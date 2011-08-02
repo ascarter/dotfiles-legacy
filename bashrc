@@ -57,9 +57,9 @@ fi
 # export M2=${M2_HOME}/bin
 # export MAVEN_OPTS="-Xms256m -Xmx512m"
 # export PATH=${M2}:${PATH}
-export ANDROID_SDK=~/Developer/Projects/Library/android/android-sdk-mac_x86
+export ANDROID_SDK=~/Developer/Library/Android/android-sdk-mac_x86
 export ANDROID_HOME=${ANDROID_SDK}
-export ANDROID_NDK=~/Developer/Projects/Library/android/android-ndk-r5
+export ANDROID_NDK=~/Developer/Library/Android/android-ndk-r5
 export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
 
 # ========================================
