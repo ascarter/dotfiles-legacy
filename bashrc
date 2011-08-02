@@ -13,13 +13,6 @@ fi
 
 # Editor
 
-# TextMate
-# export GIT_EDITOR="mate -wl1"
-# export EDITOR="mate -w"
-# export VISUAL="mate"
-# export LESSEDIT='mate -l %lm %f'
-# export TEXEDIT='mate -w -l %d "%s"'
-
 if [ -e /usr/local/bin/bbedit ]; then
     # bbedit
     export GIT_EDITOR="bbedit -w"
@@ -45,9 +38,6 @@ export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit
 # Command history
 bind '"[A":history-search-backward'
 bind '"[B":history-search-forward'
-
-# CVS
-export CVS_RSH=ssh
 
 # Ruby RVM
 if [[ -s ~/.rvm/scripts/rvm ]] ; then
@@ -76,39 +66,8 @@ export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
 # Shell functions
 # ========================================
 
-# TODO: define color aliases
-
-function theme() {                                                                         
-	case $1 in
-		(dark)
-			export LSCOLORS=gxfxcxdxbxegedabagacad
-			# PS1='\[\e]2;\u@\h: \w\a\][\[\e[0;32m\]\u@\h:\[\e[1;32m\]\W\[\e[m\]$(__git_ps1 " (\[    \e[0;37m\]%s\[\e[m\])")]\$ '
-			# PS1='[\[\e[0;32m\]\u@\h:\[\e[1;32m\]\W\[\e[m\]$(__git_ps1 " (\[\e[0;37m\]%s\[\e[m\]    )")]\$ '
-			PS1='[\[\e[0;37m\]\u@\h:\[\e[1;37m\]\W\[\e[m\]$(__git_ps1 " (\[\e[1;36m\]%s\[\e[m\])"    )]\$ '
-			# PS1='[\[\e[0;37m\]\u@\h:\[\e[1;37m\]\W\[\e[m\]$(__git_ps1 " (\[\e[1;36m\]%s\[\e[m\])") $(~/.rvm/bin/rvm-prompt)]\n\$ '
-			pwdtitle
-		;;
-		(light)
-			# DEFAULT
-			# export LSCOLORS=exfxcxdxbxegedabagacad
-			export LSCOLORS=exfxcxdxbxegedabagahad
-			# PS1='\[\e]2;\u@\h: \w\a\][\[\e[1;30m\]\u@\h:\[\e[1;30m\]\W\[\e[m\]$(__git_ps1 " (\[    \e[1;34m\]%s\[\e[m\])")]\$ '
-			# PS1='[\[\e[1;34m\]\u@\h:\[\e[1;34m\]\W\[\e[m\]$(__git_ps1 " (\[\e[1;30m\]%s\[\e[m\]    )")]\$ '
-PS1="\$(~/.rvm/bin/rvm-prompt) $PS1"
-			PS1='[\[\e[0;30m\]\u@\h:\[\e[1;30m\]\W\[\e[m\]$(__git_ps1 " (\[\e[0;34m\]%s\[\e[m\])"    )]\$ '
-			# PS1='[\[\e[0;30m\]\u@\h:\[\e[1;30m\]\W\[\e[m\]$(__git_ps1 " (\[\e[0;34m\]%s\[\e[m\])") $(~/.rvm/bin/rvm-prompt)]\n\$ '
-			pwdtitle
-		;;
-		(*)
-			echo "Usage: theme (dark|light)"
-		;;
-	esac
-}
-
 # Set terminal title
 function title() {
-  # PROMPT_COMMAND="echo -ne \"\e]0;$*\a\""
-  # unset PROMPT_COMMAND
   PROMPT_COMMAND="echo -ne \"\033]0;$*\a\""
 }
 
@@ -120,22 +79,6 @@ function etitle() {
 # Set title to current directory
 function pwdtitle() {
   title "${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~} \$(__dev_ps1 '— (%s)')"
-}
-
-# Open gem doc page
-function gemdoc {
-    open "http://localhost:8808/rdoc?q=$1"
-}
-
-# Switch to current RVM gemdir
-function gemdir {
-	if [[ -z "$1" ]] ; then
-		echo "gemdir expects a parameter, which should be a valid RVM Ruby selector"
-	else
-		rvm "$1"
-		cd $(rvm gemdir)
-		pwd
-	fi
 }
 
 # Return text to add to bash PS1 prompt for active virtual env
@@ -189,27 +132,20 @@ function __dev_ps1() {
     fi
 }
 
-# Positions ps1 output on right of terminal
-# a hack based on http://www.tldp.org/HOWTO/Bash-Prompt-HOWTO/clockt.html
-# PROMPT_COMMAND=rvmised_prompt
-function __dev_multi_ps1 () {
-    local format="${1:-%s}"
-    shift 1
-    local n_cols=$(tput cols)
-    local dev_ps1_prompt="$(__dev_ps1)"
-    let ppos=$n_cols-${#dev_ps1_prompt}
-    
-    # save cursor
-    tput sc
-    
-    # right justified and in red
-    tput cuf $ppos
-    # tput setaf 1
-    echo -n $(printf "$format" "$dev_ps1_prompt")
-    
-    # restore cursor
-    tput sgr0
-    tput rc
+# Open gem doc page
+function gemdoc {
+    open "http://localhost:8808/rdoc?q=$1"
+}
+
+# Switch to current RVM gemdir
+function gemdir {
+	if [[ -z "$1" ]] ; then
+		echo "gemdir expects a parameter, which should be a valid RVM Ruby selector"
+	else
+		rvm "$1"
+		cd $(rvm gemdir)
+		pwd
+	fi
 }
 
 # Open man page with default x-man handler
@@ -259,6 +195,14 @@ else
   PS1='\[\e]2;\u@\h: \w\a\][\u@\h:\W$(__dev_ps1 " (%s)")]\$ '
 fi
 
+# Set directory colors
+
+# Default (light shell)
+# export LSCOLORS=exfxcxdxbxegedabagacad
+
+# Dark shell
+export LSCOLORS=gxfxcxdxbxegedabagacad
+
 # ========================================
 # Aliases
 # ========================================
@@ -303,7 +247,3 @@ function gemdoc {
 # ========================================
 #uname -a
 uptime
-
-# Set default color theme
-# theme dark
-export LSCOLORS=gxfxcxdxbxegedabagacad
