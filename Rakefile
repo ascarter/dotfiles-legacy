@@ -19,7 +19,7 @@ task :install do
         if replace_all
           replace(file, target)
         else
-          puts "Replace existing file #{filename}? [ynaq] "
+          print "Replace existing file #{filename}? [ynaq] "
           case $stdin.gets.chomp
           when 'a'
             replace_all = true
@@ -62,6 +62,6 @@ def replace(file, target)
 end
 
 def prompt_for_value(message)
-    puts "Enter #{message}: "
+    print "Enter #{message}: "
     return $stdin.gets.chomp
 end
