@@ -1,12 +1,6 @@
-<%
-  name = prompt_for_value("name") if name.nil?
-  email = prompt_for_value("email") if email.nil?
-  github_user = prompt_for_value("GitHub user") if github_user.nil?
-  github_token = prompt_for_value("GitHub token") if github_token.nil?
-%>
 [user]
-	name = <%= name %>
-	email = <%= email %>
+	name = <%= prompt_for_value("name") %>
+	email = <%= prompt_for_value("email") %>
 [gui]
 	fontui = -family \"Lucida Grande\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0
 	fontdiff = -family Menlo -size 11 -weight normal -slant roman -underline 0 -overstrike 0
@@ -17,8 +11,8 @@
 [pack]
 	threads = 0
 [github]
-	user = <%= github_user %>
-	token = <%= github_token %>
+	user = <%= prompt_for_value("github_user") %>
+	token = <%= prompt_for_value("github_token") %>
 [merge]
 	tool = opendiff
 	prompt = false
