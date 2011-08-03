@@ -31,3 +31,7 @@ alias svnbbup='svn update --diff3-cmd bbdiff'
 # Python
 alias rmpyc='find . -type f -name \*.pyc -print | xargs rm'
 alias pydocv='python -m pydoc'
+
+# Shortcuts
+alias projects='cd ~/Developer/Projects'
+alias dev='cd ~/Developer'
