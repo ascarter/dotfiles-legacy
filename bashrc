@@ -153,6 +153,12 @@ function gemdir {
 function manx() {
    open x-man-page://${1}
 }
+
+# Switch to project home
+function project() {
+    cd ~/Developer/Projects/${1}
+}
+
 # ========================================
 # Terminal settings
 # ========================================
