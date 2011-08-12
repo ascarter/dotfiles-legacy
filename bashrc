@@ -2,6 +2,12 @@
 # Path settings
 # ========================================
 
+# Add developer bin
+if [ -d ~/Developer/bin ]; then
+	PATH=~/Developer/bin:${PATH}
+fi
+
+
 # Add home bin dir if it is there
 if [ -d ~/.bin ]; then
 	PATH=~/.bin:${PATH}
