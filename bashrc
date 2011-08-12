@@ -7,6 +7,11 @@ if [ -d ~/.bin ]; then
 	PATH=~/.bin:${PATH}
 fi
 
+# rbenv
+if [ -d ~/.rbenv/bin ]; then
+    PATH=~/.rbenv/bin:${PATH}
+fi
+
 # ========================================
 # Shell preferences
 # ========================================
@@ -38,11 +43,6 @@ export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit
 # Command history
 bind '"[A":history-search-backward'
 bind '"[B":history-search-forward'
-
-# Ruby RVM
-if [[ -s ~/.rvm/scripts/rvm ]] ; then
-	source ~/.rvm/scripts/rvm
-fi
 
 # Python
 export WORKON_HOME=$HOME/.virtualenvs
@@ -81,6 +81,16 @@ function pwdtitle() {
   title "${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~} \$(__dev_ps1 '— (%s)')"
 }
 
+# Return text to add to bash PS1 prompt for active rbenv
+function __rbenv_ps1() {
+    local rbenv_ps1="$(rbenv version-name)"
+    if [ -n "${rbenv_ps1}" ]; then
+        if [ "system" != "${rbenv_ps1}" ]; then
+            printf "${1:-%s}" "$rbenv_ps1"
+        fi
+    fi
+}
+
 # Return text to add to bash PS1 prompt for active virtual env
 function __virtualenv_ps1() {
     local virtualenv_ps1="`basename \"${VIRTUAL_ENV}\"`"
@@ -89,36 +99,28 @@ function __virtualenv_ps1() {
     fi
 }
 
-# Return text to add to bash PS1 prompt for active rvm
-function __rvm_ps1() {
-    local rvm_ps1="$(rvm-prompt v g)"
-    if [ -n "${rvm_ps1}" ]; then
-        printf "${1:-%s}" "$rvm_ps1"
-    fi
-}
-
 # Return a developer prompt
 # Arguments:
 #   $1 = all format string
-#   $2 = RVM format
+#   $2 = rbenv format
 #   $3 = Virtualenv format
 #   $4 = Git format
 #   $5 = Separator
 function __dev_ps1() {
     local format="${1:-%s}"
-    local rvm_format="${2:-%s}"
+    local rbenv_format="${2:-%s}"
     local virtualenv_format="${3:-%s}"
     local git_format="${4:-%s}"
     local separator="${5:-|}"
     shift 5
     
-    local rvm_ps1="$(__rvm_ps1 ${rvm_format})"
+    local rbenv_ps1="$(__rbenv_ps1 ${rbenv_format})"
     local virtualenv_ps1="$(__virtualenv_ps1 ${virtualenv_format})"
     local git_ps1="$(__git_ps1 ${git_format})"
     
     # Build format string
     dev_ps1=
-    for element in ${rvm_ps1##*( )} ${virtualenv_ps1##*( )} ${git_ps1##*( )}
+    for element in ${rbenv_ps1##*( )} ${virtualenv_ps1##*( )} ${git_ps1##*( )}
     do
         if [ -n "$element" ]; then
             if [ -n "$dev_ps1" ]; then
@@ -135,17 +137,6 @@ function __dev_ps1() {
 # Open gem doc page
 function gemdoc {
     open "http://localhost:8808/rdoc?q=$1"
-}
-
-# Switch to current RVM gemdir
-function gemdir {
-	if [[ -z "$1" ]] ; then
-		echo "gemdir expects a parameter, which should be a valid RVM Ruby selector"
-	else
-		rvm "$1"
-		cd $(rvm gemdir)
-		pwd
-	fi
 }
 
 # Open man page with default x-man handler
@@ -233,10 +224,8 @@ if [ -f `brew --prefix`/etc/bash_completion ]; then
    . `brew --prefix`/etc/bash_completion
 fi
 
-# RVM
-if [ -r $rvm_path/scripts/completion ]; then
-	source $rvm_path/scripts/completion
-fi
+# rbenv
+eval "$(rbenv init -)"
 
 # Pip
 eval "`pip completion --bash`"
