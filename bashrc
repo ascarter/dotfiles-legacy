@@ -156,6 +156,12 @@ function project() {
     cd ~/Developer/Projects/${1}
 }
 
+# Open URL source in BBEdit
+function bbcurl () {
+    curl $1 | bbedit --new-window +1 -t $1
+}
+
+
 # ========================================
 # Terminal settings
 # ========================================
@@ -232,6 +238,9 @@ fi
 
 # rbenv
 eval "$(rbenv init -)"
+if [ -d ~/.rbenv/completions ]; then
+    . ~/.rbenv/completions/rbenv.bash
+fi
 
 # Pip
 eval "`pip completion --bash`"
