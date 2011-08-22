@@ -65,7 +65,9 @@ export ANDROID_NDK=~/Developer/Library/Android/android-ndk-r5
 export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
 
 # Ruby
-eval "$(rbenv init -)"
+if [ -d ~/.rbenv ]; then
+	eval "$(rbenv init -)"
+fi
 
 # ========================================
 # Terminal settings
