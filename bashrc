@@ -89,12 +89,14 @@ function pwdtitle() {
 
 # Return text to add to bash PS1 prompt for active rbenv
 function __rbenv_ps1() {
-    local rbenv_ps1="$(rbenv version-name)"
-    if [ -n "${rbenv_ps1}" ]; then
-        if [ "system" != "${rbenv_ps1}" ]; then
-            printf "${1:-%s}" "$rbenv_ps1"
-        fi
-    fi
+	if [ -d ~/.rbenv ]; then
+		local rbenv_ps1="$(rbenv version-name)"
+		if [ -n "${rbenv_ps1}" ]; then
+			if [ "system" != "${rbenv_ps1}" ]; then
+				printf "${1:-%s}" "$rbenv_ps1"
+			fi
+		fi
+	fi
 }
 
 # Return text to add to bash PS1 prompt for active virtual env
@@ -232,18 +234,25 @@ if [ -d ~/.bash_completion ]; then
 fi
 
 # Brew
-if [ -f `brew --prefix`/etc/bash_completion ]; then
-   . `brew --prefix`/etc/bash_completion
+if [ -n "`which brew`" ]; then
+	if [ -f `brew --prefix`/etc/bash_completion ]; then
+	   . `brew --prefix`/etc/bash_completion
+	fi
 fi
 
 # rbenv
-eval "$(rbenv init -)"
+if [ -d ~/.rbenv ]; then
+	eval "$(rbenv init -)"
+fi
+
 if [ -d ~/.rbenv/completions ]; then
     . ~/.rbenv/completions/rbenv.bash
 fi
 
 # Pip
-eval "`pip completion --bash`"
+if [ -n "`which pip`" ]; then
+	eval "`pip completion --bash`"
+fi
 
 # ========================================
 # Shell methods
