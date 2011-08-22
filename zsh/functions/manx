@@ -1,0 +1,5 @@
+# Open man page with default x-man handler
+# On Mac OS X, opens a nice terminal window
+manx() {
+   open x-man-page://${1}
+}
