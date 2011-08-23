@@ -19,28 +19,18 @@ if [ -d ~/.rbenv/bin ]; then
 fi
 
 # ========================================
-# Shell preferences
+# Functions/Completions
 # ========================================
 
-# Editor
-
-if [ -e /usr/local/bin/bbedit ]; then
-    # bbedit
-    export GIT_EDITOR="bbedit -w"
-    export SVN_EDITOR="bbedit -w"
-    export EDITOR="bbedit -w"
-    export VISUAL="bbedit"
-    export LESSEDIT='bbedit -l %lm %f'
-    export TEXEDIT='bbedit -w -l %d "%s"'
-else
-    # vim
-    export EDITOR="vim"
-    export GIT_EDITOR="${EDITOR}"
-    export SVN_EDITOR="${EDITOR}"
-    export VISUAL="gvim"
-    export LESSEDIT='vim ?lm+%lm. %f'
-    export TEXEDIT='vim +%d %s'
-fi
+fpath=(~/.zsh/functions ~/.rbenv/completions $fpath)
+autoload -U compinit
+compinit
+autoload -U promptinit
+promptinit
+autoload -U colors
+colors
+autoload -- ~/.zsh/functions/[^_]*(:t)
+autoload -Uz vcs_info
 
 # ========================================
 # Languages/frameworks
@@ -70,6 +60,29 @@ if [ -d ~/.rbenv ]; then
 fi
 
 # ========================================
+# Shell preferences
+# ========================================
+
+# Editor
+if [ -e /usr/local/bin/bbedit ]; then
+    # bbedit
+    export GIT_EDITOR="bbedit -w"
+    export SVN_EDITOR="bbedit -w"
+    export EDITOR="bbedit -w"
+    export VISUAL="bbedit"
+    export LESSEDIT='bbedit -l %lm %f'
+    export TEXEDIT='bbedit -w -l %d "%s"'
+else
+    # vim
+    export EDITOR="vim"
+    export GIT_EDITOR="${EDITOR}"
+    export SVN_EDITOR="${EDITOR}"
+    export VISUAL="gvim"
+    export LESSEDIT='vim ?lm+%lm. %f'
+    export TEXEDIT='vim +%d %s'
+fi
+
+# ========================================
 # Terminal settings
 # ========================================
 
@@ -81,6 +94,16 @@ fi
 # Dark shell
 export LSCOLORS=gxfxcxdxbxegedabagacad
 
+# ========================================
+# Prompt
+# ========================================
+
+setopt transient_rprompt
+
+# Default
+# PS1="%m%# "
+declare +x PS1
+prompt ascartervcs
 
 # ========================================
 # Aliases
@@ -88,13 +111,3 @@ export LSCOLORS=gxfxcxdxbxegedabagacad
 if [ -e ~/.zsh_aliases ]; then
 	. ~/.zsh_aliases
 fi
-
-# ========================================
-# Functions/Completions
-# ========================================
-
-fpath=(~/.zsh/functions ~/.rbenv/completions $fpath)
-autoload -U compinit
-compinit
-autoload -- ~/.zsh/functions/[^_]*(:t)
-
