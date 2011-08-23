@@ -198,6 +198,8 @@ COLOR_BACKGROUND_CYAN="\[\033[46m\]"
 COLOR_BACKGROUND_WHITE="\[\033[47m\]"
 
 # Prompt
+declare +x PS1
+
 if [ $TERM = "xterm-256color" -o $TERM = "xterm-color" -o $TERM = "dtterm" -o $TERM = "linux" ]; then
   export CLICOLOR=1
   PS1="\$(__dev_ps1 '(${COLOR_BOLD_CYAN}%s${COLOR_CLEAR})')${COLOR_WHITE}\u@\h:${COLOR_BOLD_WHITE}\W${COLOR_CLEAR}\$ "
@@ -227,7 +229,7 @@ fi
 
 # Git, SVN, etc.
 if [ -d ~/.bash_completion ]; then
-    for f in ~/.bash_completion/*.bash
+    for f in ~/.bash_completion/*
     do
         source ${f}
     done
