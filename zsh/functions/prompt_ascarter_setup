@@ -1,0 +1,22 @@
+# Developer zsh prompt theme
+# Andrew Carter <ascarter@gmail.com>
+# 
+# Developer prompt with VCS info
+#
+
+prompt_ascarter_help () {
+  cat <<'EOH'
+
+Developer prompt
+
+EOH
+}
+
+prompt_ascarter_setup () {
+  PS1='%n@%m:%B%3~%b%# '
+  PS4='+%N:%i:%_>'
+  
+  prompt_opts=( cr percent subst )
+}
+
+prompt_ascarter_setup "$@"
