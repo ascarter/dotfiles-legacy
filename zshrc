@@ -4,37 +4,37 @@
 
 # Add developer bin
 if [ -d ~/Developer/bin ]; then
-	PATH=~/Developer/bin:${PATH}
+	export PATH=~/Developer/bin:${PATH}
 fi
-
 
 # Add home bin dir if it is there
 if [ -d ~/.bin ]; then
-	PATH=~/.bin:${PATH}
-fi
-
-# rbenv
-if [ -d ~/.rbenv/bin ]; then
-    PATH=~/.rbenv/bin:${PATH}
+	export PATH=~/.bin:${PATH}
 fi
 
 # ========================================
 # Functions/Completions
 # ========================================
 
-fpath=(~/.zsh/functions ~/.rbenv/completions $fpath)
+fpath=(~/.zsh/functions $fpath)
 autoload -U compinit
 compinit
 autoload -U promptinit
 promptinit
 autoload -U colors
 colors
-autoload -- ~/.zsh/functions/[^_]*(:t)
+autoload -U ~/.zsh/functions/[^_]*(:t)
 autoload -Uz vcs_info
 
 # ========================================
 # Languages/frameworks
 # ========================================
+
+# Ruby (rbenv)
+if [ -d ~/.rbenv/bin ]; then
+    export PATH=~/.rbenv/bin:${PATH}
+	eval "$(rbenv init -)"
+fi
 
 # Python
 export WORKON_HOME=$HOME/.virtualenvs
@@ -53,11 +53,6 @@ export ANDROID_SDK=~/Developer/Library/Android/android-sdk-mac_x86
 export ANDROID_HOME=${ANDROID_SDK}
 export ANDROID_NDK=~/Developer/Library/Android/android-ndk-r5
 export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
-
-# Ruby
-if [ -d ~/.rbenv ]; then
-	eval "$(rbenv init -)"
-fi
 
 # ========================================
 # Shell preferences
@@ -81,6 +76,12 @@ else
     export LESSEDIT='vim ?lm+%lm. %f'
     export TEXEDIT='vim +%d %s'
 fi
+
+# zstyle ':completion:*' verbose yes
+# zstyle ':completion:*:descriptions' format '%B%d%b'
+# zstyle ':completion:*:messages' format '%d'
+# zstyle ':completion:*:warnings' format 'No matches for: %d'
+# zstyle ':completion:*' group-name ”
 
 # ========================================
 # Terminal settings
