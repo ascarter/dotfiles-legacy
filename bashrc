@@ -4,18 +4,18 @@
 
 # Add developer bin
 if [ -d ~/Developer/bin ]; then
-	PATH=~/Developer/bin:${PATH}
+	export PATH=~/Developer/bin:${PATH}
 fi
 
 
 # Add home bin dir if it is there
 if [ -d ~/.bin ]; then
-	PATH=~/.bin:${PATH}
+	export PATH=~/.bin:${PATH}
 fi
 
 # rbenv
 if [ -d ~/.rbenv/bin ]; then
-    PATH=~/.rbenv/bin:${PATH}
+	export PATH=~/.rbenv/bin:${PATH}
 fi
 
 # ========================================
@@ -49,6 +49,11 @@ export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit
 # Command history
 bind '"[A":history-search-backward'
 bind '"[B":history-search-forward'
+
+# Ruby (rbenv)
+if [ -d ~/.rbenv ]; then
+	eval "$(rbenv init -)"
+fi
 
 # Python
 export WORKON_HOME=$HOME/.virtualenvs
@@ -227,15 +232,7 @@ fi
 # Bash completions
 # ========================================
 
-# Git, SVN, etc.
-if [ -d ~/.bash_completion ]; then
-    for f in ~/.bash_completion/*
-    do
-        source ${f}
-    done
-fi
-
-# Brew
+# Homebrew - will also call user's ~/.bash_completion too
 if [ -n "`which brew`" ]; then
 	if [ -f `brew --prefix`/etc/bash_completion ]; then
 	   . `brew --prefix`/etc/bash_completion
@@ -243,10 +240,6 @@ if [ -n "`which brew`" ]; then
 fi
 
 # rbenv
-if [ -d ~/.rbenv ]; then
-	eval "$(rbenv init -)"
-fi
-
 if [ -d ~/.rbenv/completions ]; then
     . ~/.rbenv/completions/rbenv.bash
 fi
@@ -262,9 +255,3 @@ fi
 function gemdoc {
     open "http://localhost:8808/rdoc?q=$1"
 }
-
-# ========================================
-# Startup
-# ========================================
-#uname -a
-uptime
