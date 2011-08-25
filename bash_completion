@@ -1,0 +1,7 @@
+# Source any user bash completion scripts
+if [ -d ~/.bash_completion.d ]; then
+    for f in ~/.bash_completion.d/*
+    do
+        source ${f}
+    done
+fi
