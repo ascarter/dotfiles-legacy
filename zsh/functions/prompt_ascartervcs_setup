@@ -18,12 +18,9 @@ prompt_ascartervcs_setup () {
   zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
   precmd () {
   	vcs_info
-  	#local title=`print -Pn '%n@%m:%~ ${vcs_info_msg_0_}'`
   	print -Pn '\e]0;%n@%m: %3~\a'
-  	#print -Pn '\e]0;${title}\a'
   }
 
-  #PS1='%n@%m:%B%3~%b%# '
   PS1='%{$fg[white]%}%n@%m%{$reset_color%}:%{$fg[white]%}%B%1~%b%{$reset_color%}%# '
   RPS1='${vcs_info_msg_0_}'
   PS4='+%N:%i:%_>'
