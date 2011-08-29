@@ -17,11 +17,19 @@ prompt_ascartervcs_setup () {
   zstyle ':vcs_info:*' get-revision true
   zstyle ':vcs_info:*' check-for-changes true
   
-  zstyle ':vcs_info:*' actionformats '%{'${fg[faint]}'%}(%s)%{'$reset_color'%}[%{'${fg[green]}'%}%b%{'$reset_color'%}|%{'${fg[yellow]}'%}%a%{'$reset_color'%}]%{'${fg[yellow]}'%}%u%c%{'$reset_color'%}'
-  zstyle ':vcs_info:*' formats '%{'${fg[faint]}'%}(%s)%{'$reset_color'%}[%{'${fg[green]}'%}%b%{'$reset_color'%}]%{'${fg[yellow]}'%}%u%c%{'$reset_color'%}'
+  zstyle ':vcs_info:*' actionformats '(%s)[%%b %i|%a]%B%u%c%%b'
+  zstyle ':vcs_info:*' formats '(%s)[%B%b%%b %i]%B%u%c%%b'
+  
   zstyle ':vcs_info:*' stagedstr "+"
   zstyle ':vcs_info:*' unstagedstr "*"
   
+  # git
+  zstyle ':vcs_info:git*' actionformats '(%s)[%%b %12.12i|%a]%B%u%c%%b'
+  zstyle ':vcs_info:git*' formats '(%s)[%B%b%%b %12.12i]%B%u%c%%b'
+  
+  # svn
+  zstyle ':vcs_info:(hg|svn):*' branchformat '%b'
+    
   #zstyle ':vcs_info:*' actionformats '%F{5}[%f%s%F{5}%F{3}:%F{5}%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
   #zstyle ':vcs_info:*' formats       '%F{5}[%f%s%F{5}%F{3}:%F{5}%F{2}%b%F{5}]%f '
   #zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
