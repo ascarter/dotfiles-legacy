@@ -48,4 +48,8 @@ prompt_ascartervcs_setup () {
   #chpwd () { print -Pn "\e]0;%n@%m: %~\a" }
 }
 
+_filter_vcsinfo() {
+  '${(S)vcs_info_msg_0_//(\%b|\%B)/}'
+}
+
 prompt_ascartervcs_setup "$@"
