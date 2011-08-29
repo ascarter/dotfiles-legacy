@@ -13,9 +13,9 @@ EOH
 }
 
 prompt_ascarter_setup () {
+  precmd () { print -Pn '\e]0;%n@%m: %3~\a' }
   PS1='%n@%m:%B%3~%b%# '
   PS4='+%N:%i:%_>'
-  
   prompt_opts=( cr percent subst )
 }
 
