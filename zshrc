@@ -25,6 +25,7 @@ autoload -U colors
 colors
 autoload -U ~/.zsh/functions/[^_]*(:t)
 autoload -Uz vcs_info
+autoload add-zsh-hook
 
 # ========================================
 # Languages/frameworks
@@ -95,6 +96,11 @@ fi
 # Dark shell
 export LSCOLORS=gxfxcxdxbxegedabagacad
 
+# Key mappings
+
+# Forward delete
+bindkey "^[[3~" delete-char
+
 # ========================================
 # Prompt
 # ========================================
@@ -105,6 +111,14 @@ setopt transient_rprompt
 # PS1="%m%# "
 declare +x PS1
 prompt ascartervcs
+
+if [ "$TERM_PROGRAM" = "Apple_Terminal" ] && [ -z "$INSIDE_EMACS" ]; then
+    add-zsh-hook chpwd update_terminal_cwd
+    update_terminal_cwd
+fi
+
+# _update_pwd() { print -P '%~' }
+# add-zsh-hook chpwd _update_pwd
 
 # ========================================
 # Aliases
