@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 # coding=UTF-8
 
-import math, subprocess
+import math
+import subprocess
+import sys
+
+# TODO: Add a command line option for color output
+
+total_slots = 8
 
 p = subprocess.Popen(["ioreg", "-rc", "AppleSmartBattery"], stdout=subprocess.PIPE)
 output = p.communicate()[0]
@@ -13,16 +19,15 @@ b_max = float(o_max.rpartition('=')[-1].strip())
 b_cur = float(o_cur.rpartition('=')[-1].strip())
 
 charge = b_cur / b_max
-charge_threshold = int(math.ceil(10 * charge))
+charge_threshold = int(math.ceil(float(total_slots) * charge))
 
 # Output
 
-total_slots, slots = 10, []
-filled = int(math.ceil(charge_threshold * (total_slots / 10.0))) * u'•'
+slots = []
+filled = int(math.ceil(charge_threshold * (float(total_slots) / 8.0))) * u'•'
 empty = (total_slots - len(filled)) * u'▹'
 
 out = (filled + empty).encode('utf-8')
-import sys
 
 color_green = '%{[32m%}'
 color_yellow = '%{[1;33m%}'
@@ -34,5 +39,5 @@ color_out = (
     else color_red
 )
 
-out = color_out + out + color_reset
+#out = color_out + out + color_reset
 sys.stdout.write(out)
