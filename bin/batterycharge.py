@@ -9,12 +9,13 @@ import sys
 def main(argv):
     parser = argparse.ArgumentParser(description='Display current battery capacity')
     parser.add_argument('-c', '--color', action='store_true')
+    parser.add_argument('-s', '--slots', default=10)
     args = parser.parse_args()
     
     p = subprocess.Popen(["ioreg", "-rc", "AppleSmartBattery"], stdout=subprocess.PIPE)
     output = p.communicate()[0]
     
-    total_slots = 8
+    total_slots = int(args.slots)
     
     o_max = [l for l in output.splitlines() if 'MaxCapacity' in l][0]
     o_cur = [l for l in output.splitlines() if 'CurrentCapacity' in l][0]
