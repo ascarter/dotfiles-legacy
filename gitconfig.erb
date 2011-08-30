@@ -31,6 +31,7 @@
 	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
 	gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
 	logx = log --graph --decorate --all --oneline
+	datetag = !git tag `date \"+%Y%m%d%H%M\"`
 [difftool]
 	prompt = false
 [difftool "bbdiff"]
