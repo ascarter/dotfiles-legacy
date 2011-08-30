@@ -5,7 +5,7 @@
 #
 
 prompt_ascartervcs_help () {
-  cat <<'EOH'
+    cat <<'EOH'
 
 Developer prompt with VCS info
 
@@ -13,43 +13,45 @@ EOH
 }
 
 prompt_ascartervcs_setup () {
-  zstyle ':vcs_info:*' enable git svn cvs hg bzr
-  zstyle ':vcs_info:*' get-revision true
-  zstyle ':vcs_info:*' check-for-changes true
-  
-  zstyle ':vcs_info:*' actionformats '%{'${fg[white]}'%}(%s)%{'$reset_color'%}[%{'${fg[green]}'%%B%b%%b%{'$reset_color'%} %{'${fg[yellow]}'%}%i|%B%a%%b%{'$reset_color'%}]%{'${fg[red]}'%}%B%u%c%%b%{'$reset_color'%}'
-  zstyle ':vcs_info:*' formats '%{'${fg[white]}'%}(%s)%{'$reset_color'%}[%{'${fg[green]}'%B%b%%b%{'$reset_color'%} %{'${fg[yellow]}'%}%i%{'$reset_color'%}]%{'${fg[red]}'%}%B%u%c%%b%{'$reset_color'%}'
-  
-  zstyle ':vcs_info:*' stagedstr "+"
-  zstyle ':vcs_info:*' unstagedstr "*"
-  
-  # git
-  zstyle ':vcs_info:git*' actionformats '%{'${fg[white]}'%}(%s)%{'$reset_color'%}[%{'${fg[green]}'%}%B%b%%b%{'$reset_color'%} %{'${fg[yellow]}'%}%12.12i|%a%{'$reset_color'%}]%{'${fg[red]}'%}%B%u%c%%b%{'$reset_color'%}'
-  zstyle ':vcs_info:git*' formats '%{'${fg[white]}'%}(%s)%{'$reset_color'%}[%{'${fg[green]}'%}%B%b%%b%{'$reset_color'%} %{'${fg[yellow]}'%}%12.12i%{'$reset_color'%}]%{'${fg[red]}'%}%B%u%c%%b%{'$reset_color'%}'
-  
-  # svn
-  zstyle ':vcs_info:(hg|svn):*' branchformat '%b'
+    zstyle ':vcs_info:*' enable git svn cvs hg bzr
+    zstyle ':vcs_info:*' get-revision true
+    zstyle ':vcs_info:*' check-for-changes true
     
-  #zstyle ':vcs_info:*' actionformats '%F{5}[%f%s%F{5}%F{3}:%F{5}%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-  #zstyle ':vcs_info:*' formats       '%F{5}[%f%s%F{5}%F{3}:%F{5}%F{2}%b%F{5}]%f '
-  #zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-  
-  precmd () { vcs_info }
-  
-  PS1='%{$fg[white]%}%n@%m%{$reset_color%}:%{$fg[white]%}%B%1~%b%{$reset_color%}%# '
-  RPS1='${vcs_info_msg_0_}'
-  PS4='+%N:%i:%_>'
-  
-  prompt_opts=( cr percent subst )
-  
-  #chpwd () _update_cwd
-  #_update_cwd
-
+    zstyle ':vcs_info:*' actionformats '%{'${fg[white]}'%}[%s|%{'${fg[green]}'%%B%b%%b%{'$reset_color'%}|%{'${fg[yellow]}'%}%i|%B%a%%b%{'$reset_color'%}]%{'${fg[red]}'%}%B%u%c%%b%{'$reset_color'%}'
+    zstyle ':vcs_info:*' formats '%{'${fg[white]}'%}[%s|%{'${fg[green]}'%B%b%%b%{'$reset_color'%}|%{'${fg[yellow]}'%}%i%{'$reset_color'%}]%{'${fg[red]}'%}%B%u%c%%b%{'$reset_color'%}'
+    
+    zstyle ':vcs_info:*' stagedstr "+"
+    zstyle ':vcs_info:*' unstagedstr "*"
+    
+    # git
+    zstyle ':vcs_info:git*' actionformats '%{'${fg[white]}'%}[%s|%{'${fg[green]}'%}%B%b%%b%{'$reset_color'%}|%{'${fg[yellow]}'%}%12.12i|%a%{'$reset_color'%}]%{'${fg[red]}'%}%B%u%c%%b%{'$reset_color'%}'
+    zstyle ':vcs_info:git*' formats '%{'${fg[white]}'%}[%s|%{'${fg[green]}'%}%B%b%%b%{'$reset_color'%}|%{'${fg[yellow]}'%}%12.12i%{'$reset_color'%}]%{'${fg[red]}'%}%B%u%c%%b%{'$reset_color'%}'
+    
+    # svn
+    zstyle ':vcs_info:(hg|svn):*' branchformat '%b'
+    
+    precmd () {
+        vcs_info
+        
+        # Show longer path if no vcs info
+        if [[ -z ${vcs_info_msg_0_} ]]; then
+            PS1='%{$fg[white]%}%n@%m%{$reset_color%}:%{$fg[white]%}%B%3~%b%{$reset_color%}%# '
+        else
+            PS1='%{$fg[white]%}%n@%m%{$reset_color%}:%{$fg[white]%}%B%1~%b%{$reset_color%}${vcs_info_msg_0_}%# '
+        fi
+    }
+    
+    #RPS1='${vcs_info_msg_0_}'
+    PS4='+%N:%i:%_>'
+    
+    prompt_opts=( cr percent subst )
+    
+    #chpwd () _update_cwd
+    #_update_cwd
+    
 }
 
-_filter_vcsinfo() {
-  '${(S)vcs_info_msg_0_//(\%b|\%B)/}'
-}
+_filter_vcsinfo() { '${(S)vcs_info_msg_0_//(\%b|\%B)/}' }
 
 _update_cwd() {
     # print -Pn '\e]0;%n@%m: %3~\a'
