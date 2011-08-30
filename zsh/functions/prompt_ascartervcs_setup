@@ -72,18 +72,9 @@ prompt_ascartervcs_setup () {
         hook_com[misc]+=${(j:/:)gitstatus}
     }
 
-    precmd () {
-        vcs_info
-        
-        # Show longer path if no vcs info
-        if [[ -z ${vcs_info_msg_0_} ]]; then
-            PS1='%{$fg[white]%}%n@%m%{$reset_color%}:%{$fg[white]%}%B%3~%b%{$reset_color%}%# '
-        else
-            PS1='%{$fg[white]%}%n@%m%{$reset_color%}:%{$fg[white]%}%B%1~%b%{$reset_color%}${vcs_info_msg_0_}%# '
-        fi
-    }
-    
-    #RPS1='${vcs_info_msg_0_}'
+    precmd () { vcs_info }
+    RPS1='${vcs_info_msg_0_}'
+    PS1="${white}%n@%m${reset}:${white}%B%1~%b${reset}%# "
     PS4='+%N:%i:%_>'
     
     prompt_opts=( cr percent subst )
