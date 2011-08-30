@@ -1,4 +1,4 @@
 # Display current battery charge
 batterycharge () {
-    echo `python ~/.bin/batterycharge.py $1` 2>/dev/null
+    echo `python ~/.bin/batterycharge.py $*` 2>/dev/null
 }
