@@ -117,6 +117,9 @@ if [ "$TERM_PROGRAM" = "Apple_Terminal" ] && [ -z "$INSIDE_EMACS" ]; then
     update_terminal_cwd
 fi
 
+# Show battery charge on right prompt
+RPS1='$(batterycharge --color)'
+
 # _update_pwd() { print -P '%~' }
 # add-zsh-hook chpwd _update_pwd
 
