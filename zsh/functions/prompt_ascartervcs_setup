@@ -29,7 +29,7 @@ prompt_ascartervcs_setup () {
     zstyle ':vcs_info:*' formats "${reset}${white}[${gray}%s|${green}%B%b%%b${gray}|${yellow}%i${reset}${white}]${reset}%c%u${reset}"
     
     zstyle ':vcs_info:*' stagedstr "${green}%B+%b${reset}"
-    zstyle ':vcs_info:*' unstagedstr "${yellow}%B*%b${reset}"
+    zstyle ':vcs_info:*' unstagedstr "${yellow}%B*%b${red}"
     
     # git
     zstyle ':vcs_info:git*' actionformats "${reset}${white}[${gray}%s|${green}%B%b%%b${green}%m${gray}|${yellow}%12.12i${gray}|${yellow}%a${reset}${white}]${reset}%c%u${reset}"
@@ -49,7 +49,7 @@ prompt_ascartervcs_setup () {
     
     git_untracked() {
         if $(git status --porcelain | grep '??' &> /dev/null); then
-            hook_com[unstaged]+="${red}%B?%b${reset}"
+            hook_com[unstaged]+="?"
         fi
     }
     
