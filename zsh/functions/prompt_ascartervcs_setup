@@ -25,47 +25,41 @@ prompt_ascartervcs_setup () {
     zstyle ':vcs_info:*' get-revision true
     zstyle ':vcs_info:*' check-for-changes true
     
-    zstyle ':vcs_info:*' actionformats "${reset}${white}[${gray}%s|${green}%%B%b%%b${gray}|${yellow}%i${gray}|%B%a%%b${reset}${white}]${red}%B%u%c%%b${reset}"
-    zstyle ':vcs_info:*' formats "${reset}${white}[${gray}%s|${green}%B%b%%b${gray}|${yellow}%i${reset}${white}]${red}%B%u%c%%b${reset}"
+    zstyle ':vcs_info:*' actionformats "${reset}${white}[${gray}%s|${green}%%B%b%%b${gray}|${yellow}%i${gray}|%B%a%%b${reset}${white}]${reset}%c%u${reset}"
+    zstyle ':vcs_info:*' formats "${reset}${white}[${gray}%s|${green}%B%b%%b${gray}|${yellow}%i${reset}${white}]${reset}%c%u${reset}"
     
-    zstyle ':vcs_info:*' stagedstr "+"
-    zstyle ':vcs_info:*' unstagedstr "*"
+    zstyle ':vcs_info:*' stagedstr "${green}%B+%b${reset}"
+    zstyle ':vcs_info:*' unstagedstr "${yellow}%B*%b${reset}"
     
     # git
-    zstyle ':vcs_info:git*' actionformats "${reset}${white}[${gray}%s|${green}%B%b%%b${green}%m${gray}|${yellow}%12.12i${gray}|${yellow}%a${reset}${white}]${red}%B%u%c%%b${reset}"
-    zstyle ':vcs_info:git*' formats "${reset}${white}[${gray}%s|${green}%B%b%%b${green}%m${gray}|${yellow}%12.12i${reset}${white}]${red}%B%u%c%%b${reset}"
+    zstyle ':vcs_info:git*' actionformats "${reset}${white}[${gray}%s|${green}%B%b%%b${green}%m${gray}|${yellow}%12.12i${gray}|${yellow}%a${reset}${white}]${reset}%c%u${reset}"
+    zstyle ':vcs_info:git*' formats "${reset}${white}[${gray}%s|${green}%B%b%%b${green}%m${gray}|${yellow}%12.12i${reset}${white}]${reset}%c%u${reset}"
     
     # svn
     zstyle ':vcs_info:(hg|svn):*' branchformat '%b'
     
     # Mark untracked files
-    zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
-    
+    zstyle ':vcs_info:git*+set-message:*' hooks git-untracked  
     +vi-git-untracked(){
-        if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
-        git status --porcelain | grep '??' &> /dev/null ; then
-            # This will show the marker if there are any untracked files in repo.
-            # If instead you want to show the marker only if there are untracked
-            # files in $PWD, use:
-            #[[ -n $(git ls-files --others --exclude-standard) ]] ; then
-            hook_com[staged]+='?'
+        if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]]; then
+            git_untracked
+            git_st
         fi
     }
     
-    ### git: Show +N/-N when your local branch is ahead-of or behind remote HEAD.
-    # Make sure you have added misc to your 'formats':  %m
-    # Compare with remote
+    git_untracked() {
+        if $(git status --porcelain | grep '??' &> /dev/null); then
+            hook_com[unstaged]+="${red}%B?%b${reset}"
+        fi
+    }
     
-    # git: Show +N/-N when local branch is ahead/behind remote
-    
-    zstyle ':vcs_info:git*+set-message:*' hooks git-st
-    function +vi-git-st() {
+    git_st() {
         local ahead behind
         local -a gitstatus
-    
+        
         ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
         (( $ahead )) && gitstatus+=( "+${ahead:t:gs/ /}" )
-    
+        
         behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
         (( $behind )) && gitstatus+=( "-${behind:t:gs/ /}" )
         
