@@ -25,15 +25,15 @@ prompt_ascartervcs_setup () {
     zstyle ':vcs_info:*' get-revision true
     zstyle ':vcs_info:*' check-for-changes true
     
-    zstyle ':vcs_info:*' actionformats "${reset}${white}[${gray}%s|${green}%%B%b%%b${gray}|${yellow}%i${gray}|%B%a%%b${reset}${white}]${reset}%c%u${reset}"
-    zstyle ':vcs_info:*' formats "${reset}${white}[${gray}%s|${green}%B%b%%b${gray}|${yellow}%i${reset}${white}]${reset}%c%u${reset}"
+    zstyle ':vcs_info:*' actionformats "${reset}${white}[${gray}%s|${green}%%B%b%%b${gray}|${yellow}%i${gray}|%B%a%%b${reset}%c%u${reset}${white}]${reset}"
+    zstyle ':vcs_info:*' formats "${reset}${white}[${gray}%s|${green}%B%b%%b${gray}|${yellow}%i${reset}%c%u${reset}${white}]${reset}"
     
     zstyle ':vcs_info:*' stagedstr "${green}%B+%b${reset}"
-    zstyle ':vcs_info:*' unstagedstr "${yellow}%B*%b${red}"
+    zstyle ':vcs_info:*' unstagedstr "${yellow}%B!%b${red}"
     
     # git
-    zstyle ':vcs_info:git*' actionformats "${reset}${white}[${green}%B%b%%b${green}%m${gray}|${yellow}%12.12i${gray}|${yellow}%a${reset}${white}]${reset}%c%u${reset}"
-    zstyle ':vcs_info:git*' formats "${reset}${white}[${green}%B%b%%b${green}%m${gray}|${yellow}%12.12i${reset}${white}]${reset}%c%u${reset}"
+    zstyle ':vcs_info:git*' actionformats "${reset}${white}[${green}%B%b%%b${green}%m${gray}|${yellow}%12.12i${gray}|${yellow}%a${reset}%c%u${reset}${white}]${reset}"
+    zstyle ':vcs_info:git*' formats "${reset}${white}[${green}%B%b%%b${green}%m${gray}|${yellow}%12.12i${reset}%c%u${reset}${white}]${reset}"
     
     # svn
     zstyle ':vcs_info:(hg|svn):*' branchformat '%b'
