@@ -19,6 +19,11 @@ alias ql='qlmanage -p "$@" >& /dev/null'
 alias bbtags='bbedit --maketags'
 alias eclipse='open /Developer/Applications/Eclipse.app'
 
+# Git
+if [ -n "`which hub`" ]; then
+    alias git=hub
+fi
+
 # Subverison
 alias svnfmdiff='svn diff --diff-cmd /usr/local/bin/fmdiff'
 alias svnfmmerge='svn merge --diff3-cmd /usr/local/bin/fmdiff3'

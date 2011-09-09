@@ -1,5 +1,10 @@
 # Open man page with default x-man handler
 # On Mac OS X, opens a nice terminal window
+
 manx() {
-   open x-man-page://${1}
+    URL=${1}    
+    if [ "${2}" ]; then
+        URL="${URL}/${2}"
+    fi
+    open x-man-page://${URL}
 }
