@@ -39,7 +39,7 @@ fi
 
 # Python
 export WORKON_HOME=$HOME/.virtualenvs
-if [[ -s /usr/local/bin/virtualenvwrapper.sh ]] ; then
+if [[ -e /usr/local/bin/virtualenvwrapper.sh ]] ; then
     source /usr/local/bin/virtualenvwrapper.sh
 fi
 
