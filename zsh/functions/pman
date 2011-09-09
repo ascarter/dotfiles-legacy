@@ -1,0 +1,8 @@
+# Open man page as PDF
+# On Mac OS X, uses Preview.app
+
+
+pman () {
+    # TODO: Check for the right PDF viewer based on OS
+    man "${1}" | open -f -a /Applications/Preview.app
+}
