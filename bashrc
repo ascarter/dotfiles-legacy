@@ -239,6 +239,10 @@ if [ -n "`which brew`" ]; then
 	fi
 fi
 
+if [ -e ~/.bash_completion ]; then
+    . ~/.bash_completion
+fi
+
 # rbenv
 if [ -d ~/.rbenv/completions ]; then
     . ~/.rbenv/completions/rbenv.bash
