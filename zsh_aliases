@@ -21,7 +21,7 @@ alias eclipse='open /Developer/Applications/Eclipse.app'
 
 # Git
 if [ -n "`which hub`" ]; then
-    alias git=hub
+    eval `hub alias -s zsh`
 fi
 
 # Subverison
