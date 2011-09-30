@@ -18,6 +18,10 @@ if [ -d ~/.rbenv/bin ]; then
 	export PATH=~/.rbenv/bin:${PATH}
 fi
 
+# Add local bin directory for Ruby/Bundler
+export PATH=./bin:${PATH}
+
+
 # ========================================
 # Shell preferences
 # ========================================
