@@ -13,15 +13,6 @@ if [ -d ~/.bin ]; then
 	export PATH=~/.bin:${PATH}
 fi
 
-# rbenv
-if [ -d ~/.rbenv/bin ]; then
-	export PATH=~/.rbenv/bin:${PATH}
-fi
-
-# Add local bin directory for Ruby/Bundler
-export PATH=./bin:${PATH}
-
-
 # ========================================
 # Shell preferences
 # ========================================
@@ -54,10 +45,19 @@ export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit
 bind '"[A":history-search-backward'
 bind '"[B":history-search-forward'
 
+# ========================================
+# Languages/frameworks
+# ========================================
+
+
 # Ruby (rbenv)
 if [ -d ~/.rbenv ]; then
+	export PATH=~/.rbenv/bin:${PATH}
 	eval "$(rbenv init -)"
 fi
+
+# Add local bin directory for Ruby/Bundler
+export PATH=./bin:${PATH}
 
 # Python
 export WORKON_HOME=$HOME/.virtualenvs
@@ -245,11 +245,6 @@ fi
 
 if [ -e ~/.bash_completion ]; then
     . ~/.bash_completion
-fi
-
-# rbenv
-if [ -d ~/.rbenv/completions ]; then
-    . ~/.rbenv/completions/rbenv.bash
 fi
 
 # Pip
