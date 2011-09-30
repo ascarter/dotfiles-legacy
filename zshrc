@@ -12,9 +12,6 @@ if [ -d ~/.bin ]; then
 	export PATH=~/.bin:${PATH}
 fi
 
-# Add local bin directory for Ruby/Bundler
-export PATH=./bin:${PATH}
-
 # ========================================
 # Functions/Completions
 # ========================================
@@ -39,6 +36,9 @@ if [ -d ~/.rbenv/bin ]; then
     export PATH=~/.rbenv/bin:${PATH}
 	eval "$(rbenv init -)"
 fi
+
+# Add local bin directory for Ruby/Bundler
+export PATH=./bin:${PATH}
 
 # Python
 export WORKON_HOME=$HOME/.virtualenvs
