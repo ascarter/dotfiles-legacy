@@ -12,6 +12,9 @@ if [ -d ~/.bin ]; then
 	export PATH=~/.bin:${PATH}
 fi
 
+# Add local bin directory for Ruby/Bundler
+export PATH=./bin:${PATH}
+
 # ========================================
 # Functions/Completions
 # ========================================
