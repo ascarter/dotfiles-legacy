@@ -44,3 +44,4 @@ alias pydocv='python -m pydoc'
 # Shortcuts
 alias projects='cd ~/Developer/Projects'
 alias dev='cd ~/Developer'
+alias elements='bbedit --new-window ~/Dropbox/Elements'
