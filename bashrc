@@ -258,3 +258,10 @@ fi
 function gemdoc {
     open "http://localhost:8808/rdoc?q=$1"
 }
+
+# ========================================
+# Per-machine extras
+# ========================================
+if [ -e ~/.bash_local ]; then
+	. ~/.bash_local
+fi
