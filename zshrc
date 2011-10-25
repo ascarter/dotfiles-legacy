@@ -132,3 +132,10 @@ fi
 if [ -e ~/.zsh_aliases ]; then
 	. ~/.zsh_aliases
 fi
+
+# ========================================
+# Per-machine extras
+# ========================================
+if [ -e ~/.zsh_local ]; then
+	. ~/.zsh_local
+fi

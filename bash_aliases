@@ -37,6 +37,11 @@ alias svnbbup='svn update --diff3-cmd bbdiff'
 alias rmpyc='find . -type f -name \*.pyc -print | xargs rm'
 alias pydocv='python -m pydoc'
 
+# Ruby
+alias pow="/Users/andrew/Library/Application\ Support/Pow/Versions/0.3.2/bin/pow"
+alias binit="bundle install --path vendor/bundle && bundle install --binstubs && echo \".bundle\nvendor/bundle/ruby\n\" >> .gitignore"
+alias gman="gem man -s"
+
 # Shortcuts
 alias projects='cd ~/Developer/Projects'
 alias dev='cd ~/Developer'
