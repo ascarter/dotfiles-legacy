@@ -77,6 +77,9 @@ export ANDROID_HOME=${ANDROID_SDK}
 export ANDROID_NDK=~/Developer/Library/Android/android-ndk-r5
 export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
 
+# Node
+export NODE_PATH=/opt/homebrew/lib/node_modules
+
 # ========================================
 # Shell functions
 # ========================================
