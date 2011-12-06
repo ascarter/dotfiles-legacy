@@ -17,6 +17,7 @@ alias ql='qlmanage -p "$@" >& /dev/null'
 
 # Dev tools
 alias bbtags='bbedit --maketags'
+alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
 alias eclipse='open /Developer/Applications/Eclipse.app'
 
 # Git
