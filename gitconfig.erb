@@ -3,7 +3,7 @@
 	email = <%= prompt_for_value("email") %>
 [gui]
 	fontui = -family \"Lucida Grande\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0
-	fontdiff = -family Menlo -size 11 -weight normal -slant roman -underline 0 -overstrike 0
+	fontdiff = -family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0
 [color]
 	ui = auto
 [core]
@@ -13,13 +13,17 @@
 [github]
 	user = <%= prompt_for_value("github_user") %>
 	token = <%= prompt_for_value("github_token") %>
+[difftool]
+	prompt = false
+[difftool "bbdiff"]
+	cmd = /usr/local/bin/bbdiff --wait --resume "$LOCAL" "$REMOTE"
 [merge]
 	tool = opendiff
 	prompt = false
 	renormalize = true
+	keepBackup = true
 [diff]
 	tool = opendiff
-	prompt = false
 [alias]
 	k = !gitk
 	x = !gitx
@@ -32,7 +36,3 @@
 	gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
 	logx = log --graph --decorate --all --oneline
 	datetag = !git tag `date \"+%Y%m%d%H%M\"`
-[difftool]
-	prompt = false
-[difftool "bbdiff"]
-	cmd = /usr/local/bin/bbdiff --wait --resume "$LOCAL" "$REMOTE"
