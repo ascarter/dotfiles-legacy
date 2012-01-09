@@ -13,30 +13,25 @@ EOH
 }
 
 prompt_ascartervcs_setup () {
-    local reset white gray green red yellow
-    reset="%{${reset_color}%}"
-    white="%{$fg[white]%}"
-    gray="%{$fg_bold[black]%}"
-    green="%{$fg[green]%}"
-    red="%{$fg[red]%}"
-    yellow="%{$fg[yellow]%}"
+    # Set some color vars
+    local reset="%{${reset_color}%}"
+    for COLOR in white red green black blue yellow magenta; do
+        eval local $COLOR='%{$fg[${COLOR}]%}'
+        eval local ${COLOR}_bold='%{$fg_bold[${COLOR}]%}'
+    done
 
     zstyle ':vcs_info:*' enable git svn cvs hg bzr
     zstyle ':vcs_info:*' get-revision true
-#     zstyle ':vcs_info:*' check-for-changes true
+    zstyle ':vcs_info:*' check-for-changes true
     
-    zstyle ':vcs_info:*' actionformats "${reset}${white}[${gray}%s|${green}%%B%b%%b${gray}|${yellow}%i${gray}|%B%a%%b${reset}%c%u${reset}${white}]${reset}"
-    zstyle ':vcs_info:*' formats "${reset}${white}[${gray}%s|${green}%B%b%%b${gray}|${yellow}%i${reset}%c%u${reset}${white}]${reset}"
+    zstyle ':vcs_info:*' actionformats "[%s %b (%a) %i]%m%c%u"
+    zstyle ':vcs_info:*' formats "[%s %b%m %i]%m%c%u"
+    zstyle ':vcs_info:git*' actionformats "[%s %b (%a) %12.12i]%m%c%u"
+    zstyle ':vcs_info:git*' formats "[%s %b %12.12i]%m%c%u"
     
-    zstyle ':vcs_info:*' stagedstr "${green}%B+%b${reset}"
-    zstyle ':vcs_info:*' unstagedstr "${yellow}%B!%b${red}"
-    
-    # git
-    zstyle ':vcs_info:git*' actionformats "${reset}${white}[${green}%B%b%%b${green}%m${gray}|${yellow}%12.12i${gray}|${yellow}%a${reset}%c%u${reset}${white}]${reset}"
-    zstyle ':vcs_info:git*' formats "${reset}${white}[${green}%B%b%%b${green}%m${gray}|${yellow}%12.12i${reset}%c%u${reset}${white}]${reset}"
-    
-    # svn
-    zstyle ':vcs_info:(hg|svn):*' branchformat '%b'
+    zstyle ':vcs_info:(git|hg|svn):*' branchformat '%b'
+    zstyle ':vcs_info:*' stagedstr "${green_bold}%B+%b${reset}"
+    zstyle ':vcs_info:*' unstagedstr "${red_bold}%B?%b${reset}"
     
     # Mark untracked files
 #     zstyle ':vcs_info:git*+set-message:*' hooks git-untracked  
@@ -67,22 +62,14 @@ prompt_ascartervcs_setup () {
     }
 
     precmd () { vcs_info }
-    RPS1='${vcs_info_msg_0_}'
-    PS1="${white}%n@%m${reset}:${white}%B%1~%b${reset}%# "
-    PS4='+%N:%i:%_>'
-    
     prompt_opts=( cr percent subst )
-    
-    #chpwd () _update_cwd
-    #_update_cwd
-    
+    PROMPT='
+${black_bold}%n@%m${reset}:%B%~%b${reset}
+%# '
+    PROMPT4='+%N:%i:%_>'    
+    RPROMPT='%{$fg_bold[black]%}${vcs_info_msg_0_}%{$reset_color%}'
 }
 
 _filter_vcsinfo() { '${(S)vcs_info_msg_0_//(\%b|\%B)/}' }
-
-_update_cwd() {
-    # print -Pn '\e]0;%n@%m: %3~\a'
-    print -Pn '\e]0;%n@%m\a'
-}
 
 prompt_ascartervcs_setup "$@"
