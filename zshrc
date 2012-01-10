@@ -49,10 +49,10 @@ fi
 # Set directory colors
 
 # Default (light shell)
-export LSCOLORS=exfxcxdxbxegedabagacad
+# export LSCOLORS=exfxcxdxbxegedabagacad
 
 # Dark shell
-# export LSCOLORS=gxfxcxdxbxegedabagacad
+export LSCOLORS=gxfxcxdxbxegedabagacad
 
 # Key mappings
 
