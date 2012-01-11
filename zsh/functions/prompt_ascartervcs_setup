@@ -57,7 +57,7 @@ prompt_ascartervcs_setup () {
     precmd () { vcs_info }
     prompt_opts=( cr percent subst )
     PROMPT='
-%{$fg[white]%}%n@%m%{${reset_color}%}:%{$fg_bold[white]%}%~%{${reset_color}%}
+%{$fg_bold[black]%}%n@%m%{${reset_color}%}:%B%~%b%{${reset_color}%}
 %# '
     PROMPT4='+%N:%i:%_>'    
     RPROMPT='%{$fg_bold[black]%}${vcs_info_msg_0_}%{${reset_color}%}'
