@@ -56,7 +56,7 @@ fi
 # export LSCOLORS=gxfxcxdxbxegedabagacad
 
 # Daring Fireball terminal
-export LSCOLORS=CxGxcxdxbxegedabagacad
+export LSCOLORS=CxGxcxdxBxegedabagacad
 
 # Key mappings
 
