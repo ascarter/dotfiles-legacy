@@ -23,8 +23,8 @@ prompt_ascartervcs_setup () {
     zstyle ':vcs_info:git*' formats "[%s %b %12.12i]%m%c%u"
     
     zstyle ':vcs_info:(git|hg|svn):*' branchformat '%b'
-    zstyle ':vcs_info:*' stagedstr "%{$fg[green]%}%B+%b%{${reset_color}%}"
-    zstyle ':vcs_info:*' unstagedstr "%{$fg[red]%}%B?%b%{${reset_color}%}"
+    zstyle ':vcs_info:*' stagedstr "+"
+    zstyle ':vcs_info:*' unstagedstr "?"
     
     # Mark untracked files
 #     zstyle ':vcs_info:git*+set-message:*' hooks git-untracked  
@@ -57,10 +57,10 @@ prompt_ascartervcs_setup () {
     precmd () { vcs_info }
     prompt_opts=( cr percent subst )
     PROMPT='
-%{$fg_bold[black]%}%n@%m%{${reset_color}%}:%B%~%b%{${reset_color}%}
+%B%n@%m%b:%~
 %# '
     PROMPT4='+%N:%i:%_>'    
-    RPROMPT='%{$fg_bold[black]%}${vcs_info_msg_0_}%{${reset_color}%}'
+    RPROMPT='%B${vcs_info_msg_0_}%b'
 }
 
 _filter_vcsinfo() { '${(S)vcs_info_msg_0_//(\%b|\%B)/}' }

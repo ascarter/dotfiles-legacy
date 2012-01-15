@@ -47,12 +47,16 @@ fi
 # ========================================
 
 # Set directory colors
+# man ls -> find LSCOLORS
 
-# Default (light shell)
-export LSCOLORS=exfxcxdxbxegedabagacad
+# Default (light terminal)
+# export LSCOLORS=exfxcxdxbxegedabagacad
 
-# Dark shell
+# Dark terminal
 # export LSCOLORS=gxfxcxdxbxegedabagacad
+
+# Daring Fireball terminal
+export LSCOLORS=CxGxcxdxbxegedabagacad
 
 # Key mappings
 

@@ -13,8 +13,9 @@ EOH
 }
 
 prompt_ascarter_setup () {
-  PS1='%n@%m:%B%3~%b%# '
-  PS4='+%N:%i:%_>'
+  PROMPT='%n@%m:%B%3~%b%# '
+  PROMPT4='+%N:%i:%_>'
+  unset RPROMPT
   prompt_opts=( cr percent subst )
 }
 
