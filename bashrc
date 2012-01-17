@@ -221,12 +221,16 @@ else
 fi
 
 # Set directory colors
+# man ls -> find LSCOLORS
 
-# Default (light shell)
+# Default (light terminal)
 # export LSCOLORS=exfxcxdxbxegedabagacad
 
-# Dark shell
-export LSCOLORS=gxfxcxdxbxegedabagacad
+# Dark terminal
+# export LSCOLORS=gxfxcxdxbxegedabagacad
+
+# Daring Fireball terminal
+export LSCOLORS=CxGxcxdxBxegedabagacad
 
 # ========================================
 # Aliases
