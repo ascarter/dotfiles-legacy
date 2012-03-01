@@ -133,11 +133,11 @@ function __dev_ps1() {
     local git_format="${4:-%s}"
     local separator="${5:-|}"
     shift 5
-    
+
     local rbenv_ps1="$(__rbenv_ps1 ${rbenv_format})"
     local virtualenv_ps1="$(__virtualenv_ps1 ${virtualenv_format})"
     local git_ps1="$(__git_ps1 ${git_format})"
-    
+
     # Build format string
     dev_ps1=
     for element in ${rbenv_ps1##*( )} ${virtualenv_ps1##*( )} ${git_ps1##*( )}
@@ -148,7 +148,7 @@ function __dev_ps1() {
             fi
             dev_ps1="${dev_ps1}${element}"
         fi
-    done        
+    done
     if [ -n "$dev_ps1" ]; then
         printf "$format" "$dev_ps1"
     fi
@@ -245,9 +245,9 @@ fi
 
 # Homebrew - will also call user's ~/.bash_completion too
 if [ -n "`which brew`" ]; then
-	if [ -f `brew --prefix`/etc/bash_completion ]; then
-	   . `brew --prefix`/etc/bash_completion
-	fi
+    if [ -f `brew --prefix`/etc/bash_completion ]; then
+        . `brew --prefix`/etc/bash_completion
+    fi
 fi
 
 if [ -e ~/.bash_completion ]; then
