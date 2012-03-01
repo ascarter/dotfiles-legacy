@@ -1,5 +1,5 @@
 Xft.dpi: 96
 XTerm.*.faceName: Menlo
-XTerm.*.faceSize: 9
-XTerm.*.background: Black
-XTerm.*.foreground: White
+XTerm.*.faceSize: 10
+XTerm.*.background: grey29
+XTerm.*.foreground: LightYellow2
