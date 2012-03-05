@@ -44,5 +44,4 @@ alias binit="bundle install --path vendor/bundle && bundle install --binstubs &&
 alias gman="gem man -s"
 
 # Shortcuts
-alias projects='cd ~/Developer/Projects'
-alias dev='cd ~/Developer'
+alias projects='cd ~/Projects'
