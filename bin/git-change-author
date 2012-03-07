@@ -2,22 +2,37 @@
 
 # TODO: Get inputs for the values
 
-git filter-branch --env-filter '
+if [ -z ${1} ]
+then
+    echo git-change-author [old_email] [new_name] [new_email]
+    exit 1
+fi
 
+export old_email=$1
+export au_name=$2
+export au_email=$3
+export co_name=${au_name}
+export co_email=${au_email}
+
+git filter-branch --env-filter '
 an="$GIT_AUTHOR_NAME"
 am="$GIT_AUTHOR_EMAIL"
 cn="$GIT_COMMITTER_NAME"
 cm="$GIT_COMMITTER_EMAIL"
 
-if [ "$GIT_COMMITTER_EMAIL" = "your@email.to.match" ]
+if [ "$GIT_COMMITTER_EMAIL" = "${old_email}" ]
 then
-    cn="Your New Committer Name"
-    cm="Your New Committer Email"
+#     cn="Your New Committer Name"
+#     cm="Your New Committer Email"
+    cn="${co_name}"
+    cm="${co_email}"
 fi
-if [ "$GIT_AUTHOR_EMAIL" = "your@email.to.match" ]
+if [ "$GIT_AUTHOR_EMAIL" = "${old_email}" ]
 then
-    an="Your New Author Name"
-    am="Your New Author Email"
+#     an="Your New Author Name"
+#     am="Your New Author Email"
+    an="${au_name}"
+    am="${au_email}"
 fi
 
 export GIT_AUTHOR_NAME="$an"
