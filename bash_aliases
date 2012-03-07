@@ -23,7 +23,7 @@ alias eclipse='open /Developer/Applications/Eclipse.app'
 # Git
 # defunkt's hub wrapper: http://defunkt.io/hub/
 if [ -n "`which hub`" ]; then
-    alias git=hub
+    eval $(hub alias -s bash)
 fi
 
 # Subverison
