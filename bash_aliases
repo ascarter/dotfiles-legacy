@@ -19,6 +19,7 @@ alias ql='qlmanage -p "$@" >& /dev/null'
 alias bbtags='bbedit --maketags'
 alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
 alias eclipse='open /Developer/Applications/Eclipse.app'
+alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
 
 # Git
 # defunkt's hub wrapper: http://defunkt.io/hub/
