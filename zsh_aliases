@@ -24,8 +24,8 @@ alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
 
 # Git
 # defunkt's hub wrapper: http://defunkt.io/hub/
-if [ -n "`which hub`" ]; then
-    eval $(hub alias -s zsh)
+if [[ -n `which hub` ]]; then
+    eval "$(hub alias -s zsh)"
 fi
 
 # Subverison
