@@ -30,13 +30,17 @@
 	prompt = false
 [difftool "bbdiff"]
 	cmd = /usr/local/bin/bbdiff --wait --resume "$LOCAL" "$REMOTE"
+[difftool "Kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 [merge]
-	tool = opendiff
+	tool = Kaleidoscope
 	prompt = false
 	renormalize = true
 	keepBackup = true
 [diff]
-	tool = opendiff
+	tool = Kaleidoscope
 [alias]
 	k = !gitk
 	x = !gitx
