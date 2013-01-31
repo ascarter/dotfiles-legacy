@@ -25,7 +25,6 @@
 	threads = 0
 [github]
 	user = <%= prompt_for_value("github_user") %>
-	token = <%= prompt_for_value("github_token") %>
 [difftool]
 	prompt = false
 [difftool "bbdiff"]
@@ -53,3 +52,5 @@
 	gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
 	logx = log --graph --decorate --all --oneline
 	datetag = !git tag `date \"+%Y%m%d%H%M\"`
+[credential]
+	helper = osxkeychain
