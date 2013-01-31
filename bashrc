@@ -81,6 +81,15 @@ export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
 export NODE_PATH=/usr/local/lib/node_modules
 
 # ========================================
+# Applications/services
+# ========================================
+
+export POSTGRES_APP_ROOT=/Applications/Postgres.app/Contents/MacOS
+if [ -d ${POSTGRES_APP_ROOT} ]; then
+    export PATH=${POSTGRES_APP_ROOT}/bin:${PATH}
+fi
+
+# ========================================
 # Shell functions
 # ========================================
 
