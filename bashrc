@@ -49,6 +49,8 @@ bind '"[B":history-search-forward'
 # Languages/frameworks
 # ========================================
 
+# Homebrew
+export HOMEBREW_NO_EMOJI=1
 
 # Ruby (rbenv)
 if [ -d ~/.rbenv ]; then
@@ -87,6 +89,11 @@ export NODE_PATH=/usr/local/lib/node_modules
 export POSTGRES_APP_ROOT=/Applications/Postgres.app/Contents/MacOS
 if [ -d ${POSTGRES_APP_ROOT} ]; then
     export PATH=${POSTGRES_APP_ROOT}/bin:${PATH}
+fi
+
+# Heroku Toolbelt
+if [ -d /usr/local/heroku ]; then
+	export PATH="/usr/local/heroku/bin:$PATH"
 fi
 
 # ========================================
