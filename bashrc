@@ -70,13 +70,9 @@ fi
 # Java
 
 # Android
-# export M2_HOME=/usr/local/apache-maven/apache-maven-3.0
-# export M2=${M2_HOME}/bin
-# export MAVEN_OPTS="-Xms256m -Xmx512m"
-# export PATH=${M2}:${PATH}
-export ANDROID_SDK=~/Developer/Library/Android/android-sdk-mac_x86
-export ANDROID_HOME=${ANDROID_SDK}
-export ANDROID_NDK=~/Developer/Library/Android/android-ndk-r5
+export ANDROID_HOME=~/Developer/Library/Android
+export ANDROID_SDK=${ANDROID_HOME}/adt-bundle-mac-x86_64/sdk
+export ANDROID_NDK=${ANDROID_HOME}/android-ndk-r8d
 export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
 
 # Node
