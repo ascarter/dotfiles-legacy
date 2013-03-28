@@ -5,4 +5,4 @@
 # source == /Users/andrew
 # dest   == /Volumes/MyDrive/backup (will copy to /Volumes/MyDrive/backup/andrew)
 
-rsync -av --delete-excluded --exclude=${1}/Dropbox --exclude=${1}/Library/Caches "${1}" "${2}"
+rsync -av --delete-excluded --exclude=${1}/Dropbox --exclude=${1}/.dropbox --exclude=${1}/Library/Caches "${1}" "${2}"
