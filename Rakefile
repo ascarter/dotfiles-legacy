@@ -1,13 +1,19 @@
 require 'rake'
 require 'erb'
 
-task :default => [ :install ]
+task :default => [ :install, :chsh ]
+
+desc "Change default shell"
+task :chsh do
+  puts "Setting shell to zsh"
+  system "chsh -s /bin/zsh"
+end
 
 desc "Install dotfiles to home directory using symlinks"
 task :install do
   replace_all = false
   home = File.expand_path(ENV['HOME'])
-  
+
   Dir['*'].each do |file|
     next if %w(Rakefile README.md).include?(file)
     filename = file.sub('.erb', '')
@@ -31,7 +37,7 @@ task :install do
             exit
           else
             puts "Skipping #{filename}"
-          end        
+          end
         end
       end
     else

@@ -47,6 +47,9 @@ alias rmpyc='find . -type f -name \*.pyc -print | xargs rm'
 alias pydocv='python -m pydoc'
 alias editvenv='bbedit --new-window ${VIRTUAL_ENV}'
 
+# Java
+alias java_home='/usr/libexec/java_home'
+
 # Shortcuts
 alias projects='cd ~/Projects'
 alias elements='bbedit --new-window ~/Dropbox/Elements'

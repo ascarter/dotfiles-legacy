@@ -23,9 +23,9 @@ alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
 
 # Git
 # defunkt's hub wrapper: http://defunkt.io/hub/
-if [ -n "`which hub`" ]; then
-    eval $(hub alias -s bash)
-fi
+# if [ -n "`which hub`" ]; then
+#     eval $(hub alias -s bash)
+# fi
 
 # Subverison
 alias svnfmdiff='svn diff --diff-cmd /usr/local/bin/fmdiff'
@@ -44,6 +44,9 @@ alias pydocv='python -m pydoc'
 alias pow="/Users/andrew/Library/Application\ Support/Pow/Versions/0.3.2/bin/pow"
 alias binit="bundle install --path vendor/bundle && bundle install --binstubs && echo \".bundle\nvendor/bundle/ruby\n\" >> .gitignore"
 alias gman="gem man -s"
+
+# Java
+alias java_home='/usr/libexec/java_home'
 
 # Shortcuts
 alias projects='cd ~/Projects'

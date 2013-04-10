@@ -68,6 +68,9 @@ if [[ -s /usr/local/bin/virtualenvwrapper.sh ]] ; then
 fi
 
 # Java
+if [[ -e /usr/libexec/java_home ]] ; then
+	export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
+fi
 
 # Android
 export ANDROID_HOME=~/Developer/Library/Android
