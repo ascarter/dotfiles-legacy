@@ -1,16 +1,20 @@
 require 'rake'
 require 'erb'
+require 'uri'
+require 'pathname'
+require 'fileutils'
 
-task :default => [ :install, :chsh ]
+task :default => [ :install ]
+task :install => [ :bootstrap, :chsh, "packages:rbenv", "packages:homebrew" ]
 
 desc "Change default shell"
 task :chsh do
   puts "Setting shell to zsh"
-  system "chsh -s /bin/zsh"
+  sh "chsh -s /bin/zsh"
 end
 
-desc "Install dotfiles to home directory using symlinks"
-task :install do
+desc "Bootstrap dotfiles to home directory using symlinks"
+task :bootstrap do
   replace_all = false
   home = File.expand_path(ENV['HOME'])
 
@@ -46,6 +50,40 @@ task :install do
   end
 end
 
+namespace "packages" do
+	desc "Install rbenv"
+	task :rbenv do
+		rbenv_root = Pathname.new(File.expand_path("~/.rbenv"))
+		plugins = %w{ruby-build rbenv-vars rbenv-gem-rehash rbenv-default-gems}
+		
+		unless File.exist?(rbenv_root.to_s)
+			git_clone('sstephenson', 'rbenv', rbenv_root)
+			plugins.each do |plugin|
+				git_clone('sstephenson', plugin, rbenv_root.join('plugins', plugin))
+			end
+		else
+			puts "Updating rbenv..."
+			system "cd #{rbenv_root} && git pull"
+			plugins.each do |plugin|
+				puts "Updating #{plugin}..."
+				system "cd #{rbenv_root}/plugins/#{plugin} && git pull"
+			end
+		end
+	end
+
+	desc "Install homebrew"
+	task :homebrew do
+		homebrew_root = '/opt/homebrew'
+		unless File.exist?(homebrew_root)
+			sudo "mkdir -p #{homebrew_root}"
+			sudo "curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C #{homebrew_root}"
+		end
+		sudo "echo '/opt/homebrew/bin' > /etc/paths.d/homebrew"
+		sudo "echo '/opt/homebrew/share/man' > /etc/manpaths.d/homebrew"
+		sudo "/opt/homebrew/bin/brew update"
+	end
+end
+
 def link(file, target)
   filename = file.sub('.erb', '')
   if file =~ /.erb$/
@@ -70,4 +108,15 @@ end
 def prompt_for_value(message)
     print "Enter #{message}: "
     return $stdin.gets.chomp
+end
+
+def git_clone(owner, repo, dest=nil)
+	git_url = URI.join("https://github.com/", "#{owner}/", "#{repo}.git").to_s
+	cmd = "git clone #{git_url}"
+	cmd += " #{dest.to_s}" if dest
+	sh cmd
+end
+
+def sudo(cmd)
+	system "sudo sh -c '#{cmd}'"
 end
