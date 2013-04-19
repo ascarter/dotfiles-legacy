@@ -45,7 +45,7 @@ task :bootstrap do
         end
       end
     else
-      link(file, target)
+      link_file(file, target)
     end
   end
 end
@@ -73,18 +73,20 @@ namespace "packages" do
 
 	desc "Install homebrew"
 	task :homebrew do
-		homebrew_root = '/opt/homebrew'
-		unless File.exist?(homebrew_root)
-			sudo "mkdir -p #{homebrew_root}"
-			sudo "curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C #{homebrew_root}"
+		if RUBY_PLATFORM =~ /darwin/
+			homebrew_root = '/opt/homebrew'
+			unless File.exist?(homebrew_root)
+				sudo "mkdir -p #{homebrew_root}"
+				sudo "curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C #{homebrew_root}"
+			end
+			sudo "echo '/opt/homebrew/bin' > /etc/paths.d/homebrew"
+			sudo "echo '/opt/homebrew/share/man' > /etc/manpaths.d/homebrew"
+			sudo "/opt/homebrew/bin/brew update"
 		end
-		sudo "echo '/opt/homebrew/bin' > /etc/paths.d/homebrew"
-		sudo "echo '/opt/homebrew/share/man' > /etc/manpaths.d/homebrew"
-		sudo "/opt/homebrew/bin/brew update"
 	end
 end
 
-def link(file, target)
+def link_file(file, target)
   filename = file.sub('.erb', '')
   if file =~ /.erb$/
     puts "Generating #{filename}"
@@ -102,7 +104,7 @@ def replace(file, target)
   backup = "#{target}.orig"
   puts "Backing up #{target} to #{backup}"
   File.rename(target, backup)
-  link(file, target)
+  link_file(file, target)
 end
 
 def prompt_for_value(message)
