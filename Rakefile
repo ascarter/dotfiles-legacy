@@ -84,6 +84,19 @@ namespace "packages" do
 			sudo "/opt/homebrew/bin/brew update"
 		end
 	end
+
+	desc "Install pip/virtualenv"
+	task :virtualenv do
+		virtualenv_root = File.expand_path("~/.virtualenvs")
+		puts "Install pip..."
+		sudo "easy_install --upgrade pip"
+		pip_install("virtualenv", true)
+		pip_install("virtualenvwrapper", true)
+		unless File.exist?(virtualenv_root)
+			puts "Creating #{virtualenv_root}"
+			Dir.mkdir(virtualenv_root)
+		end
+	end
 end
 
 def link_file(file, target)
@@ -121,4 +134,14 @@ end
 
 def sudo(cmd)
 	system "sudo sh -c '#{cmd}'"
+end
+
+def pip_install(package, use_sudo=false)
+	puts "Installing #{package}..."
+	cmd = "pip install --upgrade #{package}"
+	if use_sudo
+		sudo cmd
+	else
+		exec cmd
+	end
 end
