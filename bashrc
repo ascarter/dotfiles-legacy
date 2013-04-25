@@ -2,6 +2,14 @@
 # Path settings
 # ========================================
 
+# Fix up the paths to prioritize homebrew
+if [ -n "`which brew`" ]; then
+    export MANPATH=""
+    eval `/usr/libexec/path_helper`
+    export PATH=`brew --prefix`/bin:${PATH}
+    export MANPATH=`brew --prefix`/share/man:${MANPATH}
+fi
+
 # Add developer bin
 if [ -d ~/Developer/bin ]; then
 	export PATH=~/Developer/bin:${PATH}
