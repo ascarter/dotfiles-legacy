@@ -5,7 +5,7 @@ require 'pathname'
 require 'fileutils'
 
 task :default => [ :install ]
-task :install => [ :bootstrap, :chsh, "packages:rbenv", "packages:homebrew" ]
+task :install => [ :bootstrap, :chsh, "packages:rbenv", "packages:homebrew", "packages:virtualenv" ]
 
 desc "Change default shell"
 task :chsh do
@@ -88,6 +88,14 @@ namespace "packages" do
 	desc "Install pip/virtualenv"
 	task :virtualenv do
 		virtualenv_root = File.expand_path("~/.virtualenvs")
+		
+		# macosx - backup easy_install-2.7 because it gets broken during virtualenv install
+		if RUBY_PLATFORM =~ /darwin/
+			puts "Backing up easy_install-2.7..."
+			FileUtils.copy("/usr/bin/easy_install-2.7", "/tmp/easy_install-2.7")
+			sudo "cp /usr/bin/easy_install-2.7 /tmp/."
+		end
+		
 		puts "Install pip..."
 		sudo "easy_install --upgrade pip"
 		pip_install("virtualenv", true)
@@ -96,6 +104,12 @@ namespace "packages" do
 			puts "Creating #{virtualenv_root}"
 			Dir.mkdir(virtualenv_root)
 		end
+		
+		# macosx - restore original easy_install-2.7 script
+		if RUBY_PLATFORM =~ /darwin/
+			puts "Restore easy_install-2.7..."
+			sudo "cp /tmp/easy_install-2.7 /usr/bin/."
+		end		
 	end
 end
 
