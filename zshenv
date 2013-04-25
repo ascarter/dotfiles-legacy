@@ -48,6 +48,10 @@ export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
 # Node
 export NODE_PATH=/usr/local/lib/node_modules
 
+# Perforce
+export P4DIFF=/usr/local/bin/ksdiff
+export P4MERGE=/usr/local/bin/ksdiff
+
 # ========================================
 # Applications/services
 # ========================================
