@@ -3,7 +3,7 @@
 # ========================================
 
 # Fix up the paths to prioritize homebrew
-if [ -n "`which brew`" ]; then
+if which -s brew; then
     export MANPATH=""
     eval `/usr/libexec/path_helper`
     export PATH=`brew --prefix`/bin:${PATH}

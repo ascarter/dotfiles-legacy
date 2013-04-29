@@ -3,7 +3,7 @@
 # ========================================
 
 # Homebrew - Fix up the paths to prioritize homebrew
-if [ -n "`which brew`" ]; then
+if which brew &>/dev/null; then
 	export HOMEBREW_NO_EMOJI=1
     export MANPATH=""
     eval `/usr/libexec/path_helper`
