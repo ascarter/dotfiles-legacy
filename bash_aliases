@@ -21,12 +21,6 @@ alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
 alias eclipse='open /Developer/Applications/Eclipse.app'
 alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
 
-# Git
-# defunkt's hub wrapper: http://defunkt.io/hub/
-# if [ -n "`which hub`" ]; then
-#     eval $(hub alias -s bash)
-# fi
-
 # Subverison
 alias svnfmdiff='svn diff --diff-cmd /usr/local/bin/fmdiff'
 alias svnfmmerge='svn merge --diff3-cmd /usr/local/bin/fmdiff3'
