@@ -1,9 +1,20 @@
+# tag files from ctags
+TAGS
+!TAGS/
+tags
+!tags/
+
+# Temporary files
+*~
+
 # Swap files
 *.sw?
 
-# OSX
+# Mac OSX
 .DS_Store
-Icon?
+.AppleDouble
+.LSOverride
+Icon
 
 # Thumbnails
 ._*
@@ -13,19 +24,7 @@ Icon?
 .Trashes
 
 # Xcode
-build/*
-*.pbxuser
-!default.pbxuser
+.xcodeproj/ !*.xcodeproj/project.pbxproj
 *.mode1v3
-!default.mode1v3
 *.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
-*.xcworkspace
-!default.xcworkspace
-xcuserdata
-profile
-*.moved-aside
-*~.nib
-*~
+build/

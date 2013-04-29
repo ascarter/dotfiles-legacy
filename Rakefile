@@ -53,6 +53,7 @@ end
 namespace "packages" do
 	desc "Install rbenv"
 	task :rbenv do
+	  puts "Installing rbenv..."
 		rbenv_root = Pathname.new(File.expand_path("~/.rbenv"))
 		plugins = %w{ruby-build rbenv-vars rbenv-gem-rehash rbenv-default-gems}
 		
@@ -74,6 +75,7 @@ namespace "packages" do
 	desc "Install homebrew"
 	task :homebrew do
 		if RUBY_PLATFORM =~ /darwin/
+      puts "Installing homebrew..."
 			homebrew_root = '/opt/homebrew'
 			unless File.exist?(homebrew_root)
 				sudo "mkdir -p #{homebrew_root}"
@@ -110,6 +112,11 @@ namespace "packages" do
 			puts "Restore easy_install-2.7..."
 			sudo "cp /tmp/easy_install-2.7 /usr/bin/."
 		end		
+	end
+
+	desc "Install vim support"
+	task :vim do
+    vim_root = File.join(File.dir(__FILE__), 'vim')
 	end
 end
 

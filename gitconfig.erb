@@ -25,6 +25,8 @@
 	threads = 0
 [github]
 	user = <%= prompt_for_value("github_user") %>
+[init]
+	templatedir = ~/.git_template
 [difftool]
 	prompt = false
 [difftool "bbdiff"]
@@ -41,17 +43,18 @@
 [diff]
 	tool = Kaleidoscope
 [alias]
-	k = !gitk
-	x = !gitx
-	gdiff = difftool --gui --no-prompt
 	changes = diff --name-status -r
+	ctags = '!${PWD}/.git/hooks/ctags'
+	datetag = !git tag `date \"+%Y%m%d%H%M\"`
 	diffstat = diff --stat -r
+	gdiff = difftool --gui --no-prompt
+	gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
+	k = !gitk
+	logx = log --graph --decorate --all --oneline
+	tower = "!sh -c 'gittower'"
+	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
 	who = shortlog -s --
 	whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
-	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
-	gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
-	logx = log --graph --decorate --all --oneline
-	datetag = !git tag `date \"+%Y%m%d%H%M\"`
-	tower = "!sh -c 'gittower'"
+	x = !gitx
 [credential]
 	helper = osxkeychain

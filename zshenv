@@ -2,8 +2,9 @@
 # Path settings
 # ========================================
 
-# Fix up the paths to prioritize homebrew
+# Homebrew - Fix up the paths to prioritize homebrew
 if [ -n "`which brew`" ]; then
+	export HOMEBREW_NO_EMOJI=1
     export MANPATH=""
     eval `/usr/libexec/path_helper`
     export PATH=`brew --prefix`/bin:${PATH}
@@ -24,8 +25,6 @@ fi
 # Languages/frameworks
 # ========================================
 
-# Homebrew
-export HOMEBREW_NO_EMOJI=1
 
 # Ruby (rbenv)
 if [ -d ~/.rbenv/bin ]; then
@@ -48,17 +47,21 @@ if [[ -e /usr/libexec/java_home ]] ; then
 fi
 
 # Android
-export ANDROID_HOME=~/Developer/Library/Android
-export ANDROID_SDK=${ANDROID_HOME}/adt-bundle-mac-x86_64/sdk
-export ANDROID_NDK=${ANDROID_HOME}/android-ndk-r8d
-export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
+if [ -d ~/Developer/Library/Android ]; then
+	export ANDROID_HOME=~/Developer/Library/Android
+	export ANDROID_SDK=${ANDROID_HOME}/adt-bundle-mac-x86_64/sdk
+	export ANDROID_NDK=${ANDROID_HOME}/android-ndk-r8d
+	export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
+fi
 
 # Node
 export NODE_PATH=/usr/local/lib/node_modules
 
 # Perforce
-export P4DIFF=/usr/local/bin/ksdiff
-export P4MERGE=/usr/local/bin/ksdiff
+if [ -e /usr/local/p4 ]; then
+	export P4DIFF=/usr/local/bin/ksdiff
+	export P4MERGE=/usr/local/bin/ksdiff
+fi
 
 # ========================================
 # Applications/services
