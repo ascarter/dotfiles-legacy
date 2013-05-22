@@ -1,0 +1,11 @@
+# Open query in dash
+
+dash() {
+	if [ "${2}" ]; then
+        QUERY=${1}:${2}
+    else
+        QUERY=${1}
+    fi
+
+    open dash://${QUERY}
+}

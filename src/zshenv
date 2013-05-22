@@ -9,6 +9,12 @@ if which brew &>/dev/null; then
     eval `/usr/libexec/path_helper`
     export PATH=`brew --prefix`/bin:${PATH}
     export MANPATH=`brew --prefix`/share/man:${MANPATH}
+	
+	# Extend gcc library/include paths to homebrew
+	export LIBRARY_PATH=`brew --prefix`/lib
+	export C_INCLUDE_PATH=`brew --prefix`/include
+	export CPLUS_INCLUDE_PATH=`brew --prefix`/include
+	export OBJC_INCLUDE_PATH=`brew --prefix`/include
 fi
 
 # Add developer bin
@@ -36,6 +42,8 @@ fi
 export PATH=./bin:${PATH}
 
 # Python
+# /Library/Frameworks/Python.framework/Versions/2.7/bin
+# /Library/Frameworks/Python.framework/Versions/3.3/bin
 export WORKON_HOME=$HOME/.virtualenvs
 if [[ -e /usr/local/bin/virtualenvwrapper.sh ]] ; then
     source /usr/local/bin/virtualenvwrapper.sh

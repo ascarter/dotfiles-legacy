@@ -10,6 +10,10 @@ tags
 # Swap files
 *.sw?
 
+# Python
+*.py[cod]
+*.so
+
 # Mac OSX
 .DS_Store
 .AppleDouble

@@ -1,6 +1,3 @@
-[user]
-	name = <%= prompt_for_value("name") %>
-	email = <%= prompt_for_value("email") %>
 [gui]
 	fontui = -family \"Lucida Grande\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0
 	fontdiff = -family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0
@@ -23,8 +20,6 @@
 	excludesfile = ~/.gitignore
 [pack]
 	threads = 0
-[github]
-	user = <%= prompt_for_value("github_user") %>
 [init]
 	templatedir = ~/.git_template
 [difftool]
@@ -33,8 +28,11 @@
 	cmd = /usr/local/bin/bbdiff --wait --resume "$LOCAL" "$REMOTE"
 [difftool "Kaleidoscope"]
 	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[instaweb]
+	httpd = webrick	
 [mergetool "Kaleidoscope"]
 	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
 [merge]
 	tool = Kaleidoscope
 	prompt = false
@@ -51,10 +49,10 @@
 	gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
 	k = !gitk
 	logx = log --graph --decorate --all --oneline
-	tower = "!sh -c 'gittower'"
+	tower = !sh -c 'gittower'
 	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
 	who = shortlog -s --
-	whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
+	whois = !sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -
 	x = !gitx
 [credential]
 	helper = osxkeychain

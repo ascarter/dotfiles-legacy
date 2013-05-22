@@ -3,6 +3,8 @@ require 'erb'
 require 'uri'
 require 'pathname'
 require 'fileutils'
+require 'tmpdir'
+require 'open-uri'
 
 task :default => [ :install ]
 task :install => [ :bootstrap, :chsh, "packages:rbenv", "packages:homebrew", "packages:virtualenv" ]
@@ -13,40 +15,92 @@ task :chsh do
   sh "chsh -s /bin/zsh"
 end
 
+desc "Update git config"
+task :gitconfig do
+  puts "Setting git config"
+  source = File.expand_path('gitconfig')
+  target = File.join(File.expand_path(ENV['HOME']), '.gitconfig')
+  replace(source, target)
+  name = prompt("user name")
+  email = prompt("user email")
+  sh "git config --global user.name \"#{name}\""
+  sh "git config --global user.email \"#{email}\""
+end
+
 desc "Bootstrap dotfiles to home directory using symlinks"
 task :bootstrap do
   replace_all = false
   home = File.expand_path(ENV['HOME'])
-
-  Dir['*'].each do |file|
-    next if %w(Rakefile README.md).include?(file)
-    filename = file.sub('.erb', '')
-    target = File.expand_path(File.join(home, ".#{filename}"))
-    if File.exist?(target) or File.symlink?(target) or File.directory?(target)
-      if File.identical?(file, target)
-        puts "Identical #{filename}"
-      else
-        if replace_all
-          replace(file, target)
+  srcdir = File.expand_path('src')
+  Dir.new(srcdir).each do |file|
+    unless %w(. ..).include?(file)
+      source = File.join(srcdir, file)
+      target = File.expand_path(File.join(home, ".#{file}"))
+      if File.exist?(target) or File.symlink?(target) or File.directory?(target)
+        if File.identical?(file, target)
+          puts "Identical #{filename}"
         else
-          print "Replace existing file #{filename}? [ynaq] "
-          case $stdin.gets.chomp
-          when 'a'
-            replace_all = true
-            replace(file, target)
-          when 'y'
-            replace(file, target)
-          when 'q'
-            puts "Abort"
-            exit
+          if replace_all
+            replace(source, target)
           else
-            puts "Skipping #{filename}"
+            print "Replace existing file #{file}? [ynaq] "
+            case $stdin.gets.chomp
+            when 'a'
+              replace_all = true
+              replace(source, target)
+            when 'y'
+              replace(source, target)
+            when 'q'
+              puts "Abort"
+              exit
+            else
+              puts "Skipping #{file}"
+            end
           end
         end
+      else
+        link_file(source, target)
       end
-    else
-      link_file(file, target)
     end
+  end
+end
+
+desc "Uninstall dotfiles from home directory"
+task :uninstall do
+  home = File.expand_path(ENV['HOME'])
+  src = File.expand_path('src')
+  Dir.new(src).each do |file|
+    unless %w(. ..).include?(file)
+      target = File.expand_path(File.join(home, ".#{file}"))
+      if File.exist?(target) or File.symlink?(target) or File.directory?(target)
+        puts "Removing #{target}"
+        File.delete(target)
+      end
+    end
+  end
+end
+
+namespace "fonts" do
+  task :default => [ :all ]
+
+  desc "Install all fonts"
+  task :all => [ :sourcecodepro ]
+  
+  desc "Adobe SourceCodePro"
+  task :sourcecodepro do
+#     install_font('SourceCodePro', 'http://sourceforge.net/projects/sourcecodepro.adobe/files/latest/download')
+#   #!/bin/bash
+#   FONT_NAME="SourceCodePro"
+#   URL="http://sourceforge.net/projects/sourcecodepro.adobe/files/latest/download"
+# 
+#   mkdir /tmp/adodefont
+#   cd /tmp/adodefont
+#   wget ${URL} -O ${FONT_NAME}.zip
+#   unzip -o -j ${FONT_NAME}.zip
+#   mkdir -p ~/.fonts
+#   cp *.otf ~/.fonts
+#   fc-cache -f -v
+# 
   end
 end
 
@@ -118,30 +172,26 @@ namespace "packages" do
 	task :vim do
     vim_root = File.join(File.dir(__FILE__), 'vim')
 	end
+	
+	desc "Install terminal-notifier"
+	task :terminal_notifer do
+	  zipfile = "https://github.com/downloads/alloy/terminal-notifier/terminal-notifier_1.4.2.zip"
+	end
 end
 
-def link_file(file, target)
-  filename = file.sub('.erb', '')
-  if file =~ /.erb$/
-    puts "Generating #{filename}"
-    File.open(target, 'w') do |output|
-      output.write(ERB.new(File.read(file)).result(binding))
-    end
-  else
-    puts "Symlink #{filename}"
-    source = File.expand_path(File.join(File.dirname(__FILE__), file))
-    File.symlink(source, target)
-  end
+def link_file(source, target)
+  puts "Symlink #{source}"
+  File.symlink(source, target)
 end
 
-def replace(file, target)
+def replace(source, target)
   backup = "#{target}.orig"
   puts "Backing up #{target} to #{backup}"
   File.rename(target, backup)
-  link_file(file, target)
+  link_file(source, target)
 end
 
-def prompt_for_value(message)
+def prompt(message)
     print "Enter #{message}: "
     return $stdin.gets.chomp
 end

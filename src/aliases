@@ -21,6 +21,7 @@ alias bbtags='bbedit --maketags'
 alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
 alias eclipse='open /Developer/Applications/Eclipse.app'
 alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
+alias terminal-notifier='/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier'
 
 # Subverison
 alias svnfmdiff='svn diff --diff-cmd /usr/local/bin/fmdiff'
@@ -40,6 +41,7 @@ alias gman="gem man -s"
 alias rmpyc='find . -type f -name \*.pyc -print | xargs rm'
 alias pydocv='python -m pydoc'
 alias editvenv='bbedit --new-window ${VIRTUAL_ENV}'
+alias pipbrew='CFLAGS="-I/opt/homebrew/include -L/opt/homebrew/lib" pip'
 
 # Java
 alias java_home='/usr/libexec/java_home'
