@@ -93,6 +93,44 @@ export NODE_PATH=/usr/local/lib/node_modules
 export P4DIFF=/usr/local/bin/ksdiff
 export P4MERGE=/usr/local/bin/ksdiff
 
+# AWS
+if [ -d ~/Developer/Library/AWS ]; then
+	export AWS_HOME=~/Developer/Library/AWS
+	
+	# Setup EB
+	if [ -d ${AWS_HOME}/AWS-ElasticBeanstalk-CLI-2.4.0 ]; then
+		export AWS_EB_HOME=${AWS_HOME}/AWS-ElasticBeanstalk-CLI-2.4.0
+		
+		case $(uname) in
+		Darwin )
+			platform="macosx"
+			;;
+		Linux )
+			platform="linux"
+			;;
+		* )
+			platform="unknown"
+		esac
+		
+		if [ $platform != "unknown" ]; then
+			case $(python --version 2>&1) in
+				*2.7* )
+					pyver="python2.7"
+					;;
+				*3* )
+					pyver="python3"
+					;;
+				* )
+					pyver="unknown"
+			esac
+			
+			if [ $pyver != "unknown" ]; then
+				export PATH=$PATH:${AWS_EB_HOME}/eb/${platform}/${pyver}
+			fi
+		fi
+	fi
+fi
+
 # ========================================
 # Applications/services
 # ========================================
