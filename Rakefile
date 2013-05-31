@@ -105,7 +105,7 @@ namespace "fonts" do
 end
 
 namespace "packages" do
-	desc "Install rbenv"
+	desc "Install/update rbenv"
 	task :rbenv do
 	  puts "Installing rbenv..."
 		rbenv_root = Pathname.new(File.expand_path("~/.rbenv"))
