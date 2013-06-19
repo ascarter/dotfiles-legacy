@@ -20,7 +20,7 @@ task :gitconfig do
   puts "Setting git config"
   source = File.expand_path('gitconfig')
   target = File.join(File.expand_path(ENV['HOME']), '.gitconfig')
-  replace(source, target)
+  copy_and_replace(source, target)
   name = prompt("user name")
   email = prompt("user email")
   sh "git config --global user.name \"#{name}\""
@@ -184,11 +184,22 @@ def link_file(source, target)
   File.symlink(source, target)
 end
 
-def replace(source, target)
+def backup(target)
   backup = "#{target}.orig"
-  puts "Backing up #{target} to #{backup}"
-  File.rename(target, backup)
+  if File.exist?(target)
+    puts "Backing up #{target} to #{backup}"
+    File.rename(target, backup)
+  end
+end
+
+def replace(source, target)
+  backup(target)
   link_file(source, target)
+end
+
+def copy_and_replace(source, target)
+  backup(target)
+  FileUtils.copy(source, target)
 end
 
 def prompt(message)
