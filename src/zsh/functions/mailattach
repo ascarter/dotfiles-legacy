@@ -1,0 +1,10 @@
+# Mail file as attachment
+mailattach () {
+	local FILEPATH=$1
+	local NAME=`basename $1`
+	local SUBJECT=$2
+	local RECIPIENT=$3
+	
+	uuencode ${FILEPATH} ${NAME} | mail -s "${SUBJECT}" ${RECIPIENT}
+}
+
