@@ -33,9 +33,10 @@ alias svnbbup='svn update --diff3-cmd bbdiff'
 
 # Ruby
 alias pow="/Users/andrew/Library/Application\ Support/Pow/Versions/0.3.2/bin/pow"
-alias binit="bundle install --path vendor/bundle && echo \".bundle\nvendor/bundle/ruby\n\" >> .gitignore"
+alias binit="bundle install --path vendor/bundle"
 alias bstubs="bundle install --binstubs"
 alias bexec="bundle exec"
+alias bignore="echo \".bundle\nvendor/bundle/ruby\n\" >> .gitignore"
 alias gman="gem man -s"
 
 # Python
