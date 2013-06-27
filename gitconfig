@@ -20,8 +20,6 @@
 	excludesfile = ~/.gitignore
 [pack]
 	threads = 0
-[init]
-	templatedir = ~/.git_template
 [difftool]
 	prompt = false
 [difftool "bbdiff"]
