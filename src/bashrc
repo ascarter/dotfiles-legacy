@@ -3,7 +3,7 @@
 # ========================================
 
 # Fix up the paths to prioritize homebrew
-if which -s brew; then
+if [ -n "`which brew`" ]; then
     export MANPATH=""
     eval `/usr/libexec/path_helper`
     export PATH=`brew --prefix`/bin:${PATH}
@@ -50,8 +50,8 @@ export PAGER=less
 export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit-at-eof -R"
 
 # Command history
-bind '"[A":history-search-backward'
-bind '"[B":history-search-forward'
+# bind '"[A":history-search-backward'
+# bind '"[B":history-search-forward'
 
 # ========================================
 # Languages/frameworks
