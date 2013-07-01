@@ -7,7 +7,8 @@ endif
 
 if has("gui_gtk2")
   " runtime mswin.vim
-  set guifont=Monospace\ 10
+  " set guifont=Monospace\ 10
+  set guifont=Source\ Code\ Pro\ Medium\ 10
   " set guioptions=egmrLT
 elseif has("gui_macvim")
   set guifont=Menlo:h12

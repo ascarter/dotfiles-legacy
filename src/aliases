@@ -54,3 +54,12 @@ alias java_home='/usr/libexec/java_home'
 alias projects='cd ~/Projects'
 alias elements='bbedit --new-window ~/Dropbox/Elements'
 alias uploadcr='python ~/Developer/Projects/hulu/upload.py'
+
+# Platform specific aliases
+case $(uname) in
+Darwin )
+	alias gvim=mvim
+	;;
+Linux )
+	;;
+esac
