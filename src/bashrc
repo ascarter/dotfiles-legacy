@@ -72,7 +72,7 @@ export PATH=./bin:${PATH}
 # Python
 export WORKON_HOME=$HOME/.virtualenvs
 if [ -s /usr/local/bin/virtualenvwrapper.sh ]; then
-    source /usr/local/bin/virtualenvwrapper.sh
+  . /usr/local/bin/virtualenvwrapper.sh
 fi
 
 # Java
@@ -150,22 +150,22 @@ fi
 # ========================================
 
 # Set terminal title
-function title() {
+title() {
   PROMPT_COMMAND="echo -ne \"\033]0;$*\a\""
 }
 
 # Set title to string
-function etitle() {
+etitle() {
   title "\$(eval \"$*\")"
 }
 
 # Set title to current directory
-function pwdtitle() {
+pwdtitle() {
   title "${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~} \$(__dev_ps1 '— (%s)')"
 }
 
 # Return text to add to bash PS1 prompt for active rbenv
-function __rbenv_ps1() {
+__rbenv_ps1() {
 	if [ -d ~/.rbenv ]; then
 		local rbenv_ps1="$(rbenv version-name)"
 		if [ -n "${rbenv_ps1}" ]; then
@@ -177,7 +177,7 @@ function __rbenv_ps1() {
 }
 
 # Return text to add to bash PS1 prompt for active virtual env
-function __virtualenv_ps1() {
+__virtualenv_ps1() {
     local virtualenv_ps1="`basename \"${VIRTUAL_ENV}\"`"
     if [ -n "${virtualenv_ps1}" ]; then
         printf "${1:-%s}" "$virtualenv_ps1"
@@ -191,7 +191,7 @@ function __virtualenv_ps1() {
 #   $3 = Virtualenv format
 #   $4 = Git format
 #   $5 = Separator
-function __dev_ps1() {
+__dev_ps1() {
     local format="${1:-%s}"
     local rbenv_format="${2:-%s}"
     local virtualenv_format="${3:-%s}"
@@ -220,23 +220,23 @@ function __dev_ps1() {
 }
 
 # Open gem doc page
-function gemdoc {
+gemdoc() {
     open "http://localhost:8808/rdoc?q=$1"
 }
 
 # Open man page with default x-man handler
 # On Mac OS X, opens a nice terminal window
-function manx() {
+manx() {
    open x-man-page://${1}
 }
 
 # Switch to project home
-function project() {
+project() {
     cd ~/Developer/Projects/${1}
 }
 
 # Open URL source in BBEdit
-function bbcurl () {
+bbcurl() {
     curl $1 | bbedit --new-window +1 -t $1
 }
 
@@ -323,13 +323,6 @@ fi
 if [ -n "`which pip`" ]; then
 	eval "`pip completion --bash`"
 fi
-
-# ========================================
-# Shell methods
-# ========================================
-function gemdoc {
-    open "http://localhost:8808/rdoc?q=$1"
-}
 
 # ========================================
 # Per-machine extras
