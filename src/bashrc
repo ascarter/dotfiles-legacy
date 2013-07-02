@@ -71,12 +71,12 @@ export PATH=./bin:${PATH}
 
 # Python
 export WORKON_HOME=$HOME/.virtualenvs
-if [[ -s /usr/local/bin/virtualenvwrapper.sh ]] ; then
+if [ -s /usr/local/bin/virtualenvwrapper.sh ]; then
     source /usr/local/bin/virtualenvwrapper.sh
 fi
 
 # Java
-if [[ -e /usr/libexec/java_home ]] ; then
+if [ -e /usr/libexec/java_home ]; then
 	export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
 fi
 
