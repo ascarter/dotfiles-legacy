@@ -1,6 +1,6 @@
 # Open query in dash
 
-dash() {
+dashq() {
 	if [ "${2}" ]; then
         QUERY=${1}:${2}
     else
