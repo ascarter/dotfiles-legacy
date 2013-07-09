@@ -87,10 +87,7 @@ task :uninstall do
   Dir.new(src).each do |file|
     unless %w(. ..).include?(file)
       target = File.expand_path(File.join(home, ".#{file}"))
-      if File.exist?(target) or File.symlink?(target) or File.directory?(target)
-        puts "Removing #{target}"
-        File.delete(target)
-      end
+      remove(target)
     end
   end
 end
@@ -182,16 +179,40 @@ namespace "packages" do
 			sudo "cp /tmp/easy_install-2.7 /usr/bin/."
 		end		
 	end
-
-	desc "Install vim support"
-	task :vim do
-    vim_root = File.join(File.dir(__FILE__), 'vim')
-	end
 	
 	desc "Install terminal-notifier"
 	task :terminal_notifer do
 	  zipfile = "https://github.com/downloads/alloy/terminal-notifier/terminal-notifier_1.4.2.zip"
 	end
+end
+
+namespace "vim" do
+	desc "Install vim support"
+	task :install do
+    # Symlink vim programs to mvim on mac
+    usr_bin = '/usr/local/bin'
+    mvim_path = File.join(usr_bin, 'mvim')
+    if File.exist?(mvim_path)
+      # Gui, Diff, Read-only, Ex, Restricted
+      %w(gvim mvimdiff mview mex rmvim).each do |prog|
+        sudo "ln -s #{mvim_path} #{File.join(usr_bin, prog)}"
+      end
+    end
+	end
+	
+	desc "Uninstall vim support"
+	task :uninstall do
+    usr_bin = '/usr/local/bin'
+    mvim_path = File.join(usr_bin, 'mvim')
+    if File.exist?(mvim_path)
+      # Gui, Diff, Read-only, Ex, Restricted
+      %w(gvim mvimdiff mview mex rmvim).each do |prog|
+        target = File.expand_path(File.join(usr_bin, prog))
+        sudo_remove(target)
+      end
+    end
+  end
+	  
 end
 
 def link_file(source, target)
@@ -215,6 +236,20 @@ end
 def copy_and_replace(source, target)
   backup(target)
   FileUtils.copy(source, target)
+end
+
+def remove(target)
+  if File.exist?(target) or File.symlink?(target) or File.directory?(target)
+    puts "Removing #{target}"
+    File.delete(target)
+  end
+end
+
+def sudo_remove(target)
+  if File.exist?(target) or File.symlink?(target) or File.directory?(target)
+    puts "Removing #{target}"
+    sudo("rm -f #{target}")
+  end
 end
 
 def prompt(message)
