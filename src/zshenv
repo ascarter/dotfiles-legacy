@@ -54,6 +54,13 @@ if [[ -e /usr/libexec/java_home ]] ; then
 	export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
 fi
 
+# Intellij IDEA
+case $(uname) in
+Linux )
+  export IDEA_JDK=/usr/lib/jvm/java-1.7.0_25-jdk-oracle
+  ;;
+esac
+
 # Android
 if [ -d ~/Developer/Library/Android ]; then
 	export ANDROID_HOME=~/Developer/Library/Android
