@@ -240,6 +240,13 @@ bbcurl() {
     curl $1 | bbedit --new-window +1 -t $1
 }
 
+tabname() {
+  printf "\e]1;${1}\a"
+}
+
+winname() {
+  printf "\e]2;${1}\a"
+}
 
 # ========================================
 # Terminal settings
