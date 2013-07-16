@@ -52,9 +52,28 @@ DerivedData
 # CocoaPods
 Pods
 
+# C/C++
+
+# Object files
+*.o
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+
 # Python
 *.py[cod]
-*.so
 
 # Packages
 *.egg
