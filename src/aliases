@@ -1,7 +1,16 @@
 # ls
-alias ls='ls -hFGH'
-alias ll='ls -l'
-alias la='ls -a'
+case $(uname) in
+Darwin )
+  alias ls='ls -hFGH'
+  alias ll='ls -l'
+  alias la='ls -a'
+  ;;
+Linux )
+  alias ls='ls -alF'
+  alias la='ls -A'
+  alias ll='ls -l'
+  ;;
+esac
 
 # Search/grep
 alias devgrep="grep -n -r --exclude='.svn' --exclude='*.swp' --exclude='.git'"
