@@ -87,7 +87,7 @@ task :uninstall do
   Dir.new(src).each do |file|
     unless %w(. ..).include?(file)
       target = File.expand_path(File.join(home, ".#{file}"))
-      remove(target)
+      file_remove(target)
     end
   end
 end
@@ -256,7 +256,7 @@ def copy_and_replace(source, target)
   FileUtils.copy(source, target)
 end
 
-def remove(target)
+def file_remove(target)
   if File.exist?(target) or File.symlink?(target) or File.directory?(target)
     puts "Removing #{target}"
     File.delete(target)
