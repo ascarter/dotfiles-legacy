@@ -12,25 +12,31 @@ Linux )
   ;;
 esac
 
+case $(uname) in
+Darwin )
+  # System shortcuts
+  alias loginw='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
+
+  # Power managment
+  alias sleepnow='pmset sleepnow'
+  alias batterycapacity='ioreg -w0 -c AppleSmartBattery -b -f | grep -i capacity'
+
+  # QuickLoom
+  alias ql='qlmanage -p "$@" >& /dev/null'
+
+  # Dev tools
+  alias bbtags='bbedit --maketags'
+  alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
+  alias eclipse='open /Developer/Applications/Eclipse.app'
+  alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
+  alias terminal-notifier='/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier'
+
+  # Java
+  alias java_home='/usr/libexec/java_home'
+esac
+
 # Search/grep
 alias devgrep="grep -n -r --exclude='.svn' --exclude='*.swp' --exclude='.git'"
-
-# System shortcuts
-alias loginw='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
-
-# Power managment
-alias sleepnow='pmset sleepnow'
-alias batterycapacity='ioreg -w0 -c AppleSmartBattery -b -f | grep -i capacity'
-
-# QuickLook
-alias ql='qlmanage -p "$@" >& /dev/null'
-
-# Dev tools
-alias bbtags='bbedit --maketags'
-alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
-alias eclipse='open /Developer/Applications/Eclipse.app'
-alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
-alias terminal-notifier='/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier'
 
 # Subverison
 alias svnfmdiff='svn diff --diff-cmd /usr/local/bin/fmdiff'
@@ -55,9 +61,6 @@ alias editvenv='bbedit --new-window ${VIRTUAL_ENV}'
 alias pipbrew='CFLAGS="-I/opt/homebrew/include -L/opt/homebrew/lib" pip'
 alias pdb='python -m pdb'
 alias pyunittest='python -m unittest discover --buffer'
-
-# Java
-alias java_home='/usr/libexec/java_home'
 
 # Shortcuts
 alias projects='cd ~/Projects'
