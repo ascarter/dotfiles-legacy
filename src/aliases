@@ -33,6 +33,10 @@ Darwin )
 
   # Java
   alias java_home='/usr/libexec/java_home'
+  ;;
+Linux )
+  alias eclipse=/opt/eclipse/eclipse
+  ;;
 esac
 
 # Search/grep
