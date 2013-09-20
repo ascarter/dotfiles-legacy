@@ -4,17 +4,22 @@
 
 # Homebrew - Fix up the paths to prioritize homebrew
 if which brew &>/dev/null; then
+    BREW_PREFIX=`brew --prefix`
 	export HOMEBREW_NO_EMOJI=1
     export MANPATH=""
     eval `/usr/libexec/path_helper`
-    export PATH=`brew --prefix`/bin:${PATH}
-    export MANPATH=`brew --prefix`/share/man:${MANPATH}
+    export PATH=${BREW_PREFIX}/bin:${PATH}
+    export MANPATH=${BREW_PREFIX}/share/man:${MANPATH}
 	
 	# Extend gcc library/include paths to homebrew
-	export LIBRARY_PATH=`brew --prefix`/lib
-	export C_INCLUDE_PATH=`brew --prefix`/include
-	export CPLUS_INCLUDE_PATH=`brew --prefix`/include
-	export OBJC_INCLUDE_PATH=`brew --prefix`/include
+	if [ -d ${BREW_PREFIX}/lib ]; then
+    	export LIBRARY_PATH=${BREW_PREFIX}/lib
+    fi
+    if [ -d ${BREW_PREFIX}/include ]; then
+    	export C_INCLUDE_PATH=${BREW_PREFIX}/include
+	    export CPLUS_INCLUDE_PATH=${BREW_PREFIX}/include
+	    export OBJC_INCLUDE_PATH=${BREW_PREFIX}/include
+    fi
 fi
 
 # Add developer bin
