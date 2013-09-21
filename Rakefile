@@ -243,6 +243,17 @@ namespace "macports" do
     sudo "port -fp uninstall installed"
     sudo "rm -rf #{installed_files.join(' ')}"
   end
+  
+  desc "Add svn source"
+  task :svn_source do
+    macports_root = '/opt/local'
+    macports_svn_root = "#{macports_root}/sources/svn.macports.org/trunk/dports"
+    macports_svn_url = 'http://svn.macports.org/repository/macports/trunk/dports/'
+    sudo "mkdir -p #{macports_svn_root}"
+    sudo "cd #{macports_svn_root} && svn co #{macports_svn_url} ."
+    sudo "echo 'file:///opt/local/var/macports/sources/svn.macports.org/trunk/dports/' > #{macports_root}/etc/macports/sources.conf"
+    sudo "port -d sync"
+  end
 end
 namespace "vim" do
   desc "Install vim support"
