@@ -7,7 +7,7 @@ require 'tmpdir'
 require 'open-uri'
 
 task :default => [ :install ]
-task :install => [ :bootstrap, :chsh, "packages:rbenv", "packages:homebrew", "packages:virtualenv" ]
+task :install => [ :bootstrap, :chsh, "packages:rbenv", "packages:virtualenv" ]
 
 desc "Change default shell"
 task :chsh do
@@ -32,13 +32,13 @@ task :gitconfig do
     sh "git config --global merge.tool Kaleidoscope"
     sh "git config --global diff.tool Kaleidoscope"
     sh "git config --global gui.fontui '-family \"Lucida Grande\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0'"
-	sh "git config --global gui.fontdiff '-family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0'"
+  sh "git config --global gui.fontdiff '-family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0'"
   elsif RUBY_PLATFORM =~ /linux/
     sh "git config --global credential.helper cache"
     # sh "git config --global merge.tool Kaleidoscope"
     sh "git config --global diff.tool meld"
     sh "git config --global gui.fontui '-family \"Source Sans Pro\" -size 12 -weight normal -slant roman -underline 0 -overstrike 0'"
-	sh "git config --global gui.fontdiff '-family \"Source Code Pro\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'"
+  sh "git config --global gui.fontdiff '-family \"Source Code Pro\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'"
   end
 end
 
@@ -117,78 +117,136 @@ namespace "fonts" do
 end
 
 namespace "packages" do
-	desc "Install/update rbenv"
-	task :rbenv do
-	  puts "Installing rbenv..."
-		rbenv_root = Pathname.new(File.expand_path("~/.rbenv"))
-		plugins = %w{ruby-build rbenv-vars rbenv-gem-rehash rbenv-default-gems}
-		
-		unless File.exist?(rbenv_root.to_s)
-			git_clone('sstephenson', 'rbenv', rbenv_root)
-			plugins.each do |plugin|
-				git_clone('sstephenson', plugin, rbenv_root.join('plugins', plugin))
-			end
-		else
-			puts "Updating rbenv..."
-			system "cd #{rbenv_root} && git pull"
-			plugins.each do |plugin|
-				puts "Updating #{plugin}..."
-				system "cd #{rbenv_root}/plugins/#{plugin} && git pull"
-			end
-		end
-	end
+  desc "Install/update rbenv"
+  task :rbenv do
+    puts "Installing rbenv..."
+    rbenv_root = Pathname.new(File.expand_path("~/.rbenv"))
+    plugins = %w{ruby-build rbenv-vars rbenv-gem-rehash rbenv-default-gems}
+    
+    unless File.exist?(rbenv_root.to_s)
+      git_clone('sstephenson', 'rbenv', rbenv_root)
+      plugins.each do |plugin|
+        git_clone('sstephenson', plugin, rbenv_root.join('plugins', plugin))
+      end
+    else
+      puts "Updating rbenv..."
+      system "cd #{rbenv_root} && git pull"
+      plugins.each do |plugin|
+        puts "Updating #{plugin}..."
+        system "cd #{rbenv_root}/plugins/#{plugin} && git pull"
+      end
+    end
+  end
 
-	desc "Install homebrew"
-	task :homebrew do
-		if RUBY_PLATFORM =~ /darwin/
-      puts "Installing homebrew..."
-			homebrew_root = '/opt/homebrew'
-			unless File.exist?(homebrew_root)
-				sudo "mkdir -p #{homebrew_root}"
-				sudo "curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C #{homebrew_root}"
-			end
-			sudo "echo '/opt/homebrew/bin' > /etc/paths.d/homebrew"
-			sudo "echo '/opt/homebrew/share/man' > /etc/manpaths.d/homebrew"
-			sudo "/opt/homebrew/bin/brew update"
-		end
-	end
-
-	desc "Install pip/virtualenv"
-	task :virtualenv do
-		virtualenv_root = File.expand_path("~/.virtualenvs")
-		
-		# macosx - backup easy_install-2.7 because it gets broken during virtualenv install
-		if RUBY_PLATFORM =~ /darwin/
-			puts "Backing up easy_install-2.7..."
-			FileUtils.copy("/usr/bin/easy_install-2.7", "/tmp/easy_install-2.7")
-			sudo "cp /usr/bin/easy_install-2.7 /tmp/."
-		end
-		
-		puts "Install pip..."
-		sudo "easy_install --upgrade pip"
-		pip_install("virtualenv", true)
-		pip_install("virtualenvwrapper", true)
-		unless File.exist?(virtualenv_root)
-			puts "Creating #{virtualenv_root}"
-			Dir.mkdir(virtualenv_root)
-		end
-		
-		# macosx - restore original easy_install-2.7 script
-		if RUBY_PLATFORM =~ /darwin/
-			puts "Restore easy_install-2.7..."
-			sudo "cp /tmp/easy_install-2.7 /usr/bin/."
-		end		
-	end
-	
-	desc "Install terminal-notifier"
-	task :terminal_notifer do
-	  zipfile = "https://github.com/downloads/alloy/terminal-notifier/terminal-notifier_1.4.2.zip"
-	end
+  desc "Install pip/virtualenv"
+  task :virtualenv do
+    virtualenv_root = File.expand_path("~/.virtualenvs")
+    
+    # macosx - backup easy_install-2.7 because it gets broken during virtualenv install
+    if RUBY_PLATFORM =~ /darwin/
+      puts "Backing up easy_install-2.7..."
+      FileUtils.copy("/usr/bin/easy_install-2.7", "/tmp/easy_install-2.7")
+      sudo "cp /usr/bin/easy_install-2.7 /tmp/."
+    end
+    
+    puts "Install pip..."
+    sudo "easy_install --upgrade pip"
+    pip_install("virtualenv", true)
+    pip_install("virtualenvwrapper", true)
+    unless File.exist?(virtualenv_root)
+      puts "Creating #{virtualenv_root}"
+      Dir.mkdir(virtualenv_root)
+    end
+    
+    # macosx - restore original easy_install-2.7 script
+    if RUBY_PLATFORM =~ /darwin/
+      puts "Restore easy_install-2.7..."
+      sudo "cp /tmp/easy_install-2.7 /usr/bin/."
+    end   
+  end
+  
+  desc "Install terminal-notifier"
+  task :terminal_notifer do
+    zipfile = "https://github.com/downloads/alloy/terminal-notifier/terminal-notifier_1.4.2.zip"
+  end
 end
 
+namespace "homebrew" do
+  desc "Install homebrew"
+  task :install do
+    if RUBY_PLATFORM =~ /darwin/
+      puts "Installing homebrew..."
+      homebrew_root = '/opt/homebrew'
+      unless File.exist?(homebrew_root)
+        sudo "mkdir -p #{homebrew_root}"
+        sudo "curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C #{homebrew_root}"
+      end
+      sudo "echo '/opt/homebrew/bin' > /etc/paths.d/homebrew"
+      sudo "echo '/opt/homebrew/share/man' > /etc/manpaths.d/homebrew"
+      sudo "/opt/homebrew/bin/brew update"
+    end
+  end
+  
+  desc "Uninstall homebrew"
+  task :uninstall do
+    homebrew_root = '/opt/homebrew'
+    #if File.exist?(homebrew_root)
+      installed_files = [
+        '~/Library/Caches/Homebrew',
+        '~/Library/Logs/Homebrew',
+        '/Library/Caches/Homebrew',
+        '/etc/paths.d/homebrew',
+        '/etc/manpaths.d/homebrew'
+      ]
+      sudo "rm -rf #{homebrew_root}"
+      sudo "rm -rf #{installed_files.join(' ')}"
+    #end
+  end
+end
+
+namespace "macports" do
+  desc "Install macports"
+  task :install do
+    puts "Installing macports..."
+    macports_root = '/opt/local'
+    macports_url = 'https://distfiles.macports.org/MacPorts'
+    macports_pkg = 'MacPorts-2.2.0-10.8-MountainLion.pkg'
+    unless File.exist?(macports_root)
+      sh "curl -L #{macports_url}/#{macports_pkg} -o /tmp/#{macports_pkg}"
+      sudo "installer -pkg /tmp/#{macports_pkg} -target /"
+      file_remove("/tmp/{macports_pkg}")
+    end
+    sudo "echo '/opt/local/bin' > /etc/paths.d/macports"
+    sudo "echo '/opt/local/sbin' >> /etc/paths.d/macports"
+    sudo "echo '/opt/local/share/man' > /etc/manpaths.d/macports"
+    sudo "/opt/local/bin/port -v selfupdate"
+  end
+  
+  desc "Uninstall macports"
+  task :uninstall do
+    puts "Uninstall macports..."
+    macports_root = '/opt/local'
+    installed_files = [
+      '/opt/local',
+      '/Applications/DarwinPorts',
+      '/Applications/MacPorts',
+      '/Library/LaunchDaemons/org.macports.*',
+      '/Library/Receipts/DarwinPorts*.pkg',
+      '/Library/Receipts/MacPorts*.pkg',
+      '/Library/StartupItems/DarwinPortsStartup',
+      '/Library/Tcl/darwinports1.0',
+      '/Library/Tcl/macports1.0',
+      '~/.macports',
+      '/etc/paths.d/macports',
+      '/etc/manpaths.d/macports'
+    ]
+    sudo "port -fp uninstall installed"
+    sudo "rm -rf #{installed_files.join(' ')}"
+  end
+end
 namespace "vim" do
-	desc "Install vim support"
-	task :install do
+  desc "Install vim support"
+  task :install do
     # Symlink vim programs to mvim on mac
     usr_bin = '/usr/local/bin'
     mvim_path = File.join(usr_bin, 'mvim')
@@ -198,10 +256,10 @@ namespace "vim" do
         sudo "ln -s #{mvim_path} #{File.join(usr_bin, prog)}"
       end
     end
-	end
-	
-	desc "Uninstall vim support"
-	task :uninstall do
+  end
+  
+  desc "Uninstall vim support"
+  task :uninstall do
     usr_bin = '/usr/local/bin'
     mvim_path = File.join(usr_bin, 'mvim')
     if File.exist?(mvim_path)
@@ -212,7 +270,7 @@ namespace "vim" do
       end
     end
   end
-	  
+    
 end
 
 namespace "gnome" do
@@ -276,23 +334,23 @@ def prompt(message)
 end
 
 def git_clone(owner, repo, dest=nil)
-	git_url = URI.join("https://github.com/", "#{owner}/", "#{repo}.git").to_s
-	cmd = "git clone #{git_url}"
-	cmd += " #{dest.to_s}" if dest
-	sh cmd
+  git_url = URI.join("https://github.com/", "#{owner}/", "#{repo}.git").to_s
+  cmd = "git clone #{git_url}"
+  cmd += " #{dest.to_s}" if dest
+  sh cmd
 end
 
 def sudo(cmd)
-	system "sudo sh -c '#{cmd}'"
+  system "sudo sh -c '#{cmd}'"
 end
 
 def pip_install(package, use_sudo=false)
-	puts "Installing #{package}..."
-	cmd = "pip install --upgrade #{package}"
-	if use_sudo
-		sudo cmd
-	else
-		exec cmd
-	end
+  puts "Installing #{package}..."
+  cmd = "pip install --upgrade #{package}"
+  if use_sudo
+    sudo cmd
+  else
+    exec cmd
+  end
 end
 

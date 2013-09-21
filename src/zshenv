@@ -22,6 +22,12 @@ if which brew &>/dev/null; then
     fi
 fi
 
+# Macports
+if [ -d /opt/local ]; then
+    export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+    export MANPATH=/opt/local/share/man:$MANPATH
+fi
+
 # Add developer bin
 if [ -d ~/Developer/bin ]; then
 	export PATH=~/Developer/bin:${PATH}
