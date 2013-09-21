@@ -8,10 +8,10 @@ endif
 if has("gui_gtk2")
   " runtime mswin.vim
   " set guifont=Monospace\ 10
-  set guifont=Source\ Code\ Pro\ Medium\ 10
+  set guifont=Source\ Code\ Pro\ Medium\ 12
   " set guioptions=egmrLT
 elseif has("gui_macvim")
-  set guifont=Menlo:h12
+  set guifont=Source\ Code\ Pro\ Medium:h12
   " set guioptions=egmrLt
   set transparency=0
   au FocusLost * set transp=5
@@ -64,7 +64,7 @@ elseif has("gui_macvim")
   map <D-M-Left> <C-w>h
   imap <D-M-Left> <C-w>h
 elseif has("gui_win32")
-  set guifont=Consolas:h11,Lucida\ Console:h12
+  set guifont=Source\ Code\ Pro:h12,Consolas:h11,Lucida\ Console:h12
 endif
 
 " Adjust viewports to the same size
