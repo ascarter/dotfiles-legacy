@@ -255,6 +255,7 @@ namespace "macports" do
     sudo "port -d sync"
   end
 end
+
 namespace "vim" do
   desc "Install vim support"
   task :install do
