@@ -52,17 +52,19 @@ fi
 # Terminal settings
 # ========================================
 
-# Set directory colors
-# man ls -> find LSCOLORS
+if which dircolors &>/dev/null; then
+    eval `dircolors ~/.dircolors`
+else
+    # Set directory colors
+    # man ls -> find LSCOLORS
 
-# Default (light terminal)
-# export LSCOLORS=exfxcxdxbxegedabagacad
-
-# Dark terminal
-# export LSCOLORS=gxfxcxdxbxegedabagacad
-
-# Daring Fireball terminal
-export LSCOLORS=CxGxcxdxBxegedabagacad
+    # Default (light terminal)
+    # export LSCOLORS=exfxcxdxbxegedabagacad
+    # Dark terminal
+    # export LSCOLORS=gxfxcxdxbxegedabagacad
+    # Daring Fireball terminal
+    export LSCOLORS=CxGxcxdxBxegedabagacad
+fi
 
 # Key mappings
 
