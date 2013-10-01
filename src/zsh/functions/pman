@@ -4,5 +4,5 @@
 
 pman () {
     # TODO: Check for the right PDF viewer based on OS
-    man "${1}" | open -f -a /Applications/Preview.app
+    man -t ${@} | open -f -a /Applications/Preview.app
 }

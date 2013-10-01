@@ -2,20 +2,6 @@
 # Path settings
 # ========================================
 
-# Fix up the paths to prioritize homebrew
-if [ -n "`which brew`" ]; then
-    export MANPATH=""
-    eval `/usr/libexec/path_helper`
-    export PATH=`brew --prefix`/bin:${PATH}
-    export MANPATH=`brew --prefix`/share/man:${MANPATH}
-fi
-
-# Macports
-if [ -d /opt/local ]; then
-    export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-    export MANPATH=/opt/local/share/man:$MANPATH
-fi
-
 # Add developer bin
 if [ -d ~/Developer/bin ]; then
 	export PATH=~/Developer/bin:${PATH}
@@ -330,6 +316,12 @@ if [ -n "`which brew`" ]; then
     fi
 fi
 
+if [ -n "`which brew`" ]; then
+    if [ -f `brew --prefix`/Library/Contributions/brew_bash_completion.sh ]; then
+        source `brew --prefix`/Library/Contributions/brew_bash_completion.sh
+    fi
+fi
+
 if [ -e ~/.bash_completion ]; then
     . ~/.bash_completion
 fi
@@ -342,6 +334,6 @@ fi
 # ========================================
 # Per-machine extras
 # ========================================
-if [ -e ~/.bash_local ]; then
-	. ~/.bash_local
+if [ -e ~/.bash_local/bashrc ]; then
+	. ~/.bash_local/bashrc
 fi

@@ -52,9 +52,11 @@ task :bootstrap do
       source = File.join(srcdir, file)
       target = File.expand_path(File.join(home, ".#{file}"))
       if File.exist?(target) or File.symlink?(target) or File.directory?(target)
-        if File.identical?(file, target)
-          puts "Identical #{filename}"
+        if File.identical?(source, target)
+          puts "Identical #{file}"
         else
+          puts "Diff:"
+          sh "diff #{file} #{target}"
           if replace_all
             replace(source, target)
           else
@@ -76,6 +78,16 @@ task :bootstrap do
       else
         link_file(source, target)
       end
+    end
+  end
+  
+  # Create override directories for local changes
+  ['zsh_local', 'zsh_local/functions', 'bash_local'].each do |localdir|
+    target = File.expand_path(File.join(home, ".#{localdir}"))
+    unless File.exist?(target)
+      mkdir(target)
+    else
+      puts "#{localdir} exists"
     end
   end
 end
@@ -181,9 +193,17 @@ namespace "homebrew" do
         sudo "mkdir -p #{homebrew_root}"
         sudo "curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C #{homebrew_root}"
       end
-      sudo "echo '/opt/homebrew/bin' > /etc/paths.d/homebrew"
-      sudo "echo '/opt/homebrew/share/man' > /etc/manpaths.d/homebrew"
+      path_helper('homebrew', ['/opt/homebrew/bin'])
+      path_helper('homebrew', ['/opt/homebrew/share/man'], 'manpaths')
       sudo "/opt/homebrew/bin/brew update"
+      zsh_completion_source = File.join(homebrew_root, 'Library/Contributions/brew_zsh_completion.zsh')
+      zsh_local = File.expand_path(File.join(ENV['HOME'], '.zsh_local/functions'))
+      zsh_completion_target = File.expand_path(File.join(zsh_local, '_brew'))
+      if File.exist?(zsh_completion_source) and File.exist?(zsh_local)
+        link_file(zsh_completion_source, zsh_completion_target)
+      end
+    else
+      puts "Homebrew not supported on #{RUBY_PLATFORM}"
     end
   end
   
@@ -207,19 +227,22 @@ end
 namespace "macports" do
   desc "Install macports"
   task :install do
-    puts "Installing macports..."
-    macports_root = '/opt/local'
-    macports_url = 'https://distfiles.macports.org/MacPorts'
-    macports_pkg = 'MacPorts-2.2.0-10.8-MountainLion.pkg'
-    unless File.exist?(macports_root)
-      sh "curl -L #{macports_url}/#{macports_pkg} -o /tmp/#{macports_pkg}"
-      sudo "installer -pkg /tmp/#{macports_pkg} -target /"
-      file_remove("/tmp/{macports_pkg}")
+    if RUBY_PLATFORM =~ /darwin/
+      puts "Installing macports..."
+      macports_root = '/opt/local'
+      macports_url = 'https://distfiles.macports.org/MacPorts'
+      macports_pkg = 'MacPorts-2.2.0-10.8-MountainLion.pkg'
+      unless File.exist?(macports_root)
+        sh "curl -L #{macports_url}/#{macports_pkg} -o /tmp/#{macports_pkg}"
+        sudo "installer -pkg /tmp/#{macports_pkg} -target /"
+        file_remove("/tmp/{macports_pkg}")
+      end
+      path_helper('macports', ['/opt/local/bin', '/opt/local/sbin'])
+      path_helper('macports', ['/opt/local/share/man'], 'manpaths')
+      sudo "/opt/local/bin/port -v selfupdate"
+    else
+      puts "Macports not supported on #{RUBY_PLATFORM}"
     end
-    sudo "echo '/opt/local/bin' > /etc/paths.d/macports"
-    sudo "echo '/opt/local/sbin' >> /etc/paths.d/macports"
-    sudo "echo '/opt/local/share/man' > /etc/manpaths.d/macports"
-    sudo "/opt/local/bin/port -v selfupdate"
   end
   
   desc "Uninstall macports"
@@ -363,6 +386,20 @@ def pip_install(package, use_sudo=false)
     sudo cmd
   else
     exec cmd
+  end
+end
+
+def path_helper(path_file, paths, type='paths')
+  raise ArgumentError, "Invalid path type" unless ['paths', 'manpaths'].include? type
+  
+  fullpath = File.join("/etc/#{type}.d", path_file)
+  unless File.exist?(fullpath)
+    sudo "touch #{fullpath}"
+    for path in paths
+      sudo "echo '#{path}' >> #{fullpath}"
+    end
+  else
+    puts "#{fullpath} already exists"
   end
 end
 

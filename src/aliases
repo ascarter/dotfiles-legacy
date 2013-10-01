@@ -21,7 +21,7 @@ Darwin )
   alias sleepnow='pmset sleepnow'
   alias batterycapacity='ioreg -w0 -c AppleSmartBattery -b -f | grep -i capacity'
 
-  # QuickLoom
+  # QuickLook
   alias ql='qlmanage -p "$@" >& /dev/null'
 
   # Dev tools

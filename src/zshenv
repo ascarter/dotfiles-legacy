@@ -6,10 +6,8 @@
 if which brew &>/dev/null; then
     BREW_PREFIX=`brew --prefix`
 	export HOMEBREW_NO_EMOJI=1
-    export MANPATH=""
-    eval `/usr/libexec/path_helper`
-    export PATH=${BREW_PREFIX}/bin:${PATH}
-    export MANPATH=${BREW_PREFIX}/share/man:${MANPATH}
+    #export PATH=${BREW_PREFIX}/bin:${PATH}
+    #export MANPATH=${BREW_PREFIX}/share/man:${MANPATH}
 	
 	# Extend gcc library/include paths to homebrew
 	if [ -d ${BREW_PREFIX}/lib ]; then
@@ -24,8 +22,17 @@ fi
 
 # Macports
 if [ -d /opt/local ]; then
-    export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-    export MANPATH=/opt/local/share/man:$MANPATH
+    # export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+    # export MANPATH=/opt/local/share/man:$MANPATH
+	# Extend gcc library/include paths to macports
+	if [ -d /opt/local/lib ]; then
+    	export LIBRARY_PATH=/opt/local/lib
+    fi
+    if [ -d /opt/local/include ]; then
+    	export C_INCLUDE_PATH=/opt/local/include
+	    export CPLUS_INCLUDE_PATH=/opt/local/include
+	    export OBJC_INCLUDE_PATH=/opt/local/include
+    fi
 fi
 
 # Add developer bin
