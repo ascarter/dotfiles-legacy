@@ -39,6 +39,11 @@ Linux )
   ;;
 esac
 
+# Use MacVim on mac os x if installed
+if [ -e /usr/local/bin/vim ]; then
+    alias vim='/usr/local/bin/vim'
+fi
+
 # Search/grep
 alias devgrep="grep -n -r --exclude='.svn' --exclude='*.swp' --exclude='.git'"
 

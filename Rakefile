@@ -287,7 +287,7 @@ namespace "vim" do
     mvim_path = File.join(usr_bin, 'mvim')
     if File.exist?(mvim_path)
       # Gui, Diff, Read-only, Ex, Restricted
-      %w(gvim mvimdiff mview mex rmvim).each do |prog|
+      %w(gvim mvimdiff mview mex rmvim vim).each do |prog|
         sudo "ln -s #{mvim_path} #{File.join(usr_bin, prog)}"
       end
     end
@@ -299,13 +299,12 @@ namespace "vim" do
     mvim_path = File.join(usr_bin, 'mvim')
     if File.exist?(mvim_path)
       # Gui, Diff, Read-only, Ex, Restricted
-      %w(gvim mvimdiff mview mex rmvim).each do |prog|
+      %w(gvim mvimdiff mview mex rmvim vim).each do |prog|
         target = File.expand_path(File.join(usr_bin, prog))
         sudo_remove(target)
       end
     end
   end
-    
 end
 
 namespace "gnome" do
