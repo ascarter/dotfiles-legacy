@@ -90,3 +90,13 @@ endif
 
 " % to bound from do to end
 runtime! macros/matchit.vim
+
+" =====================================
+" Bundles
+" =====================================
+set runtimepath+=~/.vim/bundle/vundle
+call vundle#rc()
+Bundle 'gmarik/vundle'
+
+Bundle 'taglist'
+
