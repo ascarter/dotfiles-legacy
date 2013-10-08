@@ -5,6 +5,9 @@ else
   set lines=40 columns=100
 endif
 
+colorscheme github
+set background=light
+
 if has("gui_gtk2")
   " runtime mswin.vim
   " set guifont=Monospace\ 10

@@ -48,6 +48,14 @@ set scs
 set showtabline=1
 set ruler
 
+" netrw
+
+"let g:netrw_hide=1
+let g:netrw_liststyle=3
+let g:netrw_list_hide='.git,.DS_Store'
+"let g:netrw_preview=1
+"let g:netrw_winsize=30
+
 " Turn off blinking cursor
 set guicursor+=n:blinkon0
 
@@ -88,13 +96,8 @@ endif
 " Mappings
 let mapleader = "\\"
 
-if has('gui_running')
-  set background=light
-else
-  set background=dark
-endif
-
 colorscheme github
+set background=dark
 
 " MacVIM shift+arrow keys behavior
 if has("gui_macvim")
