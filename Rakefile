@@ -298,6 +298,8 @@ namespace "vim" do
         sudo cmd
         file_remove(File.join('/tmp', "MacVim-#{snapshot}"))
         file_remove(snapshot_pkg_path)
+      else
+        puts "MacVim already installed"
       end 
     
       # Symlink vim programs to mvim on mac
@@ -313,7 +315,13 @@ namespace "vim" do
     end
 
     # Vundle install
-    sh "vim -c \"BundleInstall\" -c \"qa\""
+    vundle_path = File.expand_path(File.join(ENV['HOME'], '.vim/bundle/vundle'))
+    unless File.exist?(vundle_path)
+      git_clone('gmarik', 'vundle', vundle_path)
+      sh "vim -c \"BundleInstall\" -c \"qa\""
+    else
+      puts "vundle already installed"
+    end
   end
   
   desc "Uninstall vim support"
@@ -326,6 +334,16 @@ namespace "vim" do
         target = File.expand_path(File.join(usr_bin, prog))
         sudo_remove(target)
       end
+    end
+    
+    bundle_path = File.expand_path(File.join(ENV['HOME'], '.vim/bundle'))
+    if File.exist?(bundle_path)
+      file_remove(bundle_path)
+    end
+    
+    macvim_path = '/Applications/MacVim.app'
+    if File.exist?(macvim_path)
+      sudo_remove(macvim_path)
     end
   end
 end
