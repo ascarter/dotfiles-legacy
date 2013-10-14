@@ -127,10 +127,12 @@ fi
 # Applications/services
 # ========================================
 
+# Postgres openssl breaks Ruby build
+# Disable it off the path for now ...
 export POSTGRES_APP_ROOT=/Applications/Postgres.app/Contents/MacOS
-if [ -d ${POSTGRES_APP_ROOT} ]; then
-    export PATH=${POSTGRES_APP_ROOT}/bin:${PATH}
-fi
+#if [ -d ${POSTGRES_APP_ROOT} ]; then
+#    export PATH=${POSTGRES_APP_ROOT}/bin:${PATH}
+#fi
 
 # Heroku Toolbelt
 if [ -d /usr/local/heroku ]; then

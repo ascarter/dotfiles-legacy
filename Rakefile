@@ -25,7 +25,7 @@ task :gitconfig do
   email = prompt("user email")
   sh "git config --global user.name \"#{name}\""
   sh "git config --global user.email \"#{email}\""
-  
+
   # Configure password caching
   if RUBY_PLATFORM =~ /darwin/
     sh "git config --global credential.helper osxkeychain"
@@ -80,7 +80,7 @@ task :bootstrap do
       end
     end
   end
-  
+
   # Create override directories for local changes
   ['zsh_local', 'zsh_local/functions', 'bash_local'].each do |localdir|
     target = File.expand_path(File.join(home, ".#{localdir}"))
@@ -109,14 +109,14 @@ namespace "fonts" do
 
   desc "Install all fonts"
   task :all => [ :sourcecodepro ]
-  
+
   desc "Adobe SourceCodePro"
   task :sourcecodepro do
 #     install_font('SourceCodePro', 'http://sourceforge.net/projects/sourcecodepro.adobe/files/latest/download')
 #   #!/bin/bash
 #   FONT_NAME="SourceCodePro"
 #   URL="http://sourceforge.net/projects/sourcecodepro.adobe/files/latest/download"
-# 
+#
 #   mkdir /tmp/adodefont
 #   cd /tmp/adodefont
 #   wget ${URL} -O ${FONT_NAME}.zip
@@ -124,43 +124,22 @@ namespace "fonts" do
 #   mkdir -p ~/.fonts
 #   cp *.otf ~/.fonts
 #   fc-cache -f -v
-# 
+#
   end
 end
 
 namespace "packages" do
-  desc "Install/update rbenv"
-  task :rbenv do
-    puts "Installing rbenv..."
-    rbenv_root = Pathname.new(File.expand_path("~/.rbenv"))
-    plugins = %w{ruby-build rbenv-vars rbenv-gem-rehash rbenv-default-gems}
-    
-    unless File.exist?(rbenv_root.to_s)
-      git_clone('sstephenson', 'rbenv', rbenv_root)
-      plugins.each do |plugin|
-        git_clone('sstephenson', plugin, rbenv_root.join('plugins', plugin))
-      end
-    else
-      puts "Updating rbenv..."
-      system "cd #{rbenv_root} && git pull"
-      plugins.each do |plugin|
-        puts "Updating #{plugin}..."
-        system "cd #{rbenv_root}/plugins/#{plugin} && git pull"
-      end
-    end
-  end
-
   desc "Install pip/virtualenv"
   task :virtualenv do
     virtualenv_root = File.expand_path("~/.virtualenvs")
-    
+
     # macosx - backup easy_install-2.7 because it gets broken during virtualenv install
     if RUBY_PLATFORM =~ /darwin/
       puts "Backing up easy_install-2.7..."
       FileUtils.copy("/usr/bin/easy_install-2.7", "/tmp/easy_install-2.7")
       sudo "cp /usr/bin/easy_install-2.7 /tmp/."
     end
-    
+
     puts "Install pip..."
     sudo "easy_install --upgrade pip"
     pip_install("virtualenv", true)
@@ -169,14 +148,14 @@ namespace "packages" do
       puts "Creating #{virtualenv_root}"
       Dir.mkdir(virtualenv_root)
     end
-    
+
     # macosx - restore original easy_install-2.7 script
     if RUBY_PLATFORM =~ /darwin/
       puts "Restore easy_install-2.7..."
       sudo "cp /tmp/easy_install-2.7 /usr/bin/."
-    end   
+    end
   end
-  
+
   desc "Install terminal-notifier"
   task :terminal_notifer do
     zipfile = "https://github.com/downloads/alloy/terminal-notifier/terminal-notifier_1.4.2.zip"
@@ -206,7 +185,7 @@ namespace "homebrew" do
       puts "Homebrew not supported on #{RUBY_PLATFORM}"
     end
   end
-  
+
   desc "Uninstall homebrew"
   task :uninstall do
     homebrew_root = '/opt/homebrew'
@@ -244,7 +223,7 @@ namespace "macports" do
       puts "Macports not supported on #{RUBY_PLATFORM}"
     end
   end
-  
+
   desc "Uninstall macports"
   task :uninstall do
     puts "Uninstall macports..."
@@ -266,7 +245,7 @@ namespace "macports" do
     sudo "port -fp uninstall installed"
     sudo "rm -rf #{installed_files.join(' ')}"
   end
-  
+
   desc "Add svn source"
   task :svn_source do
     macports_root = '/opt/local'
@@ -276,6 +255,36 @@ namespace "macports" do
     sudo "cd #{macports_svn_root} && svn co #{macports_svn_url} ."
     sudo "echo 'file:///opt/local/var/macports/sources/svn.macports.org/trunk/dports/' > #{macports_root}/etc/macports/sources.conf"
     sudo "port -d sync"
+  end
+end
+
+namespace "rbenv" do
+  desc "Install rbenv"
+  task :install do
+    puts "Installing rbenv..."
+    rbenv_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.rbenv')))
+    plugins = %w{ruby-build rbenv-vars rbenv-gem-rehash rbenv-default-gems}
+
+    unless File.exist?(rbenv_root.to_s)
+      git_clone('sstephenson', 'rbenv', rbenv_root)
+      plugins.each do |plugin|
+        git_clone('sstephenson', plugin, rbenv_root.join('plugins', plugin))
+      end
+    else
+      puts "Updating rbenv..."
+      system "cd #{rbenv_root} && git pull"
+      plugins.each do |plugin|
+        puts "Updating #{plugin}..."
+        system "cd #{rbenv_root}/plugins/#{plugin} && git pull"
+      end
+    end
+  end
+
+  desc "Uninstall rbenv"
+  task :uninstall do
+    puts "Uninstalling rbenv..."
+    rbenv_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.rbenv')))
+    file_remove(rbenv_root)
   end
 end
 
@@ -289,7 +298,7 @@ namespace "vim" do
         snapshot_pkg = "MacVim-#{snapshot}.tbz"
         snapshot_url = "https://github.com/eee19/macvim/releases/download/#{snapshot}/#{snapshot_pkg}"
         snapshot_pkg_path = File.join('/tmp', snapshot_pkg)
-        snapshot_src = File.join('/tmp', "MacVim-#{snapshot}") 
+        snapshot_src = File.join('/tmp', "MacVim-#{snapshot}")
         puts "Downlaoding #{snapshot_url}..."
         download_file(snapshot_url, snapshot_pkg_path)
         cmd = "cd /tmp && tar xvzf #{snapshot_pkg}"
@@ -300,8 +309,8 @@ namespace "vim" do
         file_remove(snapshot_pkg_path)
       else
         puts "MacVim already installed"
-      end 
-    
+      end
+
       # Symlink vim programs to mvim on mac
       usr_bin = '/usr/local/bin'
       mvim_path = File.join(usr_bin, 'mvim')
@@ -323,7 +332,7 @@ namespace "vim" do
       puts "vundle already installed"
     end
   end
-  
+
   desc "Uninstall vim support"
   task :uninstall do
     usr_bin = '/usr/local/bin'
@@ -335,12 +344,12 @@ namespace "vim" do
         sudo_remove(target)
       end
     end
-    
+
     bundle_path = File.expand_path(File.join(ENV['HOME'], '.vim/bundle'))
     if File.exist?(bundle_path)
       file_remove(bundle_path)
     end
-    
+
     macvim_path = '/Applications/MacVim.app'
     if File.exist?(macvim_path)
       sudo_remove(macvim_path)
@@ -431,7 +440,7 @@ end
 
 def path_helper(path_file, paths, type='paths')
   raise ArgumentError, "Invalid path type" unless ['paths', 'manpaths'].include? type
-  
+
   fullpath = File.join("/etc/#{type}.d", path_file)
   unless File.exist?(fullpath)
     sudo "touch #{fullpath}"
