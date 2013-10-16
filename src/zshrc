@@ -54,11 +54,13 @@ else
     # man ls -> find LSCOLORS
 
     # Default (light terminal)
-    # export LSCOLORS=exfxcxdxbxegedabagacad
+    export LSCOLORS=exfxcxdxbxegedabagacad
+    
     # Dark terminal
     # export LSCOLORS=gxfxcxdxbxegedabagacad
+    
     # Daring Fireball terminal
-    export LSCOLORS=CxGxcxdxBxegedabagacad
+    # export LSCOLORS=CxGxcxdxBxegedabagacad
 fi
 
 # Key mappings

@@ -11,10 +11,10 @@ set background=light
 if has("gui_gtk2")
   " runtime mswin.vim
   " set guifont=Monospace\ 10
-  set guifont=Source\ Code\ Pro\ Medium\ 12
+  set guifont=Source\ Code\ Pro\ Medium\ 12,Monospace\ 12
   " set guioptions=egmrLT
 elseif has("gui_macvim")
-  set guifont=Source\ Code\ Pro\ Medium:h12
+  set guifont=Menlo:h12
   " set guioptions=egmrLt
   set transparency=0
   au FocusLost * set transp=5

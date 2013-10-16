@@ -280,7 +280,7 @@ declare +x PS1
 
 if [ $TERM = "xterm-256color" -o $TERM = "xterm-color" -o $TERM = "dtterm" -o $TERM = "linux" ]; then
   export CLICOLOR=1
-  PS1="\$(__dev_ps1 '(${COLOR_BOLD_CYAN}%s${COLOR_CLEAR})')${COLOR_WHITE}\u@\h:${COLOR_BOLD_WHITE}\W${COLOR_CLEAR}\$ "
+  PS1='\[\e]2;\u@\h: \w\a\][\u@\h:\W$(__dev_ps1 " (%s)")]\$ '
   pwdtitle
 else
   PS1='\[\e]2;\u@\h: \w\a\][\u@\h:\W$(__dev_ps1 " (%s)")]\$ '
@@ -293,11 +293,13 @@ else
     # man ls -> find LSCOLORS
 
     # Default (light terminal)
-    # export LSCOLORS=exfxcxdxbxegedabagacad
+    export LSCOLORS=exfxcxdxbxegedabagacad
+    
     # Dark terminal
     # export LSCOLORS=gxfxcxdxbxegedabagacad
+    
     # Daring Fireball terminal
-    export LSCOLORS=CxGxcxdxBxegedabagacad
+    # export LSCOLORS=CxGxcxdxBxegedabagacad
 fi
 
 # ========================================
