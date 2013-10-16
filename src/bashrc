@@ -287,7 +287,9 @@ else
 fi
 
 if which dircolors &>/dev/null; then
-    eval `dircolors ~/.dircolors`
+    if [ -e ~/.dircolors ]; then
+        eval `dircolors ~/.dircolors`
+    fi
 else
     # Set directory colors
     # man ls -> find LSCOLORS
