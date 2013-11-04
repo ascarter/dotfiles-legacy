@@ -10,6 +10,7 @@ Bundle 'gmarik/vundle'
 
 Bundle 'taglist.vim'
 Bundle 'ctrlp.vim'
+Bundle 'jnwhiteh/vim-golang'
 
 " =====================================
 " Syntax and file types
@@ -73,6 +74,7 @@ autocmd FileType python     set tabstop=4 shiftwidth=4 softtabstop=4 expandtab t
 autocmd FileType make       set noexpandtab
 autocmd FileType markdown   set wrap wrapmargin=2 textwidth=72|map <buffer> <Leader>p :Hammer<CR>
 autocmd BufNewFile,BufRead *.json set ft=javascript
+autocmd FileType go compiler go
 
 set foldenable
 set foldmethod=syntax

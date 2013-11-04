@@ -92,6 +92,10 @@ fi
 # Node
 export NODE_PATH=/usr/local/lib/node_modules
 
+# Go
+export GOROOT=/usr/local/go
+export PATH=$PATH:$GOROOT/bin
+
 # Perforce
 if [ -e /usr/local/p4 ]; then
 	export P4DIFF=/usr/local/bin/ksdiff
