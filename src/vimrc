@@ -34,7 +34,7 @@ set smartindent
 set autoindent
 set backspace=start,eol,indent whichwrap+=<,>,[,]
 
-" set number
+set number
 set cursorline
 set modeline
 
