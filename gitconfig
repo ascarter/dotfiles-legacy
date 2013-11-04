@@ -1,35 +1,36 @@
 [color]
-	ui = auto
+    ui = auto
 [core]
-	excludesfile = ~/.gitignore
+    excludesfile = ~/.gitignore
 [pack]
-	threads = 0
+    threads = 0
 [difftool]
-	prompt = false
+    prompt = false
 [difftool "bbdiff"]
-	cmd = /usr/local/bin/bbdiff --wait --resume "$LOCAL" "$REMOTE"
+    cmd = /usr/local/bin/bbdiff --wait --resume "$LOCAL" "$REMOTE"
 [difftool "Kaleidoscope"]
-	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+    cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [instaweb]
-	httpd = webrick	
+    httpd = webrick 
 [mergetool "Kaleidoscope"]
-	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-	trustExitCode = true
+    cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+    trustExitCode = true
 [merge]
-	prompt = false
-	renormalize = true
-	keepBackup = true
+    prompt = false
+    renormalize = true
+    keepBackup = true
 [alias]
-	changes = diff --name-status -r
-	ctags = '!${PWD}/.git/hooks/ctags'
-	datetag = !git tag `date \"+%Y%m%d%H%M\"`
-	diffstat = diff --stat -r
-	gdiff = difftool --gui --no-prompt
-	gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
-	k = !gitk
-	logx = log --graph --decorate --all --oneline
-	tower = !sh -c 'gittower'
-	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
-	who = shortlog -s --
-	whois = !sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -
-	x = !gitx
+    changes = diff --name-status -r
+    ctags = '!${PWD}/.git/hooks/ctags'
+    datetag = !git tag `date \"+%Y%m%d%H%M\"`
+    diffstat = diff --stat -r
+    gdiff = difftool --gui --no-prompt
+    gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
+    k = !gitk
+    logx = log --graph --decorate --all --oneline
+    tower = !sh -c 'gittower'
+    setemail = !git config user.email 
+    whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
+    who = shortlog -s --
+    whois = !sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -
+    x = !gitx
