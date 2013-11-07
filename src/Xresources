@@ -1,8 +1,11 @@
 Xft.dpi: 96
 Xft.antialias: true
 XTerm.*.faceName: Source Code Pro
-XTerm.*.faceSize: 10
+XTerm.*.faceSize: 12
 XTerm.*.background: White
 XTerm.*.foreground: Black
-XTerm.*.highlightColor: 
+XTerm.*.highlightColor: rgb:A6/CA/FE
 
+# Daring Fireball
+#XTerm.*.background: grey29
+#XTerm.*.foreground: LightYellow2
