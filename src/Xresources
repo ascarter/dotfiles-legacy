@@ -5,6 +5,7 @@ XTerm.*.faceSize: 12
 XTerm.*.background: White
 XTerm.*.foreground: Black
 XTerm.*.highlightColor: rgb:A6/CA/FE
+Xterm.*.geometry: 80x24
 
 # Daring Fireball
 #XTerm.*.background: grey29
