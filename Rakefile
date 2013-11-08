@@ -7,7 +7,7 @@ require 'uri'
 require 'tmpdir'
 
 task :default => [ :install ]
-task :install => [ :bootstrap, :chsh, "packages:rbenv", "packages:virtualenv" ]
+task :install => [ :bootstrap, :chsh, "rbenv:install", "virtualenv:install", "homebrew:install" ]
 
 desc "Change default shell"
 task :chsh do
@@ -125,40 +125,6 @@ namespace "fonts" do
 #   cp *.otf ~/.fonts
 #   fc-cache -f -v
 #
-  end
-end
-
-namespace "packages" do
-  desc "Install pip/virtualenv"
-  task :virtualenv do
-    virtualenv_root = File.expand_path("~/.virtualenvs")
-
-    # macosx - backup easy_install-2.7 because it gets broken during virtualenv install
-    if RUBY_PLATFORM =~ /darwin/
-      puts "Backing up easy_install-2.7..."
-      FileUtils.copy("/usr/bin/easy_install-2.7", "/tmp/easy_install-2.7")
-      sudo "cp /usr/bin/easy_install-2.7 /tmp/."
-    end
-
-    puts "Install pip..."
-    sudo "easy_install --upgrade pip"
-    pip_install("virtualenv", true)
-    pip_install("virtualenvwrapper", true)
-    unless File.exist?(virtualenv_root)
-      puts "Creating #{virtualenv_root}"
-      Dir.mkdir(virtualenv_root)
-    end
-
-    # macosx - restore original easy_install-2.7 script
-    if RUBY_PLATFORM =~ /darwin/
-      puts "Restore easy_install-2.7..."
-      sudo "cp /tmp/easy_install-2.7 /usr/bin/."
-    end
-  end
-
-  desc "Install terminal-notifier"
-  task :terminal_notifer do
-    zipfile = "https://github.com/downloads/alloy/terminal-notifier/terminal-notifier_1.4.2.zip"
   end
 end
 
@@ -285,6 +251,45 @@ namespace "rbenv" do
     puts "Uninstalling rbenv..."
     rbenv_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.rbenv')))
     file_remove(rbenv_root)
+  end
+end
+
+namespace "virtualenv" do
+  desc "Install virtualenv"
+  task :install do
+    virtualenv_root = File.expand_path("~/.virtualenvs")
+
+    # macosx - backup easy_install-2.7 because it gets broken during virtualenv install
+    if RUBY_PLATFORM =~ /darwin/
+      puts "Backing up easy_install-2.7..."
+      FileUtils.copy("/usr/bin/easy_install-2.7", "/tmp/easy_install-2.7")
+      sudo "cp /usr/bin/easy_install-2.7 /tmp/."
+    end
+
+    unless File.exist?('/usr/local/bin/pip')
+      puts "Install pip..."
+      sudo "easy_install --upgrade pip"
+    end
+    
+    pip_install("virtualenv", true)
+    pip_install("virtualenvwrapper", true)
+    
+    unless File.exist?(virtualenv_root)
+      puts "Creating #{virtualenv_root}"
+      Dir.mkdir(virtualenv_root)
+    end
+
+    # macosx - restore original easy_install-2.7 script
+#     if RUBY_PLATFORM =~ /darwin/
+#       puts "Restore easy_install-2.7..."
+#       sudo "cp /tmp/easy_install-2.7 /usr/bin/."
+#     end
+  end
+  
+  desc "Uninstall virtualenv"
+  task :uninstall do
+    pip_uninstall("virtualenv", true)
+    pip_uninstall("virtualenvwrapper", true)
   end
 end
 
@@ -432,6 +437,16 @@ end
 def pip_install(package, use_sudo=false)
   puts "Installing #{package}..."
   cmd = "pip install --upgrade #{package}"
+  if use_sudo
+    sudo cmd
+  else
+    exec cmd
+  end
+end
+
+def pip_uninstall(package, use_sudo=false)
+  puts "Uninstalling #{package}..."
+  cmd = "pip uninstall --yes #{package}"
   if use_sudo
     sudo cmd
   else
