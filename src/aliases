@@ -36,6 +36,8 @@ Darwin )
   ;;
 Linux )
   alias eclipse=/opt/eclipse/eclipse
+  alias glock='gnome-screensaver-command --lock'
+  alias xlock='xscreensaver-command -lock'
   ;;
 esac
 

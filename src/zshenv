@@ -74,13 +74,6 @@ else
     export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 fi
 
-# Intellij IDEA
-case $(uname) in
-Linux )
-  export IDEA_JDK=/usr/lib/jvm/java-1.7.0_25-jdk-oracle
-  ;;
-esac
-
 # Android
 if [ -d ~/Developer/Library/Android ]; then
 	export ANDROID_HOME=~/Developer/Library/Android
