@@ -71,7 +71,7 @@ fi
 if [[ -e /usr/libexec/java_home ]] ; then
 	export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
 else
-    export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+    export JAVA_HOME=$(readlink -f `which java` | sed "s:bin/java::")
 fi
 
 # Android
