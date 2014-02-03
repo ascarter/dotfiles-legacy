@@ -363,6 +363,15 @@ namespace "vim" do
   end
 end
 
+namespace "cinnamon" do
+  desc "Install for Ubuntu"
+  task :install do
+    sudo "sudo add-apt-repository ppa:gwendal-lebihan-dev/cinnamon-stable"
+    sudo "apt-get update"
+    sudo "apt-get install cinnamon"
+  end
+end
+
 namespace "gnome" do
   namespace "terminal" do
     desc "Export terminal settings"
