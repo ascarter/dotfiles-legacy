@@ -11,6 +11,7 @@ Bundle 'gmarik/vundle'
 Bundle 'taglist.vim'
 Bundle 'ctrlp.vim'
 Bundle 'jnwhiteh/vim-golang'
+Bundle 'kchmck/vim-coffee-script'
 
 " =====================================
 " Syntax and file types
