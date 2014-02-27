@@ -2,6 +2,7 @@
     ui = auto
 [core]
     excludesfile = ~/.gitignore
+    autocrlf = input
 [pack]
     threads = 0
 [difftool]
