@@ -61,6 +61,10 @@ let g:netrw_list_hide='.git,.DS_Store'
 " Turn off blinking cursor
 set guicursor+=n:blinkon0
 
+set foldenable
+set foldmethod=syntax
+set foldlevel=10
+
 " Use system clipboard
 " set clipboard=unnamed
 
@@ -77,9 +81,8 @@ autocmd FileType markdown   set wrap wrapmargin=2 textwidth=72|map <buffer> <Lea
 autocmd BufNewFile,BufRead *.json set ft=javascript
 autocmd FileType go compiler go
 
-set foldenable
-set foldmethod=syntax
-set foldlevel=10
+autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent
+autocmd BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
 
 " Don't create extra files
 "set nobackup
