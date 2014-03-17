@@ -30,6 +30,7 @@ Darwin )
   # Dev tools
   alias bbtags='bbedit --maketags'
   alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
+  alias extags='/opt/homebrew/bin/ctags'
   alias eclipse='open /Developer/Applications/Eclipse.app'
   alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
   alias terminal-notifier='/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier'
