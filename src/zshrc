@@ -1,3 +1,5 @@
+#  -*- mode: unix-shell-script; -*-
+
 # ========================================
 # Functions/Completions
 # ========================================
@@ -19,15 +21,7 @@ autoload add-zsh-hook
 # ========================================
 
 # Editor
-if [ -e /usr/local/bin/atom ]; then
-    # atom
-    export GIT_EDITOR="atom --wait"
-    export SVN_EDITOR="atom --wait"
-    export EDITOR="atom --wait"
-    export VISUAL="atom"
-    # export LESSEDIT='bbedit -l %lm %f'
-    # export TEXEDIT='bbedit -w -l %d "%s"'
-elif [ -e /usr/local/bin/bbedit ]; then
+if [ -e /usr/local/bin/bbedit ]; then
     # bbedit
     export GIT_EDITOR="bbedit -w"
     export SVN_EDITOR="bbedit -w"
@@ -35,6 +29,14 @@ elif [ -e /usr/local/bin/bbedit ]; then
     export VISUAL="bbedit"
     export LESSEDIT='bbedit -l %lm %f'
     export TEXEDIT='bbedit -w -l %d "%s"'
+elif [ -e /usr/local/bin/atom ]; then
+    # atom
+    export GIT_EDITOR="atom --wait"
+    export SVN_EDITOR="atom --wait"
+    export EDITOR="atom --wait"
+    export VISUAL="atom"
+    # export LESSEDIT='bbedit -l %lm %f'
+    # export TEXEDIT='bbedit -w -l %d "%s"'
 else
     # vim
     export EDITOR="vim"

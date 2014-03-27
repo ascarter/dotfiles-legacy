@@ -1,3 +1,5 @@
+#  -*- mode: unix-shell-script; -*-
+
 # Open query in dash
 
 dashq() {

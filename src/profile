@@ -1,3 +1,5 @@
+#  -*- mode: unix-shell-script; -*-
+
 # include .bashrc if it exists and is really bash (not dash)
 if [ -f ~/.bashrc ] && [ -n "$BASH_VERSION" ]; then
 	. ~/.bashrc

@@ -1,3 +1,5 @@
+#  -*- mode: unix-shell-script; -*-
+
 # ls
 case $(uname) in
 Darwin )

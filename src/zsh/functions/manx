@@ -1,3 +1,5 @@
+#  -*- mode: unix-shell-script; -*-
+
 # Open man page with default x-man handler
 # On Mac OS X, opens a nice terminal window
 

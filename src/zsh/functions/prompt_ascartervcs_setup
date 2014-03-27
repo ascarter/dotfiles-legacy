@@ -1,5 +1,7 @@
+#  -*- mode: unix-shell-script; -*-
+
 # Developer zsh prompt with vcs theme
-# Andrew Carter <ascarter@gmail.com>
+# Andrew Carter <ascarter@icloud.com>
 # 
 # Developer prompt with VCS info
 #

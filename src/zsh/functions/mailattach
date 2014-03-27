@@ -1,3 +1,5 @@
+#  -*- mode: unix-shell-script; -*-
+
 # Mail file as attachment
 mailattach () {
 	local FILEPATH=$1
