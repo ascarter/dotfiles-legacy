@@ -2,16 +2,17 @@ set nocompatible
 filetype off
 
 " =====================================
-" Bundles
+" Plugins
 " =====================================
 set runtimepath+=~/.vim/bundle/vundle
 call vundle#rc()
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
-Bundle 'taglist.vim'
-Bundle 'ctrlp.vim'
-Bundle 'jnwhiteh/vim-golang'
-Bundle 'kchmck/vim-coffee-script'
+Plugin 'taglist.vim'
+Plugin 'ctrlp.vim'
+Plugin 'jnwhiteh/vim-golang'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'yaifa.vim'
 
 " =====================================
 " Syntax and file types
