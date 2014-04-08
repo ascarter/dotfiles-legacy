@@ -16,6 +16,21 @@ autoload -U ~/.zsh/functions/[^_]*(:t)
 autoload -Uz vcs_info
 autoload add-zsh-hook
 
+# npm
+if [ -n "`which npm`" ]; then
+    . <(npm completion)
+fi
+
+# bower
+if [ -n "`which npm`" ]; then
+    . <(bower completion)
+fi
+
+# grunt
+if [ -n "`which grunt`" ]; then
+    . <(grunt --completion=zsh)
+fi
+
 # ========================================
 # Shell preferences
 # ========================================
