@@ -10,9 +10,17 @@ Plugin 'gmarik/vundle'
 
 Plugin 'taglist.vim'
 Plugin 'ctrlp.vim'
+Plugin 'yaifa.vim'
+Plugin 'rizzatti/funcoo.vim'
+Plugin 'rizzatti/dash.vim'
+
+" Syntax
 Plugin 'jnwhiteh/vim-golang'
 Plugin 'kchmck/vim-coffee-script'
-Plugin 'yaifa.vim'
+Plugin 'leafgarland/typescript-vim'
+
+" Themes
+Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
 
 " =====================================
 " Syntax and file types
@@ -103,6 +111,9 @@ endif
 " Mappings
 let mapleader = "\\"
 
+:nmap <silent> <leader>d <Plug>DashSearch
+
+" Color scheme
 colorscheme github
 set background=light
 
