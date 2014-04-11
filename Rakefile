@@ -331,11 +331,11 @@ namespace "vim" do
   desc "Install vim support"
   task :install do
     if RUBY_PLATFORM =~ /darwin/
-      #Install MacVim
+      #Install MacVim      
       unless File.exist?('/Applications/MacVim.app')
-        snapshot = 'snapshot-71'
-        snapshot_pkg = "MacVim-#{snapshot}.tbz"
-        snapshot_url = "https://github.com/eee19/macvim/releases/download/#{snapshot}/#{snapshot_pkg}"
+        snapshot = 'snapshot-72'
+        snapshot_pkg = "MacVim-#{snapshot}-Mavericks.tbz"
+        snapshot_url = "https://github.com/b4winckler/macvim/releases/download/#{snapshot}/#{snapshot_pkg}"
         snapshot_pkg_path = File.join('/tmp', snapshot_pkg)
         snapshot_src = File.join('/tmp', "MacVim-#{snapshot}")
         puts "Downlaoding #{snapshot_url}..."
