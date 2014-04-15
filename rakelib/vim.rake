@@ -4,14 +4,14 @@ namespace "vim" do
   desc "Install vim support"
   task :install do
     if RUBY_PLATFORM =~ /darwin/
-      #Install MacVim      
+      # Install MacVim      
       unless File.exist?('/Applications/MacVim.app')
         snapshot = 'snapshot-72'
         snapshot_pkg = "MacVim-#{snapshot}-Mavericks.tbz"
         snapshot_url = "https://github.com/b4winckler/macvim/releases/download/#{snapshot}/#{snapshot_pkg}"
         snapshot_pkg_path = File.join('/tmp', snapshot_pkg)
         snapshot_src = File.join('/tmp', "MacVim-#{snapshot}")
-        puts "Downlaoding #{snapshot_url}..."
+        puts "Downloading #{snapshot_url}..."
         download_file(snapshot_url, snapshot_pkg_path)
         cmd = "cd /tmp && tar xvzf #{snapshot_pkg}"
         sh cmd
