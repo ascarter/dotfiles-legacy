@@ -153,7 +153,11 @@ def pkg_uninstall(pkg, prefix='/usr/local')
 end
 
 def npm_install(pkg)
-  sudo "npm install --global #{pkg}"
+  if %x{npm list --global --parseable #{pkg}}
+    puts "#{pkg} already installed"
+  else
+    sudo "npm install --global #{pkg}"
+  end
 end
 
 def npm_update(pkg="")
