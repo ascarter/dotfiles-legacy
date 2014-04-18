@@ -1,5 +1,3 @@
-# require 'rake'
-# require 'erb'
 require 'fileutils'
 require 'open-uri'
 require 'pathname'
@@ -117,6 +115,8 @@ def download_file(url, output)
   end
 end
 
+# Mac OS X package installer
+
 def pkg_download(url)
   uri = URI.parse(url)
   (path, pkg) = File.split(uri.path)
@@ -152,6 +152,8 @@ def pkg_uninstall(pkg, prefix='/usr/local')
   end
 end
 
+# npm
+
 def npm_install(pkg)
   if %x{npm list --global --parseable #{pkg}}
     puts "#{pkg} already installed"
@@ -170,4 +172,19 @@ end
 
 def npm_list(pkg="", depth=0)
   sudo "npm list --global --depth=#{depth} #{pkg}"
+end
+
+# Mac OS X defaults
+
+def defaults_read(domain, key=nil, options=nil)
+  value = %x{defaults read #{domain} #{options} #{"\"#{key}\"" unless key.nil?}}
+  return value
+end
+
+def defaults_write(domain, key, value, options=nil)
+  %x{defaults write #{domain} "#{key}" #{options} "#{value}"}
+end
+
+def defaults_delete(domain, key, options=nil)
+  %x{defaults delete #{domain} "#{key}" #{options}}
 end
