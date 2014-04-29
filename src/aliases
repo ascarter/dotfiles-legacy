@@ -18,7 +18,7 @@ case $(uname) in
 Darwin )
   # System shortcuts
   alias loginw='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
-  
+
   # System information
   alias about='system_profiler SPHardwareDataType SPStorageDataType'
 

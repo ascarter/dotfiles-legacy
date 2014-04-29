@@ -1,0 +1,9 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Fix open with list in Finder
+fixow () {
+  local lsregister='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
+  ${lsregister} -kill -r -domain local -domain user
+  killall Finder
+  echo "Open With has been rebuilt, Finder will relaunch"
+}
