@@ -52,6 +52,10 @@ fi
 # Languages/frameworks
 # ========================================
 
+# Go
+export GOROOT=/usr/local/go
+export GOPATH=~/Projects/go
+export PATH=$PATH:$GOROOT/bin:${GOPATH//://bin:}/bin
 
 # Ruby (rbenv)
 if [ -d ~/.rbenv/bin ]; then
@@ -70,6 +74,9 @@ if [[ -e /usr/local/bin/virtualenvwrapper.sh ]] ; then
     source /usr/local/bin/virtualenvwrapper.sh
 fi
 
+# Node
+export NODE_PATH=/usr/local/lib/node_modules
+
 # Java
 if [[ -e /usr/libexec/java_home ]] ; then
 	export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
@@ -84,13 +91,6 @@ if [ -d ~/Developer/Library/Android ]; then
 	export ANDROID_NDK=${ANDROID_HOME}/android-ndk-r8d
 	export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
 fi
-
-# Node
-export NODE_PATH=/usr/local/lib/node_modules
-
-# Go
-export GOROOT=/usr/local/go
-export PATH=$PATH:$GOROOT/bin
 
 # Perforce
 if [ -e /usr/local/p4 ]; then
