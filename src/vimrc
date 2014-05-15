@@ -115,7 +115,7 @@ let mapleader = "\\"
 
 " Color scheme
 colorscheme github
-set background=light
+set background=dark
 
 " MacVIM shift+arrow keys behavior
 if has("gui_macvim")
