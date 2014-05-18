@@ -72,26 +72,6 @@ def sudo(cmd)
   system "sudo sh -c '#{cmd}'"
 end
 
-def pip_install(package, use_sudo=false)
-  puts "Installing #{package}..."
-  cmd = "pip install --upgrade #{package}"
-  if use_sudo
-    sudo cmd
-  else
-    exec cmd
-  end
-end
-
-def pip_uninstall(package, use_sudo=false)
-  puts "Uninstalling #{package}..."
-  cmd = "pip uninstall --yes #{package}"
-  if use_sudo
-    sudo cmd
-  else
-    exec cmd
-  end
-end
-
 def path_helper(path_file, paths, type='paths')
   raise ArgumentError, "Invalid path type" unless ['paths', 'manpaths'].include? type
 
@@ -113,6 +93,79 @@ def download_file(url, output)
       file.write(f.read)
     end
   end
+end
+
+# pip
+
+def pip_install(package, use_sudo=false)
+  puts "Installing #{package}..."
+  cmd = "pip install --upgrade #{package}"
+  if use_sudo
+    sudo cmd
+  else
+    exec cmd
+  end
+end
+
+def pip_uninstall(package, use_sudo=false)
+  puts "Uninstalling #{package}..."
+  cmd = "pip uninstall --yes #{package}"
+  if use_sudo
+    sudo cmd
+  else
+    exec cmd
+  end
+end
+
+# homebrew
+
+def brew_command
+  @brew_cmd ||= %x{which brew}.strip()
+  if not @brew_cmd
+    raise Exception "Missing homebrew"
+  end
+  return @brew_cmd
+end
+
+def brew_install(package)
+  brew_cmd = brew_command
+
+  # Check if package installed already
+  if brew_list(package)
+    # Package is installed - update it if outdated
+    brew_upgrade(package)
+  else
+    # Install package
+    sudo "#{brew_command} install #{package}"
+  end
+end
+
+def brew_uninstall(package)
+  if brew_list(package)
+    sudo "#{brew_command} uninstall #{package}"
+  end
+end
+
+def brew_outdated(package)
+  outdated_packages = %x{#{brew_command} outdated --quiet}
+
+  if outdated_packages.include?(package)
+    return true
+  else
+    return false
+  end
+end
+
+def brew_upgrade(package)
+  if brew_outdated(package)
+    sudo "#{brew_command} upgrade #{package}"
+  else
+    puts "#{package} is up to date"
+  end
+end
+
+def brew_list(package)
+  return system("#{brew_command} list #{package} > /dev/null")
 end
 
 # Mac OS X package installer
@@ -167,7 +220,7 @@ def npm_update(pkg="")
 end
 
 def npm_uninstall(pkg)
-  sudo "npm uninstall --global #{pkg}"  
+  sudo "npm uninstall --global #{pkg}"
 end
 
 def npm_list(pkg="", depth=0)
