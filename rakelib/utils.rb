@@ -181,7 +181,7 @@ def brew_upgrade(package)
 end
 
 def brew_list(package)
-  return system("#{brew_command} list #{package} > /dev/null")
+  return system("#{brew_command} list #{package} > /dev/null 2>&1")
 end
 
 
