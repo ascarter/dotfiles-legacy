@@ -4,7 +4,7 @@ namespace "hg" do
   desc "Install hg"
   task :install do
     if RUBY_PLATFORM =~ /darwin/
-      # Install bzr from homebrew
+      # Install hg from homebrew
       brew_install('hg')
     end
 

@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 # ========================================
 # Path settings
 # ========================================
@@ -10,7 +8,7 @@ if which brew &>/dev/null; then
 	export HOMEBREW_NO_EMOJI=1
     export PATH=${BREW_PREFIX}/bin:${PATH}
     export MANPATH=${BREW_PREFIX}/share/man:${MANPATH}
-	
+
 	# Extend gcc library/include paths to homebrew
 	if [ -d ${BREW_PREFIX}/lib ]; then
     	export LIBRARY_PATH=${BREW_PREFIX}/lib
@@ -26,7 +24,7 @@ fi
 if [ -d /opt/local ]; then
     export PATH=/opt/local/bin:/opt/local/sbin:$PATH
     export MANPATH=/opt/local/share/man:$MANPATH
-	
+
     # Extend gcc library/include paths to macports
 	if [ -d /opt/local/lib ]; then
     	export LIBRARY_PATH=/opt/local/lib
@@ -54,7 +52,7 @@ fi
 
 # Go
 export GOROOT=/usr/local/go
-export GOPATH=~/Projects/go
+export GOPATH=~/.go
 export PATH=$PATH:$GOROOT/bin:${GOPATH//://bin:}/bin
 
 # Ruby (rbenv)
@@ -101,11 +99,11 @@ fi
 # AWS
 if [ -d ~/Developer/Library/AWS ]; then
 	export AWS_HOME=~/Developer/Library/AWS
-	
+
 	# Setup EB
 	if [ -d ${AWS_HOME}/AWS-ElasticBeanstalk-CLI-2.4.0 ]; then
 		export AWS_EB_HOME=${AWS_HOME}/AWS-ElasticBeanstalk-CLI-2.4.0
-		
+
 		case $(uname) in
 		Darwin )
 			platform="macosx"
@@ -116,7 +114,7 @@ if [ -d ~/Developer/Library/AWS ]; then
 		* )
 			platform="unknown"
 		esac
-		
+
 		if [ $platform != "unknown" ]; then
 			case $(python --version 2>&1) in
 				*2.7* )
@@ -128,7 +126,7 @@ if [ -d ~/Developer/Library/AWS ]; then
 				* )
 					pyver="unknown"
 			esac
-			
+
 			if [ $pyver != "unknown" ]; then
 				export PATH=$PATH:${AWS_EB_HOME}/eb/${platform}/${pyver}
 			fi
