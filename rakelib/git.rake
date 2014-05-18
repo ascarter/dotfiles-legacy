@@ -19,16 +19,20 @@ namespace "git" do
       sh "git config --global core.editor \"atom --wait\""
     end
 
-    # Configure password caching
     if RUBY_PLATFORM =~ /darwin/
+      # Configure password caching
       sh "git config --global credential.helper osxkeychain"
+
+      # Configure Kaleidoscope
       sh "git config --global merge.tool Kaleidoscope"
       sh "git config --global diff.tool Kaleidoscope"
+
       sh "git config --global gui.fontui '-family \"Lucida Grande\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0'"
-    sh "git config --global gui.fontdiff '-family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0'"
+      sh "git config --global gui.fontdiff '-family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0'"
     elsif RUBY_PLATFORM =~ /linux/
+      # Configure password caching
       sh "git config --global credential.helper cache"
-      # sh "git config --global merge.tool Kaleidoscope"
+
       sh "git config --global diff.tool meld"
       sh "git config --global gui.fontui '-family \"Source Sans Pro\" -size 12 -weight normal -slant roman -underline 0 -overstrike 0'"
       sh "git config --global gui.fontdiff '-family \"Source Code Pro\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'"

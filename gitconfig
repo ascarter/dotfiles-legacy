@@ -12,7 +12,7 @@
 [difftool "Kaleidoscope"]
     cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [instaweb]
-    httpd = webrick 
+    httpd = webrick
 [mergetool "Kaleidoscope"]
     cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
     trustExitCode = true
@@ -27,10 +27,11 @@
     diffstat = diff --stat -r
     gdiff = difftool --gui --no-prompt
     gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
+    hub = !sh -c 'github'
     k = !gitk
     logx = log --graph --decorate --all --oneline
     tower = !sh -c 'gittower'
-    setemail = !git config user.email 
+    setemail = !git config user.email
     whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
     who = shortlog -s --
     whois = !sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -
