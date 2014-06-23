@@ -6,7 +6,7 @@ namespace "vim" do
     if RUBY_PLATFORM =~ /darwin/
       # Install MacVim      
       unless File.exist?('/Applications/MacVim.app')
-        snapshot = 'snapshot-72'
+        snapshot = 'snapshot-73'
         snapshot_pkg = "MacVim-#{snapshot}-Mavericks.tbz"
         snapshot_url = "https://github.com/b4winckler/macvim/releases/download/#{snapshot}/#{snapshot_pkg}"
         snapshot_pkg_path = File.join('/tmp', snapshot_pkg)
@@ -66,7 +66,7 @@ namespace "vim" do
 
     macvim_path = '/Applications/MacVim.app'
     if File.exist?(macvim_path)
-      sudo_remove(macvim_path)
+      sudo_remove_dir(macvim_path)
     end
   end
 end

@@ -28,7 +28,10 @@ def copy_and_replace(source, target)
 end
 
 def file_remove(target)
-  if File.exist?(target) or File.symlink?(target) or File.directory?(target)
+  if File.exist?(target) and File.directory?(target)
+    puts "Removing directory #{target}"
+    FileUtils.remove_dir(target)
+  elsif File.exist?(target) or File.symlink?(target)
     puts "Removing #{target}"
     File.delete(target)
   else
