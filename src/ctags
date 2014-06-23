@@ -18,6 +18,9 @@
 --regex-CoffeeScript=/^[ \t]*xit[ \t]'([^']+)'[ \t]*,[ \t]+[-=]>/disabled: \1/f,function/
 --regex-CoffeeScript=/^[ \t]*class[ \t]*([a-zA-Z$_\.1-9]+)[ \t]*/\1/f,function/
 
+--regex-JavaScript=/\$scope[A-Za-z0-9._$]*\.([A-Za-z0-9._$]+?)[ \t]*[:=]/\1/t,ng-scope-variable/
+--regex-JavaScript=/\.controller\('([A-Za-z0-9._$]+)'/\1/c,ng-controller/
+
 --langdef=css
 --langmap=Css:.css
 --langmap=Css:+.less
