@@ -4,7 +4,6 @@ namespace "golang" do
   desc "Install Go language"
   task :install do
     go_root = File.expand_path('/usr/local/go')
-    go_user_dir = File.expand_path('~/.go')
     go_prog = File.join(go_root, 'bin', 'go')
 
     unless File.exist?(go_root)
@@ -18,19 +17,27 @@ namespace "golang" do
         end
       end
     end
-
-    # Configure default GOPATH repository
-    unless File.exist?(go_user_dir)
-      mkdir(go_user_dir)
-    end
-
+    
     puts %x{#{go_prog} version}
 
-    # TODO: Install some standard go packages?
+    # Install/update goenv
+    goenv_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.goenv')))
+    unless File.exist?(goenv_root.to_s)
+      puts "Installing goenv..."
+      git_clone('ascarter', 'goenv', goenv_root)
+    else
+      puts "Updating goenv..."
+      git_pull(goenv_root)
+    end
   end
 
   desc "Uninstall Go language"
   task :uninstall do
+    puts "Uninstalling goenv..."
+    goenv_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.goenv')))
+    file_remove(goenv_root)
+    
+    puts "Uninstalling go language..."
     go_root = File.expand_path('/usr/local/go')
     if File.exist?(go_root)
       if RUBY_PLATFORM =~ /darwin/

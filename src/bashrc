@@ -61,6 +61,13 @@ export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit
 # Homebrew
 export HOMEBREW_NO_EMOJI=1
 
+# Go
+export GOROOT=/usr/local/go
+export PATH=$PATH:$GOROOT/bin #:${GOPATH//://bin:}/bin
+if [ -d ~/.goenv ]; then
+    source ~/.goenv/goenv
+fi
+
 # Ruby (rbenv)
 if [ -d ~/.rbenv ]; then
 	export PATH=~/.rbenv/bin:${PATH}
