@@ -1,5 +1,11 @@
 #  -*- mode: unix-shell-script; -*-
 
+# go
+if [[ -d $GOROOT  && -e $GOROOT/misc/bash/go ]]; then
+    . $GOROOT/misc/bash/go
+fi
+
+
 # Source any user bash completion scripts
 if [ -d ~/.bash_completion.d ]; then
     for f in ~/.bash_completion.d/*
