@@ -1,5 +1,12 @@
 --exclude=.git
 
+--langdef=Go
+--langmap=Go:.go
+--regex-Go=/func([ \t]+\([^)]+\))?[ \t]+([a-zA-Z0-9_]+)/\2/f,func/
+--regex-Go=/var[ \t]+([a-zA-Z_][a-zA-Z0-9_]+)/\1/v,var/
+--regex-Go=/type[ \t]+([a-zA-Z_][a-zA-Z0-9_]+)/\1/t,type/
+--regex-Go=/^package[ \t]+([a-zA-Z_][a-zA-Z0-9_]+)/\1/p,package/
+
 --langdef=CoffeeScript
 --langmap=CoffeeScript:.coffee
 --regex-CoffeeScript=/^[ \t]*(@?[a-zA-Z$_\.1-9]+)[ \t]*(=|\:)[ \t]*(\(.*\))?[ \t]*(-|=)>/\1/f,function/
@@ -17,9 +24,6 @@
 --regex-CoffeeScript=/^[ \t]*xit[ \t]"([^"]+)"[ \t]*,[ \t]+[-=]>/disabled: \1/f,function/
 --regex-CoffeeScript=/^[ \t]*xit[ \t]'([^']+)'[ \t]*,[ \t]+[-=]>/disabled: \1/f,function/
 --regex-CoffeeScript=/^[ \t]*class[ \t]*([a-zA-Z$_\.1-9]+)[ \t]*/\1/f,function/
-
---regex-JavaScript=/\$scope[A-Za-z0-9._$]*\.([A-Za-z0-9._$]+?)[ \t]*[:=]/\1/t,ng-scope-variable/
---regex-JavaScript=/\.controller\('([A-Za-z0-9._$]+)'/\1/c,ng-controller/
 
 --langdef=css
 --langmap=Css:.css
@@ -61,9 +65,3 @@
 --langmap=Ruby:+(Rakefile)
 
 --langmap=Php:+.module
-
---langdef=Go
---langmap=Go:.go
---regex-Go=/func([ \t]+\([^)]+\))?[ \t]+([a-zA-Z0-9_]+)/\2/f,func/
---regex-Go=/var[ \t]+([a-zA-Z_][a-zA-Z0-9_]+)/\1/v,var/
---regex-Go=/type[ \t]+([a-zA-Z_][a-zA-Z0-9_]+)/\1/t,type/
