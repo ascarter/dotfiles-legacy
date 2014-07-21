@@ -93,6 +93,9 @@ autocmd FileType go compiler go
 autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent
 autocmd BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
 
+autocmd FileType go autocmd BufWritePre <buffer> Fmt
+autocmd FileType go compiler go
+
 " Don't create extra files
 "set nobackup
 "set nowritebackup
