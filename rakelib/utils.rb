@@ -237,11 +237,16 @@ end
 # npm
 #
 
+def node_version
+  puts "Node.js: #{%x{/usr/local/bin/node --version}}"
+  puts "npm:     #{%x{/usr/local/bin/npm --version}}"
+end
+
 def npm_install(pkg)
-  if %x{npm list --global --parseable #{pkg}}
-    puts "#{pkg} already installed"
-  else
+  if %x{npm list --global --parseable #{pkg}}.strip().empty?
     sudo "npm install --global #{pkg}"
+  else
+    puts "#{pkg} already installed"
   end
 end
 
@@ -253,10 +258,21 @@ def npm_uninstall(pkg)
   sudo "npm uninstall --global #{pkg}"
 end
 
-def npm_list(pkg="", depth=0)
-  sudo "npm list --global --depth=#{depth} #{pkg}"
+def npm_list
+  packages = []
+  %x{npm list --global --parseable --depth=0}.split("\n").each do |pkg|
+    pkg_name = File.basename(pkg)
+    unless %w{lib npm}.include?(pkg_name)
+      packages.push(File.basename(pkg_name))
+    end
+  end
+  return packages
 end
 
+def npm_ls
+  puts "Installed npm modules:"
+  npm_list.each { |pkg| puts "  #{pkg}" }
+end
 
 #
 # Mac OS X defaults

@@ -22,17 +22,17 @@ if [[ -d $GOROOT  && -e $GOROOT/misc/zsh/go ]]; then
 fi
 
 # npm
-if [ -n "`which npm`" ]; then
+if which npm &>/dev/null; then
     . <(npm completion)
 fi
 
 # bower
-if [ -n "`which npm`" ]; then
+if which bower &>/dev/null; then
     . <(bower completion)
 fi
 
 # grunt
-if [ -n "`which grunt`" ]; then
+if which grunt &>/dev/null; then
     . <(grunt --completion=zsh)
 fi
 
