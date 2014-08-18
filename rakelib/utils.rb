@@ -108,6 +108,9 @@ def git_pull(path)
   end
 end
 
+def git_config(key, value)
+  sh "git config --global #{key} \"#{value}\""
+end
 
 #
 # pip

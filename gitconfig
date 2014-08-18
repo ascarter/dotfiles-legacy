@@ -5,14 +5,16 @@
     autocrlf = input
 [pack]
     threads = 0
+[instaweb]
+    httpd = webrick
 [difftool]
     prompt = false
 [difftool "bbdiff"]
     cmd = /usr/local/bin/bbdiff --wait --resume "$LOCAL" "$REMOTE"
+[mergetool "bbdiff"]
+    cmd = /usr/local/bin/bbdiff --wait --resume "$LOCAL" "$REMOTE"
 [difftool "Kaleidoscope"]
     cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-[instaweb]
-    httpd = webrick
 [mergetool "Kaleidoscope"]
     cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
     trustExitCode = true
@@ -21,6 +23,8 @@
     renormalize = true
     keepBackup = true
 [alias]
+    bbdiff = difftool
+    bbmerge = mergetool
     changes = diff --name-status -r
     ctags = '!${PWD}/.git/hooks/ctags'
     datetag = !git tag `date \"+%Y%m%d%H%M\"`

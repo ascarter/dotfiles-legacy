@@ -8,34 +8,47 @@ namespace "git" do
     target = File.join(File.expand_path(ENV['HOME']), '.gitconfig')
     copy_and_replace(source, target)
 
+    # Get user and email
     name = prompt("user name")
     email = prompt("user email")
-    sh "git config --global user.name \"#{name}\""
-    sh "git config --global user.email \"#{email}\""
+    git_config("user.name", name)
+    git_config("user.email", email)
 
     # Set git commit editor
-    atom = File.expand_path('/usr/local/bin/atom')
-    if File.exist?(atom)
-      sh "git config --global core.editor \"atom --wait\""
+    if File.exist?(File.expand_path('/usr/local/bin/bbedit'))
+        # bbedit
+        git_config("core.editor", "bbedit --wait")
+    elsif File.exist?(File.expand_path('/usr/local/bin/atom'))
+        # atom
+        git_config("core.editor", "atom --wait")
+    else
+        # vim
+        git_config("core.editor", "vim")
     end
 
     if RUBY_PLATFORM =~ /darwin/
       # Configure password caching
-      sh "git config --global credential.helper osxkeychain"
+      git_config("credential.helper", "osxkeychain")
 
-      # Configure Kaleidoscope
-      sh "git config --global merge.tool Kaleidoscope"
-      sh "git config --global diff.tool Kaleidoscope"
+      if File.exist?(File.expand_path('/usr/local/bin/bbdiff'))
+        # bbedit
+        git_config("diff.tool", "bbdiff")
+        git_config("merge.tool", "bbdiff")          
+      elsif File.exist?(File.expand_path('/usr/local/bin/ksdiff'))
+        # Configure Kaleidoscope
+        git_config("diff.tool", "Kaleidoscope")
+        git_config("merge.tool", "Kaleidoscope")
+      end
 
-      sh "git config --global gui.fontui '-family \"Lucida Grande\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0'"
-      sh "git config --global gui.fontdiff '-family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0'"
+      git_config("gui.fontui", '-family \"Lucida Grande\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0')
+      git_config("gui.fontdiff", '-family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0')
     elsif RUBY_PLATFORM =~ /linux/
       # Configure password caching
-      sh "git config --global credential.helper cache"
+      git_config("credential.helper", "cache")
 
-      sh "git config --global diff.tool meld"
-      sh "git config --global gui.fontui '-family \"Source Sans Pro\" -size 12 -weight normal -slant roman -underline 0 -overstrike 0'"
-      sh "git config --global gui.fontdiff '-family \"Source Code Pro\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'"
+      git_config("diff.tool", "meld")
+      git_config("gui.fontui", '-family \"Source Sans Pro\" -size 12 -weight normal -slant roman -underline 0 -overstrike 0')
+      git_config("gui.fontdiff", '-family \"Source Code Pro\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0')
     end
   end
 end
