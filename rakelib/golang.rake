@@ -9,7 +9,7 @@ namespace "golang" do
     unless File.exist?(go_root)
       # Download and install go package
       if RUBY_PLATFORM =~ /darwin/
-        release = '1.3.1'
+        release = '1.3.3'
         pkg = "go#{release}.darwin-amd64-osx10.8.pkg"
         pkg_url = "https://storage.googleapis.com/golang/#{pkg}"
         pkg_download(pkg_url) do |p|
