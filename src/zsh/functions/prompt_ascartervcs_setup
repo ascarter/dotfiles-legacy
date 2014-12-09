@@ -59,7 +59,7 @@ prompt_ascartervcs_setup () {
     precmd () { vcs_info }
     prompt_opts=( cr percent subst )
     PROMPT='
-%B%n@%m%b:%~
+%B%n@%m%b:%3~
 %# '
     PROMPT4='+%N:%i:%_>'    
     RPROMPT='%B${vcs_info_msg_0_}%b'
