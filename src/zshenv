@@ -86,9 +86,16 @@ else
     export JAVA_HOME=$(readlink -f `which java` | sed "s:bin/java::")
 fi
 
+# Gradle
+if [[ -e ~/Developer/gradle ]]
+then
+	export GRADLE_HOME=~/Developer/gradle
+	export PATH=${PATH}:${GRADLE_HOME}/bin
+fi
+
 # Android
-if [ -d ~/Developer/android-sdk-macosx ]; then
-    export ANDROID_HOME=~/Developer/android-sdk-macosx
+if [ -d ~/Library/Android/sdk ]; then
+    export ANDROID_HOME=~/Library/Android/sdk
 	export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 fi
 
