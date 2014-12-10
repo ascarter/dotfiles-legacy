@@ -1,55 +1,59 @@
-#  -*- mode: unix-shell-script; -*-
+#	 -*- mode: unix-shell-script; -*-
 
 # ls
 case $(uname) in
 Darwin )
-  alias ls='ls -hFGH'
-  alias ll='ls -l'
-  alias la='ls -a'
-  ;;
+	alias ls='ls -hFGH'
+	alias ll='ls -l'
+	alias la='ls -a'
+	;;
 Linux )
-  alias ls='ls -aFh --color=auto'
-  alias la='ls -A'
-  alias ll='ls -l'
-  ;;
+	alias ls='ls -aFh --color=auto'
+	alias la='ls -A'
+	alias ll='ls -l'
+	;;
 esac
 
 case $(uname) in
 Darwin )
-  # System shortcuts
-  alias loginw='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
+	# System shortcuts
+	alias loginw='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
 
-  # System information
-  alias about='system_profiler SPHardwareDataType SPStorageDataType'
+	# System information
+	alias about='system_profiler SPHardwareDataType SPStorageDataType'
 
-  # Power managment
-  alias sleepnow='pmset sleepnow'
-  alias batterycapacity='ioreg -w0 -c AppleSmartBattery -b -f | grep -i capacity'
+	# Power managment
+	alias sleepnow='pmset sleepnow'
+	alias batterycapacity='ioreg -w0 -c AppleSmartBattery -b -f | grep -i capacity'
 
-  # QuickLook
-  alias ql='qlmanage -p "$@" >& /dev/null'
+	# QuickLook
+	alias ql='qlmanage -p "$@" >& /dev/null'
 
-  # Dev tools
-  alias bbtags='bbedit --maketags'
-  alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
-  alias extags='/opt/homebrew/bin/ctags'
-  alias eclipse='open /Developer/Applications/Eclipse.app'
-  alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
-  alias terminal-notifier='/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier'
+	# BBEdit
+	alias bbtags='bbedit --maketags'
+	alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
+	alias bbpb='pbpaste | bbedit --clean --view-top'
+	alias bbd=bbdiff
 
-  # Java
-  alias java_home='/usr/libexec/java_home'
-  ;;
+	# Dev tools
+	alias extags='/opt/homebrew/bin/ctags'
+	alias eclipse='open /Developer/Applications/Eclipse.app'
+	alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
+	alias terminal-notifier='/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier'
+
+	# Java
+	alias java_home='/usr/libexec/java_home'
+	;;
 Linux )
-  alias eclipse=/opt/eclipse/eclipse
-  alias glock='gnome-screensaver-command --lock'
-  alias xlock='xscreensaver-command -lock'
-  ;;
+	alias eclipse=/opt/eclipse/eclipse
+	alias glock='gnome-screensaver-command --lock'
+	alias xlock='xscreensaver-command -lock'
+	;;
 esac
 
 # Use MacVim on mac os x if installed
 if [ -e /usr/local/bin/vim ]; then
-    alias vim='/usr/local/bin/vim'
+		alias vim='/usr/local/bin/vim'
 fi
 
 # Search/grep
