@@ -19,6 +19,10 @@ autoload add-zsh-hook
 # go
 if [[ -d $GOROOT  && -e $GOROOT/misc/zsh/go ]]; then
     . $GOROOT/misc/zsh/go
+	
+	if [ -d ~/.goenv ]; then
+		source ~/.goenv/goenv.zsh
+	fi
 fi
 
 # npm
@@ -35,6 +39,11 @@ fi
 if which grunt &>/dev/null; then
     . <(grunt --completion=zsh)
 fi
+
+# bbedit
+# if which bbedit &>/dev/null; then
+# 	. ~/.zsh/functions/bbedit_helpers
+# fi
 
 # ========================================
 # Shell preferences
