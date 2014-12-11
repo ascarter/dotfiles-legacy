@@ -9,7 +9,7 @@ namespace "golang" do
     unless File.exist?(go_root)
       # Download and install go package
       if RUBY_PLATFORM =~ /darwin/
-        release = '1.3.3'
+        release = '1.4'
         pkg = "go#{release}.darwin-amd64-osx10.8.pkg"
         pkg_url = "https://storage.googleapis.com/golang/#{pkg}"
         pkg_download(pkg_url) do |p|
@@ -46,4 +46,7 @@ namespace "golang" do
       end
     end
   end
+  
+  desc "Update Go language"
+  task update: [:uninstall, :install]
 end
