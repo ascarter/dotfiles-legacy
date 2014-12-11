@@ -19,10 +19,6 @@ autoload add-zsh-hook
 # go
 if [[ -d $GOROOT  && -e $GOROOT/misc/zsh/go ]]; then
     . $GOROOT/misc/zsh/go
-	
-	if [ -d ~/.goenv ]; then
-		source ~/.goenv/goenv.zsh
-	fi
 fi
 
 # npm
