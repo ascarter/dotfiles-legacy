@@ -1,0 +1,11 @@
+#!/bin/sh
+
+ICONSET="${1%%.*}".iconset
+
+mkdir "$ICONSET"
+for s in 16 32 128 256 512; do
+	sips -z $s $s "$1" --out "$ICONSET"/icon_$((s))x$((s)).png
+	sips -z $((s*2)) $((s*2)) "$1" --out "$ICONSET"/icon_$((s))x$((s))@2x.png
+done
+
+iconutil -c icns "$ICONSET"
