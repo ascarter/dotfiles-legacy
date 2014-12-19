@@ -235,6 +235,15 @@ def pkg_uninstall(pkg, prefix='/usr/local')
   end
 end
 
+#
+# go
+#
+
+def go_get(pkg)
+  cmd = "go get #{pkg}"
+  puts cmd
+  system cmd
+end
 
 #
 # npm
