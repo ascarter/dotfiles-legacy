@@ -16,9 +16,9 @@ autoload -U ~/.zsh/functions/[^_]*(:t)
 autoload -Uz vcs_info
 autoload add-zsh-hook
 
-# go
-if [[ -d $GOROOT  && -e $GOROOT/misc/zsh/go ]]; then
-    . $GOROOT/misc/zsh/go
+# Go
+if [[ -e ~/.zsh/completions/go ]]; then
+	. ~/.zsh/completions/go
 fi
 
 # npm
