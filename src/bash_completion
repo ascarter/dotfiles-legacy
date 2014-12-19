@@ -3,10 +3,6 @@
 # go
 if [[ -d $GOROOT  && -e $GOROOT/misc/bash/go ]]; then
     . $GOROOT/misc/bash/go
-
-	if [ -d ~/.goenv ]; then
-		source ~/.goenv/goenv.bash
-	fi
 fi
 
 

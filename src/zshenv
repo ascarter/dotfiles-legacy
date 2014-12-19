@@ -62,8 +62,8 @@ if [ -d ~/.go ]; then
 	export PATH=$PATH:$GOROOT/bin:${GOPATH//://bin:}/bin
 fi
 
-if [ -d ~/.goenv ]; then
-    source ~/.goenv/goenv
+if [ -d ~/.gows ]; then
+    source ~/.gows/gows
 fi
 
 # Ruby (rbenv)

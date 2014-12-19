@@ -20,14 +20,14 @@ namespace "golang" do
     
     puts %x{#{go_prog} version}
 
-    # Install/update goenv
-    goenv_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.goenv')))
-    unless File.exist?(goenv_root.to_s)
-      puts "Installing goenv..."
-      git_clone('ascarter', 'goenv', goenv_root)
+    # Install/update gows
+    gows_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.gows')))
+    unless File.exist?(gows_root.to_s)
+      puts "Installing gows..."
+      git_clone('ascarter', 'gows', gows_root)
     else
-      puts "Updating goenv..."
-      git_pull(goenv_root)
+      puts "Updating gows..."
+      git_pull(gows_root)
     end
     
     # Install default packages
@@ -47,10 +47,6 @@ namespace "golang" do
 
   desc "Uninstall Go language"
   task :uninstall do
-    puts "Uninstalling goenv..."
-    goenv_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.goenv')))
-    file_remove(goenv_root)
-    
     puts "Uninstalling go language..."
     go_root = File.expand_path('/usr/local/go')
     if File.exist?(go_root)
