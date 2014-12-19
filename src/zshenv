@@ -53,8 +53,15 @@ fi
 # ========================================
 
 # Go
-export GOROOT=/usr/local/go
-export PATH=$PATH:$GOROOT/bin #:${GOPATH//://bin:}/bin
+if [ -d /usr/local/go ]; then
+	export GOROOT=/usr/local/go
+fi
+
+if [ -d ~/.go ]; then
+	export GOPATH=~/.go
+	export PATH=$PATH:$GOROOT/bin:${GOPATH//://bin:}/bin
+fi
+
 if [ -d ~/.goenv ]; then
     source ~/.goenv/goenv
 fi
