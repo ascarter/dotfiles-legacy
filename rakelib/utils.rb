@@ -149,9 +149,11 @@ def brew_command
   return @brew_cmd
 end
 
-def brew_install(package)
-  brew_cmd = brew_command
+def brew_update
+  sudo "#{brew_command} update"
+end
 
+def brew_install(package)
   # Check if package installed already
   if brew_list(package)
     # Package is installed - update it if outdated

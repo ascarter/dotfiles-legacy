@@ -23,11 +23,19 @@ namespace "homebrew" do
       puts "Homebrew not supported on #{RUBY_PLATFORM}"
     end
   end
-
+  
+  desc "Update homebrew"
+  task :update do
+    if RUBY_PLATFORM =~ /darwin/
+      brew_update
+    else
+      puts "Homebrew not supported on #{RUBY_PLATFORM}"
+    end
+  end
+  
   desc "Uninstall homebrew"
   task :uninstall do
-    homebrew_root = '/opt/homebrew'
-    #if File.exist?(homebrew_root)
+    if RUBY_PLATFORM =~ /darwin/
       installed_files = [
         '~/Library/Caches/Homebrew',
         '~/Library/Logs/Homebrew',
@@ -35,9 +43,12 @@ namespace "homebrew" do
         '/etc/paths.d/homebrew',
         '/etc/manpaths.d/homebrew'
       ]
+      homebrew_root = '/opt/homebrew'
       sudo "rm -rf #{homebrew_root}"
       sudo "rm -rf #{installed_files.join(' ')}"
-    #end
+    else
+      puts "Homebrew not supported on #{RUBY_PLATFORM}"
+    end
   end
 end
 
