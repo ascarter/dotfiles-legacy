@@ -242,7 +242,7 @@ end
 #
 
 def go_get(pkg)
-  cmd = "go get #{pkg}"
+  cmd = "go get -u #{pkg}"
   puts cmd
   system cmd
 end
