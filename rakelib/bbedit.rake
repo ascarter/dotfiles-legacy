@@ -5,24 +5,38 @@
 namespace "bbedit" do
   desc "Install bbedit"
   task :install do
+    barebones_root = "http://pine.barebones.com/files"
     domain = "com.barebones.bbedit"
     
     if RUBY_PLATFORM =~ /darwin/
       unless File.exist?("/Applications/BBEdit.app")
-        # Download BBEdit
+        # Install BBEdit
         release = '11.0.2'
         pkg = "BBEdit_#{release}"
-        pkg_url = "http://pine.barebones.com/files/#{pkg}.dmg"
+        pkg_url = "#{barebones_root}/#{pkg}.dmg"
         pkg_download(pkg_url) do |p|
           src = dmg_mount(p)
           install_app("#{src}/BBEdit.app")
           dmg_unmount(src)
         end
-        # TODO: Set license key
-        
-        # Install command line utils
+      end
+
+      # TODO: Set license key
+
+      # Install command line utils
+      unless File.exist?('/usr/local/bin/bbedit')
         run_applescript('/Applications/BBEdit.app/Contents/Resources/BBEdit Help/install_tools.scpt')
         hide_app("BBEdit")
+      end
+      
+      # Install automator actions
+      unless File.exist?('/Library/Automator/AddLineNumbers.action')
+        zipfile = "BBEdit11AutomatorActionsInstaller.zip"
+        pkg = "BBEditAutomatorActionsInstaller-11.0_3470.pkg"
+        pkg_download("#{barebones_root}/#{zipfile}") do |p|
+          unzip(p)
+          pkg_install(File.join(File.dirname(p), pkg))
+        end
       end
       
       # Set preferences
@@ -51,7 +65,12 @@ namespace "bbedit" do
           sudo_remove(target)
         end
         
-        # Application
+        # Automator actions
+        if File.exist?('/Library/Automator/AddLineNumbers.action')
+          pkg_uninstall('com.barebones.bbedit.automatorActions')
+        end
+              
+        # Remove application
         sudo_remove_dir(bbedit_path)
       end
     end

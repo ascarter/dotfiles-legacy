@@ -97,6 +97,10 @@ def fetch(url, dest, limit = 10)
   end
 end
 
+def unzip(zipfile)
+  system "unzip #{zipfile} -d #{File.dirname(zipfile)}" 
+end
+
 
 #
 # sudo
