@@ -78,13 +78,14 @@ def fetch(url, dest, limit = 10)
 
   puts "Fetching #{url}"
   uri = URI(url)
-  Net::HTTP.start(uri.host, uri.port) do |http|
+  Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
     request = Net::HTTP::Get.new uri
     http.request request do |response|
       case response
       when Net::HTTPSuccess then
         thread = download(response, dest)
-        print "\rDownloading #{File.basename dest}: %.2f%%" % thread[:progress].to_f until thread.join 1
+        print "\rDownloading #{File.basename dest}: %d%%" % thread[:progress].to_i until thread.join 1
+        puts ""
       when Net::HTTPRedirection then
         location = response['location']
         warn "  --> redirected to #{location}"
@@ -265,6 +266,28 @@ def pkg_uninstall(pkg, prefix='/usr/local')
     sudo_remove(File.join(receipts_path, pkg + ext))
   end
 end
+
+def dmg_mount(dmg)
+  return %x{hdiutil attach "#{dmg}" | tail -1 | awk '{$1=$2=""; print $0}' | xargs -0 echo}.strip!
+end
+
+def dmg_unmount(dmg)
+  sh "hdiutil detach \"#{dmg}\""
+end
+
+def install_app(app)
+  sudo "cp -R \"#{app}\" /Applications/."
+end
+
+def run_applescript(script)
+  sh "osascript \"#{script}\""
+end
+
+def hide_app(app)
+  script = "tell application \"Finder\" to set visible of process \"#{app}\" to false"
+  sh "osascript -e '#{script}'"
+end
+
 
 #
 # go

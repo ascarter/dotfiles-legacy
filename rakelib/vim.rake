@@ -9,16 +9,13 @@ namespace "vim" do
         snapshot = 'snapshot-73'
         snapshot_pkg = "MacVim-#{snapshot}-Mavericks.tbz"
         snapshot_url = "https://github.com/b4winckler/macvim/releases/download/#{snapshot}/#{snapshot_pkg}"
-        snapshot_pkg_path = File.join('/tmp', snapshot_pkg)
-        snapshot_src = File.join('/tmp', "MacVim-#{snapshot}")
-        puts "Downloading #{snapshot_url}..."
-        fetch(snapshot_url, snapshot_pkg_path)
-        cmd = "cd /tmp && tar xvzf #{snapshot_pkg}"
-        sh cmd
-        cmd = "mv #{snapshot_src}/MacVim.app /Applications/. && mv #{snapshot_src}/mvim /usr/local/bin/."
-        sudo cmd
-        file_remove(File.join('/tmp', "MacVim-#{snapshot}"))
-        file_remove(snapshot_pkg_path)
+        pkg_download(snapshot_url) do |p|
+          tmp_dir = File.dirname(p)
+          tmp_src = File.join(tmp_dir, "MacVim-#{snapshot}")
+          sh "cd #{tmp_dir} && tar xvzf #{File.basename(p)}"
+          sudo "mv #{File.join(tmp_src, 'MacVim.app')} /Applications/."
+          sudo "mv #{File.join(tmp_src, 'mvim')} /usr/local/bin/."
+        end
       else
         puts "MacVim already installed"
       end
