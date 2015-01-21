@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'net/http'
 require 'open-uri'
 require 'pathname'
 require 'tempfile'
@@ -58,11 +59,39 @@ def path_helper(path_file, paths, type='paths')
   end
 end
 
-def download_file(url, output)
-  puts "Downloading #{url} to #{output}..."
-  open(url) do |f|
-    File.open(output, "wb") do |file|
-      file.write(f.read)
+def download(response, dest)
+  Thread.new do
+    thread = Thread.current
+    length = thread[:length] = response['Content-Length'].to_i
+    open(dest, 'wb') do |io|
+      response.read_body do |fragment|
+        thread[:done] = (thread[:done] || 0) + fragment.length 
+        thread[:progress] = thread[:done].quo(length) * 100
+        io.write fragment
+      end
+    end
+  end
+end
+
+def fetch(url, dest, limit = 10)
+  raise "Too many redirects" if limit == 0
+
+  puts "Fetching #{url}"
+  uri = URI(url)
+  Net::HTTP.start(uri.host, uri.port) do |http|
+    request = Net::HTTP::Get.new uri
+    http.request request do |response|
+      case response
+      when Net::HTTPSuccess then
+        thread = download(response, dest)
+        print "\rDownloading #{File.basename dest}: %.2f%%" % thread[:progress].to_f until thread.join 1
+      when Net::HTTPRedirection then
+        location = response['location']
+        warn "  --> redirected to #{location}"
+        fetch(location, dest, limit - 1)
+      else
+        raise "#{response.class.name} #{res.code} #{res.message}"
+      end
     end
   end
 end
@@ -202,7 +231,7 @@ def pkg_download(url)
   (path, pkg) = File.split(uri.path)
   Dir.mktmpdir do |dir|
     pkg_path = File.join(dir, pkg)
-    download_file(url, pkg_path)
+    fetch(url, pkg_path)
     yield pkg_path
   end
 end

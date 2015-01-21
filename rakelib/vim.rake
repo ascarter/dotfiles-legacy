@@ -12,7 +12,7 @@ namespace "vim" do
         snapshot_pkg_path = File.join('/tmp', snapshot_pkg)
         snapshot_src = File.join('/tmp', "MacVim-#{snapshot}")
         puts "Downloading #{snapshot_url}..."
-        download_file(snapshot_url, snapshot_pkg_path)
+        fetch(snapshot_url, snapshot_pkg_path)
         cmd = "cd /tmp && tar xvzf #{snapshot_pkg}"
         sh cmd
         cmd = "mv #{snapshot_src}/MacVim.app /Applications/. && mv #{snapshot_src}/mvim /usr/local/bin/."
