@@ -64,5 +64,6 @@
 --langmap=C++:+.mm
 
 --langmap=Ruby:+(Rakefile)
+--langmap=Ruby:+.rake
 
 --langmap=Php:+.module
