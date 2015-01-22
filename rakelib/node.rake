@@ -1,13 +1,13 @@
 # Node.js tasks
 
 namespace "node" do
-  desc "Install node"
+  desc "Install node.js"
   task :install do
     if RUBY_PLATFORM =~ /darwin/
       # Install node.js from package
       unless File.exist?('/usr/local/bin/node')
         # TODO: Get list of releases and prompt user to pick
-        release = 'v0.10.29'
+        release = 'v0.10.35'
         pkg = "node-#{release}.pkg"
         pkg_url = "http://nodejs.org/dist/#{release}/#{pkg}"
         pkg_download(pkg_url) do |p|
@@ -29,7 +29,7 @@ namespace "node" do
     npm_ls
   end
   
-  desc "Uninstall node"
+  desc "Uninstall node.js"
   task :uninstall do
     if RUBY_PLATFORM =~ /darwin/
       if File.exist?('/usr/local/bin/node')
@@ -49,5 +49,8 @@ namespace "node" do
         puts 'Node.js is not installed'
       end
     end
-  end    
+  end
+  
+  desc "Update node.js"
+  task update: [:uninstall, :install]
 end
