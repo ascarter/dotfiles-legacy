@@ -1,3 +1,5 @@
+#  -*- mode: ruby; -*-
+
 require 'rake'
 require 'erb'
 require 'fileutils'
