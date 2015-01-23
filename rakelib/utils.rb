@@ -124,6 +124,14 @@ def usr_bin_rm(cmd)
   sudo_remove(File.join('/usr/local/bin', cmd))
 end
 
+def usr_bin_ln(src, target)
+  src_file = File.expand_path(src)
+  target_file = File.join('/usr/local/bin', target)
+  unless File.exist?(target_file)
+    sudo "ln -s #{src_file} #{target_file}" if File.exists?(src_file)
+  end
+end
+
 #
 # sudo
 #

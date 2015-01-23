@@ -1,7 +1,7 @@
 # Vim tasks
 
 namespace "vim" do
-  desc "Install vim support"
+  desc "Install vim"
   task :install do
     if RUBY_PLATFORM =~ /darwin/
       # Install MacVim      
@@ -14,25 +14,29 @@ namespace "vim" do
           tmp_src = File.join(tmp_dir, "MacVim-#{snapshot}")
           sh "cd #{tmp_dir} && tar xvzf #{File.basename(p)}"
           app_install(File.join(tmp_src, 'MacVim.app'))
-          sudo "mv #{File.join(tmp_src, 'mvim')} /usr/local/bin/."
+          sudo "cp #{File.join(tmp_src, 'mvim')} /usr/local/bin/."
         end
       else
         puts "MacVim already installed"
       end
 
       # Symlink vim programs to mvim on mac
-      usr_bin = '/usr/local/bin'
-      mvim_path = File.join(usr_bin, 'mvim')
-      if File.exist?(mvim_path)
+      mvim = '/usr/local/bin/mvim'
+      if File.exist?(mvim)
         # Gui, Diff, Read-only, Ex, Restricted
-        %w(gvim mvimdiff mview mex rmvim vim).each do |prog|
-          ln_path = File.join(usr_bin, prog)
-          sudo "ln -s #{mvim_path} #{ln_path}" unless File.exist?(ln_path)
-        end
+        %w(gvim mvimdiff mview mex rmvim vim).each { |p| usr_bin_ln(mvim, p) }
       end
     end
+    
+    puts %x{vim --version}
+  end
 
-    # Vundle install
+  Rake::Task["vim:install"].enhance do
+    Rake::Task["vim:vundle"].invoke
+  end  
+
+  desc "Update vundle"
+  task :vundle do
     vundle_path = File.expand_path(File.join(ENV['HOME'], '.vim/bundle/vundle'))
     unless File.exist?(vundle_path)
       git_clone('gmarik', 'vundle', vundle_path)
@@ -43,27 +47,21 @@ namespace "vim" do
       sh "vim +PluginInstall +qall"
     end
   end
-
-  desc "Uninstall vim support"
+  
+  desc "Uninstall vim"
   task :uninstall do
-    usr_bin = '/usr/local/bin'
-    mvim_path = File.join(usr_bin, 'mvim')
-    if File.exist?(mvim_path)
-      # Gui, Diff, Read-only, Ex, Restricted
-      %w(gvim mvimdiff mview mex rmvim vim).each do |prog|
-        target = File.expand_path(File.join(usr_bin, prog))
-        sudo_remove(target)
+    if RUBY_PLATFORM =~ /darwin/
+      # Remove symlinks
+      %w(gvim mvimdiff mview mex rmvim vim).each { |p| usr_bin_rm(p) }
+
+      # Remove bundles
+      bundle_path = File.expand_path(File.join(ENV['HOME'], '.vim/bundle'))
+      if File.exist?(bundle_path)
+        file_remove(bundle_path)
       end
-    end
-
-    bundle_path = File.expand_path(File.join(ENV['HOME'], '.vim/bundle'))
-    if File.exist?(bundle_path)
-      file_remove(bundle_path)
-    end
-
-    macvim_path = '/Applications/MacVim.app'
-    if File.exist?(macvim_path)
-      sudo_remove_dir(macvim_path)
+      
+      # Remove MacVim
+      app_remove("MacVim")
     end
   end
 end
