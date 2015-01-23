@@ -16,7 +16,7 @@ namespace "bbedit" do
         pkg_url = "#{barebones_root}/#{pkg}.dmg"
         pkg_download(pkg_url) do |p|
           src = dmg_mount(p)
-          install_app("#{src}/BBEdit.app")
+          app_install(File.join(src, "BBEdit.app"))
           dmg_unmount(src)
         end
       end
@@ -26,7 +26,7 @@ namespace "bbedit" do
       # Install command line utils
       unless File.exist?('/usr/local/bin/bbedit')
         run_applescript('/Applications/BBEdit.app/Contents/Resources/BBEdit Help/install_tools.scpt')
-        hide_app("BBEdit")
+        app_hide("BBEdit")
       end
       
       # Install automator actions

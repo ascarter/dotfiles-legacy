@@ -97,10 +97,32 @@ def fetch(url, dest, limit = 10)
   end
 end
 
-def unzip(zipfile)
-  system "unzip #{zipfile} -d #{File.dirname(zipfile)}" 
+def unzip(zipfile, exdir=nil)
+  exdir = File.dirname(zipfile) if exdir.nil?
+  system "unzip -q #{zipfile} -d #{exdir}" 
 end
 
+def run_applescript(script)
+  sh "osascript \"#{script}\""
+end
+
+
+#
+# usr tools
+#
+
+def usr_bin_cp(src)
+  cmd_file = File.join('usr/local/bin', File.basename(src))
+  unless File.exist?(cmd_file)
+    sudo "cp #{src} /usr/local/bin."
+  else
+    puts "#{cmd_file} already exists"
+  end
+end
+
+def usr_bin_rm(cmd)
+  sudo_remove(File.join('/usr/local/bin', cmd))
+end
 
 #
 # sudo
@@ -279,15 +301,15 @@ def dmg_unmount(dmg)
   sh "hdiutil detach \"#{dmg}\""
 end
 
-def install_app(app)
-  sudo "cp -R \"#{app}\" /Applications/."
+def app_install(app)
+  sudo "ditto \"#{app}\" /Applications/#{File.basename(app)}"
 end
 
-def run_applescript(script)
-  sh "osascript \"#{script}\""
+def app_remove(app)
+  sudo_remove_dir File.join('/Applications', "#{app}.app")
 end
 
-def hide_app(app)
+def app_hide(app)
   script = "tell application \"Finder\" to set visible of process \"#{app}\" to false"
   sh "osascript -e '#{script}'"
 end
@@ -343,6 +365,36 @@ def npm_ls
   puts "Installed npm modules:"
   npm_list.each { |pkg| puts "  #{pkg}" }
 end
+
+#
+# apm (atom package manager)
+#
+
+def apm_install(pkg)
+  unless apm_list().include?(pkg)
+    sh "apm install #{pkg}"
+  else
+    puts "#{pkg} already installed"
+  end
+end
+
+def apm_upgrade
+  sh "apm upgrade --confirm false"
+end
+
+def apm_uninstall(pkg)
+  sh "apm uninstall #{pkg}" if apm_list().include?(pkg)
+end
+
+def apm_list
+  packages = []
+  %x{apm list --installed --bare}.split.each do |p|
+    (name, version) = p.split('@')
+    packages.push(name)
+  end
+  return packages
+end
+
 
 #
 # Mac OS X defaults

@@ -13,7 +13,7 @@ namespace "vim" do
           tmp_dir = File.dirname(p)
           tmp_src = File.join(tmp_dir, "MacVim-#{snapshot}")
           sh "cd #{tmp_dir} && tar xvzf #{File.basename(p)}"
-          install_app(File.join(tmp_src, 'MacVim.app'))
+          app_install(File.join(tmp_src, 'MacVim.app'))
           sudo "mv #{File.join(tmp_src, 'mvim')} /usr/local/bin/."
         end
       else
