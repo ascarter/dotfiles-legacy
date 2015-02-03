@@ -1,0 +1,5 @@
+#  -*- mode: unix-shell-script; -*-
+
+java6() {
+	set_java_home 1.6
+}
