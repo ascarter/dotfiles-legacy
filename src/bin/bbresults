@@ -70,7 +70,8 @@ end
 # Read options
 options = {
   :title => "Results",
-  :cwd => Dir.pwd 
+  :cwd => Dir.pwd ,
+  :verbose => true
 }
 
 opt_parser = OptionParser.new do |opts|
@@ -81,6 +82,9 @@ opt_parser = OptionParser.new do |opts|
   end
   opts.on("-d", "--dir DIR", "Set working directory") do |d|
     options[:cwd] = File.expand_path(d)
+  end
+  opts.on("-q", "--quiet", "Do not echo to stdout") do |q|
+    options[:verbose] = !q
   end
   opts.separator ""
   opts.separator "Input on STDIN in following format for each entry:"
@@ -99,6 +103,7 @@ entries = []
 STDIN.readlines.each do |line|
   entry = parse(options[:cwd], line)
   entries.push entry unless entry.nil?
+  STDOUT.puts line if options[:verbose]
 end
 
 # Sort and filter entries
