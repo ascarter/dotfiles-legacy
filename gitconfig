@@ -34,6 +34,7 @@
     hub = !sh -c 'github'
     k = !gitk
     logx = log --graph --decorate --all --oneline
+    logd = log -- .
     tower = !sh -c 'gittower .'
     setemail = !git config user.email
     whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
