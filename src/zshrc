@@ -6,6 +6,8 @@
 
 fpath=(~/.zsh/functions ~/.zsh_local/functions $fpath)
 
+source ~/.git-prompt.sh
+
 autoload -U compinit
 compinit
 autoload -U promptinit
@@ -13,12 +15,16 @@ promptinit
 autoload -U colors
 colors
 autoload -U ~/.zsh/functions/[^_]*(:t)
-autoload -Uz vcs_info
 autoload add-zsh-hook
 
-# Go
-if [[ -e ~/.zsh/completions/go ]]; then
-	. ~/.zsh/completions/go
+zstyle ':completion:*:*:git:*' script ~/.zsh/completions/git
+
+# Source any user zsh completion scripts
+if [ -d ~/.zsh/completions/completions.d ]; then
+    for f in ~/.zsh/completions/completions.d/*
+    do
+        . ${f}
+    done
 fi
 
 # npm
@@ -72,12 +78,6 @@ else
     export TEXEDIT='vim +%d %s'
 fi
 
-# zstyle ':completion:*' verbose yes
-# zstyle ':completion:*:descriptions' format '%B%d%b'
-# zstyle ':completion:*:messages' format '%d'
-# zstyle ':completion:*:warnings' format 'No matches for: %d'
-# zstyle ':completion:*' group-name ”
-
 # ========================================
 # Terminal settings
 # ========================================
@@ -101,21 +101,23 @@ bindkey "^[[3~" delete-char
 
 setopt transient_rprompt
 
+# Set Git PS conditions
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWSTASHSTATE=1
+export GIT_PS1_SHOWUNTRACKEDFILES=1
+export GIT_PS1_SHOWUPSTREAM="auto"
+export GIT_PS1_SHOWCOLORHINTS=1
+
 # Default
 # PS1="%m%# "
 declare +x PS1
-prompt ascartervcs
+
+prompt ascarter
 
 if [ "$TERM_PROGRAM" = "Apple_Terminal" ] && [ -z "$INSIDE_EMACS" ]; then
     add-zsh-hook chpwd update_terminal_cwd
     update_terminal_cwd
 fi
-
-# Show battery charge on right prompt
-# RPS1='$(batterycharge --color --slots 5)'
-
-# _update_pwd() { print -P '%~' }
-# add-zsh-hook chpwd _update_pwd
 
 # ========================================
 # Aliases

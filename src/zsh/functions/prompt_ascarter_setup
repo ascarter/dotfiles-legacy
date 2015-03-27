@@ -3,22 +3,26 @@
 # ascarter zsh prompt theme
 # Andrew Carter <ascarter@icloud.com>
 # 
-# Simple prompt
+# Simple git prompt
 #
 
 prompt_ascarter_help () {
-  cat <<'EOH'
+	cat <<'EOH'
 
-Simple prompt
+Simple Prompt with git info
 
 EOH
 }
 
 prompt_ascarter_setup () {
-  PROMPT='%n@%m:%B%3~%b%# '
-  PROMPT4='+%N:%i:%_>'
-  unset RPROMPT
-  prompt_opts=( cr percent subst )
+	PROMPT='
+%B%2~%b%B$(__git_ps1 " [%s]")%b%# '
+	PROMPT4='+%N:%i:%_>'
+	prompt_opts=( cr percent subst )	
+
+	# Display user@host in titlebar
+	precmd() { print -Pn "\e]2;%n@%m\a" }
 }
 
 prompt_ascarter_setup "$@"
+

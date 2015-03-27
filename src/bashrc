@@ -170,76 +170,6 @@ fi
 # Shell functions
 # ========================================
 
-# Set terminal title
-title() {
-  PROMPT_COMMAND="echo -ne \"\033]0;$*\a\""
-}
-
-# Set title to string
-etitle() {
-  title "\$(eval \"$*\")"
-}
-
-# Set title to current directory
-pwdtitle() {
-  title "${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~} \$(__dev_ps1 '— (%s)')"
-}
-
-# Return text to add to bash PS1 prompt for active rbenv
-__rbenv_ps1() {
-	if [ -d ~/.rbenv ]; then
-		local rbenv_ps1="$(rbenv version-name)"
-		if [ -n "${rbenv_ps1}" ]; then
-			if [ "system" != "${rbenv_ps1}" ]; then
-				printf "${1:-%s}" "$rbenv_ps1"
-			fi
-		fi
-	fi
-}
-
-# Return text to add to bash PS1 prompt for active virtual env
-__virtualenv_ps1() {
-    local virtualenv_ps1="`basename \"${VIRTUAL_ENV}\"`"
-    if [ -n "${virtualenv_ps1}" ]; then
-        printf "${1:-%s}" "$virtualenv_ps1"
-    fi
-}
-
-# Return a developer prompt
-# Arguments:
-#   $1 = all format string
-#   $2 = rbenv format
-#   $3 = Virtualenv format
-#   $4 = Git format
-#   $5 = Separator
-__dev_ps1() {
-    local format="${1:-%s}"
-    local rbenv_format="${2:-%s}"
-    local virtualenv_format="${3:-%s}"
-    local git_format="${4:-%s}"
-    local separator="${5:-|}"
-    shift 5
-
-    local rbenv_ps1="$(__rbenv_ps1 ${rbenv_format})"
-    local virtualenv_ps1="$(__virtualenv_ps1 ${virtualenv_format})"
-    local git_ps1="$(__git_ps1 ${git_format})"
-
-    # Build format string
-    dev_ps1=
-    for element in ${rbenv_ps1##*( )} ${virtualenv_ps1##*( )} ${git_ps1##*( )}
-    do
-        if [ -n "$element" ]; then
-            if [ -n "$dev_ps1" ]; then
-                dev_ps1="${dev_ps1}${separator}"
-            fi
-            dev_ps1="${dev_ps1}${element}"
-        fi
-    done
-    if [ -n "$dev_ps1" ]; then
-        printf "$format" "$dev_ps1"
-    fi
-}
-
 # Open gem doc page
 gemdoc() {
     open "http://localhost:8808/rdoc?q=$1"
@@ -259,14 +189,6 @@ project() {
 # Open URL source in BBEdit
 bbcurl() {
     curl $1 | bbedit --new-window +1 -t $1
-}
-
-tabname() {
-  printf "\e]1;${1}\a"
-}
-
-winname() {
-  printf "\e]2;${1}\a"
 }
 
 # ========================================
@@ -302,15 +224,24 @@ COLOR_BACKGROUND_MAGENTA="\[\033[45m\]"
 COLOR_BACKGROUND_CYAN="\[\033[46m\]"
 COLOR_BACKGROUND_WHITE="\[\033[47m\]"
 
+# Set Git PS conditions
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWSTASHSTATE=1
+export GIT_PS1_SHOWUNTRACKEDFILES=1
+export GIT_PS1_SHOWUPSTREAM="auto"
+export GIT_PS1_SHOWCOLORHINTS=1
+source ~/.git-prompt.sh
+
 # Prompt
 declare +x PS1
 
+export PROMPT_DIRTRIM=3
+
 if [ $TERM = "xterm-256color" -o $TERM = "xterm-color" -o $TERM = "dtterm" -o $TERM = "linux" ]; then
   export CLICOLOR=1
-  PS1='\[\e]2;\u@\h: \w\a\][\u@\h:\W$(__dev_ps1 " (%s)")]\$ '
-  pwdtitle
+  PS1='\w$(__git_ps1 " (%s)")\$ '
 else
-  PS1='\[\e]2;\u@\h: \w\a\][\u@\h:\W$(__dev_ps1 " (%s)")]\$ '
+  PS1='\w$(__git_ps1 " (%s)")\$ '
 fi
 
 if which dircolors &>/dev/null; then
@@ -322,10 +253,10 @@ else
     # man ls -> find LSCOLORS
 
     # Default (light terminal)
-    export LSCOLORS=exfxcxdxbxegedabagacad
+    # export LSCOLORS=exfxcxdxbxegedabagacad
 
     # Dark terminal
-    # export LSCOLORS=gxfxcxdxbxegedabagacad
+    export LSCOLORS=gxfxcxdxbxegedabagacad
 
     # Daring Fireball terminal
     # export LSCOLORS=CxGxcxdxBxegedabagacad
