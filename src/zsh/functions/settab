@@ -1,0 +1,5 @@
+#  -*- mode: unix-shell-script; -*-
+
+settab() {
+  print -Pn "\e]1;%n@%m: %3~\a"
+}

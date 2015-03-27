@@ -16,12 +16,17 @@ EOH
 
 prompt_ascarter_setup () {
 	PROMPT='
-%B%2~%b%B$(__git_ps1 " [%s]")%b%# '
+%B%n@%m%b:%3~
+%# '
 	PROMPT4='+%N:%i:%_>'
 	prompt_opts=( cr percent subst )	
 
 	# Display user@host in titlebar
-	precmd() { print -Pn "\e]2;%n@%m\a" }
+	precmd() {
+		__git_ps1 "
+%B%n@%m%b:%3~% %B" "%b
+%# " " [%s]"
+	}
 }
 
 prompt_ascarter_setup "$@"
