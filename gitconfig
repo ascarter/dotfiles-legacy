@@ -28,6 +28,7 @@
     changes = diff --name-status -r
     ctags = '!${PWD}/.git/hooks/ctags'
     datetag = !git tag `date \"+%Y%m%d%H%M\"`
+    difflast = diff HEAD^ HEAD
     diffstat = diff --stat -r
     gdiff = difftool --gui --no-prompt
     gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
