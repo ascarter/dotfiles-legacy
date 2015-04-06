@@ -29,20 +29,6 @@ namespace "golang" do
       puts "Updating gows..."
       git_pull(gows_root)
     end
-    
-    # Install default packages
-    go_workspace = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.go')))
-    unless File.exist?(go_workspace.to_s)
-      Dir.mkdir(go_workspace)
-    end
-    
-    packages = [
-      'github.com/tools/godep',
-      'github.com/golang/lint/golint',
-      'golang.org/x/tools/cmd/goimports',
-      'golang.org/x/tools/oracle'
-    ]
-    packages.each { |pkg| go_get pkg }
   end
 
   desc "Uninstall Go language"
