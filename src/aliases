@@ -59,13 +59,8 @@ fi
 # Search/grep
 alias devgrep="grep -n -r --exclude='.svn' --exclude='*.swp' --exclude='.git'"
 
-# Subverison
-alias svnfmdiff='svn diff --diff-cmd /usr/local/bin/fmdiff'
-alias svnfmmerge='svn merge --diff3-cmd /usr/local/bin/fmdiff3'
-alias svnfmup='svn update --diff3-cmd /usr/local/bin/fmdiff3'
-alias svnbbdiff='svn diff --diff-cmd bbdiff --extensions "--resume --wait --reverse"'
-alias svnbbmerge='svn merge --diff3-cmd bbdiff'
-alias svnbbup='svn update --diff3-cmd bbdiff'
+# Go
+alias gopresent='present -play=true &; open -g http://127.0.0.1:3999; fg'
 
 # Ruby
 alias pow="/Users/andrew/Library/Application\ Support/Pow/Versions/0.3.2/bin/pow"
@@ -82,6 +77,14 @@ alias editvenv='bbedit --new-window ${VIRTUAL_ENV}'
 alias pipbrew='CFLAGS="-I/opt/homebrew/include -L/opt/homebrew/lib" pip'
 alias pdb='python -m pdb'
 alias pyunittest='python -m unittest discover --buffer'
+
+# Subverison
+alias svnfmdiff='svn diff --diff-cmd /usr/local/bin/fmdiff'
+alias svnfmmerge='svn merge --diff3-cmd /usr/local/bin/fmdiff3'
+alias svnfmup='svn update --diff3-cmd /usr/local/bin/fmdiff3'
+alias svnbbdiff='svn diff --diff-cmd bbdiff --extensions "--resume --wait --reverse"'
+alias svnbbmerge='svn merge --diff3-cmd bbdiff'
+alias svnbbup='svn update --diff3-cmd bbdiff'
 
 # Shortcuts
 alias projects='cd ~/Projects'
