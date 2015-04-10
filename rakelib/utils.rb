@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'net/http'
 require 'open-uri'
+require 'open3'
 require 'pathname'
 require 'tempfile'
 require 'uri'
@@ -271,33 +272,53 @@ def pkg_download(url)
   end
 end
 
-def pkg_install(pkg)
-  if File.exist?(pkg)
-    sudo "installer -pkg #{pkg} -target /"
+def pkg_ls(pkg)
+  if system "pkgutil --pkgs=\"#{pkg.gsub(".", "\.")}\""
+    files = %x{pkgutil --only-files --files #{pkg}}
+    dirs = %x{pkgutil --only-dirs --files #{pkg}}
+    return files.split, dirs.split
   else
-    puts "Package #{pkg} missing"
+    puts "Package #{pkg} not installed"
   end
 end
 
-def pkg_uninstall(pkg, prefix='/usr/local')
-  receipts_path = '/var/db/receipts'
-  bom = File.join(receipts_path, pkg + '.pkg.bom')
-  if File.exist?(bom)
-    # Remove files
-    %x{lsbom -f -l -s -pf #{bom}}.each_line do |file|
-      path = File.expand_path(File.join(prefix, file.strip))
-      sudo_remove(path)
-    end
-    Dir.glob(File.join(receipts_path, pkg + '.*')).each do |file|
-      sudo_remove(file)
-    end
-  else
-    puts "Package #{bom} is not installed"
+def pkg_info(pkg)
+  info = {}
+  o, s = Open3.capture2("pkgutil --pkg-info #{pkg}")
+  return nil unless s.success?
+  o.each_line do |l|
+    parts = l.split(':')
+    info[parts[0].strip] = parts[1].strip
   end
+  return info
+end
 
-  # Remove plist or bom files
-  ['.plist', '.bom'].each do |ext|
-    sudo_remove(File.join(receipts_path, pkg + ext))
+def pkg_install(pkg)
+  if File.exist?(pkg)
+    sudo "installer -pkg #{pkg} -target /"
+  end
+end
+
+def pkg_uninstall(pkg, dryrun=false)
+  info = pkg_info(pkg)
+  puts "Pkg info: #{info}" if dryrun
+  
+  if info
+    files, dirs = pkg_ls(pkg)
+    
+    # Remove files
+    files.each do |f|
+      path = File.expand_path(File.join(info["volume"], info["location"], f))
+      sudo_remove(path) unless dryrun
+    end
+    
+    # Forget package
+    sudo "pkgutil --forget #{pkg}" unless dryrun
+    
+    # Don't remove directories - this needs to be per package so return them
+    return dirs
+  else
+    puts "Package #{pkg} is not installed"
   end
 end
 
