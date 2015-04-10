@@ -3,10 +3,10 @@
 namespace "golang" do
   desc "Install Go language"
   task :install do
-    go_root = File.expand_path('/usr/local/go')
-    go_prog = File.join(go_root, 'bin', 'go')
+    root = File.expand_path('/usr/local/go')
+    prog = File.join(root, 'bin', 'go')
 
-    unless File.exist?(go_root)
+    unless File.exist?(root)
       # Download and install go package
       if RUBY_PLATFORM =~ /darwin/
         release = '1.4.2'
@@ -18,7 +18,7 @@ namespace "golang" do
       end
     end
     
-    puts %x{#{go_prog} version}
+    puts %x{#{prog} version}
 
     # Install/update gows
     gows_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.gows')))
@@ -31,15 +31,33 @@ namespace "golang" do
     end
   end
 
+  desc "Info on Go language"
+  task :info do
+    root = File.expand_path('/usr/local/go')
+    prog = File.join(root, 'bin', 'go')
+    if File.exist?(prog)
+      puts %x{#{prog} version}
+      if RUBY_PLATFORM =~ /darwin/
+        pkg_id = "com.googlecode.go"
+        puts pkg_info(pkg_id)
+      end
+    else
+      puts "Go language is not installed"
+    end
+  end
+  
   desc "Uninstall Go language"
   task :uninstall do
     puts "Uninstalling go language..."
-    go_root = File.expand_path('/usr/local/go')
-    if File.exist?(go_root)
+    root = File.expand_path('/usr/local/go')
+    if File.exist?(root)
       if RUBY_PLATFORM =~ /darwin/
-        pkg_uninstall("com.googlecode.go")
-        sudo_remove_dir(go_root)
+        pkg_id = "com.googlecode.go"
+        pkg_uninstall(pkg_id)
+        sudo_remove_dir(root)
       end
+    else
+      puts "Go language is not installed"
     end
   end
   
