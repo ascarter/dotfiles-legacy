@@ -57,11 +57,6 @@ if [ -d /usr/local/go ]; then
 	export GOROOT=/usr/local/go
 fi
 
-if [ -d ~/.go ]; then
-	export GOPATH=~/.go
-	export PATH=$PATH:$GOROOT/bin:${GOPATH//://bin:}/bin
-fi
-
 if [ -d ~/.gows ]; then
     source ~/.gows/gows
 fi
