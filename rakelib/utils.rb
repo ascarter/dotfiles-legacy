@@ -41,9 +41,10 @@ def file_remove(target)
   end
 end
 
-def prompt(message)
-    print "Enter #{message}: "
-    return $stdin.gets.chomp
+def prompt(message, default=nil)
+    print "Enter #{message}#{" [#{default}]" unless nil}: "
+    response = $stdin.gets.chomp
+    return response.empty? ? default : response
 end
 
 def path_helper(path_file, paths, type='paths')

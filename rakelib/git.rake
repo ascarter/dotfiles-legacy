@@ -1,5 +1,7 @@
 # Git tasks
 
+require 'etc'
+
 namespace "git" do
   desc "Update git config"
   task :config do
@@ -9,8 +11,10 @@ namespace "git" do
     copy_and_replace(source, target)
 
     # Get user and email
-    name = prompt("user name")
-    email = prompt("user email")
+    uinfo = Etc.getpwnam(Etc.getlogin)
+    name = prompt("user name", uinfo.gecos)
+    # TODO: get email from the GitHub user that checked out the repo
+    email = prompt("user email", "ascarter@icloud.com")
     git_config("user.name", name)
     git_config("user.email", email)
 
