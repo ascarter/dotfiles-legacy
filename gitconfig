@@ -23,10 +23,16 @@
     renormalize = true
     keepBackup = true
 [alias]
+	aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
 	br = branch
 	ci = commit
 	co = checkout
+	dump = cat-file -p
+	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+	llog = log --date=local
 	st = status
+	type = cat-file -t
+	untrack = rm --cache --
     bbdiff = difftool
     bbmerge = mergetool
     changes = diff --name-status -r
@@ -39,7 +45,6 @@
     hub = !sh -c 'github'
     k = !gitk
     last = log -l HEAD -n 1
-	llog = log --date=local
     logd = log -- .
     logx = log --graph --decorate --all --oneline
     setemail = !git config user.email
