@@ -23,6 +23,10 @@
     renormalize = true
     keepBackup = true
 [alias]
+	br = branch
+	ci = commit
+	co = checkout
+	st = status
     bbdiff = difftool
     bbmerge = mergetool
     changes = diff --name-status -r
@@ -34,10 +38,14 @@
     gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
     hub = !sh -c 'github'
     k = !gitk
-    logx = log --graph --decorate --all --oneline
+    last = log -l HEAD -n 1
+	llog = log --date=local
     logd = log -- .
-    tower = !sh -c 'gittower .'
+    logx = log --graph --decorate --all --oneline
     setemail = !git config user.email
+    tower = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
+    unstage = reset HEAD --
+    visual = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
     whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
     who = shortlog -s --
     whois = !sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -

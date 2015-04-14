@@ -36,6 +36,7 @@ Darwin )
 	alias bbd=bbdiff
 
 	# Dev tools
+    alias gtower='gittower $(P=$(pwd); while [[ "$P" != "" && ! -e "$P/.git" ]]; do P=${P%/*}; done; echo "$P")'
 	alias extags='/opt/homebrew/bin/ctags'
 	alias eclipse='open /Developer/Applications/Eclipse.app'
 	alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
