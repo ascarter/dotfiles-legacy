@@ -300,11 +300,6 @@ if [ -n "`which npm`" ]; then
     eval "$(npm completion -)"
 fi
 
-# bower
-if [ -n "`which bower`" ]; then
-    eval "$(bower completion -)"
-fi
-
 # grunt
 if [ -n "`which grunt`" ]; then
     eval "$(grunt --completion=bash)"
