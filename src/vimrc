@@ -21,6 +21,7 @@ Plugin 'leafgarland/typescript-vim'
 
 " Themes
 Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
+Plugin 'github-theme'
 
 " =====================================
 " Syntax and file types
