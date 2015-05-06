@@ -19,7 +19,7 @@ namespace "node" do
     node_version
 
     # Install npm packages
-    pkgs = %w{bower grunt-cli jslint jsonlint}
+    pkgs = %w{grunt-cli bower}
     pkgs.each { |pkg| npm_install(pkg) }
   end
 

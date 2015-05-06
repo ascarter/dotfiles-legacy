@@ -32,20 +32,10 @@ if which npm &>/dev/null; then
     . <(npm completion)
 fi
 
-# bower
-if which bower &>/dev/null; then
-    . <(bower completion)
-fi
-
 # grunt
 if which grunt &>/dev/null; then
     . <(grunt --completion=zsh)
 fi
-
-# bbedit
-# if which bbedit &>/dev/null; then
-# 	. ~/.zsh/functions/bbedit_helpers
-# fi
 
 # ========================================
 # Shell preferences
