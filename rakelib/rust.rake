@@ -8,7 +8,7 @@ namespace "rust" do
 
     unless File.exist?(prog)
       # Download and install Rust
-      system "curl -s https://static.rust-lang.org/rustup.sh | sudo sh"
+      system "curl -sSf https://static.rust-lang.org/rustup.sh | sh"
     end
     
     puts %x{#{prog} --version}
