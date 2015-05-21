@@ -2,12 +2,13 @@
 
 namespace "node" do
   desc "Install node.js"
-  task :install do
+  task :install, [:version] do |t, args|
+    args.with_defaults(:version => 'v0.12.2')
     if RUBY_PLATFORM =~ /darwin/
       # Install node.js from package
       unless File.exist?('/usr/local/bin/node')
         # TODO: Get list of releases and prompt user to pick
-        release = 'v0.12.2'
+        release = args.version
         pkg = "node-#{release}.pkg"
         pkg_url = "http://nodejs.org/dist/#{release}/#{pkg}"
         pkg_download(pkg_url) do |p|
