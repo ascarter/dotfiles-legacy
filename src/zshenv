@@ -57,6 +57,11 @@ if [ -d /usr/local/go ]; then
 	export GOROOT=/usr/local/go
 fi
 
+if [ -d ~/.go ]; then
+	export GOPATH=~/.go
+	export PATH=$PATH:$GOROOT/bin:${GOPATH//://bin:}/bin
+fi
+
 if [ -d ~/.gows ]; then
     source ~/.gows/gows
 fi
@@ -82,15 +87,14 @@ fi
 export NODE_PATH=/usr/local/lib/node_modules
 
 # Java
-if [[ -e /usr/libexec/java_home ]] ; then
+if [[ -e /usr/libexec/java_home ]]; then
 	export JAVA_HOME=`/usr/libexec/java_home`
 else
     export JAVA_HOME=$(readlink -f `which java` | sed "s:bin/java::")
 fi
 
 # Gradle
-if [[ -e ~/Developer/gradle ]]
-then
+if [[ -e ~/Developer/gradle ]]; then
 	export GRADLE_HOME=~/Developer/gradle
 	export PATH=${PATH}:${GRADLE_HOME}/bin
 fi
