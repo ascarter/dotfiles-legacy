@@ -3,7 +3,7 @@
 namespace "node" do
   desc "Install node.js"
   task :install, [:version] do |t, args|
-    args.with_defaults(:version => 'v0.12.2')
+    args.with_defaults(:version => 'v0.12.4')
     if RUBY_PLATFORM =~ /darwin/
       # Install node.js from package
       unless File.exist?('/usr/local/bin/node')
