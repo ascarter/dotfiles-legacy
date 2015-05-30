@@ -88,7 +88,12 @@ export NODE_PATH=/usr/local/lib/node_modules
 
 # Java
 if [[ -e /usr/libexec/java_home ]]; then
-	export JAVA_HOME=`/usr/libexec/java_home`
+	# Verify that java is installed
+	/usr/libexec/java_home > /dev/null 2>&1
+	if [[ $? -eq 0 ]]; then
+		# Java installed - use the default JDK
+		export JAVA_HOME=`/usr/libexec/java_home`
+	fi
 else
     export JAVA_HOME=$(readlink -f `which java` | sed "s:bin/java::")
 fi
