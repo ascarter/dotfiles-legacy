@@ -20,6 +20,25 @@ namespace "golang" do
     
     puts %x{#{prog} version}
 
+    # Init default workspace
+    workspace = File.join(ENV['HOME'], '.go')
+    unless File.exist?(workspace)
+      puts "Initialize default go workspace at #{workspace}"
+      mkdir workspace
+    end
+    
+    # Install default packages
+    pkgs = %w[
+      github.com/golang/lint/golint
+      golang.org/x/tools/cmd/goimports
+      golang.org/x/tools/oracle
+      golang.org/x/tools/cmd/present
+      github.com/mailgun/godebug
+      github.com/derekparker/delve/cmd/dlv      
+      github.com/constabulary/gb/...
+    ]
+    pkgs.each { |p| go_get(workspace, p) }
+
     # Install/update gows
     gows_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.gows')))
     unless File.exist?(gows_root.to_s)

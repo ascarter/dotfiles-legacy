@@ -349,7 +349,8 @@ end
 # go
 #
 
-def go_get(pkg)
+def go_get(workspace, pkg)
+  ENV['GOPATH'] = workspace
   cmd = "go get -u #{pkg}"
   puts cmd
   system cmd
