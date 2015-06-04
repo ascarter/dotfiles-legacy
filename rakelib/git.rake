@@ -37,11 +37,14 @@ namespace "git" do
       if File.exist?(File.expand_path('/usr/local/bin/bbdiff'))
         # bbedit
         git_config("diff.tool", "bbdiff")
-        git_config("merge.tool", "bbdiff")          
+        git_config("merge.tool", "opendiff")          
       elsif File.exist?(File.expand_path('/usr/local/bin/ksdiff'))
         # Configure Kaleidoscope
         git_config("diff.tool", "Kaleidoscope")
         git_config("merge.tool", "Kaleidoscope")
+      else
+        git_config("diff.tool", "opendiff")
+        git_config("merge.tool", "opendiff")
       end
 
       git_config("gui.fontui", '-family \"Lucida Grande\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0')
@@ -51,6 +54,8 @@ namespace "git" do
       git_config("credential.helper", "cache")
 
       git_config("diff.tool", "meld")
+      git_config("merge.tool", "meld")
+      
       git_config("gui.fontui", '-family \"Source Sans Pro\" -size 12 -weight normal -slant roman -underline 0 -overstrike 0')
       git_config("gui.fontdiff", '-family \"Source Code Pro\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0')
     end

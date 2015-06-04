@@ -3,25 +3,27 @@
 [core]
     excludesfile = ~/.gitignore
     autocrlf = input
-[pack]
-    threads = 0
 [instaweb]
     httpd = webrick
+[merge]
+    prompt = false
+    renormalize = true
+    keepBackup = true
+[pack]
+    threads = 0
+[pull]
+	rebase = true
 [difftool]
     prompt = false
 [difftool "bbdiff"]
-    cmd = /usr/local/bin/bbdiff --wait --resume "$LOCAL" "$REMOTE"
-[mergetool "bbdiff"]
     cmd = /usr/local/bin/bbdiff --wait --resume "$LOCAL" "$REMOTE"
 [difftool "Kaleidoscope"]
     cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [mergetool "Kaleidoscope"]
     cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
     trustExitCode = true
-[merge]
-    prompt = false
-    renormalize = true
-    keepBackup = true
+[url "git@github.com:"]
+    pushInsteadOf = https://github.com
 [alias]
 	aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
 	br = branch
@@ -55,5 +57,3 @@
     who = shortlog -s --
     whois = !sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -
     x = !gitx
-[url "git@github.com:"]
-    pushInsteadOf = https://github.com
