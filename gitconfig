@@ -49,7 +49,9 @@
     last = log -l HEAD -n 1
     logd = log -- .
     logx = log --graph --decorate --all --oneline
+    prep = rebase -i @{upstream}
     setemail = !git config user.email
+    ship = merge --no-ff
     tower = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
     unstage = reset HEAD --
     visual = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
