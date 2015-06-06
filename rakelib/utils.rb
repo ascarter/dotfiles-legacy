@@ -296,7 +296,7 @@ end
 
 def pkg_install(pkg)
   if File.exist?(pkg)
-    sudo "installer -pkg #{pkg} -target /"
+    sudo "installer -package #{pkg} -target /"
   end
 end
 
