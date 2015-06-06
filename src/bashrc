@@ -93,8 +93,9 @@ fi
 # Java
 if [[ -e /usr/libexec/java_home ]]; then
 	# Verify that java is installed
-	/usr/libexec/java_home > /dev/null
+	/usr/libexec/java_home > /dev/null 2>&1
 	if [[ $? -eq 0 ]]; then
+		# Java installed - use the default JDK
 		export JAVA_HOME=`/usr/libexec/java_home`
 	fi
 else
