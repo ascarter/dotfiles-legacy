@@ -154,7 +154,7 @@ fi
 
 # Postgres openssl breaks Ruby build
 # Disable it off the path for now ...
-export POSTGRES_APP_ROOT=/Applications/Postgres.app/Contents/Versions/9.3
+export POSTGRES_APP_ROOT=/Applications/Postgres.app/Contents/Versions/9.4
 if [ -d ${POSTGRES_APP_ROOT} ]; then
 	export PATH=${PATH}:${POSTGRES_APP_ROOT}/bin
 fi
