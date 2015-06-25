@@ -36,6 +36,7 @@ namespace "golang" do
       github.com/mailgun/godebug
       github.com/derekparker/delve/cmd/dlv      
       github.com/constabulary/gb/...
+      github.com/ChimeraCoder/gojson/...
     ]
     pkgs.each { |p| go_get(workspace, p) }
 
