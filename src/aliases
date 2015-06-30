@@ -23,7 +23,10 @@ Darwin )
 
 	# System information
 	alias about='system_profiler SPHardwareDataType SPStorageDataType'
-
+	alias aboutsys='system_profiler SPSoftwareDataType'
+	# Use sw_vers for version
+	alias sysver='sw_vers'
+	
 	# Airport utility
 	alias airport=/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport
 
