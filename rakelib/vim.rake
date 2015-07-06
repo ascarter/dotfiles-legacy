@@ -4,7 +4,7 @@ namespace "vim" do
   desc "Install vim"
   task :install do
     if RUBY_PLATFORM =~ /darwin/
-      # Install MacVim      
+      # Install MacVim
       unless File.exist?('/Applications/MacVim.app')
         snapshot = 'snapshot-73'
         snapshot_pkg = "MacVim-#{snapshot}-Mavericks.tbz"
@@ -27,19 +27,19 @@ namespace "vim" do
         %w(gvim mvimdiff mview mex rmvim vim).each { |p| usr_bin_ln(mvim, p) }
       end
     end
-    
+
     puts %x{vim --version}
   end
 
   Rake::Task["vim:install"].enhance do
     Rake::Task["vim:vundle"].invoke
-  end  
+  end
 
   desc "Update vundle"
   task :vundle do
     vundle_path = File.expand_path(File.join(ENV['HOME'], '.vim/bundle/vundle'))
     unless File.exist?(vundle_path)
-      git_clone('gmarik', 'vundle', vundle_path)
+      git_clone('gmarik/vundle', vundle_path)
       sh "vim +PluginInstall +qall"
     else
       puts "Update vundle"
@@ -47,7 +47,7 @@ namespace "vim" do
       sh "vim +PluginInstall +qall"
     end
   end
-  
+
   desc "Uninstall vim"
   task :uninstall do
     if RUBY_PLATFORM =~ /darwin/
@@ -59,7 +59,7 @@ namespace "vim" do
       if File.exist?(bundle_path)
         file_remove(bundle_path)
       end
-      
+
       # Remove MacVim
       app_remove("MacVim")
     end

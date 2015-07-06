@@ -5,19 +5,31 @@ namespace "rbenv" do
   task :install do
     puts "Installing rbenv..."
     rbenv_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.rbenv')))
-    plugins = %w{ruby-build rbenv-vars rbenv-gem-rehash rbenv-default-gems}
+    plugins = [
+      { owner: "sstephenson", repo: "ruby-build" },
+      { owner: "sstephenson", repo: "rbenv-vars" },
+      { owner: "sstephenson", repo: "rbenv-gem-rehash" },
+      { owner: "sstephenson", repo: "rbenv-default-gems" },
+      { owner: "parkr",       repo: "ruby-build-github" }
+    ]
 
     unless File.exist?(rbenv_root.to_s)
-      git_clone('sstephenson', 'rbenv', rbenv_root)
-      plugins.each do |plugin|
-        git_clone('sstephenson', plugin, rbenv_root.join('plugins', plugin))
-      end
+      git_clone('sstephenson/rbenv', rbenv_root)
     else
       puts "Updating rbenv..."
       system "cd #{rbenv_root} && git pull"
-      plugins.each do |plugin|
-        puts "Updating #{plugin}..."
-        system "cd #{rbenv_root}/plugins/#{plugin} && git pull"
+    end
+
+    plugins.each do |item|
+      owner = item[:owner]
+      repo = item[:repo]
+      dest = rbenv_root.join('plugins', repo)
+
+      unless File.exist?(dest)
+        git_clone("#{owner}/#{repo}", dest)
+      else
+        puts "Updating #{repo}..."
+        system "cd #{dest} && git pull"
       end
     end
   end

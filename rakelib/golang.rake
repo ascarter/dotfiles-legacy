@@ -17,7 +17,7 @@ namespace "golang" do
         end
       end
     end
-    
+
     puts %x{#{prog} version}
 
     # Init default workspace
@@ -26,7 +26,7 @@ namespace "golang" do
       puts "Initialize default go workspace at #{workspace}"
       mkdir workspace
     end
-    
+
     # Install default packages
     pkgs = %w[
       github.com/golang/lint/golint
@@ -34,7 +34,7 @@ namespace "golang" do
       golang.org/x/tools/oracle
       golang.org/x/tools/cmd/present
       github.com/mailgun/godebug
-      github.com/derekparker/delve/cmd/dlv      
+      github.com/derekparker/delve/cmd/dlv
       github.com/constabulary/gb/...
       github.com/ChimeraCoder/gojson/...
     ]
@@ -44,7 +44,7 @@ namespace "golang" do
     gows_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.gows')))
     unless File.exist?(gows_root.to_s)
       puts "Installing gows..."
-      git_clone('ascarter', 'gows', gows_root)
+      git_clone('ascarter/gows', gows_root)
     else
       puts "Updating gows..."
       git_pull(gows_root)
@@ -65,7 +65,7 @@ namespace "golang" do
       puts "Go language is not installed"
     end
   end
-  
+
   desc "Uninstall Go language"
   task :uninstall do
     puts "Uninstalling go language..."
@@ -80,7 +80,7 @@ namespace "golang" do
       puts "Go language is not installed"
     end
   end
-  
+
   desc "Update Go language"
   task update: [:uninstall, :install]
 end

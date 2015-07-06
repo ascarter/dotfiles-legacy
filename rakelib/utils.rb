@@ -67,7 +67,7 @@ def download(response, dest)
     length = thread[:length] = response['Content-Length'].to_i
     open(dest, 'wb') do |io|
       response.read_body do |fragment|
-        thread[:done] = (thread[:done] || 0) + fragment.length 
+        thread[:done] = (thread[:done] || 0) + fragment.length
         thread[:progress] = thread[:done].quo(length) * 100
         io.write fragment
       end
@@ -101,7 +101,7 @@ end
 
 def unzip(zipfile, exdir=nil)
   exdir = File.dirname(zipfile) if exdir.nil?
-  system "unzip -q #{zipfile} -d #{exdir}" 
+  system "unzip -q #{zipfile} -d #{exdir}"
 end
 
 def run_applescript(script)
@@ -161,8 +161,8 @@ end
 # git
 #
 
-def git_clone(owner, repo, dest=nil)
-  git_url = URI.join("https://github.com/", "#{owner}/", "#{repo}.git").to_s
+def git_clone(repo, dest=nil)
+  git_url = URI.join("https://github.com/", "#{repo}.git").to_s
   cmd = "git clone #{git_url}"
   cmd += " #{dest.to_s}" if dest
   sh cmd
@@ -303,19 +303,19 @@ end
 def pkg_uninstall(pkg, dryrun=false)
   info = pkg_info(pkg)
   puts "Pkg info: #{info}" if dryrun
-  
+
   if info
     files, dirs = pkg_ls(pkg)
-    
+
     # Remove files
     files.each do |f|
       path = File.expand_path(File.join(info["volume"], info["location"], f))
       sudo_remove(path) unless dryrun
     end
-    
+
     # Forget package
     sudo "pkgutil --forget #{pkg}" unless dryrun
-    
+
     # Don't remove directories - this needs to be per package so return them
     return dirs
   else
