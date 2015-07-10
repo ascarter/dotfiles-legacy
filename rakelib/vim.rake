@@ -6,9 +6,9 @@ namespace "vim" do
     if RUBY_PLATFORM =~ /darwin/
       # Install MacVim
       unless File.exist?('/Applications/MacVim.app')
-        snapshot = 'snapshot-73'
-        snapshot_pkg = "MacVim-#{snapshot}-Mavericks.tbz"
-        snapshot_url = "https://github.com/b4winckler/macvim/releases/download/#{snapshot}/#{snapshot_pkg}"
+        snapshot = 'snapshot-77'
+        snapshot_pkg = "MacVim-#{snapshot}.tbz"
+        snapshot_url = "https://github.com/macvim-dev/macvim/releases/download/#{snapshot}/#{snapshot_pkg}"
         pkg_download(snapshot_url) do |p|
           tmp_dir = File.dirname(p)
           tmp_src = File.join(tmp_dir, "MacVim-#{snapshot}")
