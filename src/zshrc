@@ -15,7 +15,9 @@ promptinit
 autoload -U colors
 colors
 autoload -U ~/.zsh/functions/[^_]*(:t)
-autoload -U ~/.zsh_local/functions/[^_]*(:t)
+if [ -d ~/.zsh_local/functions ]; then
+    autoload -U ~/.zsh_local/functions/[^_]*(:t)
+fi
 autoload add-zsh-hook
 
 zstyle ':completion:*:*:git:*' script ~/.zsh/completions/git
