@@ -29,14 +29,14 @@ namespace "golang" do
 
     # Install default packages
     pkgs = %w[
-      github.com/golang/lint/golint
-      golang.org/x/tools/cmd/goimports
-      golang.org/x/tools/oracle
-      golang.org/x/tools/cmd/present
-      github.com/mailgun/godebug
-      github.com/derekparker/delve/cmd/dlv
-      github.com/constabulary/gb/...
       github.com/ChimeraCoder/gojson/...
+      github.com/derekparker/delve/cmd/dlv
+      github.com/golang/lint/golint
+      github.com/jstemmer/gotags
+      github.com/mailgun/godebug
+      golang.org/x/tools/cmd/goimports
+      golang.org/x/tools/cmd/present
+      golang.org/x/tools/oracle
     ]
     pkgs.each { |p| go_get(workspace, p) }
 
