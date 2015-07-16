@@ -1,7 +1,0 @@
-github.com/tools/godep
-github.com/golang/lint/golint
-golang.org/x/tools/cmd/goimports
-golang.org/x/tools/oracle
-golang.org/x/tools/cmd/present
-github.com/mailgun/godebug
-github.com/derekparker/delve/cmd/dlv
