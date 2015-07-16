@@ -15,7 +15,7 @@ Plugin 'rizzatti/funcoo.vim'
 Plugin 'rizzatti/dash.vim'
 
 " Syntax
-Plugin 'jnwhiteh/vim-golang'
+Plugin 'fatih/vim-go'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'leafgarland/typescript-vim'
 
@@ -34,9 +34,9 @@ filetype indent on
 
 " Whitespace
 " set nowrap
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+set tabstop=8
+set shiftwidth=8
+set softtabstop=8
 set listchars=tab:\ \ ,trail:·
 set nolist
 set expandtab
@@ -78,24 +78,29 @@ set foldlevel=10
 " Use system clipboard
 " set clipboard=unnamed
 
-autocmd FileType javascript set tabstop=4 shiftwidth=4 softtabstop=4 expandtab
-autocmd FileType ruby       set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType rdoc       set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType eruby      set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType haml       set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType sass       set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType cucumber   set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType python     set tabstop=4 shiftwidth=4 softtabstop=4 expandtab textwidth=79 cinwords=if,elif,else,for,while,with,try,except,finally,def,class
-autocmd FileType make       set noexpandtab
-autocmd FileType markdown   set wrap wrapmargin=2 textwidth=72|map <buffer> <Leader>p :Hammer<CR>
-autocmd BufNewFile,BufRead *.json set ft=javascript
-autocmd FileType go compiler go
+autocmd FileType javascript setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+autocmd FileType ruby       setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType rdoc       setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType go         setlocal tabstop=8 shiftwidth=8 softtabstop=8 noexpandtab
+autocmd FileType eruby      setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType haml       setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType sass       setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType cucumber   setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType python     setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab textwidth=79 cinwords=if,elif,else,for,while,with,try,except,finally,def,class
+autocmd FileType make       setlocal noexpandtab
+autocmd FileType markdown   setlocal wrap wrapmargin=2 textwidth=72|map <buffer> <Leader>p :Hammer<CR>
 
+autocmd BufNewFile,BufRead     *.json set ft=javascript
 autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent
 autocmd BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
 
-autocmd FileType go autocmd BufWritePre <buffer> Fmt
+" autocmd FileType go autocmd BufWritePre <buffer> Fmt
 autocmd FileType go compiler go
+
+" vim-go
+let g:go_fmt_command = "goimports"
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 0
 
 " Don't create extra files
 "set nobackup
