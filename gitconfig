@@ -47,6 +47,7 @@
     hub = !sh -c 'github'
     k = !gitk
     last = log -l HEAD -n 1
+    logb = log master..HEAD --pretty=oneline 
     logd = log -- .
     logx = log --graph --decorate --all --oneline
     prep = rebase -i @{upstream}
