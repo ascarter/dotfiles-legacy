@@ -2,23 +2,25 @@
 
 namespace "golang" do
   desc "Install Go language"
-  task :install do
-    root = File.expand_path('/usr/local/go')
-    prog = File.join(root, 'bin', 'go')
-
-    unless File.exist?(root)
-      # Download and install go package
-      if RUBY_PLATFORM =~ /darwin/
-        release = '1.4.2'
-        pkg = "go#{release}.darwin-amd64-osx10.8.pkg"
-        pkg_url = "https://storage.googleapis.com/golang/#{pkg}"
-        pkg_download(pkg_url) do |p|
-          pkg_install(p)
+  task :install, [:version] do |t, args|
+    # Install: rake "golang:install[1.5beta3]"
+    args.with_defaults(:version => '1.4.2')
+    
+    if RUBY_PLATFORM =~ /darwin/
+      unless File.exist?('/usr/local/bin/go')
+        # Download and install go package
+        if RUBY_PLATFORM =~ /darwin/
+          release = args.version
+          pkg = "go#{release}.darwin-amd64#{'-osx10.8' unless release.include?('beta')}.pkg"
+          pkg_url = "https://storage.googleapis.com/golang/#{pkg}"
+          pkg_download(pkg_url) do |p|
+            pkg_install(p)
+          end
         end
       end
     end
 
-    puts %x{#{prog} version}
+    puts %x{go version}
 
     # Init default workspace
     workspace = File.join(ENV['HOME'], '.go')

@@ -93,7 +93,7 @@ def fetch(url, dest, limit = 10)
         warn "  --> redirected to #{location}"
         fetch(location, dest, limit - 1)
       else
-        raise "#{response.class.name} #{res.code} #{res.message}"
+        raise "#{response.class.name} #{response.code} #{response.message}"
       end
     end
   end
