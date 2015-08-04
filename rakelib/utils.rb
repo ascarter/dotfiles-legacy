@@ -216,7 +216,7 @@ def brew_command
 end
 
 def brew_update
-  sudo "#{brew_command} update"
+  system "#{brew_command} update"
 end
 
 def brew_install(package)
@@ -226,13 +226,13 @@ def brew_install(package)
     brew_upgrade(package)
   else
     # Install package
-    sudo "#{brew_command} install #{package}"
+    system "#{brew_command} install #{package}"
   end
 end
 
 def brew_uninstall(package)
   if brew_list(package)
-    sudo "#{brew_command} uninstall #{package}"
+    system "#{brew_command} uninstall #{package}"
   end
 end
 
@@ -248,7 +248,7 @@ end
 
 def brew_upgrade(package)
   if brew_outdated(package)
-    sudo "#{brew_command} upgrade #{package}"
+    system "#{brew_command} upgrade #{package}"
   else
     puts "#{package} is up to date"
   end
