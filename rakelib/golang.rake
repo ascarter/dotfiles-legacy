@@ -7,7 +7,7 @@ namespace "golang" do
     args.with_defaults(:version => '1.4.2')
     
     if RUBY_PLATFORM =~ /darwin/
-      unless File.exist?('/usr/local/bin/go')
+      unless File.exist?('/usr/local/go')
         # Download and install go package
         if RUBY_PLATFORM =~ /darwin/
           release = args.version
@@ -33,6 +33,8 @@ namespace "golang" do
     pkgs = %w[
       github.com/ChimeraCoder/gojson/...
       github.com/derekparker/delve/cmd/dlv
+      github.com/dvyukov/go-fuzz/go-fuzz
+      github.com/dvyukov/go-fuzz/go-fuzz-build
       github.com/golang/lint/golint
       github.com/jstemmer/gotags
       github.com/mailgun/godebug
