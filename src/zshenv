@@ -54,15 +54,13 @@ fi
 
 # Go
 if [ -d /usr/local/go ]; then
-	export GOROOT=/usr/local/go
-	
 	# Enable go support for d/vendor
 	export GO15VENDOREXPERIMENT=1
 fi
 
 if [ -d ~/.go ]; then
 	export GOPATH=~/.go
-	export PATH=$PATH:$GOROOT/bin:${GOPATH//://bin:}/bin
+	export PATH=$PATH:${GOPATH//://bin:}/bin
 fi
 
 if [ -d ~/.gows ]; then
