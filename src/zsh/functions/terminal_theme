@@ -79,5 +79,5 @@ terminal_theme() {
             ;;
     esac
     
-    printf "Terminal theme set to %s\n" "$THEME"
+    #printf "Terminal theme set to %s\n" "$THEME"
 }
