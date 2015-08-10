@@ -15,6 +15,14 @@ namespace "homebrew" do
       path_helper('homebrew', ['/opt/homebrew/bin'])
       path_helper('homebrew', ['/opt/homebrew/share/man'], 'manpaths')
       system "/opt/homebrew/bin/brew update"
+      
+      zsh_local = File.expand_path('~/.zsh_local')
+      zsh_local_fn = File.join(zsh_local, 'functions')
+      zsh_brew_completion = File.join(zsh_local_fn, '_brew')
+      unless File.exist?(zsh_brew_completion)
+        FileUtils.mkdir_p(zsh_local_fn)
+        link_file(File.join(homebrew_root, 'Library', 'Contributions', 'brew_zsh_completion.zsh'), zsh_brew_completion)
+      end
     else
       puts "Homebrew not supported on #{RUBY_PLATFORM}"
     end
