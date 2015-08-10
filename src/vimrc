@@ -1,3 +1,9 @@
+" vimrc
+" Multi-platform vimrc for software development
+"
+" Author: Andrew Carter <ascarter@icloud.com>
+" MIT License
+
 set nocompatible
 filetype off
 
@@ -8,24 +14,36 @@ set runtimepath+=~/.vim/bundle/vundle
 call vundle#rc()
 Plugin 'gmarik/vundle'
 
-Plugin 'taglist.vim'
-Plugin 'ctrlp.vim'
-Plugin 'yaifa.vim'
-Plugin 'rizzatti/funcoo.vim'
-Plugin 'rizzatti/dash.vim'
-
-" Syntax
-Plugin 'fatih/vim-go'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'leafgarland/typescript-vim'
-
 " Themes
-Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
 Plugin 'github-theme'
+Plugin 'phd'
+Plugin 'proton'
+Plugin 'pyte'
+Plugin 'twilight'
+
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'jnurmine/Zenburn'
+Plugin 'tomasr/molokai'
+
+" =====================================
+" Color scheme
+" =====================================
+
+colorscheme default
+set background=dark
+
+" Turn off blinking cursor
+" set guicursor+=n:blinkon0
+
+" Status line
+
+set cursorline
+set modeline
 
 " =====================================
 " Syntax and file types
 " =====================================
+
 set encoding=utf-8
 syntax enable
 filetype on
@@ -33,104 +51,95 @@ filetype plugin on
 filetype indent on
 
 " Whitespace
-" set nowrap
-set tabstop=8
-set shiftwidth=8
-set softtabstop=8
-set listchars=tab:\ \ ,trail:·
-set nolist
-set expandtab
-set smarttab
-set smartindent
-set autoindent
-set backspace=start,eol,indent whichwrap+=<,>,[,]
-
-set number
-set cursorline
-set modeline
 
 " Searching
-set hlsearch
-set incsearch
-set ignorecase
-set smartcase
-set showmatch
 
-set scs
-set showtabline=1
-set ruler
-
-" netrw
-
-"let g:netrw_hide=1
-let g:netrw_liststyle=3
-let g:netrw_list_hide='.git,.DS_Store'
-"let g:netrw_preview=1
-"let g:netrw_winsize=30
-
-" Turn off blinking cursor
-set guicursor+=n:blinkon0
-
+" Folding
 set foldenable
 set foldmethod=syntax
 set foldlevel=10
 
-" Use system clipboard
-" set clipboard=unnamed
+" =====================================
+" GUI settings
+" =====================================
 
-autocmd FileType javascript setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
-autocmd FileType ruby       setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType rdoc       setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType go         setlocal tabstop=8 shiftwidth=8 softtabstop=8 noexpandtab
-autocmd FileType eruby      setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType haml       setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType sass       setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType cucumber   setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType python     setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab textwidth=79 cinwords=if,elif,else,for,while,with,try,except,finally,def,class
-autocmd FileType make       setlocal noexpandtab
-autocmd FileType markdown   setlocal wrap wrapmargin=2 textwidth=72|map <buffer> <Leader>p :Hammer<CR>
+if has("gui_running")
+	" GUI color scheme
+	" colorscheme github
+	" set background=light
+	colorscheme phd
 
-autocmd BufNewFile,BufRead     *.json set ft=javascript
-autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent
-autocmd BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
+	" Set standard starting window size
+	if &diff
+		set lines=40 columns=160
+	else
+		set lines=40 columns=100
+	endif
 
-" autocmd FileType go autocmd BufWritePre <buffer> Fmt
-autocmd FileType go compiler go
+	" Turn off toolbar
+	set guioptions-=T
+	map <silent> <C-F1> :call ToggleGuiOption("T")<CR>
 
-" vim-go
-let g:go_fmt_command = "goimports"
-let g:go_highlight_methods = 1
-let g:go_highlight_structs = 0
+	" Adjust viewports to the same size
+	map <Leader>= <C-w>=
+	imap <Leader>= <ESC> <C-w>=
+	
+	if has("gui_macvim")
+		" Mac OS X
+		set guifont=Menlo:h12
+		let macvim_hig_shift_movement = 1
+		au FocusLost * set transp=5
+		au FocusGained * set transp=0
 
-" Don't create extra files
-"set nobackup
-"set nowritebackup
-"set noswapfile
+		" Typical Mac OS X keymappings
+		" cmd-[ / cmd-] to increase/decrease indentation
+		vmap <D-]> >gv
+		vmap <D-[> <gv
+		map <D-]> >>
+		map <D-[> <<
 
-" Status line
-set laststatus=2
-set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P
-set titlestring=%t%(\ -\ %{expand(\"%:~:.:h\")}%)%(\ [%n]%)%(\ %M%)%(\ %a%)
+		" cmd-<0...9> to switch tabs
+		map  <D-0> 0gt
+		imap <D-0> <Esc>0gt
+		map  <D-1> 1gt
+		imap <D-1> <Esc>1gt
+		map  <D-2> 2gt
+		imap <D-2> <Esc>2gt
+		map  <D-3> 3gt
+		imap <D-3> <Esc>3gt
+		map  <D-4> 4gt
+		imap <D-4> <Esc>4gt
+		map  <D-5> 5gt
+		imap <D-5> <Esc>5gt
+		map  <D-6> 6gt
+		imap <D-6> <Esc>6gt
+		map  <D-7> 7gt
+		imap <D-7> <Esc>7gt
+		map  <D-8> 8gt
+		imap <D-8> <Esc>8gt
+		map  <D-9> 9gt
+		imap <D-9> <Esc>9gt
 
-if has("unix")
-  " Invisible character symbols (match textmate)
-  set listchars=tab:▸\ ,eol:¬
+	elseif has("gui_gtk2")
+		" Linux
+		set guifont=Source\ Code\ Pro\ Medium\ 12,Monospace\ 12
+	elseif has("gui_win32")
+		" Windows
+		set guifont=Source\ Code\ Pro:h12,Consolas:h11,Lucida\ Console:h12
+	endif
 endif
 
-" Mappings
-let mapleader = "\\"
 
-:nmap <silent> <leader>d <Plug>DashSearch
+" =====================================
+" Functions
+" =====================================
 
-" Color scheme
-colorscheme github
-set background=dark
-
-" MacVIM shift+arrow keys behavior
-if has("gui_macvim")
-  let macvim_hig_shift_movement = 1
-endif
-
-" % to bound from do to end
-runtime! macros/matchit.vim
+function ToggleGuiOption(option)
+    " If a:option is already set in guioptions, then we want to remove it
+    if match(&guioptions, "\\C" . a:option) > -1
+	exec "set guioptions-=" . a:option
+    else
+	exec "set guioptions+=" . a:option
+    endif
+endfunction
 
