@@ -14,6 +14,10 @@ set runtimepath+=~/.vim/bundle/vundle
 call vundle#rc()
 Plugin 'gmarik/vundle'
 
+Plugin 'majutsushi/tagbar'
+Plugin 'fatih/vim-go'
+Plugin 'Valloric/YouCompleteMe'
+
 " Themes
 Plugin 'github-theme'
 Plugin 'phd'
@@ -40,6 +44,23 @@ set background=dark
 set cursorline
 set modeline
 
+" Searching
+
+" Folding
+set foldenable
+set foldmethod=syntax
+" Default to expanded
+set foldlevel=10
+"set foldcolumn=1
+
+" netrw
+" let g:netrw_banner=0
+let g:netrw_alto=&sb
+let g:netrw_altv=&spr
+let g:netrw_list_hide='.git,.DS_Store,.*\.swp$'
+let g:netrw_liststyle=3
+let g:netrw_preview = 1
+
 " =====================================
 " Syntax and file types
 " =====================================
@@ -52,20 +73,35 @@ filetype indent on
 
 " Whitespace
 
-" Searching
-
-" Folding
-set foldenable
-set foldmethod=syntax
-set foldlevel=10
-
-" netrw
-" let g:netrw_banner=0
-let g:netrw_alto=&sb
-let g:netrw_altv=&spr
-let g:netrw_list_hide='.git,.DS_Store,.*\.swp$'
-let g:netrw_liststyle=3
-let g:netrw_preview = 1
+" Go
+let g:go_fmt_command = "goimports"
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
 
 " =====================================
 " GUI settings
