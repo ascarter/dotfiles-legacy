@@ -6,6 +6,7 @@
 
 set nocompatible
 filetype off
+" let mapleader="\"
 
 " =====================================
 " Plugins
@@ -14,9 +15,10 @@ set runtimepath+=~/.vim/bundle/vundle
 call vundle#rc()
 Plugin 'gmarik/vundle'
 
-Plugin 'majutsushi/tagbar'
 Plugin 'fatih/vim-go'
-Plugin 'Valloric/YouCompleteMe'
+Plugin 'kien/ctrlp.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'rizzatti/dash.vim'
 
 " Themes
 Plugin 'github-theme'
@@ -29,22 +31,42 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'jnurmine/Zenburn'
 Plugin 'tomasr/molokai'
 
+" Enable extend % matching
+runtime macros/matchit.vim
+
 " =====================================
-" Color scheme
+" UI
 " =====================================
 
-colorscheme default
+colorscheme phd
 set background=dark
 
 " Turn off blinking cursor
 " set guicursor+=n:blinkon0
 
 " Status line
+if has('statusline')
+	set laststatus=2
+	set statusline=%<%f\ %w%h%m%r%=%-14.(%l,%c%V%)\ %P
+endif
 
+set hidden
 set cursorline
 set modeline
+set ruler
+set title
 
 " Searching
+set showmatch
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+
+" Completion
+set wildmenu
+set wildmode=list:longest
+set wildignore=*.o,*.obj,*~,*DS_Store*
 
 " Folding
 set foldenable
@@ -61,6 +83,17 @@ let g:netrw_list_hide='.git,.DS_Store,.*\.swp$'
 let g:netrw_liststyle=3
 let g:netrw_preview = 1
 
+" Window management
+
+" Adjust viewports to the same size
+map <Leader>= <C-w>=
+imap <Leader>= <ESC> <C-w>=
+
+" Enable Dash search
+if has('macunix')
+	:nmap <silent> <leader>d <Plug>DashSearch
+endif
+
 " =====================================
 " Syntax and file types
 " =====================================
@@ -72,6 +105,8 @@ filetype plugin on
 filetype indent on
 
 " Whitespace
+set nowrap
+set autoindent
 
 " Go
 let g:go_fmt_command = "goimports"
@@ -109,8 +144,8 @@ let g:tagbar_type_go = {
 
 if has("gui_running")
 	" GUI color scheme
-	colorscheme github
-	set background=light
+	"colorscheme github
+	"set background=light
 
 	" Set standard starting window size
 	if &diff
@@ -123,11 +158,8 @@ if has("gui_running")
 	set guioptions-=T
 	map <silent> <C-F1> :call ToggleGuiOption("T")<CR>
 
-	" Adjust viewports to the same size
-	map <Leader>= <C-w>=
-	imap <Leader>= <ESC> <C-w>=
 	
-	if has("gui_macvim")
+	if has('gui_macvim')
 		" Mac OS X
 		set guifont=Menlo:h12
 		let macvim_hig_shift_movement = 1
@@ -163,10 +195,10 @@ if has("gui_running")
 		map  <D-9> 9gt
 		imap <D-9> <Esc>9gt
 
-	elseif has("gui_gtk2")
+	elseif has('gui_gtk2')
 		" Linux
 		set guifont=Source\ Code\ Pro\ Medium\ 12,Monospace\ 12
-	elseif has("gui_win32")
+	elseif has('gui_win32')
 		" Windows
 		set guifont=Source\ Code\ Pro:h12,Consolas:h11,Lucida\ Console:h12
 	endif
