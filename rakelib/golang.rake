@@ -38,6 +38,8 @@ namespace "golang" do
       github.com/golang/lint/golint
       github.com/jstemmer/gotags
       github.com/mailgun/godebug
+      github.com/nsf/gocode
+      github.com/rogpeppe/godef
       golang.org/x/tools/cmd/goimports
       golang.org/x/tools/cmd/present
       golang.org/x/tools/oracle
