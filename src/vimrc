@@ -47,7 +47,7 @@ set background=dark
 " Status line
 if has('statusline')
 	set laststatus=2
-	set statusline=%<%f\ %w%h%m%r%=%-14.(%l,%c%V%)\ %P
+	set statusline=%<%f%{tagbar#currenttag('[%s]\ ','')}\ %w%h%m%r%=%-14.(%l,%c%V%)\ %P
 endif
 
 set hidden
@@ -89,27 +89,12 @@ let g:netrw_preview = 1
 map <Leader>= <C-w>=
 imap <Leader>= <ESC> <C-w>=
 
-" Enable Dash search
-if has('macunix')
-	:nmap <silent> <leader>d <Plug>DashSearch
-endif
+" Tagbar
+nmap <F8> :TagbarToggle<CR>
 
-" =====================================
-" Syntax and file types
-" =====================================
-
-set encoding=utf-8
-syntax enable
-filetype on
-filetype plugin on
-filetype indent on
-
-" Whitespace
-set nowrap
-set autoindent
-
-" Go
-let g:go_fmt_command = "goimports"
+let g:tagbar_autoshowtag = 1
+let g:tagbar_previewwin_pos = "rightbelow vertical"
+let g:tagbar_autopreview = 1
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
     \ 'kinds'     : [
@@ -135,8 +120,30 @@ let g:tagbar_type_go = {
         \ 'ntype' : 'n'
     \ },
     \ 'ctagsbin'  : 'gotags',
-    \ 'ctagsargs' : '-sort -silent'
+    \ 'ctagsargs' : '-sort -silent -f "-"'
 \ }
+
+" Enable Dash search
+if has('macunix')
+	:nmap <silent> <leader>d <Plug>DashSearch
+endif
+
+" =====================================
+" Syntax and file types
+" =====================================
+
+set encoding=utf-8
+syntax enable
+filetype on
+filetype plugin on
+filetype indent on
+
+" Whitespace
+set nowrap
+set autoindent
+
+" Go
+let g:go_fmt_command = "goimports"
 
 " =====================================
 " GUI settings
