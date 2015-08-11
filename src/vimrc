@@ -93,7 +93,6 @@ imap <Leader>= <ESC> <C-w>=
 nmap <F8> :TagbarToggle<CR>
 
 let g:tagbar_autoshowtag = 1
-let g:tagbar_previewwin_pos = "rightbelow vertical"
 let g:tagbar_autopreview = 1
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
