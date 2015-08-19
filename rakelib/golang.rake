@@ -3,15 +3,15 @@
 namespace "golang" do
   desc "Install Go language"
   task :install, [:version] do |t, args|
-    # Install: rake "golang:install[1.5beta3]"
-    args.with_defaults(:version => '1.4.2')
+    # Install: rake "golang:install[1.5]"
+    args.with_defaults(:version => '1.5')
     
     if RUBY_PLATFORM =~ /darwin/
       unless File.exist?('/usr/local/go')
         # Download and install go package
         if RUBY_PLATFORM =~ /darwin/
           release = args.version
-          pkg = "go#{release}.darwin-amd64#{'-osx10.8' unless release.include?('beta') or release.include?('rc')}.pkg"
+          pkg = "go#{release}.darwin-amd64.pkg"
           pkg_url = "https://storage.googleapis.com/golang/#{pkg}"
           pkg_download(pkg_url) do |p|
             pkg_install(p)
