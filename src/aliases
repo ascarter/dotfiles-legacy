@@ -38,10 +38,11 @@ Darwin )
 	alias ql='qlmanage -p "$@" >& /dev/null'
 
 	# BBEdit
-	alias bbtags='bbedit --maketags'
 	alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
-	alias bbpb='pbpaste | bbedit --clean --view-top'
 	alias bbd=bbdiff
+	alias bbnw='bbedit --new-window'
+	alias bbpb='pbpaste | bbedit --clean --view-top'
+	alias bbtags='bbedit --maketags'
 
 	# Dev tools
     alias gtower='gittower $(P=$(pwd); while [[ "$P" != "" && ! -e "$P/.git" ]]; do P=${P%/*}; done; echo "$P")'
