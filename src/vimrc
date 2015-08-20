@@ -25,6 +25,7 @@ Plugin 'github-theme'
 Plugin 'phd'
 Plugin 'proton'
 Plugin 'pyte'
+Plugin 'tolerable.vim'
 Plugin 'twilight'
 
 Plugin 'altercation/vim-colors-solarized'
@@ -38,7 +39,7 @@ runtime macros/matchit.vim
 " UI
 " =====================================
 
-colorscheme phd
+colorscheme macvim
 set background=dark
 
 " Turn off blinking cursor
@@ -150,8 +151,8 @@ let g:go_fmt_command = "goimports"
 
 if has("gui_running")
 	" GUI color scheme
-	"colorscheme github
-	"set background=light
+	colorscheme github
+	set background=light
 
 	" Set standard starting window size
 	if &diff
