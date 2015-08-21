@@ -22,9 +22,6 @@ namespace "git" do
     if File.exist?(File.expand_path('/usr/local/bin/bbedit'))
         # bbedit
         git_config("core.editor", "bbedit --wait")
-    elsif File.exist?(File.expand_path('/usr/local/bin/atom'))
-        # atom
-        git_config("core.editor", "atom --wait")
     else
         # vim
         git_config("core.editor", "vim")
