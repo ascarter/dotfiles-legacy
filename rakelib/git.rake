@@ -44,7 +44,7 @@ namespace "git" do
         git_config("merge.tool", "opendiff")
       end
 
-      git_config("gui.fontui", '-family \"Lucida Grande\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0')
+      git_config("gui.fontui", '-family \"SF UI Display Regular\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0')
       git_config("gui.fontdiff", '-family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0')
     elsif RUBY_PLATFORM =~ /linux/
       # Configure password caching
