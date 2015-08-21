@@ -29,6 +29,7 @@
 	br = branch
 	ci = commit
 	co = checkout
+	dir = rev-parse --show-toplevel
 	dump = cat-file -p
 	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 	llog = log --date=local
