@@ -6,7 +6,7 @@
 
 set nocompatible
 filetype off
-" let mapleader="\"
+let mapleader=","
 
 " =====================================
 " Plugins
@@ -44,6 +44,9 @@ set background=dark
 
 " Turn off blinking cursor
 " set guicursor+=n:blinkon0
+
+" Flash screen only - no beep
+set visualbell
 
 " Status line
 if has('statusline')
