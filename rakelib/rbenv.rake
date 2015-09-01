@@ -10,7 +10,8 @@ namespace "rbenv" do
       { owner: "sstephenson", repo: "rbenv-vars" },
       { owner: "sstephenson", repo: "rbenv-gem-rehash" },
       { owner: "sstephenson", repo: "rbenv-default-gems" },
-      { owner: "parkr",       repo: "ruby-build-github" }
+      { owner: "parkr",       repo: "ruby-build-github" },
+      { owner: "tpope",       repo: "rbenv-ctags" },
     ]
 
     unless File.exist?(rbenv_root.to_s)
