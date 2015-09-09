@@ -3,8 +3,8 @@
 namespace "golang" do
   desc "Install Go language"
   task :install, [:version] do |t, args|
-    # Install: rake "golang:install[1.5]"
-    args.with_defaults(:version => '1.5')
+    # Install: rake "golang:install[1.5.1]"
+    args.with_defaults(:version => '1.5.1')
     
     if RUBY_PLATFORM =~ /darwin/
       unless File.exist?('/usr/local/go')
