@@ -6,9 +6,17 @@ require 'pathname'
 require 'tempfile'
 require 'uri'
 
+def home_dir
+  return File.expand_path(ENV['HOME'])
+end
+
 def link_file(source, target)
-  puts "Symlink #{source}"
-  File.symlink(source, target)
+  unless File.exist?(target)
+    puts "Symlink #{source}"
+    File.symlink(source, target)
+  else
+    puts "Symlink #{target} exists"
+  end
 end
 
 def backup(target)

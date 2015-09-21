@@ -7,7 +7,7 @@ namespace "git" do
   task :config do
     puts "Setting git config"
     source = File.expand_path('gitconfig')
-    target = File.join(File.expand_path(ENV['HOME']), '.gitconfig')
+    target = File.join(home_dir(), '.gitconfig')
     copy_and_replace(source, target)
 
     # Get user and email

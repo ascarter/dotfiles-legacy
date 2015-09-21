@@ -37,7 +37,7 @@ namespace "vim" do
 
   desc "Update vundle"
   task :vundle do
-    vundle_path = File.expand_path(File.join(ENV['HOME'], '.vim/bundle/vundle'))
+    vundle_path = File.expand_path(File.join(home_dir(), '.vim/bundle/vundle'))
     unless File.exist?(vundle_path)
       git_clone('gmarik/vundle', vundle_path)
       sh "vim +PluginInstall +qall"
@@ -55,7 +55,7 @@ namespace "vim" do
       %w(gvim mvimdiff mview mex rmvim vim).each { |p| usr_bin_rm(p) }
 
       # Remove bundles
-      bundle_path = File.expand_path(File.join(ENV['HOME'], '.vim/bundle'))
+      bundle_path = File.expand_path(File.join(home_dir(), '.vim/bundle'))
       if File.exist?(bundle_path)
         file_remove(bundle_path)
       end

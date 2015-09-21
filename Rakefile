@@ -24,12 +24,11 @@ end
 desc "Bootstrap dotfiles to home directory using symlinks"
 task :bootstrap do
   replace_all = false
-  home = File.expand_path(ENV['HOME'])
   srcdir = File.expand_path('src')
   Dir.new(srcdir).each do |file|
     unless %w(. ..).include?(file)
       source = File.join(srcdir, file)
-      target = File.expand_path(File.join(home, ".#{file}"))
+      target = File.expand_path(File.join(home_dir(), ".#{file}"))
       if File.exist?(target) or File.symlink?(target) or File.directory?(target)
         if File.identical?(source, target)
           puts "Identical #{file}"
@@ -62,7 +61,7 @@ task :bootstrap do
 
   # Create override directories for local changes
   ['zsh_local', 'zsh_local/functions', 'bash_local'].each do |localdir|
-    target = File.expand_path(File.join(home, ".#{localdir}"))
+    target = File.join(home_dir(), ".#{localdir}")
     unless File.exist?(target)
       mkdir(target)
     else
@@ -73,11 +72,10 @@ end
 
 desc "Uninstall dotfiles from home directory"
 task :uninstall do
-  home = File.expand_path(ENV['HOME'])
   src = File.expand_path('src')
   Dir.new(src).each do |file|
     unless %w(. ..).include?(file)
-      target = File.expand_path(File.join(home, ".#{file}"))
+      target = File.join(home_dir(), ".#{file}")
       file_remove(target)
     end
   end

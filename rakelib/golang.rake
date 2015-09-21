@@ -23,7 +23,7 @@ namespace "golang" do
     puts %x{go version}
 
     # Init default workspace
-    workspace = File.join(ENV['HOME'], '.go')
+    workspace = File.join(home_dir(), '.go')
     unless File.exist?(workspace)
       puts "Initialize default go workspace at #{workspace}"
       mkdir workspace
@@ -48,7 +48,7 @@ namespace "golang" do
     pkgs.each { |p| go_get(workspace, p) }
 
     # Install/update gows
-    gows_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.gows')))
+    gows_root = Pathname.new(File.expand_path(File.join(home_dir(), '.gows')))
     unless File.exist?(gows_root.to_s)
       puts "Installing gows..."
       git_clone('ascarter/gows', gows_root)
