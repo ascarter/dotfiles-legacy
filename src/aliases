@@ -50,7 +50,8 @@ Darwin )
 	alias eclipse='open /Developer/Applications/Eclipse.app'
 	alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
 	alias terminal-notifier='/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier'
-
+	alias verifyxcode='spctl --assess --verbose /Applications/Xcode.app'
+	
 	# Java
 	alias java_home='/usr/libexec/java_home'
 	;;
