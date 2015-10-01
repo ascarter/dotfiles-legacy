@@ -1,6 +1,6 @@
 # Tools from homebrew
 
-brew_tools = %w(ctags gist jq memcached protobuf redis unar wget)
+brew_tools = %w(ctags gist graphviz jq memcached protobuf redis unar wget)
 
 namespace "brewtools" do
   desc "Install tools"
