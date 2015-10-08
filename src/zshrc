@@ -30,6 +30,17 @@ if [ -d ~/.zsh/completions/completions.d ]; then
     done
 fi
 
+# Source homebrew zsh
+if which brew &>/dev/null; then
+    BREW_PREFIX=`brew --prefix`
+    if [ -d ${BREW_PREFIX}/share/zsh/site-functions ]; then
+        for f in ${BREW_PREFIX}/share/zsh/site-functions/*
+        do
+            source ${f}
+        done
+    fi
+fi
+
 # ========================================
 # Path settings
 # ========================================
