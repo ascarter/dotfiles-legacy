@@ -4,7 +4,7 @@
 # Functions/Completions
 # ========================================
 
-fpath=(~/.zsh/functions ~/.zsh_local/functions $fpath)
+fpath=(~/.zsh/functions ~/.zsh_local/functions /opt/homebrew/share/zsh/site-functions $fpath)
 
 source ~/.git-prompt.sh
 
@@ -28,17 +28,6 @@ if [ -d ~/.zsh/completions/completions.d ]; then
     do
         . ${f}
     done
-fi
-
-# Source homebrew zsh
-if which brew &>/dev/null; then
-    BREW_PREFIX=`brew --prefix`
-    if [ -d ${BREW_PREFIX}/share/zsh/site-functions ]; then
-        for f in ${BREW_PREFIX}/share/zsh/site-functions/*
-        do
-            source ${f}
-        done
-    fi
 fi
 
 # ========================================
@@ -163,6 +152,13 @@ if [ -d ~/Library/Android/sdk ]; then
 fi
 
 # AWS
+if which brew &>/dev/null; then
+    BREW_PREFIX=`brew --prefix`
+    if [ -e ${BREW_PREFIX}/share/zsh/site-functions/_aws ]; then
+		source ${BREW_PREFIX}/share/zsh/site-functions/_aws
+    fi
+fi
+
 if [ -d ~/Developer/Library/AWS ]; then
 	export AWS_HOME=~/Developer/Library/AWS
 
