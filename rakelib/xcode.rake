@@ -19,4 +19,9 @@ namespace "xcode" do
     # TODO: Uninstall Xcode command line tools
     puts 'Not yet implemented'
   end
+
+  desc "Reset Xcode preferences"
+  task :reset do
+    defaults_delete "com.apple.dt.Xcode"
+  end
 end

@@ -448,6 +448,7 @@ def defaults_write(domain, key, value, options=nil)
   %x{defaults write #{domain} "#{key}" #{options} "#{value}"}
 end
 
-def defaults_delete(domain, key, options=nil)
-  %x{defaults delete #{domain} "#{key}" #{options}}
+def defaults_delete(domain, key=nil, options=nil)
+  cmd = "defaults delete #{domain}"
+  %x{defaults delete #{domain} #{"#{key}" unless key.nil?} #{options}}
 end
