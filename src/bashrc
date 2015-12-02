@@ -282,7 +282,9 @@ if [ -n "`which brew`" ]; then
         source `brew --prefix`/Library/Contributions/brew_bash_completion.sh
     fi
     
-    complete -C aws_completer aws
+    if [ -e `brew --prefix`/bin/aws_completer ]; then
+	    complete -C aws_completer aws
+    fi
 fi
 
 if [ -e ~/.bash_completion ]; then
