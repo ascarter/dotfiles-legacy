@@ -6,15 +6,14 @@ namespace "vim" do
     if RUBY_PLATFORM =~ /darwin/
       # Install MacVim
       unless File.exist?('/Applications/MacVim.app')
-        snapshot = 'snapshot-77'
-        snapshot_pkg = "MacVim-#{snapshot}.tbz"
-        snapshot_url = "https://github.com/macvim-dev/macvim/releases/download/#{snapshot}/#{snapshot_pkg}"
+        snapshot = 'snapshot-85'
+        snapshot_dmg = "MacVim-7.4.dmg"
+        snapshot_url = "https://github.com/macvim-dev/macvim/releases/download/#{snapshot}/#{snapshot_dmg}"
         pkg_download(snapshot_url) do |p|
-          tmp_dir = File.dirname(p)
-          tmp_src = File.join(tmp_dir, "MacVim-#{snapshot}")
-          sh "cd #{tmp_dir} && tar xvzf #{File.basename(p)}"
-          app_install(File.join(tmp_src, 'MacVim.app'))
-          sudo "cp #{File.join(tmp_src, 'mvim')} /usr/local/bin/."
+          src = dmg_mount(p)
+          app_install(File.join(src, "MacVim.app"))
+          sudo "cp \"#{File.join(src, 'mvim')}\" /usr/local/bin/."
+          dmg_unmount(src)
         end
       else
         puts "MacVim already installed"
@@ -64,4 +63,7 @@ namespace "vim" do
       app_remove("MacVim")
     end
   end
+  
+  desc "Update vim"
+  task update: [:uninstall, :install]
 end
