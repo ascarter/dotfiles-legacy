@@ -6,7 +6,7 @@ namespace "emacs" do
     if RUBY_PLATFORM =~ /darwin/
       # Install Emacs for Mac OS X
       unless File.exist?('/Applications/Emacs.app')
-        version = '24.4'
+        version = '24.5-1'
         pkg = "Emacs-#{version}-universal.dmg"
         pkg_url = "http://emacsformacosx.com/emacs-builds/#{pkg}"
         pkg_download(pkg_url) do |p|
