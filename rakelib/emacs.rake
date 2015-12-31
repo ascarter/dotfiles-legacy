@@ -40,4 +40,7 @@ namespace "emacs" do
       app_remove("Emacs")
     end
   end
+
+  desc "Update emacs"
+  task update: [:uninstall, :install]
 end
