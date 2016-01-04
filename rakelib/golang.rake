@@ -43,7 +43,7 @@ namespace "golang" do
       golang.org/x/tools/cmd/goimports
       golang.org/x/tools/cmd/gorename
       golang.org/x/tools/cmd/present
-      golang.org/x/tools/oracle
+      golang.org/x/tools/cmd/oracle
     ]
     pkgs.each { |p| go_get(workspace, p) }
 
