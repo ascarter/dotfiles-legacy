@@ -1,5 +1,7 @@
 # Leiningen/Clojure tasks
 
+require 'open3'
+
 lein = File.expand_path("~/.bin/lein")
 lein_home = File.expand_path("~/.lein")
 
@@ -12,12 +14,9 @@ namespace "leiningen" do
       fetch(url, lein)
       system "chmod a+x #{lein}"
     end
+    puts %x{lein version}
   end
   
-  Rake::Task["leiningen:install"].enhance do
-    Rake::Task["leiningen:update"].invoke
-  end
-
   desc "Uninstall leiningen and clojure"
   task :uninstall do
     file_remove lein
@@ -26,7 +25,8 @@ namespace "leiningen" do
   
   desc "Update leiningen and clojure"
   task :update do
-    puts %x{lein upgrade}
-    puts %x{lein version}
+    IO.popen("lein upgrade", 'w') do |io|
+      io.write "y"
+    end
   end
 end
