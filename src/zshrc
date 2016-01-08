@@ -209,6 +209,9 @@ fi
 # Applications/services
 # ========================================
 
+# GitHub
+export GITHUB_USER=ascarter
+
 # Postgres openssl breaks Ruby build
 # Disable it off the path for now ...
 export POSTGRES_APP_ROOT=/Applications/Postgres.app/Contents/Versions/9.4
