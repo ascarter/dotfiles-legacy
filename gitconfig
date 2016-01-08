@@ -51,6 +51,7 @@
     logb = log master..HEAD --pretty=oneline 
     logd = log -- .
     logx = log --graph --decorate --all --oneline
+    pr = !hub pull-request --browse
     prep = rebase -i @{upstream}
     setemail = !git config user.email
     ship = merge --no-ff
