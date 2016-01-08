@@ -210,7 +210,10 @@ fi
 # ========================================
 
 # GitHub
-export GITHUB_USER=ascarter
+if which hub &>/dev/null; then
+	export GITHUB_USER=ascarter
+	eval "$(hub alias -s)"
+fi
 
 # Postgres openssl breaks Ruby build
 # Disable it off the path for now ...
