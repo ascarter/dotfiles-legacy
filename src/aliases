@@ -101,3 +101,7 @@ alias svnbbup='svn update --diff3-cmd bbdiff'
 alias projects='cd ~/Projects'
 alias elements='bbedit --new-window ~/Dropbox/Elements'
 alias uploadcr='python ~/Developer/Projects/hulu/upload.py'
+
+# Ski
+
+alias whistlertom='curl -o ~/Documents/whistler_tom.pdf -L "http://online.whistlerblackcomb.com/TomPDF/Default.aspx?Season=1&Type=bg" && ql ~/Documents/whistler_tom.pdf'
