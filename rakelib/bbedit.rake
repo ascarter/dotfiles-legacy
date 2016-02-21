@@ -41,6 +41,7 @@ namespace "bbedit" do
       
       # Set preferences
       defaults_write(domain, "CloseOFBNWindowAfterOpeningSelection", "YES", "-bool")
+      defaults_write(domain, "SUFeedURL", "http://pine.barebones.com/rowboat/BBEdit.xml")
 
       puts %x{bbedit --version}
     end
