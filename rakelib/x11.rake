@@ -1,8 +1,8 @@
 namespace "x11" do
   desc "Install X11"
   task :install do
-    xquartz_root = 'http://xquartz.macosforge.org/downloads/SL'
-    release = '2.7.7'
+    xquartz_root = 'https://dl.bintray.com/xquartz/downloads'
+    release = '2.7.8'
     dmg = "XQuartz-#{release}.dmg"
     dmg_url = "#{xquartz_root}/#{dmg}"
     pkg_download(dmg_url) do |p|
