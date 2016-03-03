@@ -5,5 +5,5 @@
 # Expects results in following format:
 #    [error|warning|note]:[file]:[line]:(col):(message)
 bbmake() {
-	($* 2>&1) | bbresults -t "$*"
+	($* 2>&1) | bbresults -v -t "$*"
 }
