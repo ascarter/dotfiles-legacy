@@ -1,0 +1,6 @@
+#  -*- mode: unix-shell-script; -*-
+
+# launch vscode
+vscode () {
+	VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args "$@"
+}
