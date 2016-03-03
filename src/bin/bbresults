@@ -63,7 +63,7 @@ class Entry
     # Escape ` since it breaks sending it to BBEdit
     message = m[7].strip.gsub(/[`]/, '\\\`') unless m[7].nil?
   
-    STDERR.puts "kind='#{kind}' file='#{file}' line='#{line}' column='#{column}' message='#{message}'"
+    #STDERR.puts "kind='#{kind}' file='#{file}' line='#{line}' column='#{column}' message='#{message}'"
     return Entry.new(kind, file, line, column, message)
   end
 end
