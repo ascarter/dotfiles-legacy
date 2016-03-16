@@ -13,7 +13,7 @@ require_relative 'rakelib/utils.rb'
 task :default => [ :install ]
 
 desc "Install default configuration"
-task :install => [ :bootstrap, :chsh, "git:config", "rbenv:install", "virtualenv:install", "homebrew:install", "vim:install" ]
+task :install => [ :bootstrap, :chsh, "git:config", "rbenv:install", "homebrew:install", "vim:install" ]
 
 desc "Change default shell"
 task :chsh do
