@@ -26,7 +26,10 @@ namespace "vim" do
         %w(gvim mvimdiff mview mex rmvim vim).each { |p| usr_bin_ln(mvim, p) }
       end
     end
-
+    
+    user_vim_path = File.expand_path(File.join(home_dir(), '.vim'))
+    mkdir(user_vim_path) unless File.exist?(user_vim_path)
+    
     puts %x{vim --version}
   end
 
