@@ -18,7 +18,7 @@ task :install => [ :bootstrap, :chsh, "git:config", "rbenv:install", "homebrew:i
 desc "Change default shell"
 task :chsh do
   puts "Setting shell to zsh"
-  sh "chsh -s /bin/zsh"
+  system "chsh -s /bin/zsh"
 end
 
 desc "Bootstrap dotfiles to home directory using symlinks"
@@ -34,7 +34,7 @@ task :bootstrap do
           puts "Identical #{file}"
         else
           puts "Diff:"
-          sh "diff #{source} #{target}"
+          system "diff #{source} #{target}"
           if replace_all
             replace(source, target)
           else

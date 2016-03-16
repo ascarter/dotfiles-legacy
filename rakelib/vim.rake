@@ -42,11 +42,11 @@ namespace "vim" do
     vundle_path = File.expand_path(File.join(home_dir(), '.vim/bundle/vundle'))
     unless File.exist?(vundle_path)
       git_clone('gmarik/vundle', vundle_path)
-      sh "vim +PluginInstall +qall"
+      system "vim +PluginInstall +qall"
     else
       puts "Update vundle"
       git_pull(vundle_path)
-      sh "vim +PluginInstall +qall"
+      system "vim +PluginInstall +qall"
     end
   end
 

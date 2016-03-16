@@ -113,7 +113,7 @@ def unzip(zipfile, exdir=nil)
 end
 
 def run_applescript(script)
-  sh "osascript \"#{script}\""
+  system "osascript \"#{script}\""
 end
 
 
@@ -173,17 +173,17 @@ def git_clone(repo, dest=nil)
   git_url = URI.join("https://github.com/", "#{repo}.git").to_s
   cmd = "git clone #{git_url}"
   cmd += " #{dest.to_s}" if dest
-  sh cmd
+  system cmd
 end
 
 def git_pull(path)
   if File.directory?(path)
-    sh "cd #{path} && git pull"
+    system "cd #{path} && git pull"
   end
 end
 
 def git_config(key, value)
-  sh "git config --global #{key} \"#{value}\""
+  system "git config --global #{key} \"#{value}\""
 end
 
 #
@@ -336,7 +336,7 @@ def dmg_mount(dmg)
 end
 
 def dmg_unmount(dmg)
-  sh "hdiutil detach \"#{dmg}\""
+  system "hdiutil detach \"#{dmg}\""
 end
 
 def app_install(app)
@@ -349,7 +349,7 @@ end
 
 def app_hide(app)
   script = "tell application \"Finder\" to set visible of process \"#{app}\" to false"
-  sh "osascript -e '#{script}'"
+  system "osascript -e '#{script}'"
 end
 
 
@@ -411,18 +411,18 @@ end
 
 def apm_install(pkg)
   unless apm_list().include?(pkg)
-    sh "apm install #{pkg}"
+    system "apm install #{pkg}"
   else
     puts "#{pkg} already installed"
   end
 end
 
 def apm_upgrade
-  sh "apm upgrade --confirm false"
+  system "apm upgrade --confirm false"
 end
 
 def apm_uninstall(pkg)
-  sh "apm uninstall #{pkg}" if apm_list().include?(pkg)
+  system "apm uninstall #{pkg}" if apm_list().include?(pkg)
 end
 
 def apm_list

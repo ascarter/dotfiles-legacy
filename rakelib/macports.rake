@@ -9,7 +9,7 @@ namespace "macports" do
       macports_url = 'https://distfiles.macports.org/MacPorts'
       macports_pkg = 'MacPorts-2.2.0-10.8-MountainLion.pkg'
       unless File.exist?(macports_root)
-        sh "curl -L #{macports_url}/#{macports_pkg} -o /tmp/#{macports_pkg}"
+        system "curl -L #{macports_url}/#{macports_pkg} -o /tmp/#{macports_pkg}"
         sudo "installer -pkg /tmp/#{macports_pkg} -target /"
         file_remove("/tmp/{macports_pkg}")
       end
