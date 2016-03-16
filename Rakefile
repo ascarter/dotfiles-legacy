@@ -34,7 +34,7 @@ task :bootstrap do
           puts "Identical #{file}"
         else
           puts "Diff:"
-          sh "diff #{file} #{target}"
+          sh "diff #{source} #{target}"
           if replace_all
             replace(source, target)
           else
