@@ -39,7 +39,10 @@ runtime macros/matchit.vim
 " UI
 " =====================================
 
-colorscheme macvim
+" Color scheme
+if has('macunix')
+	colorscheme macvim
+endif
 set background=dark
 
 " Turn off blinking cursor

@@ -4,7 +4,7 @@
 pkgs = %w{dash auto-detect-indentation}
 
 namespace "atom" do
-  desc "Install atom support"
+  desc "Install atom"
   task :install do
 
     unless File.exist?('/usr/local/bin/atom')  
@@ -29,6 +29,7 @@ namespace "atom" do
     end
   end
 
+  desc "Uninstall atom"
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
