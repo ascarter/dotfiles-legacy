@@ -3,7 +3,7 @@
 namespace "node" do
   desc "Install node.js"
   task :install, [:version] do |t, args|
-    args.with_defaults(:version => 'v4.1.1')
+    args.with_defaults(:version => 'v4.4.0')
     if RUBY_PLATFORM =~ /darwin/
       # Install node.js from package
       unless File.exist?('/usr/local/bin/node')
@@ -43,7 +43,7 @@ namespace "node" do
           npm_uninstall "npm"
         end
 
-        pkgs = %w{org.nodejs.node.npm.pkg org.nodejs.pkg}
+        pkgs = %w{org.nodejs.node.pkg}
         pkgs.each { |pkg| pkg_uninstall(pkg) }
 
         dirs = [
