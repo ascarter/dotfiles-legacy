@@ -9,7 +9,7 @@ fpath=(~/.zsh/functions ~/.zsh_local/functions /opt/homebrew/share/zsh/site-func
 source ~/.git-prompt.sh
 
 autoload -U compinit
-compinit
+compinit -u
 autoload -U promptinit
 promptinit
 autoload -U colors
