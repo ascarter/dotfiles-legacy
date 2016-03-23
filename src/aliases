@@ -8,7 +8,7 @@ Darwin )
 	alias la='ls -a'
 	;;
 Linux )
-	alias ls='ls -aFh --color=auto'
+	alias ls='ls -hFH --color=auto'
 	alias la='ls -A'
 	alias ll='ls -l'
 	;;
