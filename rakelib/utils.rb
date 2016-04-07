@@ -339,12 +339,28 @@ def dmg_unmount(dmg)
   system "hdiutil detach \"#{dmg}\""
 end
 
+def app_path(app)
+  return File.join('/Applications', "#{app}.app")
+end
+
+def app_exists(app)
+  path = app_path(app)
+  return File.exist?(path)
+end
+
 def app_install(app)
-  sudo "ditto \"#{app}\" /Applications/#{File.basename(app)}"
+  path = app_path(File.basename(app, ".app"))
+  unless File.exist?(path)
+    puts "Installing #{app} to #{path}"
+    sudo "ditto \"#{app}\" \"#{path}\""
+  end
 end
 
 def app_remove(app)
-  sudo_remove_dir File.join('/Applications', "#{app}.app")
+  path = app_path(app)
+  if File.Exist?(path)
+    sudo_remove_dir path
+  end
 end
 
 def app_hide(app)
