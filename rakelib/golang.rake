@@ -16,6 +16,9 @@ namespace "golang" do
           pkg_download(pkg_url) do |p|
             pkg_install(p)
           end
+          
+          # Add go tool to the working path
+          ENV['PATH'] += ":/usr/local/go/bin"
         end
       end
     end
