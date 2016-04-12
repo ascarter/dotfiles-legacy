@@ -6,9 +6,7 @@ namespace "x11" do
     dmg = "XQuartz-#{release}.dmg"
     dmg_url = "#{xquartz_root}/#{dmg}"
     pkg_download(dmg_url) do |p|
-      src = dmg_mount(p)
-      pkg_install(File.join(src, "XQuartz.pkg"))
-      dmg_unmount(src)
+      dmg_mount(p) { |d| pkg_install(File.join(d, "XQuartz.pkg")) }
     end
     
   end
@@ -17,8 +15,7 @@ namespace "x11" do
   task :uninstall do
     if RUBY_PLATFORM =~ /darwin/
       if File.exist?('/opt/X11/bin/Xorg')
-        pkg_id = "org.macosforge.xquartz.pkg"
-        pkg_uninstall(pkg_id)
+        pkg_uninstall("org.macosforge.xquartz.pkg")
       else
         puts "XQuartz X11 is not installed"
       end

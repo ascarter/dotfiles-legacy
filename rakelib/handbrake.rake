@@ -12,9 +12,7 @@ namespace "handbrake" do
         pkg = "HandBrake-#{release}-MacOSX.6_GUI_x86_64"
         pkg_url = "#{handbrake_http_root}?file=#{pkg}.dmg"
         pkg_download(pkg_url) do |p|
-          src = dmg_mount(p)
-          app_install(File.join(src, "HandBrake.app"))
-          dmg_unmount(src)
+          dmg_mount(p) { |d| app_install(File.join(src, "HandBrake.app")) }
         end
       end
 
@@ -24,9 +22,7 @@ namespace "handbrake" do
         pkg = "HandBrake-#{release}-MacOSX.6_CLI_x86_64"
         pkg_url = "#{handbrake_http_root}?file=#{pkg}.dmg"
         pkg_download(pkg_url) do |p|
-          src = dmg_mount(p)
-          sudo "cp #{File.join(src, "HandBrakeCLI")} /usr/local/bin/."
-          dmg_unmount(src)
+          dmg_mount(p) { |d|  sudo "cp #{File.join(d, "HandBrakeCLI")} /usr/local/bin/." }
         end
         
         # Symlink handbrake

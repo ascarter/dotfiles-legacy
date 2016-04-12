@@ -8,9 +8,7 @@ namespace "intellij" do
         pkg_ver = '2016.1.1'
         pkg_url = "https://download.jetbrains.com/idea/ideaIC-#{pkg_ver}.dmg"
         pkg_download(pkg_url) do |p|
-          src = dmg_mount(p)
-          app_install(File.join(src, "IntelliJ IDEA CE.app"))
-          dmg_unmount(src)
+          dmg_mount(p) { |d| app_install(File.join(d, "IntelliJ IDEA CE.app")) }
         end
       end
     end

@@ -80,3 +80,21 @@ task :uninstall do
     end
   end
 end
+
+
+# Mac tasks
+
+desc "Install Mac development environment"
+task :macdev => [ :install, "bbedit:install", "github:install" ]
+
+
+# Linux tasks
+
+desc "Install Linux development environment"
+task :linuxdev => [ :install, "github:install" ]
+
+
+# Windows tasks
+
+desc "Install Windows development environment"
+task :windev => [ :install, "github:install" ]

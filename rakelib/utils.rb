@@ -281,19 +281,19 @@ def pkg_download(url)
   end
 end
 
-def pkg_ls(pkg)
-  if system "pkgutil --pkgs=\"#{pkg.gsub(".", "\.")}\""
-    files = %x{pkgutil --only-files --files #{pkg}}
-    dirs = %x{pkgutil --only-dirs --files #{pkg}}
+def pkg_ls(pkg_id)
+  if system "pkgutil --pkgs=\"#{pkg_id.gsub(".", "\.")}\""
+    files = %x{pkgutil --only-files --files #{pkg_id}}
+    dirs = %x{pkgutil --only-dirs --files #{pkg_id}}
     return files.split, dirs.split
   else
-    puts "Package #{pkg} not installed"
+    puts "Package #{pkg_id} not installed"
   end
 end
 
-def pkg_info(pkg)
+def pkg_info(pkg_id)
   info = {}
-  o, s = Open3.capture2("pkgutil --pkg-info #{pkg}")
+  o, s = Open3.capture2("pkgutil --pkg-info #{pkg_id}")
   return nil unless s.success?
   o.each_line do |l|
     parts = l.split(':')
@@ -304,16 +304,16 @@ end
 
 def pkg_install(pkg)
   if File.exist?(pkg)
-    sudo "installer -package #{pkg} -target /"
+    sudo "installer -package \"#{pkg}\" -target /"
   end
 end
 
-def pkg_uninstall(pkg, dryrun=false)
-  info = pkg_info(pkg)
-  puts "Pkg info: #{info}" if dryrun
+def pkg_uninstall(pkg_id, dryrun=false)
+  info = pkg_info(pkg_id)
+  puts "pkg info: #{info}" if dryrun
 
   if info
-    files, dirs = pkg_ls(pkg)
+    files, dirs = pkg_ls(pkg_id)
 
     # Remove files
     files.each do |f|
@@ -322,21 +322,19 @@ def pkg_uninstall(pkg, dryrun=false)
     end
 
     # Forget package
-    sudo "pkgutil --forget #{pkg}" unless dryrun
+    sudo "pkgutil --forget #{pkg_id}" unless dryrun
 
     # Don't remove directories - this needs to be per package so return them
     return dirs
   else
-    puts "Package #{pkg} is not installed"
+    puts "Package #{pkg_id} is not installed"
   end
 end
 
 def dmg_mount(dmg)
-  return %x{hdiutil attach "#{dmg}" | tail -1 | awk '{$1=$2=""; print $0}' | xargs -0 echo}.strip!
-end
-
-def dmg_unmount(dmg)
-  system "hdiutil detach \"#{dmg}\""
+  d = %x{hdiutil attach "#{dmg}" | tail -1 | awk '{$1=$2=""; print $0}' | xargs -0 echo}.strip!
+  yield d
+  system "hdiutil detach \"#{d}\""
 end
 
 def app_path(app)
@@ -358,7 +356,7 @@ end
 
 def app_remove(app)
   path = app_path(app)
-  if File.Exist?(path)
+  if File.exist?(path)
     sudo_remove_dir path
   end
 end

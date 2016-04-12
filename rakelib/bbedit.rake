@@ -16,9 +16,7 @@ namespace "bbedit" do
         pkg = "BBEdit_#{release}"
         pkg_url = "#{barebones_root}/#{pkg}.dmg"
         pkg_download(pkg_url) do |p|
-          src = dmg_mount(p)
-          app_install(File.join(src, "BBEdit.app"))
-          dmg_unmount(src)
+          dmg_mount(p) { |d| app_install(File.join(d, "BBEdit.app")) }
         end
       end
 
@@ -33,7 +31,7 @@ namespace "bbedit" do
       # Install automator actions
       unless File.exist?('/Library/Automator/AddLineNumbers.action')
         zipfile = "BBEdit11.5AutomatorActionsInstaller.zip"
-	pkg = "BBEditAutomatorActionsInstaller-11.5.pkg"
+        pkg = "BBEditAutomatorActionsInstaller-11.5.pkg"
         pkg_download("#{barebones_pine_root}/#{zipfile}") do |p|
           unzip(p)
           pkg_install(File.join(File.dirname(p), pkg))

@@ -10,10 +10,10 @@ namespace "vim" do
         snapshot_dmg = "MacVim.dmg"
         snapshot_url = "https://github.com/macvim-dev/macvim/releases/download/#{snapshot}/#{snapshot_dmg}"
         pkg_download(snapshot_url) do |p|
-          src = dmg_mount(p)
-          app_install(File.join(src, "MacVim.app"))
-          sudo "cp \"#{File.join(src, 'mvim')}\" /usr/local/bin/."
-          dmg_unmount(src)
+          dmg_mount(p) do |d|
+            app_install(File.join(d, "MacVim.app"))
+            sudo "cp \"#{File.join(d, 'mvim')}\" /usr/local/bin/."
+          end
         end
       else
         puts "MacVim already installed"
