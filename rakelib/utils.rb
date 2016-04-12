@@ -160,7 +160,7 @@ end
 def sudo_remove_dir(target)
   if File.directory?(target)
     puts "Removing directory #{target}"
-    sudo("rm -Rf #{target}")
+    sudo("rm -Rf \"#{target}\"")
   end
 end
 
