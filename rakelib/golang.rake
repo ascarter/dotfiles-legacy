@@ -4,7 +4,7 @@ namespace "golang" do
   desc "Install Go language"
   task :install, [:version] do |t, args|
     # Install: rake "golang:install[1.6]"
-    args.with_defaults(:version => '1.6')
+    args.with_defaults(:version => '1.6.1')
     
     if RUBY_PLATFORM =~ /darwin/
       unless File.exist?('/usr/local/go')
@@ -36,8 +36,6 @@ namespace "golang" do
     pkgs = %w[
       github.com/ChimeraCoder/gojson/...
       github.com/derekparker/delve/cmd/dlv
-      github.com/dvyukov/go-fuzz/go-fuzz
-      github.com/dvyukov/go-fuzz/go-fuzz-build
       github.com/golang/lint/golint
       github.com/jstemmer/gotags
       github.com/mailgun/godebug
