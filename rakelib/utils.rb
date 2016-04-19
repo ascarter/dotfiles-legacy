@@ -121,24 +121,26 @@ end
 # usr tools
 #
 
-def usr_bin_cp(src)
-  cmd_file = File.join('usr/local/bin', File.basename(src))
-  unless File.exist?(cmd_file)
-    sudo "cp #{src} /usr/local/bin."
+def usr_bin_cp(src, dest=nil)
+  target = File.join('/usr/local/bin', dest.nil? ? File.basename(src) : dest)
+  unless File.exist?(target)
+    puts "Copying #{src} to #{target}"
+    sudo "cp \"#{src}\" #{target}"
   else
-    puts "#{cmd_file} already exists"
+    puts "#{target} already exists"
   end
 end
 
 def usr_bin_rm(cmd)
-  sudo_remove(File.join('/usr/local/bin', cmd))
+  cmd_file = File.join('/usr/local/bin', cmd)
+  sudo_remove(cmd_file) if File.exist?(cmd_file)
 end
 
 def usr_bin_ln(src, target)
   src_file = File.expand_path(src)
   target_file = File.join('/usr/local/bin', target)
   unless File.exist?(target_file)
-    sudo "ln -s #{src_file} #{target_file}" if File.exists?(src_file)
+    sudo "ln -s \"#{src_file}\" #{target_file}" if File.exists?(src_file)
   end
 end
 
