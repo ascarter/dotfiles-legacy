@@ -38,13 +38,14 @@ namespace "golang" do
       github.com/derekparker/delve/cmd/dlv
       github.com/golang/lint/golint
       github.com/jstemmer/gotags
+      github.com/lukehoban/go-outline
       github.com/mailgun/godebug
       github.com/nsf/gocode
       github.com/rogpeppe/godef
       golang.org/x/tools/cmd/goimports
       golang.org/x/tools/cmd/gorename
+      golang.org/x/tools/cmd/guru
       golang.org/x/tools/cmd/present
-      golang.org/x/tools/cmd/oracle
     ]
     pkgs.each { |p| go_get(workspace, p) }
 
