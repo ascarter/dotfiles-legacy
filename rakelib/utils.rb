@@ -295,7 +295,7 @@ end
 
 def pkg_info(pkg_id)
   info = {}
-  o, s = Open3.capture2("pkgutil --pkg-info #{pkg_id}")
+  o, e, s = Open3.capture3("pkgutil --pkg-info #{pkg_id}")
   return nil unless s.success?
   o.each_line do |l|
     parts = l.split(':')
@@ -304,9 +304,22 @@ def pkg_info(pkg_id)
   return info
 end
 
-def pkg_install(pkg)
+def pkg_exists(pkg_id)
+  return !pkg_info(pkg_id).nil?
+end
+
+def pkg_install(pkg, choices=nil)
   if File.exist?(pkg)
-    sudo "installer -package \"#{pkg}\" -target /"
+    cmd = "installer -package \"#{pkg}\" -target /"
+    if !choices.nil? 
+      if !File.exist?(choices)
+        raise "Choices file #{choices} not found"
+      end
+      cmd += " -applyChoiceChangesXML \"#{choices}\""
+    end
+    sudo cmd
+  else
+    puts "Package #{pkg} not found"
   end
 end
 
