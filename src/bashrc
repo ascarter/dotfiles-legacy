@@ -4,16 +4,208 @@
 # Path settings
 # ========================================
 
-# Add developer bin
-if [ -d ~/Developer/bin ]; then
-	export PATH=~/Developer/bin:${PATH}
-fi
-
-
 # Add home bin dir if it is there
 if [ -d ~/.bin ]; then
 	export PATH=~/.bin:${PATH}
 fi
+
+# ========================================
+# Languages/frameworks
+# ========================================
+
+# Homebrew
+if which brew &>/dev/null; then
+    BREW_PREFIX=`brew --prefix`
+	export HOMEBREW_NO_EMOJI=1
+
+	# Extend gcc library/include paths to homebrew
+# 	if [ -d ${BREW_PREFIX}/lib ]; then
+#     	export LIBRARY_PATH=${BREW_PREFIX}/lib
+#     fi
+#     if [ -d ${BREW_PREFIX}/include ]; then
+#     	export C_INCLUDE_PATH=${BREW_PREFIX}/include
+# 	    export CPLUS_INCLUDE_PATH=${BREW_PREFIX}/include
+# 	    export OBJC_INCLUDE_PATH=${BREW_PREFIX}/include
+#     fi
+fi
+
+# Go
+if [ -d ~/.go ]; then
+	export GOPATH=~/.go
+	export PATH=$PATH:${GOPATH//://bin:}/bin
+fi
+
+if [ -d ~/.gows ]; then
+    source ~/.gows/gows
+fi
+
+# Ruby (rbenv)
+if [ -d ~/.rbenv ]; then
+	export PATH=~/.rbenv/bin:${PATH}
+	eval "$(rbenv init -)"
+fi
+
+# Add local bin directory for Ruby/Bundler
+# export PATH=./bin:${PATH}
+
+# Python
+export WORKON_HOME=$HOME/.virtualenvs
+if [[ -e /usr/local/bin/virtualenvwrapper.sh ]]; then
+  . /usr/local/bin/virtualenvwrapper.sh
+fi
+
+# Java
+if [[ -e /usr/libexec/java_home ]]; then
+	# Verify that java is installed
+	/usr/libexec/java_home > /dev/null 2>&1
+	if [[ $? -eq 0 ]]; then
+		# Java installed - use the default JDK
+		export JAVA_HOME=`/usr/libexec/java_home`
+	fi
+else
+    export JAVA_HOME=$(readlink -f `which java` | sed "s:bin/java::")
+fi
+
+# Android
+if [ -d ~/Library/Android/sdk ]; then
+    export ANDROID_HOME=~/Library/Android/sdk
+	export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+fi
+
+# Perforce
+export P4DIFF=/usr/local/bin/ksdiff
+export P4MERGE=/usr/local/bin/ksdiff
+
+# ========================================
+# Applications/services
+# ========================================
+
+# GitHub
+if which hub &>/dev/null; then
+	export GITHUB_USER=ascarter
+	eval "$(hub alias -s)"
+fi
+
+# PostgreSQL
+if [ -d /Applications/Postgres.app ]; then
+	export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
+fi
+
+# Heroku Toolbelt
+if [ -d /usr/local/heroku ]; then
+	export PATH="/usr/local/heroku/bin:$PATH"
+fi
+
+# ========================================
+# Shell functions
+# ========================================
+
+# Display current battery charge
+batterycharge () { echo `python ~/.bin/batterycharge.py $*` 2>/dev/null ; }
+
+# If the bb command is called without an argument, launch BBEdit
+# If bb is passed a directory, cd to it and open it in BBEdit
+# If bb is passed a file, open it in BBEdit
+bb () {
+    if [[ -z "$1" ]]; then
+        bbedit --launch
+    else
+        if [[ -d "$1" ]]; then
+            cd "$1"
+        fi
+        bbedit "$1"
+    fi
+}
+
+# Open URL source in BBEdit
+bbcurl () { curl $1 | bbedit --new-window +1 -t $1 ; }
+
+# Run build tool command and send results to bbresults
+# Captures stderr to stdin
+# Expects results in following format:
+#    [error|warning|note]:[file]:[line]:(col):(message)
+bbmake () { ($* 2>&1) | bbresults -v -t "$*" ; }
+
+# Run command and send results to new BBEdit window
+bbrun () { ($* 2>&1) | bbedit --new-window +1 -t "$*" ; }
+
+# Open query in dash
+dashq () {
+	if [ "${2}" ]; then
+        open dash://${1}:${2}
+    else
+        open dash://${1}
+    fi
+}
+
+# Fix open with list in Finder
+fixow () {
+  /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain user
+  killall Finder
+  echo "Open With has been rebuilt, Finder will relaunch"
+}
+
+# Open gem doc page
+gemdoc () { open "http://localhost:8808/rdoc?q=$1" ; }
+
+# Set JVM
+set_jvm () {
+	export JAVA_HOME=`/usr/libexec/java_home -v $1`
+	java -version
+}
+java6 () { set_jvm 1.6 ; }
+java7 () { set_jvm 1.7 ; }
+java8 () { set_jvm 1.8 ; }
+
+# Mail file as attachment: <filepath> <subject> <recipient>
+mailattach () { uuencode ${1} `basename $1` | mail -s "${2}" ${3} ; }
+
+# Open man page with default x-man handler
+# On Mac OS X, opens a nice terminal window
+manx () {
+    if [ "${2}" ]; then
+        open x-man-page://${1}/${2}
+    else
+    	open x-man-page://${1}
+    fi
+}
+
+# Open man page as PDF
+# On Mac OS X, uses Preview.app
+pman () { man -t ${@} | open -f -a /Applications/Preview.app ; }
+
+# Switch to project home
+project () { cd ~/Developer/Projects/${1} ; }
+
+# Set tab path
+settab () { print -Pn "\e]1;%n@%m: %3~\a" ; }
+
+# Set window path
+settitle () { print -Pn "\e]2;%n@%m\a" ; }
+
+# Set tab name
+tabname () { printf "\e]1;${1}\a" ; }
+
+# Set window title
+winname () { printf "\e]2;${1}\a" ; }
+
+# Identify the directory using a "file:" scheme URL, including the host name to
+# disambiguate local vs. remote connections. Percent-escape spaces.
+update_terminal_cwd () { printf '\e]7;%s\a' "file://$HOST${PWD//' '/%20}" ; }
+
+# Search up path until target directory is found
+upsearch () {                                                               
+	local P=$(pwd)
+	while [[ "$P" != "" && ! -e "$P/$1" ]]; do
+		P=${P%/*}
+	done
+	echo "$P"
+}
+
+# Source bash functions
+for f in ~/.bash_functions/*; do
+	. ${f}
+done
 
 # ========================================
 # Shell preferences
@@ -47,206 +239,61 @@ export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit
 # bind '"[B":history-search-forward'
 
 # ========================================
-# Languages/frameworks
-# ========================================
-
-# Homebrew
-export HOMEBREW_NO_EMOJI=1
-
-# Go
-if [ -d /usr/local/go ]; then
-	export GOROOT=/usr/local/go
-fi
-
-if [ -d ~/.go ]; then
-	export GOPATH=~/.go
-	export PATH=$PATH:$GOROOT/bin:${GOPATH//://bin:}/bin
-fi
-
-if [ -d ~/.gows ]; then
-    source ~/.gows/gows
-fi
-
-# Ruby (rbenv)
-if [ -d ~/.rbenv ]; then
-	export PATH=~/.rbenv/bin:${PATH}
-	eval "$(rbenv init -)"
-fi
-
-# Add local bin directory for Ruby/Bundler
-export PATH=./bin:${PATH}
-
-# Python
-export WORKON_HOME=$HOME/.virtualenvs
-if [ -s /usr/local/bin/virtualenvwrapper.sh ]; then
-  . /usr/local/bin/virtualenvwrapper.sh
-fi
-
-# Java
-if [[ -e /usr/libexec/java_home ]]; then
-	# Verify that java is installed
-	/usr/libexec/java_home > /dev/null 2>&1
-	if [[ $? -eq 0 ]]; then
-		# Java installed - use the default JDK
-		export JAVA_HOME=`/usr/libexec/java_home`
-	fi
-else
-    export JAVA_HOME=$(readlink -f `which java` | sed "s:bin/java::")
-fi
-
-# Android
-export ANDROID_HOME=~/Developer/Library/Android
-export ANDROID_SDK=${ANDROID_HOME}/adt-bundle-mac-x86_64/sdk
-export ANDROID_NDK=${ANDROID_HOME}/android-ndk-r8d
-export PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools
-
-# Node
-export NODE_PATH=/usr/local/lib/node_modules
-
-# Go
-export GOROOT=/usr/local/go
-export PATH=$PATH:$GOROOT/bin
-
-# Perforce
-export P4DIFF=/usr/local/bin/ksdiff
-export P4MERGE=/usr/local/bin/ksdiff
-
-# AWS
-if [ -d ~/Developer/Library/AWS ]; then
-	export AWS_HOME=~/Developer/Library/AWS
-
-	# Setup EB
-	if [ -d ${AWS_HOME}/AWS-ElasticBeanstalk-CLI-2.4.0 ]; then
-		export AWS_EB_HOME=${AWS_HOME}/AWS-ElasticBeanstalk-CLI-2.4.0
-
-		case $(uname) in
-		Darwin )
-			platform="macosx"
-			;;
-		Linux )
-			platform="linux"
-			;;
-		* )
-			platform="unknown"
-		esac
-
-		if [ $platform != "unknown" ]; then
-			case $(python --version 2>&1) in
-				*2.7* )
-					pyver="python2.7"
-					;;
-				*3* )
-					pyver="python3"
-					;;
-				* )
-					pyver="unknown"
-			esac
-
-			if [ $pyver != "unknown" ]; then
-				export PATH=$PATH:${AWS_EB_HOME}/eb/${platform}/${pyver}
-			fi
-		fi
-	fi
-fi
-
-# ========================================
-# Applications/services
-# ========================================
-
-# GitHub
-if which hub &>/dev/null; then
-	export GITHUB_USER=ascarter
-	eval "$(hub alias -s)"
-fi
-
-# Postgres openssl breaks Ruby build
-# Disable it off the path for now ...
-export POSTGRES_APP_ROOT=/Applications/Postgres.app/Contents/MacOS
-#if [ -d ${POSTGRES_APP_ROOT} ]; then
-#    export PATH=${POSTGRES_APP_ROOT}/bin:${PATH}
-#fi
-
-# Heroku Toolbelt
-if [ -d /usr/local/heroku ]; then
-	export PATH="/usr/local/heroku/bin:$PATH"
-fi
-
-# ========================================
-# Shell functions
-# ========================================
-
-# Open gem doc page
-gemdoc() {
-    open "http://localhost:8808/rdoc?q=$1"
-}
-
-# Open man page with default x-man handler
-# On Mac OS X, opens a nice terminal window
-manx() {
-   open x-man-page://${1}
-}
-
-# Switch to project home
-project() {
-    cd ~/Developer/Projects/${1}
-}
-
-# Open URL source in BBEdit
-bbcurl() {
-    curl $1 | bbedit --new-window +1 -t $1
-}
-
-# ========================================
 # Terminal settings
 # ========================================
 
 # Colors
-COLOR_CLEAR="\[\033[0m\]"
-COLOR_BLACK="\[\033[0;30m\]"
-COLOR_RED="\[\033[0;31m\]"
-COLOR_GREEN="\[\033[0;32m\]"
-COLOR_YELLOW="\[\033[0;33m\]"
-COLOR_BLUE="\[\033[0;34m\]"
-COLOR_MAGENTA="\[\033[0;35m\]"
-COLOR_CYAN="\[\033[0;36m\]"
-COLOR_WHITE="\[\033[0;37m\]"
+COLOR_RESET='\[\e[0m\]'
 
-COLOR_BOLD_BLACK="\[\033[1;30m\]"
-COLOR_BOLD_RED="\[\033[1;31m\]"
-COLOR_BOLD_GREEN="\[\033[1;32m\]"
-COLOR_BOLD_YELLOW="\[\033[1;33m\]"
-COLOR_BOLD_BLUE="\[\033[1;34m\]"
-COLOR_BOLD_MAGENTA="\[\033[1;35m\]"
-COLOR_BOLD_CYAN="\[\033[1;36m\]"
+COLOR_BLACK='\[\e[0;30m\]'
+COLOR_RED="\[\e[0;31m\]"
+COLOR_GREEN="\[\e[0;32m\]"
+COLOR_YELLOW="\[\e[0;33m\]"
+COLOR_BLUE="\[\e[0;34m\]"
+COLOR_MAGENTA="\[\e[0;35m\]"
+COLOR_CYAN="\[\e[0;36m\]"
+COLOR_WHITE="\[\e[0;37m\]"
+
+COLOR_BOLD_BLACK="\[\e[1;30m\]"
+COLOR_BOLD_RED="\[\e[1;31m\]"
+COLOR_BOLD_GREEN="\[\e[1;32m\]"
+COLOR_BOLD_YELLOW="\[\e[1;33m\]"
+COLOR_BOLD_BLUE="\[\e[1;34m\]"
+COLOR_BOLD_MAGENTA="\[\e[1;35m\]"
+COLOR_BOLD_CYAN="\[\e[1;36m\]"
 COLOR_BOLD_WHITE="\[\e[1;37m\]"
 
-COLOR_BACKGROUND_BLACK="\[\033[40m\]"
-COLOR_BACKGROUND_RED="\[\033[41m\]"
-COLOR_BACKGROUND_GREEN="\[\033[42m\]"
-COLOR_BACKGROUND_YELLOW="\[\033[43m\]"
-COLOR_BACKGROUND_BLUE="\[\033[44m\]"
-COLOR_BACKGROUND_MAGENTA="\[\033[45m\]"
-COLOR_BACKGROUND_CYAN="\[\033[46m\]"
-COLOR_BACKGROUND_WHITE="\[\033[47m\]"
+COLOR_BACKGROUND_BLACK="\[\e[40m\]"
+COLOR_BACKGROUND_RED="\[\e[41m\]"
+COLOR_BACKGROUND_GREEN="\[\e[42m\]"
+COLOR_BACKGROUND_YELLOW="\[\e[43m\]"
+COLOR_BACKGROUND_BLUE="\[\e[44m\]"
+COLOR_BACKGROUND_MAGENTA="\[\e[45m\]"
+COLOR_BACKGROUND_CYAN="\[\e[46m\]"
+COLOR_BACKGROUND_WHITE="\[\e[47m\]"
 
 # Set Git PS conditions
 export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWSTASHSTATE=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
 export GIT_PS1_SHOWUPSTREAM="auto"
-export GIT_PS1_SHOWCOLORHINTS=1
-source ~/.git-prompt.sh
 
-# Prompt
-declare +x PS1
-
+# Limit paths to 3 levels
 export PROMPT_DIRTRIM=3
 
+# Docker
+# PS1='[\u@\h \W$(__docker_machine_ps1 " [%s]")]\$ '
+
+# Prompt
 if [ $TERM = "xterm-256color" -o $TERM = "xterm-color" -o $TERM = "dtterm" -o $TERM = "linux" ]; then
-  export CLICOLOR=1
-  PS1='\w$(__git_ps1 " (%s)")\$ '
+	export CLICOLOR=1
+	export GIT_PS1_SHOWCOLORHINTS=1
+	PS1=${COLOR_BOLD_WHITE}'\n\u@\h'${COLOR_RESET}':\w\n\$ '
+	PROMPT_COMMAND='__git_ps1 "${COLOR_BOLD_WHITE}\n\u@\h${COLOR_RESET}:\w" "\n\\\$ "'
 else
-  PS1='\w$(__git_ps1 " (%s)")\$ '
+	# PS1='\u@\h:\w\$ '
+	PS1="\n\u@\h:\w\n\$ "
+	PROMPT_COMMAND='__git_ps1 "\n\u@\h:\w" "\n\\\$ "'
 fi
 
 if which dircolors &>/dev/null; then
@@ -254,6 +301,8 @@ if which dircolors &>/dev/null; then
         eval `dircolors ~/.dircolors`
     fi
 else
+	terminal_theme dark
+    
     # Set directory colors
     # man ls -> find LSCOLORS
 
@@ -261,7 +310,7 @@ else
     # export LSCOLORS=exfxcxdxbxegedabagacad
 
     # Dark terminal
-    export LSCOLORS=gxfxcxdxbxegedabagacad
+    # export LSCOLORS=gxfxcxdxbxegedabagacad
 
     # Daring Fireball terminal
     # export LSCOLORS=CxGxcxdxBxegedabagacad
@@ -284,17 +333,17 @@ if [ -n "`which brew`" ]; then
         . `brew --prefix`/etc/bash_completion
     fi
     
-    if [ -f `brew --prefix`/Library/Contributions/brew_bash_completion.sh ]; then
-        source `brew --prefix`/Library/Contributions/brew_bash_completion.sh
-    fi
-    
     if [ -e `brew --prefix`/bin/aws_completer ]; then
 	    complete -C aws_completer aws
     fi
 fi
 
-if [ -e ~/.bash_completion ]; then
-    . ~/.bash_completion
+# Source any user bash completion scripts
+if [ -d ~/.bash_completion.d ]; then
+    for f in ~/.bash_completion.d/*
+    do
+        source ${f}
+    done
 fi
 
 # Pip
@@ -315,6 +364,6 @@ fi
 # ========================================
 # Per-machine extras
 # ========================================
-if [ -e ~/.bash_local/bashrc ]; then
-	. ~/.bash_local/bashrc
+if [ -e ~/.bash_local ]; then
+	. ~/.bash_local
 fi

@@ -13,12 +13,12 @@ require_relative 'rakelib/utils.rb'
 task :default => [ :install ]
 
 desc "Install default configuration"
-task :install => [ :bootstrap, :chsh, "git:config", "rbenv:install", "homebrew:install", "vim:install" ]
+task :install => [ :bootstrap, "git:config", "rbenv:install", "homebrew:install", "vim:install" ]
 
 desc "Change default shell"
 task :chsh do
-  puts "Setting shell to zsh"
-  system "chsh -s /bin/zsh"
+  puts "Setting shell to bash"
+  system "chsh -s /bin/bash"
 end
 
 desc "Bootstrap dotfiles to home directory using symlinks"
@@ -56,16 +56,6 @@ task :bootstrap do
       else
         link_file(source, target)
       end
-    end
-  end
-
-  # Create override directories for local changes
-  ['zsh_local', 'zsh_local/functions', 'bash_local'].each do |localdir|
-    target = File.join(home_dir(), ".#{localdir}")
-    unless File.exist?(target)
-      mkdir(target)
-    else
-      puts "#{localdir} exists"
     end
   end
 end

@@ -1,9 +1,0 @@
-#  -*- mode: unix-shell-script; -*-
-
-# Run build tool command and send results to bbresults
-# Captures stderr to stdin
-# Expects results in following format:
-#    [error|warning|note]:[file]:[line]:(col):(message)
-bbmake() {
-	($* 2>&1) | bbresults -v -t "$*"
-}

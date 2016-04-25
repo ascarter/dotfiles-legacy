@@ -53,31 +53,26 @@
 #                      bles, etc.
 
 terminal_theme() {
-    THEME=${1}
-    
-    export CLICOLOR=1
-    
-    case "$THEME" in
-        (light)
+    export CLICOLOR=1    
+    case "${1}" in
+        light)
             export LSCOLORS=exfxcxdxbxegedabagacad
             ;;
-        (lightbold)
+        lightbold)
             export LSCOLORS=ExFxCxDxBxegedabagacad
             ;;
-        (dark)
+        dark)
             export LSCOLORS=gxfxcxdxbxegedabagacad
             ;;
-        (darkbold)
+        darkbold)
             export LSCOLORS=GxFxCxDxBxegedabagaced
             ;;
-        (df)
+        df)
             export LSCOLORS=CxGxcxdxBxegedabagacad
             ;;
-        (*)
+        *)
             printf "terminal_theme [light | lightbold | dark | darkbold | df]\n"
             return
             ;;
     esac
-    
-    #printf "Terminal theme set to %s\n" "$THEME"
 }

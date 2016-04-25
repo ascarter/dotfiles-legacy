@@ -1,6 +1,6 @@
 # Unix configuration
 
-This is my collection of configuration scripts for bash, zsh, git, etc.
+This is my collection of configuration scripts for bash, git, etc.
 
 ## Install
 

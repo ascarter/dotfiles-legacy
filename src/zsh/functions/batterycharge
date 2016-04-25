@@ -1,6 +1,0 @@
-#  -*- mode: unix-shell-script; -*-
-
-# Display current battery charge
-batterycharge () {
-    echo `python ~/.bin/batterycharge.py $*` 2>/dev/null
-}

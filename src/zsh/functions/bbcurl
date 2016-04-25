@@ -1,6 +1,0 @@
-#  -*- mode: unix-shell-script; -*-
-
-# Open URL source in BBEdit
-bbcurl () {
-    curl $1 | bbedit --new-window +1 -t $1
-}
