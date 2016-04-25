@@ -241,9 +241,6 @@ export GIT_PS1_SHOWSTASHSTATE=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
 export GIT_PS1_SHOWUPSTREAM="auto"
 
-# Limit paths to 3 levels
-export PROMPT_DIRTRIM=3
-
 # Docker
 # PS1='[\u@\h \W$(__docker_machine_ps1 " [%s]")]\$ '
 
@@ -258,13 +255,19 @@ prompt_command () {
 	Linux )
 		# TODO: Update title
 	esac
+
+	if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
+		PROMPT_DIR="\W"
+	else
+		PROMPT_DIR="\w"
+	fi
 	
 	if [ $TERM = "xterm-256color" -o $TERM = "xterm-color" -o $TERM = "dtterm" -o $TERM = "linux" ]; then
 		export CLICOLOR=1
 		export GIT_PS1_SHOWCOLORHINTS=1
-		__git_ps1 "$(tput bold)\n\u@\h$(tput sgr0):\W" "\n\\\$ "
+		__git_ps1 "$(tput bold)\n\u@\h$(tput sgr0):${PROMPT_DIR}" "\n\\\$ "
 	else
-		__git_ps1 "\n\u@\h$:\W" "\n\\\$ "
+		__git_ps1 "\n\u@\h$:${PROMPT_DIR}" "\n\\\$ "
 	fi
 
 
@@ -272,6 +275,9 @@ prompt_command () {
 
 PS1='\n\u@\h:\W\n\$ '
 PROMPT_COMMAND=prompt_command
+
+# Limit paths to 3 levels (Bash version 4+)
+export PROMPT_DIRTRIM=3
 
 if which dircolors &>/dev/null; then
     if [ -e ~/.dircolors ]; then
