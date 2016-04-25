@@ -313,7 +313,7 @@ Darwin )
 	
 	# System shortcuts
 	alias lockscreen='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
-
+	
 	# System information
 	alias about='system_profiler SPHardwareDataType SPStorageDataType'
 	alias aboutsys='system_profiler SPSoftwareDataType'
@@ -363,10 +363,26 @@ Linux )
 	;;
 esac
 
+# refresh shell
+alias reload='source ~/.profile'
+
+# up 'n' folders
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
 alias filetree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
 
 # Search/grep
 alias devgrep="grep -n -r --exclude='.svn' --exclude='*.swp' --exclude='.git'"
+
+# ip list
+alias ip='ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d " " -f2'
+# verbose ip list
+alias ipv="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
+# external ip
+alias wanip="dig +short myip.opendns.com @resolver1.opendns.com"
 
 # Docker
 # Remove stopped containers
