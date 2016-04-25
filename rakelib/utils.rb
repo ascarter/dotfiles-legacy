@@ -236,12 +236,14 @@ def brew_install(package)
     brew_upgrade(package)
   else
     # Install package
+    puts "Install homebrew #{package}
     system "#{brew_command} install #{package}"
   end
 end
 
 def brew_uninstall(package)
   if brew_list(package)
+    puts "Uninstall homebrew #{package}"
     system "#{brew_command} uninstall #{package}"
   end
 end
@@ -358,7 +360,11 @@ end
 
 def app_exists(app)
   path = app_path(app)
-  return File.exist?(path)
+  if File.exist?(path)
+    puts "#{app} installed"
+    return true
+  end
+  return false
 end
 
 def app_install(app)
@@ -372,6 +378,7 @@ end
 def app_remove(app)
   path = app_path(app)
   if File.exist?(path)
+    puts "Uninstalling #{app}"
     sudo_remove_dir path
   end
 end
