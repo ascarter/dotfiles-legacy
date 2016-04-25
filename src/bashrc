@@ -319,9 +319,110 @@ fi
 # ========================================
 # Aliases
 # ========================================
-if [ -e ~/.aliases ]; then
-	. ~/.aliases
-fi
+
+case $(uname) in
+Darwin )
+	# ls
+	alias ls='ls -hFGH'
+	alias ll='ls -l'
+	alias la='ls -a'
+	
+	# System shortcuts
+	alias loginw='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
+
+	# System information
+	alias about='system_profiler SPHardwareDataType SPStorageDataType'
+	alias aboutsys='system_profiler SPSoftwareDataType'
+	# Use sw_vers for version
+	alias sysver='sw_vers'
+	
+	# Airport utility
+	alias airport=/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport
+
+	# Power managment
+	alias sleepnow='pmset sleepnow'
+	alias batterycapacity='ioreg -w0 -c AppleSmartBattery -b -f | grep -i capacity'
+
+	# QuickLook
+	alias ql='qlmanage -p "$@" >& /dev/null'
+
+	# BBEdit
+	alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
+	alias bbd=bbdiff
+	alias bbnw='bbedit --new-window'
+	alias bbpb='pbpaste | bbedit --clean --view-top'
+	alias bbtags='bbedit --maketags'
+
+	# Dev tools
+    alias gtower='gittower $(P=$(pwd); while [[ "$P" != "" && ! -e "$P/.git" ]]; do P=${P%/*}; done; echo "$P")'
+	alias extags='/opt/homebrew/bin/ctags'
+	alias eclipse='open /Developer/Applications/Eclipse.app'
+	alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
+	alias terminal-notifier='/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier'
+	alias verifyxcode='spctl --assess --verbose /Applications/Xcode.app'
+	
+	# Java
+	alias java_home='/usr/libexec/java_home'
+
+	# Use MacVim on Mac OS X if installed
+	if [ -e /usr/local/bin/vim ]; then
+			alias vim='/usr/local/bin/vim'
+	fi
+	;;
+Linux )
+	alias ls='ls -hFH --color=auto'
+	alias la='ls -A'
+	alias ll='ls -l'
+	
+	alias glock='gnome-screensaver-command --lock'
+	alias xlock='xscreensaver-command -lock'
+	;;
+esac
+
+alias filetree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
+
+# Search/grep
+alias devgrep="grep -n -r --exclude='.svn' --exclude='*.swp' --exclude='.git'"
+
+# Docker
+# Remove stopped containers
+alias dockerrms='docker rm $(docker ps -a -q)'
+# Remove all untagged images
+alias dockerrmi='docker rmi $(docker images | grep "^<none>" | awk "{print $3}")'
+# Connect shell to default machine
+alias dockerdefault='eval "$(docker-machine env default)"'
+
+# Go
+alias gopresent='present -play=true &; open -g http://127.0.0.1:3999; fg'
+
+# Ruby
+alias binit="bundle install --path vendor/bundle"
+alias bstubs="bundle install --binstubs"
+alias bexec="bundle exec"
+alias bignore="echo \".bundle\nvendor/bundle/ruby\n\" >> .gitignore"
+alias gman="gem man -s"
+
+# Python
+alias rmpyc='find . -type f -name \*.pyc -print | xargs rm'
+alias pydocv='python -m pydoc'
+alias editvenv='bbedit --new-window ${VIRTUAL_ENV}'
+alias pipbrew='CFLAGS="-I/opt/homebrew/include -L/opt/homebrew/lib" pip'
+alias pdb='python -m pdb'
+alias pyunittest='python -m unittest discover --buffer'
+
+# Subverison
+alias svnfmdiff='svn diff --diff-cmd /usr/local/bin/fmdiff'
+alias svnfmmerge='svn merge --diff3-cmd /usr/local/bin/fmdiff3'
+alias svnfmup='svn update --diff3-cmd /usr/local/bin/fmdiff3'
+alias svnbbdiff='svn diff --diff-cmd bbdiff --extensions "--resume --wait --reverse"'
+alias svnbbmerge='svn merge --diff3-cmd bbdiff'
+alias svnbbup='svn update --diff3-cmd bbdiff'
+
+# Shortcuts
+alias projects='cd ~/Projects'
+
+# Ski
+alias whistlertom='curl -o ~/Documents/whistler_tom.pdf -L "http://online.whistlerblackcomb.com/TomPDF/Default.aspx?Season=1&Type=bg" && ql ~/Documents/whistler_tom.pdf'
 
 # ========================================
 # Bash completions
