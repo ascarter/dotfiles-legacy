@@ -17,7 +17,8 @@ fi
 if which brew &>/dev/null; then
     BREW_PREFIX=`brew --prefix`
 	export HOMEBREW_NO_EMOJI=1
-
+	export HOMEBREW_NO_ANALYTICS=1
+	
 	# Extend gcc library/include paths to homebrew
 # 	if [ -d ${BREW_PREFIX}/lib ]; then
 #     	export LIBRARY_PATH=${BREW_PREFIX}/lib
