@@ -229,15 +229,15 @@ def brew_update
   system "#{brew_command} update"
 end
 
-def brew_install(package)
+def brew_install(package, args=nil)
   # Check if package installed already
   if brew_list(package)
     # Package is installed - update it if outdated
-    brew_upgrade(package)
+    brew_upgrade(package, args)
   else
     # Install package
-    puts "Install homebrew #{package}
-    system "#{brew_command} install #{package}"
+    puts "Install homebrew #{package}"
+    system "#{brew_command} install #{args unless args.nil?} #{package}"
   end
 end
 
@@ -258,9 +258,9 @@ def brew_outdated(package)
   end
 end
 
-def brew_upgrade(package)
+def brew_upgrade(package, args=nil)
   if brew_outdated(package)
-    system "#{brew_command} upgrade #{package}"
+    system "#{brew_command} upgrade #{args unless args.nil?} #{package}"
   else
     puts "#{package} is up to date"
   end
@@ -270,6 +270,17 @@ def brew_list(package)
   return system("#{brew_command} list #{package} > /dev/null 2>&1")
 end
 
+def brew_tap(package)
+  system "#{brew_command} tap #{p}"
+end
+
+def brew_untap(package)
+  system "#{brew_command} untap #{p}"
+end
+
+def brew_bin_path(cmd)
+  File.join("/opt/homebrew/bin", cmd)
+end
 
 #
 # Mac OS X package installer
