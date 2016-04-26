@@ -14,7 +14,7 @@ fi
 # ========================================
 
 # Homebrew
-if which brew &>/dev/null; then
+if [ -n "`which brew`" ]; then
     BREW_PREFIX=`brew --prefix`
 	export HOMEBREW_NO_EMOJI=1
 	export HOMEBREW_NO_ANALYTICS=1
@@ -78,7 +78,7 @@ fi
 # ========================================
 
 # GitHub
-if which hub &>/dev/null; then
+if [ -n "`which hub`" ]; then
 	export GITHUB_USER=ascarter
 	eval "$(hub alias -s)"
 fi
