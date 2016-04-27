@@ -10,7 +10,7 @@ namespace "emacs" do
         pkg = "Emacs-#{version}-universal.dmg"
         pkg_url = "http://emacsformacosx.com/emacs-builds/#{pkg}"
         pkg_download(pkg_url) do |p|
-          dmg_mount(p) { |d| app_install(File.join(src, "Emacs.app")) }
+          dmg_mount(p) { |d| app_install(File.join(d, "Emacs.app")) }
         end
       else
         puts "Emacs already installed"
