@@ -246,12 +246,26 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 # PS1='[\u@\h \W$(__docker_machine_ps1 " [%s]")]\$ '
 
 # Prompt
+
+case $(uname) in
+Darwin )
+	update_terminal_cwd() {
+		# Identify the directory using a "file:" scheme URL,
+		# including the host name to disambiguate local vs.
+		# remote connections. Percent-escape spaces.
+		#
+		# Source: https://opensource.apple.com/source/bash/bash-97/bashrc
+		local SEARCH=' '
+		local REPLACE='%20'
+		local PWD_URL="file://$HOSTNAME${PWD//$SEARCH/$REPLACE}"
+		printf '\e]7;%s\a' "$PWD_URL"
+    }
+esac
+
 prompt_command() {
 	case $(uname) in
 	Darwin )
-		# Identify the directory using a "file:" scheme URL, including the host name to
-		# disambiguate local vs. remote connections. Percent-escape spaces.
-		printf '\e]7;%s\a' "file://$HOST${PWD//' '/%20}"
+		update_terminal_cwd
 		;;
 	Linux )
 		# TODO: Update title
