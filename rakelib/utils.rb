@@ -271,11 +271,11 @@ def brew_list(package)
 end
 
 def brew_tap(package)
-  system "#{brew_command} tap #{p}"
+  system "#{brew_command} tap #{package}"
 end
 
 def brew_untap(package)
-  system "#{brew_command} untap #{p}"
+  system "#{brew_command} untap #{package}"
 end
 
 def brew_bin_path(cmd)

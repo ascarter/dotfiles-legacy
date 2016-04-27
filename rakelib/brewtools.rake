@@ -13,9 +13,9 @@ namespace "brewtools" do
       
       # Install taps
       brew_taps.each do |p|
-        user, repo = p.split("/")
-        brew_tap("#{user}/#{repo}")
-        brew_install(repo, "--HEAD")
+        parts = p.split("/")
+        brew_tap("#{parts[0]}/#{parts[1]}")
+        brew_install(parts[1], "--HEAD")
       end
       
       # Symlink homebrew overrides to /usr/local
