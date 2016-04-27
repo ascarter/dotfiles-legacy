@@ -1,6 +1,6 @@
 # Tools from homebrew
 
-brew_tools = %w(gist graphviz jq memcached protobuf redis unar wget)
+brew_tools = %w(bash-completion gist graphviz jq memcached protobuf redis unar wget)
 brew_taps = %w(universal-ctags/universal-ctags)
 brew_overrides = %w(ctags)
 
