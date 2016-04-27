@@ -1,6 +1,6 @@
 --exclude=.git
---extra=+p
---extra=+q
---extra=+r
---fields=+S
+--excmd=number
+--extra=+p+q+r
+--fields=+a+m+n+S
 --sort=no
+--tag-relative=no
