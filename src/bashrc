@@ -98,12 +98,12 @@ fi
 # ========================================
 
 # Display current battery charge
-batterycharge () { echo `python ~/.bin/batterycharge.py $*` 2>/dev/null ; }
+batterycharge() { echo `python ~/.bin/batterycharge.py $*` 2>/dev/null ; }
 
 # If the bb command is called without an argument, launch BBEdit
 # If bb is passed a directory, cd to it and open it in BBEdit
 # If bb is passed a file, open it in BBEdit
-bb () {
+bb() {
     if [[ -z "$1" ]]; then
         bbedit --launch
     else
@@ -115,19 +115,19 @@ bb () {
 }
 
 # Open URL source in BBEdit
-bbcurl () { curl $1 | bbedit --new-window +1 -t $1 ; }
+bbcurl() { curl $1 | bbedit --new-window +1 -t $1 ; }
 
 # Run build tool command and send results to bbresults
 # Captures stderr to stdin
 # Expects results in following format:
 #    [error|warning|note]:[file]:[line]:(col):(message)
-bbmake () { ($* 2>&1) | bbresults -v -t "$*" ; }
+bbmake() { ($* 2>&1) | bbresults -v -t "$*" ; }
 
 # Run command and send results to new BBEdit window
-bbrun () { ($* 2>&1) | bbedit --new-window +1 -t "$*" ; }
+bbrun() { ($* 2>&1) | bbedit --new-window +1 -t "$*" ; }
 
 # Open query in dash
-dashq () {
+dashq() {
 	if [ "${2}" ]; then
         open dash://${1}:${2}
     else
@@ -136,30 +136,30 @@ dashq () {
 }
 
 # Fix open with list in Finder
-fixow () {
+fixow() {
   /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain user
   killall Finder
   echo "Open With has been rebuilt, Finder will relaunch"
 }
 
 # Open gem doc page
-gemdoc () { open "http://localhost:8808/rdoc?q=$1" ; }
+gemdoc() { open "http://localhost:8808/rdoc?q=$1" ; }
 
 # Set JVM
-set_jvm () {
+set_jvm() {
 	export JAVA_HOME=`/usr/libexec/java_home -v $1`
 	java -version
 }
-java6 () { set_jvm 1.6 ; }
-java7 () { set_jvm 1.7 ; }
-java8 () { set_jvm 1.8 ; }
+java6() { set_jvm 1.6 ; }
+java7() { set_jvm 1.7 ; }
+java8() { set_jvm 1.8 ; }
 
 # Mail file as attachment: <filepath> <subject> <recipient>
-mailattach () { uuencode ${1} `basename $1` | mail -s "${2}" ${3} ; }
+mailattach() { uuencode ${1} `basename $1` | mail -s "${2}" ${3} ; }
 
 # Open man page with default x-man handler
 # On Mac OS X, opens a nice terminal window
-manx () {
+manx() {
     if [ "${2}" ]; then
         open x-man-page://${1}/${2}
     else
@@ -169,26 +169,26 @@ manx () {
 
 # Open man page as PDF
 # On Mac OS X, uses Preview.app
-pman () { man -t ${@} | open -f -a /Applications/Preview.app ; }
+pman() { man -t ${@} | open -f -a /Applications/Preview.app ; }
 
 # Output colors: http://linuxtidbits.wordpress.com/2008/08/11/output-color-on-bash-scripts/
-output_colors () {
+output_colors() {
 	for i in $(seq 0 $(tput colors)); do
 		echo " $(tput setaf $i)Text$(tput sgr0) $(tput bold)$(tput setaf $i)Text$(tput sgr0) $(tput sgr 0 1)$(tput setaf $i)Text$(tput sgr0)  \$(tput setaf $i)"
 	done
 }
 
 # Switch to project home
-project () { cd ~/Developer/Projects/${1} ; }
+project() { cd ~/Developer/Projects/${1} ; }
 
 # Set tab name
-tabname () { printf "\e]1;${1}\a" ; }
+tabname() { printf "\e]1;${1}\a" ; }
 
 # Set window title
-winname () { printf "\e]2;${1}\a" ; }
+winname() { printf "\e]2;${1}\a" ; }
 
 # Search up path until target directory is found
-upsearch () {                                                               
+upsearch() {                                                               
 	local P=$(pwd)
 	while [[ "$P" != "" && ! -e "$P/$1" ]]; do
 		P=${P%/*}
@@ -246,7 +246,7 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 # PS1='[\u@\h \W$(__docker_machine_ps1 " [%s]")]\$ '
 
 # Prompt
-prompt_command () {
+prompt_command() {
 	case $(uname) in
 	Darwin )
 		# Identify the directory using a "file:" scheme URL, including the host name to
