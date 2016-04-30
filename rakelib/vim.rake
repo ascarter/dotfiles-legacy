@@ -6,7 +6,7 @@ namespace "vim" do
     if RUBY_PLATFORM =~ /darwin/
       # Install MacVim
       unless File.exist?('/Applications/MacVim.app')
-        snapshot = 'snapshot-98'
+        snapshot = 'snapshot-101'
         snapshot_dmg = "MacVim.dmg"
         snapshot_url = "https://github.com/macvim-dev/macvim/releases/download/#{snapshot}/#{snapshot_dmg}"
         pkg_download(snapshot_url) do |p|

@@ -116,7 +116,6 @@ def run_applescript(script)
   system "osascript \"#{script}\""
 end
 
-
 #
 # usr tools
 #
@@ -166,7 +165,6 @@ def sudo_remove_dir(target)
   end
 end
 
-
 #
 # git
 #
@@ -211,7 +209,6 @@ def pip_uninstall(package, use_sudo=false)
     exec cmd
   end
 end
-
 
 #
 # homebrew
@@ -399,7 +396,6 @@ def app_hide(app)
   system "osascript -e '#{script}'"
 end
 
-
 #
 # go
 #
@@ -480,7 +476,6 @@ def apm_list
   end
   return packages
 end
-
 
 #
 # Mac OS X defaults
