@@ -94,4 +94,27 @@ namespace "github" do
       end
     end
   end
+  
+  namespace "gitup" do
+    desc "Install GitUp"
+    task :install do
+      if RUBY_PLATFORM =~ /darwin/
+        unless app_exists("GitUp")
+          pkg_url = 'https://s3-us-west-2.amazonaws.com/gitup-builds/stable/GitUp.zip'
+          pkg_download(pkg_url) do |p|
+            unzip(p)
+            app_install(File.join(File.dirname(p), "GitUp.app"))
+          end
+        end
+      end
+    end
+    
+    desc "Uninstall GitUp"
+    task :uninstall do
+      if RUBY_PLATFORM =~ /darwin/
+        usr_bin_rm("gitup")
+        app_remove("GitUp")
+      end
+    end
+  end
 end
