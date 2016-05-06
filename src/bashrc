@@ -442,6 +442,14 @@ alias whistlertom='curl -o ~/Documents/whistler_tom.pdf -L "http://online.whistl
 # Bash completions
 # ========================================
 
+# Source any user bash completion scripts
+if [ -d ~/.bash_completion.d ]; then
+    for f in ~/.bash_completion.d/*
+    do
+        source ${f}
+    done
+fi
+
 # Homebrew - will also call user's ~/.bash_completion too
 if [ -n "`which brew`" ]; then
     if [ -f `brew --prefix`/etc/bash_completion ]; then
@@ -451,14 +459,6 @@ if [ -n "`which brew`" ]; then
     if [ -e `brew --prefix`/bin/aws_completer ]; then
 	    complete -C aws_completer aws
     fi
-fi
-
-# Source any user bash completion scripts
-if [ -d ~/.bash_completion.d ]; then
-    for f in ~/.bash_completion.d/*
-    do
-        source ${f}
-    done
 fi
 
 # Pip
