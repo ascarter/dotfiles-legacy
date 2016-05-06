@@ -26,39 +26,40 @@
     pushInsteadOf = https://github.com
 [alias]
 	aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
+	amend = commit --amend
+	bbdiff = difftool --tool=bbdiff
 	br = branch
+	changes = diff --name-status -r
 	ci = commit
 	co = checkout
+	ctags = '!${PWD}/.git/hooks/ctags'
+	datetag = !git tag `date \"+%Y%m%d%H%M\"`
+	difflast = diff HEAD^ HEAD
+	diffstat = diff --stat -r
 	dir = rev-parse --show-toplevel
+	discard = checkout -- 
 	dump = cat-file -p
+	gdiff = difftool --gui --no-prompt
+	gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
 	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+	hub = !sh -c 'github'
+	k = !gitk
+	last = log -l HEAD -n 1
 	llog = log --date=local
+	logb = log master..HEAD --pretty=oneline 
+	logd = log -- .
+	logx = log --graph --decorate --all --oneline
+	pr = pull-request --browse
+	prep = rebase -i @{upstream}
+	setemail = !git config user.email
+	ship = merge --no-ff
 	st = status
+	tower = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
 	type = cat-file -t
+	unstage = reset HEAD --
 	untrack = rm --cache --
-    bbdiff = difftool
-    bbmerge = mergetool
-    changes = diff --name-status -r
-    ctags = '!${PWD}/.git/hooks/ctags'
-    datetag = !git tag `date \"+%Y%m%d%H%M\"`
-    difflast = diff HEAD^ HEAD
-    diffstat = diff --stat -r
-    gdiff = difftool --gui --no-prompt
-    gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
-    hub = !sh -c 'github'
-    k = !gitk
-    last = log -l HEAD -n 1
-    logb = log master..HEAD --pretty=oneline 
-    logd = log -- .
-    logx = log --graph --decorate --all --oneline
-    pr = pull-request --browse
-    prep = rebase -i @{upstream}
-    setemail = !git config user.email
-    ship = merge --no-ff
-    tower = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
-    unstage = reset HEAD --
-    visual = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
-    whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
-    who = shortlog -s --
-    whois = !sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -
-    x = !gitx
+	visual = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
+	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
+	who = shortlog -s --
+	whois = !sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -
+	x = !gitx
