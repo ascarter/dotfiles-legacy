@@ -1,6 +1,4 @@
-
 # BBEdit tasks
-# defaults write com.barebones.bbedit CloseOFBNWindowAfterOpeningSelection -bool YES
 
 namespace "bbedit" do
   desc "Install bbedit"
