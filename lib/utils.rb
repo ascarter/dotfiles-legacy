@@ -356,11 +356,19 @@ def pkg_uninstall(pkg_id, dryrun=false)
   end
 end
 
+#
+# Mac OS X dmg helpers
+#
+
 def dmg_mount(dmg)
   d = %x{hdiutil attach "#{dmg}" | tail -1 | awk '{$1=$2=""; print $0}' | xargs -0 echo}.strip!
   yield d
   system "hdiutil detach \"#{d}\""
 end
+
+#
+# Mac OS X application helpers
+#
 
 def app_path(app)
   return File.join('/Applications', "#{app}.app")
@@ -394,6 +402,20 @@ end
 def app_hide(app)
   script = "tell application \"Finder\" to set visible of process \"#{app}\" to false"
   system "osascript -e '#{script}'"
+end
+
+def app_install_url(pkg_url, appname)
+	pkg_download(pkg_url) do |p|
+		ext = File.extname(p)
+		case ext
+		when ".zip"
+			
+		when ".dmg"
+			dmg_mount(p) { |d| app_install(File.join(d, "#{appname}.app")) }
+		when ".tar.gz"
+		else
+			raise "Package format #{ext} not supported"
+		end
 end
 
 #

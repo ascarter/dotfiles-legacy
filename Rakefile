@@ -8,12 +8,12 @@ require 'pathname'
 require 'uri'
 require 'tmpdir'
 
-require_relative 'rakelib/utils.rb'
+require_relative 'lib/utils.rb'
 
 task :default => [ :install ]
 
 desc "Install default configuration"
-task :install => [ :bootstrap, "git:config", "rbenv:install", "homebrew:install", "vim:install" ]
+task :install => [ :bootstrap, "git:config", "rbenv:install", "vim:install" ]
 
 desc "Change default shell"
 task :chsh do
@@ -75,7 +75,7 @@ end
 # Mac tasks
 
 desc "Install Mac development environment"
-task :macdev => [ :install, "bbedit:install", "github:install" ]
+task :macdev => [ :install, "homebrew:install", "bbedit:install", "github:install" ]
 
 
 # Linux tasks
