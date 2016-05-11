@@ -1,14 +1,28 @@
 #  -*- mode: ruby; -*-
 
-require 'rake'
 require 'erb'
 require 'fileutils'
+require 'net/http'
 require 'open-uri'
+require 'open3'
 require 'pathname'
-require 'uri'
+require 'rake'
+require 'tempfile'
 require 'tmpdir'
+require 'uri'
 
-require_relative 'lib/utils.rb'
+require_relative 'lib/apm'
+require_relative 'lib/downloader'
+require_relative 'lib/filetools'
+require_relative 'lib/git'
+require_relative 'lib/golang'
+require_relative 'lib/node'
+require_relative 'lib/pip'
+
+if RUBY_PLATFORM =~ /darwin/
+  require_relative 'lib/homebrew'
+  require_relative 'lib/macosx'
+end
 
 task :default => [ :install ]
 
@@ -71,18 +85,19 @@ task :uninstall do
   end
 end
 
-
 # Mac tasks
 
-desc "Install Mac development environment"
-task :macdev => [ :install, "homebrew:install", "bbedit:install", "github:install" ]
-
+if RUBY_PLATFORM =~ /darwin/
+  desc "Install Mac development environment"
+  task :macdev => [ :install, "homebrew:install", "bbedit:install", "github:install" ]
+end
 
 # Linux tasks
 
-desc "Install Linux development environment"
-task :linuxdev => [ :install, "github:install" ]
-
+if RUBY_PLATFORM =~ /linux/
+  desc "Install Linux development environment"
+  task :linuxdev => [ :install, "github:install" ]
+end
 
 # Windows tasks
 
