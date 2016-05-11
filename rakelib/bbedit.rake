@@ -10,7 +10,7 @@ namespace "bbedit" do
     if RUBY_PLATFORM =~ /darwin/
       unless app_exists("BBEdit")
         # Install BBEdit
-        release = '11.5.1'
+        release = '11.5.2'
         pkg = "BBEdit_#{release}"
         pkg_url = "#{barebones_root}/#{pkg}.dmg"
         pkg_download(pkg_url) do |p|
