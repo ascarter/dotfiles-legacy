@@ -6,16 +6,16 @@ require_relative 'lib/bootstrap'
 
 task :default => [ :install ]
 
-desc "Install default configuration"
-task :install => [ :bootstrap, "git:config", "rbenv:install", "vim:install" ]
+desc 'Install default configuration'
+task :install => [ :bootstrap, 'git:config', 'rbenv:install', 'vim:install' ]
 
-desc "Change default shell"
+desc 'Change default shell'
 task :chsh do
-  puts "Setting shell to bash"
-  system "chsh -s /bin/bash"
+  puts 'Setting shell to bash'
+  system 'chsh -s /bin/bash'
 end
 
-desc "Bootstrap dotfiles to home directory using symlinks"
+desc 'Bootstrap dotfiles to home directory using symlinks'
 task :bootstrap do
   replace_all = false
   srcdir = File.expand_path('src')
@@ -27,7 +27,7 @@ task :bootstrap do
         if File.identical?(source, target)
           puts "Identical #{file}"
         else
-          puts "Diff:"
+          puts 'Diff:'
           system "diff #{source} #{target}"
           if replace_all
             replace(source, target)
@@ -40,7 +40,7 @@ task :bootstrap do
             when 'y'
               replace(source, target)
             when 'q'
-              puts "Abort"
+              warn 'Abort'
               exit
             else
               puts "Skipping #{file}"
@@ -54,7 +54,7 @@ task :bootstrap do
   end
 end
 
-desc "Uninstall dotfiles from home directory"
+desc 'Uninstall dotfiles from home directory'
 task :uninstall do
   src = File.expand_path('src')
   Dir.new(src).each do |file|
@@ -65,21 +65,18 @@ task :uninstall do
   end
 end
 
-# Mac tasks
+# Work configuration
+desc 'Work development configuration'
+task :workdev => [ :macdev, 'hipchat:install', 'zoom:install', 'viscosity:install' ]
 
-if RUBY_PLATFORM =~ /darwin/
-  desc "Install Mac development environment"
-  task :macdev => [ :install, "homebrew:install", "bbedit:install", "github:install" ]
+case RUBY_PLATFORM
+when /darwin/
+  desc 'Install Mac development environment'
+  task :macdev => [ :install, 'homebrew:install', 'bbedit:install', 'github:install' ]
+when /linux/
+  desc 'Install Linux development environment'
+  task :linuxdev => [ :install, 'github:install' ]
+when /windows/
+  desc 'Install Windows development environment'
+  task :windev => [ :install, 'github:install' ]
 end
-
-# Linux tasks
-
-if RUBY_PLATFORM =~ /linux/
-  desc "Install Linux development environment"
-  task :linuxdev => [ :install, "github:install" ]
-end
-
-# Windows tasks
-
-desc "Install Windows development environment"
-task :windev => [ :install, "github:install" ]
