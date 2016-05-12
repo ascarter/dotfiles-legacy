@@ -4,7 +4,7 @@ namespace "rbenv" do
   desc "Install rbenv"
   task :install do
     puts "Installing rbenv..."
-    rbenv_root = Pathname.new(File.expand_path(File.join(home_dir(), '.rbenv')))
+    rbenv_root = Pathname.new(File.expand_path(File.join(Bootstrap.home_dir(), '.rbenv')))
     plugins = [
       { owner: "sstephenson", repo: "ruby-build" },
       { owner: "sstephenson", repo: "rbenv-vars" },
