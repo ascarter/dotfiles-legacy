@@ -1,18 +1,19 @@
-# HipChat tasks
+# HipChat
 
 namespace "hipchat" do	
-  app = MacOSX::App.new("HipChat", 'https://www.hipchat.com/downloads/latest/mac')
-  
-	desc "Install HipChat"
+	desc 'Install HipChat'
 	task :install do
-		if RUBY_PLATFORM =~ /darwin/
-		  app.install
+		case RUBY_PLATFORM
+		when /darwin/
+		  Bootstrap::MacOSX::App.install('HipChat', 'https://www.hipchat.com/downloads/latest/mac')
 		end
 	end
 	
+	desc 'Uninstall HipChat'
 	task :uninstall do
-	  if RUBY_PLATFORM =~ /darwin/
-	    app.uninstall
-	  end
+		case RUBY_PLATFORM
+		when /darwin/
+		  Bootstrap::MacOSX::App.uinstall('HipChat')
+		end
 	end
 end
