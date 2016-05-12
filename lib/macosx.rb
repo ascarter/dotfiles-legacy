@@ -76,6 +76,13 @@ module Bootstrap
         system "osascript -e '#{script}'"
       end
       module_function :hide
+      
+      def exists?(app)
+        app_name = "#{app}.app"
+        app_path = File.join('/Applications', app_name)
+        return File.exists?(app_path)
+      end
+      module_function :exists?
     end
   
     # Mac OS X Installer Package
