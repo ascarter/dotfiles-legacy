@@ -1,7 +1,46 @@
 # File and path helpers
 
-module FileTools
+require 'erb'
+require 'fileutils'
+require 'net/http'
+require 'open-uri'
+require 'open3'
+require 'pathname'
+require 'rake'
+require 'tempfile'
+require 'tmpdir'
+require 'uri'
+
+require_relative 'apm'
+require_relative 'downloader'
+require_relative 'git'
+require_relative 'golang'
+require_relative 'node'
+require_relative 'pip'
+
+case RUBY_PLATFORM
+when /darwin/
+  require_relative 'homebrew'
+  require_relative 'macosx'
+end
+
+module Bootstrap
   # Helpers
+
+  def macosx?
+    return RUBY_PLATFORM =~ /darwin/
+  end
+  module_function :macosx?
+  
+  def linux?
+    return RUBY_PLATFORM =~ /linux/
+  end
+  module_function :linux?
+  
+  def windows?
+    return RUBY_PLATFORM =~ /windows/
+  end
+  module_function :windows?
 
   def prompt(message, default=nil)
       print "Enter #{message}#{" [#{default}]" unless nil}: "
@@ -59,9 +98,7 @@ module FileTools
   end
   module_function :file_remove
   
-  #
   # sudo
-  #
   
   def sudo(cmd)
     system "sudo sh -c '#{cmd}'"
@@ -117,9 +154,7 @@ module FileTools
   end
   module_function :sudo_chmod
 
-  #
   # usr tools
-  #
 
   def usr_bin_cp(src, dest=nil)
     target = File.join('/usr/local/bin', dest.nil? ? File.basename(src) : dest)

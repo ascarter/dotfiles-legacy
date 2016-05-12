@@ -2,7 +2,7 @@
 # Downloader
 #
 
-module Downloader
+module Bootstrap
   # Download source to dest directory following redirects up to limit
   # Returns downloaded file
   def download(src, dest, limit=10)
@@ -11,11 +11,26 @@ module Downloader
     Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
       request = Net::HTTP::Get.new uri
       http.request request do |response|
+        puts "response: #{response.to_hash.inspect}"
         case response
         when Net::HTTPSuccess then
-          filename = File.basename(src)
+          filename = /.*filename="?([^\";]*)"?/ni.match(response['content-disposition'])[1]
+          content_type = response.sub_type()
+        
+          if filename.nil?
+            case content_type
+            when 'application/zip'
+              filename = 'pkg.zip'
+            when 'application/x-apple-diskimage'
+              filename = 'pkg.dmg'
+            else
+              raise "Unsupported content-type: #{content_type}"
+            end
+          end
+          
           target = File.join(dest, filename)
           thread = start_thread(response, target)
+          
           print "\rDownloading #{filename}: %d%%" % thread[:progress].to_i until thread.join(1)
           print "\rDownloading #{filename}: done"
           puts ""
@@ -38,6 +53,23 @@ module Downloader
     Dir.mktmpdir { |d| yield download(src, d, limit) }
   end
   module_function :download_to_tempdir
+
+  def download_with_extract(src)
+    puts "Requesting #{src}"
+    download_to_tempdir(src) do |p|
+      puts "Extracting #{p}"
+      ext = File.extname(p)
+      case ext
+      when ".zip"
+        unzip(p) { |d| yield d }
+      when ".dmg"
+        mount_dmg(p) { |d| yield d }
+      else
+        raise "Download package format #{ext} not supported"
+      end
+    end
+  end
+  module_function :download_with_extract
 
   def unzip(zipfile, exdir=nil)
     exdir = File.dirname(zipfile) if exdir.nil?

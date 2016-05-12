@@ -1,28 +1,8 @@
 #  -*- mode: ruby; -*-
 
-require 'erb'
-require 'fileutils'
-require 'net/http'
-require 'open-uri'
-require 'open3'
-require 'pathname'
 require 'rake'
-require 'tempfile'
-require 'tmpdir'
-require 'uri'
 
-require_relative 'lib/apm'
-require_relative 'lib/downloader'
-require_relative 'lib/filetools'
-require_relative 'lib/git'
-require_relative 'lib/golang'
-require_relative 'lib/node'
-require_relative 'lib/pip'
-
-if RUBY_PLATFORM =~ /darwin/
-  require_relative 'lib/homebrew'
-  require_relative 'lib/macosx'
-end
+require_relative 'lib/bootstrap'
 
 task :default => [ :install ]
 
@@ -42,7 +22,7 @@ task :bootstrap do
   Dir.new(srcdir).each do |file|
     unless %w(. ..).include?(file)
       source = File.join(srcdir, file)
-      target = File.expand_path(File.join(home_dir(), ".#{file}"))
+      target = File.expand_path(File.join(Bootstrap.home_dir(), ".#{file}"))
       if File.exist?(target) or File.symlink?(target) or File.directory?(target)
         if File.identical?(source, target)
           puts "Identical #{file}"
