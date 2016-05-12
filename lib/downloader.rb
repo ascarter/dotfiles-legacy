@@ -14,17 +14,20 @@ module Bootstrap
         puts "response: #{response.to_hash.inspect}"
         case response
         when Net::HTTPSuccess then
-          filename = /.*filename="?([^\";]*)"?/ni.match(response['content-disposition'])[1]
-          content_type = response.sub_type()
+          filename = File.basename(src)
+          unless %{.zip .dmg .pkg}.include?(File.extname(filename))
+            filename = /.*filename="?([^\";]*)"?/ni.match(response['content-disposition'])[1]
+            content_type = response.sub_type()
         
-          if filename.nil?
-            case content_type
-            when 'application/zip'
-              filename = 'pkg.zip'
-            when 'application/x-apple-diskimage'
-              filename = 'pkg.dmg'
-            else
-              raise "Unsupported content-type: #{content_type}"
+            if filename.nil?
+              case content_type
+              when 'application/zip'
+                filename = 'pkg.zip'
+              when 'application/x-apple-diskimage'
+                filename = 'pkg.dmg'
+              else
+                raise "Unsupported content-type: #{content_type}"
+              end
             end
           end
           
@@ -36,7 +39,8 @@ module Bootstrap
           puts ""
           return target
         when Net::HTTPRedirection then
-          location = response['location']
+          # Replace spaces
+          location = response['location'].gsub(/ /, '%20')
           warn "  --> redirected to #{location}"
           return download(location, dest, limit - 1)
         else
@@ -64,6 +68,8 @@ module Bootstrap
         unzip(p) { |d| yield d }
       when ".dmg"
         mount_dmg(p) { |d| yield d }
+      when ".pkg"
+        yield File.dirname(p)
       else
         raise "Download package format #{ext} not supported"
       end
