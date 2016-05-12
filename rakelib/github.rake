@@ -1,21 +1,23 @@
 # GitHub tasks
 
 namespace "github" do 
-  desc "Install GitHub tools and apps"
+  GITHUB_TOOLS = %w{gist hub}
+  
+  desc 'Install GitHub tools and apps'
   task :install => [ 'tools:install', 'desktop:install', 'tower:install', 'gitx:install' ]
+  
+  desc 'Uninstall GitHub tools and apps'
   task :uninstall => [ 'tools:uninstall', 'dekstop:uninstall', 'tower:uninstall', 'gitx:uninstall' ]
 
   namespace "tools" do
     desc "Install GitHub tools"
     task :install do
-      brew_install("gist")
-      brew_install("hub")
+      GITHUB_TOOLS.each { |p| Bootstrap::Homebrew.install(p) }
     end
     
     desc "Uninstall GitHub tools"
     task :uninstall_tools do
-      brew_uninstall("gist")
-      brew_uninstall("hub")
+      GITHUB_TOOLS.each { |p| Bootstrap::Homebrew.uninstall(p) }
     end
   end
 
@@ -24,17 +26,11 @@ namespace "github" do
     task :install do
       case RUBY_PLATFORM
       when /darwin/
-        unless app_exists("Github Desktop")
-          pkg_url = 'https://central.github.com/mac/latest'
-          pkg_download(pkg_url) do |p|
-            unzip(p)
-            app_install(File.join(File.dirname(p), "Github Desktop.app"))
-          end
-        end
+        Bootstrap::MacOSX::App.install('Github Desktop', 'https://central.github.com/mac/latest')
       when /linux/
-        puts "NYI"
+        warn "NYI"
       when /windows/
-        puts "NYI"
+        warn "NYI"
       else
         raise "Platform not supported"
       end
@@ -42,32 +38,42 @@ namespace "github" do
 
     desc "Uninstall GitHub Desktop"
     task :uninstall do
-      if RUBY_PLATFORM =~ /darwin/
-        app_remove("Github Desktop")
-      end
-    end
-  end
-  
-  namespace "tower" do
-    desc "Install Tower"
-    task :install do
-      if RUBY_PLATFORM =~ /darwin/
-        unless app_exists("Tower")
-          pkg_url = 'https://updates.fournova.com/tower2-mac/stable/releases/latest/download'
-          pkg_download(pkg_url) do |p|
-              unzip(p)
-              app_install(File.join(File.dirname(p), "Tower.app"))
-          end
-        end
+      case RUBY_PLATFORM
+      when /darwin/
+        Bootstrap::MacOSX::App.uninstall('Github Desktop')
+      when /linux/
+        warn "NYI"
+      when /windows/
+        warn "NYI"
       else
         raise "Platform not supported"
       end
     end
+  end
+  
+  if Bootstrap.macosx?
+    namespace "tower" do
+      desc "Install Tower"
+      task :install do
+        Bootstrap::MacOSX::App.install('Tower', 'https://updates.fournova.com/tower2-mac/stable/releases/latest/download')
+      end
 
-    desc "Uninstall Tower"
-    task :uninstall do
-      if RUBY_PLATFORM =~ /darwin/
-        app_remove("Tower")
+      desc "Uninstall Tower"
+      task :uninstall do
+        Bootstrap::MacOSX::App.uninstall('Tower')
+      end
+    end
+
+    namespace "gitup" do
+      desc "Install GitUp"
+      task :install do
+        Bootstrap::MacOSX::App.install('GitUp', 'https://s3-us-west-2.amazonaws.com/gitup-builds/stable/GitUp.zip')
+      end
+    
+      desc "Uninstall GitUp"
+      task :uninstall do
+        Bootstrap.usr_bin_rm('gitup')
+        Bootstrap::MacOSX::App.uninstall('GitUp')
       end
     end
   end
@@ -75,45 +81,21 @@ namespace "github" do
   namespace "gitx" do
     desc "Install GitX"
     task :install do
-      if RUBY_PLATFORM =~ /darwin/
-        unless app_exists("GitX")
-          pkg_url = 'http://builds.phere.net/GitX/development/GitX-dev.dmg'
-          pkg_download(pkg_url) do |p|
-            dmg_mount(p) { |d| app_install(File.join(d, "GitX.app")) }
-          end
-        end
+      case RUBY_PLATFORM
+      when /darwin/
+        Bootstrap::MacOSX::App.install('GitX', 'http://builds.phere.net/GitX/development/GitX-dev.dmg')
       else
-        raise "Platform not supported"
+        warn "Platform not supported"
       end
     end
     
     desc "Uninstall GitX"
     task :uninstall do
-      if RUBY_PLATFORM =~ /darwin/
-        app_remove("GitX")
-      end
-    end
-  end
-  
-  namespace "gitup" do
-    desc "Install GitUp"
-    task :install do
-      if RUBY_PLATFORM =~ /darwin/
-        unless app_exists("GitUp")
-          pkg_url = 'https://s3-us-west-2.amazonaws.com/gitup-builds/stable/GitUp.zip'
-          pkg_download(pkg_url) do |p|
-            unzip(p)
-            app_install(File.join(File.dirname(p), "GitUp.app"))
-          end
-        end
-      end
-    end
-    
-    desc "Uninstall GitUp"
-    task :uninstall do
-      if RUBY_PLATFORM =~ /darwin/
-        usr_bin_rm("gitup")
-        app_remove("GitUp")
+      case RUBY_PLATFORM
+      when /darwin/
+        Bootstrap::MacOSX::App.uninstall('GitX')
+      else
+        warn "Platform not supported"
       end
     end
   end
