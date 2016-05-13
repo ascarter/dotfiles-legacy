@@ -3,9 +3,9 @@
 namespace "hg" do
   desc "Install hg"
   task :install do
-    if RUBY_PLATFORM =~ /darwin/
-      # Install hg from homebrew
-      brew_install('hg')
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::MacOSX::Homebrew.install('hg')
     end
 
     puts %x{hg --version}
@@ -13,8 +13,9 @@ namespace "hg" do
 
   desc "Uninstall hg"
   task :uninstall do
-    if RUBY_PLATFORM =~ /darwin/
-      brew_uninstall('hg')
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::MacOSX::Homebrew.uninstall('hg')
     end
   end
 end
