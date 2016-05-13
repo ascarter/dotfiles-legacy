@@ -12,21 +12,34 @@ JDK_APPLE_PKG_IDS = %w{com.apple.pkg.JavaEssentials com.apple.pkg.JavaForMacOSX1
 JDK_APPLE_SOURCE_URL = 'http://support.apple.com/downloads/DL1572/en_US/javaforosx.dmg'
 
 namespace 'java' do
-  desc 'Install Java JDK'
-  task :install do
-    case RUBY_PLATFORM
-    when /darwin/
-      Bootstrap::MacOSX::Pkg.install(JDK_PKG_NAME, JDK_PKG_IDS[0], JDK_SOURCE_URL, headers: JDK_DOWNLOAD_HEADERS)
-    end
-    
-    puts %x{java -version}
+  desc 'Install Java'
+  task :install => [ 'jdk:install' ]
+  
+  desc 'Uninstall Java'
+  task :uninstall => [ 'jdk:uninstall' ]
+
+  if Bootstrap.macosx?
+    task :install => [ 'apple:install' ]
+    task :uninstall => [ 'apple:uninstall' ]
   end
   
-  desc 'Uninstall Java JDK'
-  task :uninstall do
-    case RUBY_PLATFORM
-    when /darwin/
-      JDK_PKG_IDS.each { |p| Bootstrap::MacOSX::Pkg.uninstall(p) }
+  namespace 'jdk' do
+    desc 'Install Java JDK'
+    task :install do
+      case RUBY_PLATFORM
+      when /darwin/
+        Bootstrap::MacOSX::Pkg.install(JDK_PKG_NAME, JDK_PKG_IDS[0], JDK_SOURCE_URL, headers: JDK_DOWNLOAD_HEADERS)
+      end
+    
+      puts %x{java -version}
+    end
+  
+    desc 'Uninstall Java JDK'
+    task :uninstall do
+      case RUBY_PLATFORM
+      when /darwin/
+        JDK_PKG_IDS.each { |p| Bootstrap::MacOSX::Pkg.uninstall(p) }
+      end
     end
   end
   
