@@ -3,9 +3,10 @@
 namespace "bzr" do
   desc "Install bzr"
   task :install do
-    if RUBY_PLATFORM =~ /darwin/
+    case RUBY_PLATFORM
+    when /darwin/
       # Install bzr from homebrew
-      brew_install('bzr')
+      Bootstrap::MacOSX::Homebrew.install('bzr')
     end
 
     puts %x{bzr --version}
@@ -13,8 +14,9 @@ namespace "bzr" do
 
   desc "Uninstall bzr"
   task :uninstall do
-    if RUBY_PLATFORM =~ /darwin/
-      brew_uninstall('bzr')
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::MacOSX::Homebrew.uninstall('bzr')
     end
   end
 end
