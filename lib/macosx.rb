@@ -161,5 +161,36 @@ module Bootstrap
       end
       module_function :exists?
     end
+    
+    # Mac OS X color picker
+    module ColorPicker
+      def install(picker, url)
+        picker_name = "#{File.basename(picker)}.colorPicker"
+        picker_path = File.join(File.dirname(picker), picker_name)
+        dest = File.join(Bootstrap.home_dir(), 'Library', 'ColorPickers', picker_name)
+        unless File.exists?(dest)
+          Bootstrap.download_with_extract(url) do |d|
+            src = File.join(d, picker_path)
+            puts "Installing #{picker}"
+            FileUtils.cp_r(src, dest)
+          end
+        else
+          warn "#{picker} already installed"
+        end
+      end
+      module_function :install
+      
+      def uninstall(picker)
+        picker_name = "#{picker}.colorPicker"
+        picker_path = File.join(Bootstrap.home_dir(), 'Library', 'ColorPickers', picker_name)
+        if File.exists?(picker_path)
+          puts "Uninstalling #{picker}"
+          FileUtils.rm_rf(picker_path)
+        else
+          warn "#{picker} is not installed"
+        end
+      end
+      module_function :uninstall
+    end
   end
 end
