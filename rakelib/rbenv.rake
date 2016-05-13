@@ -5,6 +5,7 @@ namespace "rbenv" do
   task :install do
     puts "Installing rbenv..."
     rbenv_root = Pathname.new(File.expand_path(File.join(Bootstrap.home_dir(), '.rbenv')))
+    
     plugins = [
       { owner: "sstephenson", repo: "ruby-build" },
       { owner: "sstephenson", repo: "rbenv-vars" },
@@ -15,22 +16,21 @@ namespace "rbenv" do
     ]
 
     unless File.exist?(rbenv_root.to_s)
-      git_clone('sstephenson/rbenv', rbenv_root)
+      Bootstrap::Git.clone('sstephenson/rbenv', rbenv_root)
     else
       puts "Updating rbenv..."
-      system "cd #{rbenv_root} && git pull"
+      Bootstrap::Git.pull(rbenv_root)
     end
 
     plugins.each do |item|
       owner = item[:owner]
       repo = item[:repo]
       dest = rbenv_root.join('plugins', repo)
-
       unless File.exist?(dest)
-        git_clone("#{owner}/#{repo}", dest)
+        Bootstrap::Git.clone("#{owner}/#{repo}", dest)
       else
         puts "Updating #{repo}..."
-        system "cd #{dest} && git pull"
+        Bootstrap::Git.pull(dest)
       end
     end
   end
@@ -39,6 +39,6 @@ namespace "rbenv" do
   task :uninstall do
     puts "Uninstalling rbenv..."
     rbenv_root = Pathname.new(File.expand_path(File.join(ENV['HOME'], '.rbenv')))
-    file_remove(rbenv_root)
+    Bootstrap.file_remove(rbenv_root)
   end
 end
