@@ -2,7 +2,7 @@
 
 if Bootstrap.macosx?
   HOMEBREW_ROOT = '/opt/homebrew'
-  HOMEBREW_TOOLS = %w(bash-completion gist graphviz jq memcached protobuf redis unar wget)
+  HOMEBREW_TOOLS = %w(awscli bash-completion gist graphviz jq memcached protobuf redis unar wget)
   HOMEBREW_TAPS = %w(universal-ctags/universal-ctags)
   HOMEBREW_OVERRIDES = %w(ctags)
 
