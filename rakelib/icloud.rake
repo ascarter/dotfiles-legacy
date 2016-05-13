@@ -1,18 +1,16 @@
 # iCloud tasks
 
-namespace "icloud" do
-  desc "Install iCloud"
-  task :install do
-    if RUBY_PLATFORM =~ /darwin/
-      icloud_dir = File.join(home_dir(), "Library", "Mobile Documents", "com~apple~CloudDocs")
-      link_file icloud_dir, File.join(home_dir(), "iCloud")
+if Bootstrap.macosx?
+  namespace "icloud" do
+    desc "Install iCloud"
+    task :install do
+      icloud_dir = File.join(Bootstrap.home_dir(), "Library", "Mobile Documents", "com~apple~CloudDocs")
+      Bootstrap.link_file icloud_dir, File.join(Bootstrap.home_dir(), "iCloud")
     end
-  end
   
-  desc "Uninstall iCloud"
-  task :uninstall do
-    if RUBY_PLATFORM =~ /darwin/
-      file_remove(File.join(home_dir(), "iCloud"))
+    desc "Uninstall iCloud"
+    task :uninstall do
+      Bootstrap.file_remove(File.join(Bootstrap.home_dir(), "iCloud"))
     end
   end
 end
