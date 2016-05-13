@@ -41,8 +41,9 @@ module Bootstrap
     end
 
     # An App is a Mac OS X Application Bundle provied by a dmg, zip, or tar.gz
+    # cmdfiles is an optional list of paths on the expanded source to copy to /usr/local/bin
     module App
-      def install(app, url, headers: {})
+      def install(app, url, headers: {}, cmdfiles: [])
         app_name = "#{app}.app"
         app_path = File.join('/Applications', app_name)
       
@@ -50,7 +51,8 @@ module Bootstrap
           Bootstrap.download_with_extract(url, headers: headers) do |d|
             src_path = File.join(d, app_name)
             puts "Installing #{app} to #{app_path}"
-            Bootstrap.sudo %Q{ditto "#{src_path}" "#{app_path}"}
+            Bootstrap.sudo %Q{ditto "#{src_path}" "#{app_path}"}            
+            cmdfiles.each { |f| Bootstrap.sudo_cp(File.join(d, f), File.join('/usr/local/bin', File.basename(f))) }
           end
         else
           warn "#{app} already installed"
