@@ -1,28 +1,22 @@
 # Emacs tasks
 
+EMACS_APP_NAME = 'Emacs'
+EMACS_SOURCE_URL = 'http://emacsformacosx.com/emacs-builds/Emacs-24.5-1-universal.dmg'
+
 namespace "emacs" do
   desc "Install Emacs"
   task :install do
-    if RUBY_PLATFORM =~ /darwin/
-      # Install Emacs for Mac OS X
-      unless File.exist?('/Applications/Emacs.app')
-        version = '24.5-1'
-        pkg = "Emacs-#{version}-universal.dmg"
-        pkg_url = "http://emacsformacosx.com/emacs-builds/#{pkg}"
-        pkg_download(pkg_url) do |p|
-          dmg_mount(p) { |d| app_install(File.join(d, "Emacs.app")) }
-        end
-      else
-        puts "Emacs already installed"
-      end
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::MacOSX::App.install(EMACS_APP_NAME, EMACS_SOURCE_URL)
 
       # Symlink emacs
-      memacs = File.join(File.dirname(__FILE__), "../src/bin/memacs")
-      usr_bin_ln(memacs, "emacs")
+      memacs = File.expand_path(File.join(File.dirname(__FILE__), "../src/bin/memacs"))
+      Bootstrap.usr_bin_ln(memacs, "emacs")
       
       # Symlink emacsclient
       emacasclient = "/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
-      usr_bin_ln(emacasclient, "emacsclient")
+      Bootstrap.usr_bin_ln(emacasclient, "emacsclient")
     end
     
     puts %x{emacs --version}
@@ -30,12 +24,13 @@ namespace "emacs" do
 
   desc "Uninstall Emacs"
   task :uninstall do
-    if RUBY_PLATFORM =~ /darwin/
+    case RUBY_PLATFORM
+    when /darwin/
       # Remove symlinks
-      %w{emacs emacasclient}.each { |c| usr_bin_rm(c) }
+      %w{emacs emacasclient}.each { |c| Bootstrap.usr_bin_rm(c) }
       
       # Remove application
-      app_remove("Emacs")
+      Bootstrap::MacOSX::App.uninstall(EMACS_APP_NAME)
     end
   end
 
