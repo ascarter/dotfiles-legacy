@@ -22,18 +22,18 @@ module Bootstrap
 
     # Mac OS X defaults
     module Defaults
-      def read(domain, key=nil, options=nil)
+      def read(domain, key: nil, options: {})
         value = %x{defaults read #{domain} #{options} #{"\"#{key}\"" unless key.nil?}}
         return value
       end
       module_function :read
 
-      def write(domain, key, value, options=nil)
+      def write(domain, key, value, options: {})
         %x{defaults write #{domain} "#{key}" #{options} "#{value}"}
       end
       module_function :write
 
-      def delete(domain, key=nil, options=nil)
+      def delete(domain, key: nil, options: {})
         cmd = "defaults delete #{domain}"
         %x{defaults delete #{domain} #{"#{key}" unless key.nil?} #{options}}
       end
@@ -42,12 +42,12 @@ module Bootstrap
 
     # An App is a Mac OS X Application Bundle provied by a dmg, zip, or tar.gz
     module App
-      def install(app, url)
+      def install(app, url, headers: {})
         app_name = "#{app}.app"
         app_path = File.join('/Applications', app_name)
       
         unless File.exists?(app_path)
-          Bootstrap.download_with_extract(url) do |d|
+          Bootstrap.download_with_extract(url, headers: headers) do |d|
             src_path = File.join(d, app_name)
             puts "Installing #{app} to #{app_path}"
             Bootstrap.sudo %Q{ditto "#{src_path}" "#{app_path}"}
@@ -87,11 +87,10 @@ module Bootstrap
   
     # Mac OS X Installer Package
     module Pkg
-      def install(pkg, id, src, choices=nil)
+      def install(pkg, id, src, choices: nil, headers: {})
         pkg_name = "#{pkg}.pkg"
-      
         unless exists?(id)
-          Bootstrap.download_with_extract(src) do |d|
+          Bootstrap.download_with_extract(src, headers: headers) do |d|
             src_path = File.join(d, pkg_name)
             puts "Installing #{pkg}"
             cmd = %Q{installer -package "#{src_path}" -target /}
@@ -164,12 +163,12 @@ module Bootstrap
     
     # Mac OS X color picker
     module ColorPicker
-      def install(picker, url)
+      def install(picker, url, headers: {})
         picker_name = "#{File.basename(picker)}.colorPicker"
         picker_path = File.join(File.dirname(picker), picker_name)
         dest = File.join(Bootstrap.home_dir(), 'Library', 'ColorPickers', picker_name)
         unless File.exists?(dest)
-          Bootstrap.download_with_extract(url) do |d|
+          Bootstrap.download_with_extract(url, headers: headers) do |d|
             src = File.join(d, picker_path)
             puts "Installing #{picker}"
             FileUtils.cp_r(src, dest)
