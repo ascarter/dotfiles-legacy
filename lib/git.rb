@@ -11,7 +11,7 @@ module Bootstrap
   
     def clone(repo, dest=nil)
       git_url = URI.join("https://github.com/", "#{repo}.git").to_s
-      system "git clone #{git_url} {dest ? dest.to_s : ''}"
+      system "git clone #{git_url} #{dest ? dest.to_s : ''}"
     end
     module_function :clone
 
