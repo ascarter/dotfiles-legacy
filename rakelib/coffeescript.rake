@@ -1,14 +1,16 @@
 # Coffeescript tasks
 
-namespace "coffeescript" do
-  desc "Install coffeescript"
+COFFEESCRIPT_PKGS = %w{coffee-script coffeelint}
+
+namespace 'coffeescript' do
+  desc 'Install coffeescript'
   task :install do
-    %w{coffee-script coffeelint}.each { |p| npm_install p }
+    COFFEESCRIPT_PKGS.each { |p| Bootstrap::NPM.install p }
     puts %x{coffee --version}
   end
 
-  desc "Uninstall coffeescript"
+  desc 'Uninstall coffeescript'
   task :uninstall do
-    %w{coffee-script coffeelint}.each { |p| npm_uninstall p }
+    COFFEESCRIPT_PKGS.each { |p| Bootstrap::NPM.uninstall p }
   end    
 end

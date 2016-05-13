@@ -1,63 +1,53 @@
 # Node.js tasks
 
-namespace "node" do
-  desc "Install node.js"
-  task :install, [:version] do |t, args|
-    args.with_defaults(:version => 'v4.4.2')
-    if RUBY_PLATFORM =~ /darwin/
-      # Install node.js from package
-      unless File.exist?('/usr/local/bin/node')
-        # TODO: Get list of releases and prompt user to pick
-        release = args.version
-        pkg = "node-#{release}.pkg"
-        pkg_url = "http://nodejs.org/dist/#{release}/#{pkg}"
-        pkg_download(pkg_url) do |p|
-          pkg_install(p)
-        end
-      end
+NODEJS_PKG_IDS = %w{org.nodejs.node.pkg}
+NODEJS_PKG_NAME = 'node-v4.4.4'
+NODEJS_SOURCE_URL = 'https://nodejs.org/dist/v4.4.4/node-v4.4.4.pkg'
+
+NPM_PKGS = %w{grunt-cli bower}
+
+namespace 'node' do
+  desc 'Install node.js'
+  task :install do
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::MacOSX::Pkg.install(NODEJS_PKG_NAME, NODEJS_PKG_IDS[0], NODEJS_SOURCE_URL)
     end
 
-    node_version
+    Bootstrap::NodeJS.version
 
     # Install npm packages
-    pkgs = %w{grunt-cli bower}
-    pkgs.each { |pkg| npm_install(pkg) }
+    NPM_PKGS.each { |pkg| Bootstrap::NPM.install(pkg) }
   end
 
-  desc "List installed modules"
+  desc 'List installed modules'
   task :list do
-    node_version
-    npm_ls
+    Bootstrap::NodeJS.version
+    Bootstrap::NPM.ls
   end
 
-  desc "Uninstall node.js"
+  desc 'Uninstall node.js'
   task :uninstall do
-    if RUBY_PLATFORM =~ /darwin/
-      if File.exist?('/usr/local/bin/node')
-        if File.exist?('/usr/local/bin/npm')
-          # Remove all installed node modules and npm
-          npm_list.each do |pkg|
-            npm_uninstall pkg
-          end
-
-          npm_uninstall "npm"
-        end
-
-        pkgs = %w{org.nodejs.node.pkg}
-        pkgs.each { |pkg| pkg_uninstall(pkg) }
-
+    case RUBY_PLATFORM
+    when /darwin/
+      if File.exist?('/usr/local/bin/node') && File.exist?('/usr/local/bin/npm')
+        Bootstrap::NPM.list.each { |p| Bootstrap::NPM.uninstall(p) }
+        Bootstrap::NPM.uninstall('npm')
+        
+        NODEJS_PKG_IDS.each { |p| Bootstrap::MacOSX::Pkg.uninstal(p) }
+        
         dirs = [
-          "/usr/local/lib/node",
-          "/usr/local/lib/node_modules",
-          "/usr/local/include/node"
+          '/usr/local/lib/node',
+          '/usr/local/lib/node_modules',
+          '/usr/local/include/node'
         ]
-        dirs.each { |dir| sudo_remove_dir(dir) }
+        dirs.each { |dir| Bootstrap.sudo_remove_dir(dir) }
       else
-        puts 'Node.js is not installed'
+        warn 'Node.js and npm are not installed'
       end
     end
   end
 
-  desc "Update node.js"
+  desc 'Update node.js'
   task update: [:uninstall, :install]
 end

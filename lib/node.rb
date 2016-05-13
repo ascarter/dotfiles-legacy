@@ -11,24 +11,34 @@ module Bootstrap
 
   module NPM
     def install(pkg)
-      if %x{npm list --global --parseable #{pkg}}.strip().empty?
-        sudo "npm install --global #{pkg}"
+      if !installed?(pkg)
+        Bootstrap.sudo "npm install --global #{pkg}"
       else
-        puts "#{pkg} already installed"
+        warn "#{pkg} already installed"
       end
     end
     module_function :install
 
     def update(pkg="")
-      sudo "npm update --global #{pkg}"
+      Bootstrap.sudo "npm update --global #{pkg}"
     end
     module_function :update
 
     def uninstall(pkg)
-      sudo "npm uninstall --global #{pkg}"
+      if installed?(pkg)
+        Bootstrap.sudo "npm uninstall --global #{pkg}"
+      else
+        warn "#{pkg} is not installed"
+      end
     end
     module_function :uninstall
 
+    def installed?(pkg)
+      o, e, s = Open3.capture3("npm list --global --parseable #{pkg}")
+      return (s.exitstatus == 0)
+    end
+    module_function :installed?
+    
     def list
       packages = []
       %x{npm list --global --parseable --depth=0}.split("\n").each do |pkg|
