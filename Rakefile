@@ -30,15 +30,15 @@ task :bootstrap do
           puts 'Diff:'
           system "diff #{source} #{target}"
           if replace_all
-            replace(source, target)
+            Bootstrap.replace(source, target)
           else
             print "Replace existing file #{file}? [ynaq] "
             case $stdin.gets.chomp
             when 'a'
               replace_all = true
-              replace(source, target)
+              Bootstrap.replace(source, target)
             when 'y'
-              replace(source, target)
+              Bootstrap.replace(source, target)
             when 'q'
               warn 'Abort'
               exit
@@ -48,7 +48,7 @@ task :bootstrap do
           end
         end
       else
-        link_file(source, target)
+        Bootstrap.link_file(source, target)
       end
     end
   end
