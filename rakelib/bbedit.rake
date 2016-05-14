@@ -1,74 +1,56 @@
 # BBEdit tasks
 
-namespace "bbedit" do
-  desc "Install bbedit"
-  task :install do
-    barebones_root = "https://s3.amazonaws.com/BBSW-download"
-    barebones_pine_root = "http://pine.barebones.com/files"
-    domain = "com.barebones.bbedit"
-    
-    if RUBY_PLATFORM =~ /darwin/
-      unless app_exists("BBEdit")
-        # Install BBEdit
-        release = '11.5.2'
-        pkg = "BBEdit_#{release}"
-        pkg_url = "#{barebones_root}/#{pkg}.dmg"
-        pkg_download(pkg_url) do |p|
-          dmg_mount(p) { |d| app_install(File.join(d, "BBEdit.app")) }
-        end
-      end
-
+if Bootstrap.macosx?
+  BBEDIT_APP_NAME = 'BBEdit'
+  BBEDIT_SOURCE_URL = 'https://s3.amazonaws.com/BBSW-download/BBEdit_11.5.2.dmg'
+  
+  BBEDIT_AUTOMATOR_PKG_NAME = 'BBEditAutomatorActionsInstaller-11.5'
+  BBEDIT_AUTOMATOR_PKG_ID = 'com.barebones.bbedit.automatorActions'
+  BBEDIT_AUTOMATOR_SOURCE_URL = 'http://pine.barebones.com/files/BBEdit11.5AutomatorActionsInstaller.zip'
+  
+  BBEDIT_DEFAULTS_DOMAIN = 'com.barebones.bbedit'
+  BBEDIT_SUFEED_URL = 'http://pine.barebones.com/rowboat/BBEdit.xml'
+  
+  BBEDIT_TOOLS = %w{bbdiff bbedit bbfind bbresults}
+  
+  namespace 'bbedit' do
+    desc 'Install BBEdit'
+    task :install do
+      Bootstrap::MacOSX::App.install(BBEDIT_APP_NAME, BBEDIT_SOURCE_URL)
+      
       # TODO: Set license key
 
       # Install command line utils
       unless File.exist?('/usr/local/bin/bbedit')
-        run_applescript('/Applications/BBEdit.app/Contents/Resources/BBEdit Help/install_tools.scpt')
-        app_hide("BBEdit")
+        Bootstrap::MacOSX.run_applescript('/Applications/BBEdit.app/Contents/Resources/BBEdit Help/install_tools.scpt')
+        Bootstrap::MacOSX::App.hide("BBEdit")
       end
-      
+    
       # Install automator actions
-      unless File.exist?('/Library/Automator/AddLineNumbers.action')
-        zipfile = "BBEdit11.5AutomatorActionsInstaller.zip"
-        pkg = "BBEditAutomatorActionsInstaller-11.5.pkg"
-        pkg_download("#{barebones_pine_root}/#{zipfile}") do |p|
-          unzip(p)
-          pkg_install(File.join(File.dirname(p), pkg))
-        end
-      end
-      
+      Bootstrap::MacOSX::Pkg.install(BBEDIT_AUTOMATOR_PKG_NAME, BBEDIT_AUTOMATOR_PKG_ID, BBEDIT_AUTOMATOR_SOURCE_URL)
+    
       # Set preferences
-      defaults_write(domain, "CloseOFBNWindowAfterOpeningSelection", "YES", "-bool")
-      defaults_write(domain, "SUFeedURL", "http://pine.barebones.com/rowboat/BBEdit.xml")
+      Bootstrap::MacOSX::Defaults.write(BBEDIT_DEFAULTS_DOMAIN, 'CloseOFBNWindowAfterOpeningSelection', 'YES', '-bool')
+      Bootstrap::MacOSX::Defaults.write(BBEDIT_DEFAULTS_DOMAIN, 'SUFeedURL', BBEDIT_SUFEED_URL)
 
       puts %x{bbedit --version}
     end
-  end
 
-  desc "Uninstall bbedit"
-  task :uninstall do
-    if RUBY_PLATFORM =~ /darwin/
-      if app_exists("BBEdit")
+    desc "Uninstall BBEdit"
+    task :uninstall do
+      if Bootstrap::MacOSX::App.exists(BBEDIT_APP_NAME)
         # Command line tools
         usr_bin = '/usr/local/bin'
-        %w{bbdiff bbedit bbfind}.each do |p|
-          target = File.expand_path(File.join(usr_bin, p))
-          sudo_remove(target)
+        BBEDIT_TOOLS.each do |t|
+          Bootstrap.usr_bin_rm(t)
+          Bootstrap.sudo_rm(File.join('/usr/local/share/man/man1', "#{t}.1"))
         end
-        
-        # Man pages
-        usr_man = '/usr/local/share/man/man1'
-        %w{bbdiff.1 bbedit.1 bbfind.1}.each do |m|
-          target = File.expand_path(File.join(usr_man, m))
-          sudo_remove(target)
-        end
-        
+      
         # Automator actions
-        if File.exist?('/Library/Automator/AddLineNumbers.action')
-          pkg_uninstall('com.barebones.bbedit.automatorActions')
-        end
-              
+        Bootstrap::MacOSX::Pkg.uninstall(BBEDIT_AUTOMATOR_PKG_ID)
+            
         # Remove application
-        app_remove("BBEdit")
+        Bootstrap::MacOSX::App.uninstall('BBEdit')
       end
     end
   end
