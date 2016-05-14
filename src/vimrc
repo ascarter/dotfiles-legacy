@@ -21,6 +21,7 @@ Plugin 'majutsushi/tagbar'
 Plugin 'rizzatti/dash.vim'
 
 " Themes
+Plugin 'chriskempson/base16-vim'
 Plugin 'github-theme'
 Plugin 'phd'
 Plugin 'proton'
@@ -41,7 +42,8 @@ runtime macros/matchit.vim
 
 " Color scheme
 if has('macunix')
-	colorscheme macvim
+	" colorscheme macvim
+	colorscheme base16-ocean
 endif
 set background=dark
 
@@ -157,8 +159,10 @@ let g:go_fmt_command = "goimports"
 
 if has("gui_running")
 	" GUI color scheme
-	colorscheme github
-	set background=light
+	"colorscheme github
+	" set background=light
+	colorscheme base16-ocean
+	set background=dark
 
 	" Set standard starting window size
 	if &diff
