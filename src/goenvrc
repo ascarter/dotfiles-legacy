@@ -1,0 +1,12 @@
+github.com/ChimeraCoder/gojson/...		
+github.com/derekparker/delve/cmd/dlv		
+github.com/golang/lint/golint		
+github.com/govend/govend
+github.com/lukehoban/go-outline		
+github.com/mailgun/godebug		
+github.com/nsf/gocode		
+github.com/rogpeppe/godef		
+golang.org/x/tools/cmd/goimports		
+golang.org/x/tools/cmd/gorename		
+golang.org/x/tools/cmd/guru		
+golang.org/x/tools/cmd/present
