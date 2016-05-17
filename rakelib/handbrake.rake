@@ -1,46 +1,39 @@
 # HandBrake tasks
 
+HANDBRAKE_APP_NAME = 'Handbrake'
+HANDBRAKE_SRC_URL = 'http://handbrake.fr/rotation.php?file=HandBrake-0.10.5-MacOSX.6_GUI_x86_64.dmg'
+
+HANDBRAKE_CLI_APP_NAME = 'HandbrakeCLI'
+HANDBRAKE_CLI_SRC_URL = 'https://handbrake.fr/rotation.php?file=HandBrake-0.10.5-MacOSX.6_CLI_x86_64.dmg'
+
 namespace "handbrake" do
   desc "Install HandBrake"
   task :install do
-    handbrake_http_root = "https://handbrake.fr/rotation.php"
-    release = '0.10.2'
-    
-    if RUBY_PLATFORM =~ /darwin/
-      unless File.exist?("/Applications/HandBrake.app")
-        # Install Handbrake app
-        pkg = "HandBrake-#{release}-MacOSX.6_GUI_x86_64"
-        pkg_url = "#{handbrake_http_root}?file=#{pkg}.dmg"
-        pkg_download(pkg_url) do |p|
-          dmg_mount(p) { |d| app_install(File.join(src, "HandBrake.app")) }
-        end
-      end
-
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::MacOSX::App.install(HANDBRAKE_APP_NAME, HANDBRAKE_SRC_URL)
+      
       # Install command line utility
-      handbrake_cli = '/usr/local/bin/HandBrakeCLI'
-      unless File.exist?(handbrake_cli)
-        pkg = "HandBrake-#{release}-MacOSX.6_CLI_x86_64"
-        pkg_url = "#{handbrake_http_root}?file=#{pkg}.dmg"
-        pkg_download(pkg_url) do |p|
-          dmg_mount(p) { |d|  sudo "cp #{File.join(d, "HandBrakeCLI")} /usr/local/bin/." }
+      unless Bootstrap.usr_bin_exists?('HandbrakeCLI')
+        Bootstrap.download_with_extract(HANDBRAKE_CLI_SRC_URL) do |d|
+          Bootstrap.usr_bin_cp(File.join(d, HANDBRAKE_CLI_APP_NAME), HANDBRAKE_CLI_APP_NAME)
+          Bootstrap.usr_bin_ln(File.join('/usr/local/bin', HANDBRAKE_CLI_APP_NAME), 'handbrake')
         end
-        
-        # Symlink handbrake
-        usr_bin_ln(handbrake_cli, 'handbrake') if File.exist?(handbrake_cli)
       end
+      
+      # Install libdvdcss
+      Bootstrap::Homebrew.install('libdvdcss')
     end
-  end
+  end  
 
   desc "Uninstall HandBrake"
   task :uninstall do
-    if RUBY_PLATFORM =~ /darwin/
-      handbrake_app = '/Applications/HandBrake.app'
-      handbrake_cli = '/usr/local/bin/HandbrakeCLI'
-      handbrake_alias = '/usr/local/bin/handbrake'
-
-      sudo_remove_dir(handbrake_app) if File.exist?(handbrake_app)
-      sudo_remove(handbrake_cli) if File.exist?(handbrake_cli)
-      sudo_remove(handbrake_alias)
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::Homebrew.uninstall('libdvdcss')
+      Bootstrap::MacOSX::App.remove(HANDBRAKE_APP_NAME)
+      Bootstrap.usr_bin_rm('handbrake')
+      Bootstrap.usr_bin_rm(HANDBRAKE_CLI_APP_NAME)
     end
   end
 end
