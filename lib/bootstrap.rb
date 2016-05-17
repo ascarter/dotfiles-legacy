@@ -156,6 +156,12 @@ module Bootstrap
 
   # usr tools
 
+  def usr_bin_exists?(cmd)
+    target = File.join('/usr/local/bin', cmd)
+    return File.exist?(target)
+  end
+  module_function :usr_bin_exists?
+
   def usr_bin_cp(src, dest=nil)
     target = File.join('/usr/local/bin', dest.nil? ? File.basename(src) : dest)
     unless File.exist?(target)
