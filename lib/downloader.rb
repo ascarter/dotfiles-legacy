@@ -37,7 +37,7 @@ module Bootstrap
           target = File.join(dest, filename)
           thread = start_thread(response, target)
           
-          print "\rDownloading #{filename}: %d%%" % thread[:progress].to_i until thread.join(1)
+          print "\rDownloading #{filename}: #{thread[:progress].to_i}%" until thread.join(1)
           print "\rDownloading #{filename}: done"
           puts ""
           return target
