@@ -5,7 +5,7 @@ if Bootstrap.macosx?
   BBEDIT_SOURCE_URL = 'https://s3.amazonaws.com/BBSW-download/BBEdit_11.5.2.dmg'
   
   BBEDIT_AUTOMATOR_PKG_NAME = 'BBEditAutomatorActionsInstaller-11.5'
-  BBEDIT_AUTOMATOR_PKG_ID = 'com.barebones.bbedit.automatorActions'
+  BBEDIT_AUTOMATOR_PKG_ID = '.automatorActions'
   BBEDIT_AUTOMATOR_SOURCE_URL = 'http://pine.barebones.com/files/BBEdit11.5AutomatorActionsInstaller.zip'
   
   BBEDIT_DEFAULTS_DOMAIN = 'com.barebones.bbedit'
@@ -21,11 +21,8 @@ if Bootstrap.macosx?
       # TODO: Set license key
 
       # Install command line utils
-      unless File.exist?('/usr/local/bin/bbedit')
-        Bootstrap::MacOSX.run_applescript('/Applications/BBEdit.app/Contents/Resources/BBEdit Help/install_tools.scpt')
-        Bootstrap::MacOSX::App.hide("BBEdit")
-      end
-    
+      Bootstrap::MacOSX.run_applescript('/Applications/BBEdit.app/Contents/Resources/BBEdit Help/install_tools.scpt') unless File.exist?('/usr/local/bin/bbedit')
+      
       # Install automator actions
       Bootstrap::MacOSX::Pkg.install(BBEDIT_AUTOMATOR_PKG_NAME, BBEDIT_AUTOMATOR_PKG_ID, BBEDIT_AUTOMATOR_SOURCE_URL)
     
@@ -38,20 +35,19 @@ if Bootstrap.macosx?
 
     desc "Uninstall BBEdit"
     task :uninstall do
-      if Bootstrap::MacOSX::App.exists(BBEDIT_APP_NAME)
+      if Bootstrap.usr_bin_exists?('bbedit')
         # Command line tools
-        usr_bin = '/usr/local/bin'
         BBEDIT_TOOLS.each do |t|
           Bootstrap.usr_bin_rm(t)
           Bootstrap.sudo_rm(File.join('/usr/local/share/man/man1', "#{t}.1"))
         end
-      
-        # Automator actions
-        Bootstrap::MacOSX::Pkg.uninstall(BBEDIT_AUTOMATOR_PKG_ID)
-            
-        # Remove application
-        Bootstrap::MacOSX::App.uninstall('BBEdit')
       end
+      
+      # Automator actions
+      Bootstrap::MacOSX::Pkg.uninstall(BBEDIT_AUTOMATOR_PKG_ID)
+            
+      # Remove application
+      Bootstrap::MacOSX::App.uninstall('BBEdit')
     end
   end
 end
