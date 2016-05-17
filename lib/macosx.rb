@@ -73,6 +73,16 @@ module Bootstrap
       end
       module_function :uninstall
     
+      # Mac OS X Run helper
+      def run(app, url, headers: {})
+        Bootstrap.download_with_extract(url, headers: headers) do |d|
+          app_name = "#{app}.app"
+          app_path = File.join(d, app_name)
+          system %Q{open --wait-apps "#{app_path}"}
+        end
+      end
+      module_function :run
+    
       def hide(app)
         script = "tell application \"Finder\" to set visible process \"#{app}\" to false"
         system "osascript -e '#{script}'"
@@ -161,6 +171,20 @@ module Bootstrap
         return !info(id).nil?
       end
       module_function :exists?
+    end
+    
+    # Mac OS X Safari Extension
+    module SafariExtension
+      def install(ext, url, headers: {})
+        ext_name = "#{ext}.safariextz"
+        downloads_file = File.join(Bootstrap.home_dir, 'Downloads', ext_name)
+        Bootstrap.download_with_extract(url, headers: headers) do |d|
+          ext_path = File.join(d, ext_name)
+          system %Q{ditto "#{ext_path}" "#{downloads_file}"}
+        end
+        system %Q{open -a Safari --new --fresh "#{downloads_file}"}
+      end
+      module_function :install
     end
     
     # Mac OS X color picker
