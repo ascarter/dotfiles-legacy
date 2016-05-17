@@ -6,8 +6,8 @@ HANDBRAKE_SRC_URL = 'http://handbrake.fr/rotation.php?file=HandBrake-0.10.5-MacO
 HANDBRAKE_CLI_APP_NAME = 'HandbrakeCLI'
 HANDBRAKE_CLI_SRC_URL = 'https://handbrake.fr/rotation.php?file=HandBrake-0.10.5-MacOSX.6_CLI_x86_64.dmg'
 
-namespace "handbrake" do
-  desc "Install HandBrake"
+namespace 'handbrake' do
+  desc 'Install HandBrake'
   task :install do
     case RUBY_PLATFORM
     when /darwin/
@@ -26,7 +26,7 @@ namespace "handbrake" do
     end
   end  
 
-  desc "Uninstall HandBrake"
+  desc 'Uninstall HandBrake'
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
