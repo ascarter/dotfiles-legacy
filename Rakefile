@@ -72,11 +72,40 @@ task :workdev => [ :macdev, 'hipchat:install', 'zoom:install', 'viscosity:instal
 case RUBY_PLATFORM
 when /darwin/
   desc 'Install Mac development environment'
-  task :macdev => [ :install, 'homebrew:install', 'bbedit:install', 'github:install' ]
+  task :macdev => [
+    :install,
+    'android:install',
+    'bbedit:install',
+    'coderunner:install',
+    'colorpicker:install',
+    'github:install',
+    'golang:install',
+    'homebrew:install',
+    'icloud:install',
+    'intellij:install',
+    'mysql:sequelpro:install',
+    'postgres:install',
+    'safari:install',
+    'xquartz:install',
+  ]
 when /linux/
   desc 'Install Linux development environment'
-  task :linuxdev => [ :install, 'github:install' ]
+  task :linuxdev => [
+    :install,
+    'android:install',
+    'github:install',
+    'intellij:install',
+    'mysql:sequelpro:install',
+    'postgres:install',
+  ]
 when /windows/
   desc 'Install Windows development environment'
-  task :windev => [ :install, 'github:install' ]
+  task :windev => [
+    :install,
+    'android:install',
+    'github:install',
+    'intellij:install',
+    'mysql:sequelpro:install',
+    'postgres:install',
+  ]
 end
