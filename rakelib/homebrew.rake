@@ -23,6 +23,10 @@ if Bootstrap.macosx?
       Bootstrap::MacOSX.path_helper('homebrew', [File.join(HOMEBREW_ROOT, 'share', 'man')], 'manpaths')    
       Bootstrap::Homebrew.update
     end
+    
+    Rake::Task[:install].enhance do
+      Rake::Task['homebrew:tools:install'].invoke
+    end
   
     desc "Update homebrew"
     task :update do
@@ -40,7 +44,7 @@ if Bootstrap.macosx?
     end
     
     desc "Uninstall homebrew"
-    task :uninstall do
+    task :uninstall => ['homebrew:tools:uninstall'] do
       installed_dirs = [
         '~/Library/Caches/Homebrew',
         '~/Library/Logs/Homebrew',
