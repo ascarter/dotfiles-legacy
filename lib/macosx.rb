@@ -28,7 +28,7 @@ module Bootstrap
       end
       module_function :read
 
-      def write(domain, key, value, options: {})
+      def write(domain, key, value, options=nil)
         %x{defaults write #{domain} "#{key}" #{options} "#{value}"}
       end
       module_function :write
