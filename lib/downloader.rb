@@ -13,7 +13,7 @@ module Bootstrap
         case response
         when Net::HTTPSuccess then
           case File.extname(uri.path)
-          when '.zip', '.dmg', '.pkg'
+          when '.zip', '.dmg', '.pkg', '.safariextz'
             filename = File.basename(uri.path)
           when '.html'
             system "open #{src}"
@@ -71,7 +71,7 @@ module Bootstrap
         unzip(p) { |d| yield d }
       when ".dmg"
         mount_dmg(p) { |d| yield d }
-      when ".pkg"
+      when ".pkg", ".safariextz"
         yield File.dirname(p)
       else
         raise "Download package format #{ext} not supported"
