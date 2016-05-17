@@ -6,7 +6,7 @@ CODERUNNER_SOURCE_URL = 'https://coderunnerapp.com/download'
 if Bootstrap.macosx?
   namespace "coderunner" do 
     desc "Install CodeRunner"
-    task :intstall do
+    task :install do
       Bootstrap::MacOSX::App.install(CODERUNNER_APP_NAME, CODERUNNER_SOURCE_URL)
     end
     
