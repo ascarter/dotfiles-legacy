@@ -117,11 +117,11 @@ bb() {
 # Open URL source in BBEdit
 bbcurl() { curl $1 | bbedit --new-window +1 -t $1 ; }
 
-# Run build tool command and send results to bbresults
-# Captures stderr to stdin
-# Expects results in following format:
-#    [error|warning|note]:[file]:[line]:(col):(message)
-bbmake() { ($* 2>&1) | bbresults -v -t "$*" ; }
+# Run command and send results to bbresults
+bbr() { ($* 2>&1) | bbresults --errors-default ; }
+
+# Run make and send results to bbresults
+bbmake() { bbr make $* ; }
 
 # Run command and send results to new BBEdit window
 bbrun() { ($* 2>&1) | bbedit --new-window +1 -t "$*" ; }
