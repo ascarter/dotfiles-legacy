@@ -2,7 +2,7 @@
 
 ATOM_APP_NAME = 'Atom'
 ATOM_SRC_URL = 'https://atom.io/download/mac'
-ATOM_PKGS = %w{dash}
+ATOM_PKGS = %w{dash atom-ctags}
 
 namespace "atom" do
   desc "Install atom"
@@ -34,10 +34,10 @@ namespace "atom" do
       end
     
       # Command line tools
-      %w{atom apm}.each { |c| usr_bin_rm(c) }
+      %w{atom apm}.each { |c| Bootstrap.usr_bin_rm(c) }
     
       # Application
-      Bootstrap::App.uninstall("Atom")
+      Bootstrap::MacOSX::App.uninstall("Atom")
     end    
   end
 end
