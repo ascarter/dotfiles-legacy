@@ -50,9 +50,18 @@ fi
 # export PATH=./bin:${PATH}
 
 # Python
+case $(uname) in
+Darwin )
+	# Setting PATH for Python 2.7
+	PYROOT=$(python-config --exec-prefix)
+	PATH="${PYROOT}/bin:${PATH}"
+	export PATH
+esac
+
+# Python virtualenv
 export WORKON_HOME=$HOME/.virtualenvs
-if [[ -e /usr/local/bin/virtualenvwrapper.sh ]]; then
-  . /usr/local/bin/virtualenvwrapper.sh
+if [[ -e ${PYROOT}/bin/virtualenvwrapper.sh ]]; then
+  . ${PYROOT}/bin/virtualenvwrapper.sh
 fi
 
 # Java
@@ -462,9 +471,9 @@ if [ -n "`which brew`" ]; then
 fi
 
 # Pip
-# if [ -n "`which pip`" ]; then
-# 	eval "`pip completion --bash`"
-# fi
+if [ -n "`which pip`" ]; then
+	eval "`pip completion --bash`"
+fi
 
 # npm
 # if [ -n "`which npm`" ]; then

@@ -6,7 +6,7 @@ module Bootstrap
       puts "Installing #{package}..."
       cmd = "pip install --upgrade #{package}"
       if use_sudo
-        sudo cmd
+        Bootstrap.sudo(cmd)
       else
         exec cmd
       end
@@ -17,7 +17,7 @@ module Bootstrap
       puts "Uninstalling #{package}..."
       cmd = "pip uninstall --yes #{package}"
       if use_sudo
-        sudo cmd
+        Bootstrap.sudo(cmd)
       else
         exec cmd
       end
