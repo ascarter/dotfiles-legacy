@@ -50,19 +50,21 @@ fi
 # export PATH=./bin:${PATH}
 
 # Python
-case $(uname) in
-Darwin )
-	# Setting PATH for Python 2.7
-	PYROOT=$(python-config --exec-prefix)
-	PATH="${PYROOT}/bin:${PATH}"
-	export PATH
-esac
+# case $(uname) in
+# Darwin )
+# 	# Apple default python:
+# 	# /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/Python.framework/Versions/2.7
+# 	# Setting PATH for Python 2.7
+# 	PYROOT=$(python-config --exec-prefix)
+# 	PATH="${PYROOT}/bin:${PATH}"
+# 	export PATH
+# esac
 
 # Python virtualenv
-export WORKON_HOME=$HOME/.virtualenvs
-if [[ -e ${PYROOT}/bin/virtualenvwrapper.sh ]]; then
-  . ${PYROOT}/bin/virtualenvwrapper.sh
-fi
+# export WORKON_HOME=$HOME/.virtualenvs
+# if [[ -e ${PYROOT}/bin/virtualenvwrapper.sh ]]; then
+#   . ${PYROOT}/bin/virtualenvwrapper.sh
+# fi
 
 # Java
 if [[ -e /usr/libexec/java_home ]]; then
