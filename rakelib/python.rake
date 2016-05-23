@@ -31,6 +31,7 @@ namespace "python" do
   
   desc "Uninstall Python 2.7"
   task :uninstall27 do
+    PYTHON_27_PKG_ID.each { |p| Bootstrap::MacOSX::Pkg.uninstall(p) }
   end
 
   namespace "pip" do
