@@ -52,6 +52,7 @@
 	pr = pull-request --browse
 	prep = rebase -i @{upstream}
 	setemail = !git config user.email
+	sha = rev-parse --verify HEAD
 	ship = merge --no-ff
 	st = status
 	tower = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
