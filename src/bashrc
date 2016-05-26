@@ -311,18 +311,6 @@ if which dircolors &>/dev/null; then
     fi
 else
 	terminal_theme dark
-    
-    # Set directory colors
-    # man ls -> find LSCOLORS
-
-    # Default (light terminal)
-    # export LSCOLORS=exfxcxdxbxegedabagacad
-
-    # Dark terminal
-    # export LSCOLORS=gxfxcxdxbxegedabagacad
-
-    # Daring Fireball terminal
-    # export LSCOLORS=CxGxcxdxBxegedabagacad
 fi
 
 # ========================================
@@ -335,6 +323,7 @@ Darwin )
 	alias ls='ls -hFGH'
 	alias ll='ls -l'
 	alias la='ls -a'
+	alias lsz="ls -lAh | grep -m 1 total | sed 's/total //'"
 	
 	# System shortcuts
 	alias lockscreen='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
@@ -382,6 +371,7 @@ Linux )
 	alias ls='ls -hFH --color=auto'
 	alias la='ls -A'
 	alias ll='ls -l'
+	alias lsz="ls -lAh | grep -m 1 total | sed 's/total //'"
 	
 	alias glock='gnome-screensaver-command --lock'
 	alias xlock='xscreensaver-command -lock'
