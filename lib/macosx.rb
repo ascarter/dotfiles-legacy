@@ -43,15 +43,17 @@ module Bootstrap
     # An App is a Mac OS X Application Bundle provied by a dmg, zip, or tar.gz
     # cmdfiles is an optional list of paths on the expanded source to copy to /usr/local/bin
     module App
-      def install(app, url, headers: {}, cmdfiles: [])
+      def install(app, url, headers: {}, sig: nil, cmdfiles: [])
         app_name = "#{app}.app"
         app_path = File.join('/Applications', app_name)
       
         unless File.exists?(app_path)
-          Bootstrap.download_with_extract(url, headers: headers) do |d|
+          Bootstrap.download_with_extract(url, headers: headers, sig: sig) do |d|
             src_path = File.join(d, app_name)
             puts "Installing #{app} to #{app_path}"
-            Bootstrap.sudo %Q{ditto "#{src_path}" "#{app_path}"}            
+            Bootstrap.sudo_cpr src_path, app_path
+            Bootstrap.sudo_chown(app_path, 'root')
+            Bootstrap.sudo_chgrp(app_path, 'admin')
             cmdfiles.each { |f| Bootstrap.sudo_cp(File.join(d, f), File.join('/usr/local/bin', File.basename(f))) }
           end
         else
@@ -99,10 +101,10 @@ module Bootstrap
   
     # Mac OS X Installer Package
     module Pkg
-      def install(pkg, id, src, choices: nil, headers: {})
+      def install(pkg, id, src, sig: nil, choices: nil, headers: {})
         pkg_name = "#{pkg}.pkg"
         unless exists?(id)
-          Bootstrap.download_with_extract(src, headers: headers) do |d|
+          Bootstrap.download_with_extract(src, headers: headers, sig: sig) do |d|
             src_path = File.join(d, pkg_name)
             puts "Installing #{pkg}"
             cmd = %Q{installer -package "#{src_path}" -target /}
