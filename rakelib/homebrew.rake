@@ -45,18 +45,14 @@ if Bootstrap.macosx?
     
     desc "Uninstall homebrew"
     task :uninstall => ['homebrew:tools:uninstall'] do
+      Bootstrap.sudo_rmdir homebrew_root
+      %w{paths manpaths}.each { |t| Bootstrap::MacOSX.rm_path_helper('homebrew', t) } 
       installed_dirs = [
         '~/Library/Caches/Homebrew',
         '~/Library/Logs/Homebrew',
         '/Library/Caches/Homebrew'
       ]
-      installed_files = [
-        '/etc/paths.d/homebrew',
-        '/etc/manpaths.d/homebrew'
-      ]
-      Bootstrap.sudo_rmdir homebrew_root
       installed_dirs.each { |d| Bootstrap.sudo_rmdir d }
-      installed_files.each { |f| Bootstrap.sudo_rm f }
     end
 
     namespace "tools" do
