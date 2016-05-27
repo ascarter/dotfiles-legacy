@@ -20,6 +20,11 @@ module Bootstrap
     end
     module_function :run_applescript
 
+    def build_locatedb()
+      Bootstrap.sudo 'launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist'
+    end
+    module_function :build_locatedb
+    
     # Mac OS X defaults
     module Defaults
       def read(domain, key: nil, options: {})

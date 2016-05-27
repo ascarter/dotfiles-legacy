@@ -7,7 +7,7 @@ require_relative 'lib/bootstrap'
 task :default => [ :install ]
 
 desc 'Install default configuration'
-task :install => [ :bootstrap, 'git:config', 'rbenv:install', 'vim:install' ]
+task :install => [ :bootstrap, :configenv, 'git:config', 'rbenv:install', 'vim:install' ]
 
 desc 'Change default shell'
 task :chsh do
@@ -51,6 +51,14 @@ task :bootstrap do
         Bootstrap.link_file(source, target)
       end
     end
+  end
+end
+
+desc 'Configure environment'
+task :configenv do
+  case RUBY_PLATFORM
+  when /darwin/
+    Bootstrap::MacOSX.build_locatedb
   end
 end
 
