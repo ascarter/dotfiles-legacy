@@ -2,11 +2,15 @@ Xft.dpi: 96
 Xft.antialias: true
 XTerm.*.faceName: Menlo
 XTerm.*.faceSize: 12
-XTerm.*.background: Black
-XTerm.*.foreground: White
+# XTerm.*.background: Black
+# XTerm.*.foreground: White
 XTerm.*.highlightColor: rgb:66/70/78
 Xterm.*.geometry: 80x24
 
 # Daring Fireball
 #XTerm.*.background: grey29
 #XTerm.*.foreground: LightYellow2
+
+# Developer dark
+XTerm.*.background: #262626
+XTerm.*.foreground: #d9e6f2
