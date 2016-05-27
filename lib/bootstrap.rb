@@ -212,6 +212,23 @@ module Bootstrap
   end
   module_function :usr_bin_ln
   
+  def usr_man_cp(src, dest=nil)
+    dest_filename = dest.nil? ? File.basename(src) : dest
+    target = File.join('/usr/local/share/man', "man#{File.extname(dest_filename).split('.')[1]}", dest_filename)
+    unless File.exist?(target)
+      sudo_cp(src, target)
+    else
+      warn "#{target} already exists"
+    end
+  end
+  module_function :usr_man_cp
+  
+  def usr_man_rm(page)
+    page_file = File.join('/usr/local/share/man', page)
+    sudo_rm(page_file) if File.exist?(page_file)
+  end
+  module_function :usr_man_rm
+  
   # Digest
   def sha1(path)
     if File.exists?(path)
