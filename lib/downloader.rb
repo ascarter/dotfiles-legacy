@@ -97,7 +97,8 @@ module Bootstrap
   module_function :unzip
 
   def mount_dmg(dmg)
-    d = %x{hdiutil attach "#{dmg}" | tail -1 | awk '{$1=$2=""; print $0}' | xargs -0 echo}.strip!
+    d = %x{hdiutil attach "#{dmg}" | tail -1}.split(nil, 2)[1].strip
+    puts "Mount #{dmg} to #{d}"
     yield d
     system "hdiutil detach \"#{d}\""
   end
