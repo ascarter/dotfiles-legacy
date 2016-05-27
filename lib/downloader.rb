@@ -3,7 +3,7 @@
 module Bootstrap
   # Download source to dest directory following redirects up to limit
   # Returns downloaded file
-  def download(src, dest, headers: {}, limit: 10)
+  def download(src, dest, headers: {}, limit: 10, sig: nil)
     raise "Too many redirects" if limit == 0
     uri = URI(src)
     Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
@@ -40,6 +40,15 @@ module Bootstrap
           print "\rDownloading #{filename}: #{thread[:progress].to_i}%" until thread.join(1)
           print "\rDownloading #{filename}: done"
           puts ""
+
+          # Verify signature
+          if sig
+            if sig != Bootstrap.sha1(target)
+              raise "Invalid signature for package"
+            end
+            print "\r#{filename} has valid signature"
+          end
+          
           return target
         when Net::HTTPRedirection then
           # Replace spaces
@@ -54,16 +63,16 @@ module Bootstrap
   end
   module_function :download
 
-  def download_to_tempdir(src, headers: {}, limit: 10)
+  def download_to_tempdir(src, headers: {}, limit: 10, sig: nil)
     uri = URI.parse(src)
     (path, pkg) = File.split(uri.path)
-    Dir.mktmpdir { |d| yield download(src, d, headers: headers, limit: limit) }
+    Dir.mktmpdir { |d| yield download(src, d, headers: headers, limit: limit, sig: sig) }
   end
   module_function :download_to_tempdir
 
-  def download_with_extract(src, headers: {}, limit: 10)
+  def download_with_extract(src, headers: {}, limit: 10, sig: nil)
     puts "Requesting #{src}"
-    download_to_tempdir(src, headers: headers, limit: limit) do |p|
+    download_to_tempdir(src, headers: headers, limit: limit, sig: sig) do |p|
       puts "Extracting #{p}"
       ext = File.extname(p)
       case ext
