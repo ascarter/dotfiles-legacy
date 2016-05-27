@@ -445,10 +445,16 @@ alias whistlertom='curl -o ~/Documents/whistler_tom.pdf -L "http://online.whistl
 
 # Source any user bash completion scripts
 if [ -d ~/.bash_completion.d ]; then
-    for f in ~/.bash_completion.d/*
-    do
+    for f in ~/.bash_completion.d/*; do
         source ${f}
     done
+fi
+
+# Source docker completion
+if [ -d /Applications/Docker.app ]; then
+	for f in /Applications/Docker.app/Contents/Resources/etc/*.bash-completion; do
+		source ${f}
+	done
 fi
 
 # Homebrew - will also call user's ~/.bash_completion too
