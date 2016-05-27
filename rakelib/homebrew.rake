@@ -11,9 +11,9 @@ if Bootstrap.macosx?
     task :install do
       puts "Installing homebrew..."
       unless File.exist?(HOMEBREW_ROOT)
-        Bootstrap.sudo_mkdir HOMEBREW_ROOT
-        Bootstrap.sudo_chgrp HOMEBREW_ROOT
-        Bootstrap.sudo_chmod HOMEBREW_ROOT
+        Bootstrap.sudo_mkdir(HOMEBREW_ROOT)
+        Bootstrap.sudo_chgrp(HOMEBREW_ROOT, 'admin')
+        Bootstrap.sudo_chmod(HOMEBREW_ROOT)
         system "curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C #{homebrew_root}"
       else
         warn "homebrew installed"
