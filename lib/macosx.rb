@@ -7,14 +7,24 @@ module Bootstrap
 
       fullpath = File.join("/etc/#{type}.d", path_file)
       unless File.exist?(fullpath)
-        FileTools.sudo "touch #{fullpath}"
-        paths.each { |p| FileTools.sudo "echo '#{p}' >> #{fullpath}" }
+        Bootstrap.sudo "touch #{fullpath}"
+        paths.each { |p| Bootstrap.sudo "echo '#{p}' >> #{fullpath}" }
       else
         warn "#{fullpath} already exists"
       end
     end
     module_function :path_helper
 
+    def rm_path_helper(path_file, type='paths')
+      fullpath = File.join("/etc/#{type}.d", path_file)
+      if File.exist?(fullpath)
+        Bootstrap.sudo_rm(fullpath)
+      else
+        warn "#{fullpath} not found"
+      end
+    end
+    module_function :rm_path_helper
+    
     def run_applescript(script)
       system "osascript \"#{script}\""
     end
@@ -48,7 +58,7 @@ module Bootstrap
     # An App is a Mac OS X Application Bundle provied by a dmg, zip, or tar.gz
     # cmdfiles is an optional list of paths on the expanded source to copy to /usr/local/bin
     module App
-      def install(app, url, headers: {}, sig: nil, cmdfiles: [])
+      def install(app, url, headers: {}, sig: nil, cmdfiles: [], manfiles: [])
         app_name = "#{app}.app"
         app_path = File.join('/Applications', app_name)
       
@@ -56,10 +66,11 @@ module Bootstrap
           Bootstrap.download_with_extract(url, headers: headers, sig: sig) do |d|
             src_path = File.join(d, app_name)
             puts "Installing #{app} to #{app_path}"
-            Bootstrap.sudo_cpr src_path, app_path
+            Bootstrap.sudo_cpr(src_path, app_path)
             Bootstrap.sudo_chown(app_path, 'root')
             Bootstrap.sudo_chgrp(app_path, 'admin')
-            cmdfiles.each { |f| Bootstrap.sudo_cp(File.join(d, f), File.join('/usr/local/bin', File.basename(f))) }
+            cmdfiles.each { |f| Bootstrap.usr_bin_cp(File.join(d, f)) }
+            manfiles.each { |f| Bootstrap.usr_man_cp(File.join(d, f)) }
           end
         else
           warn "#{app} already installed"
