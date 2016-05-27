@@ -1,6 +1,8 @@
 # File and path helpers
 
+require 'digest'
 require 'erb'
+require 'etc'
 require 'fileutils'
 require 'net/http'
 require 'open-uri'
@@ -53,6 +55,16 @@ module Bootstrap
     return File.expand_path(ENV['HOME'])
   end
   module_function :home_dir
+  
+  def current_user
+    return Etc.getlogin
+  end
+  module_function :current_user
+  
+  def user_info(user=Etc.getlogin)
+    return Etc.getpwnam(user)
+  end
+  module_function :user_info
 
   def link_file(source, target)
     unless File.exist?(target)
@@ -134,6 +146,12 @@ module Bootstrap
     sudo %Q{cp "#{src}" "#{target}"}
   end
   module_function :sudo_cp
+
+  def sudo_cpr(src, target)
+    puts "Copying #{src} to #{target}"
+    sudo %Q{cp -R "#{src}" "#{target}"}
+  end
+  module_function :sudo_cpr
   
   def sudo_ln(src, target)
     if File.exists?(src)
@@ -153,6 +171,11 @@ module Bootstrap
     sudo "chmod #{mode} #{path}"
   end
   module_function :sudo_chmod
+  
+  def sudo_chown(path, owner=current_user)
+    sudo "chown -R #{owner} #{path}"
+  end
+  module_function :sudo_chown
 
   # usr tools
 
@@ -188,4 +211,13 @@ module Bootstrap
     end
   end
   module_function :usr_bin_ln
+  
+  # Digest
+  def sha1(path)
+    if File.exists?(path)
+      contents = File.read(path)
+      return Digest::SHA1.hexdigest(contents)
+    end
+  end
+  module_function :sha1
 end
