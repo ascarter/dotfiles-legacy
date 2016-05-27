@@ -46,7 +46,7 @@ module Bootstrap
             if sig != Bootstrap.sha1(target)
               raise "Invalid signature for package"
             end
-            print "\r#{filename} has valid signature"
+            puts "#{filename} has valid signature"
           end
           
           return target

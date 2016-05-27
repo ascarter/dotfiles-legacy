@@ -76,8 +76,8 @@ module Bootstrap
       module_function :uninstall
     
       # Mac OS X Run helper
-      def run(app, url, headers: {})
-        Bootstrap.download_with_extract(url, headers: headers) do |d|
+      def run(app, url, headers: {}, sig: nil)
+        Bootstrap.download_with_extract(url, headers: headers, sig: sig) do |d|
           app_name = "#{app}.app"
           app_path = File.join(d, app_name)
           system %Q{open --wait-apps "#{app_path}"}
