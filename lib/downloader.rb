@@ -97,7 +97,10 @@ module Bootstrap
   module_function :unzip
 
   def mount_dmg(dmg)
-    d = %x{hdiutil attach "#{dmg}" | tail -1}.split(nil, 2)[1].strip
+    # hdiutil attach returns:
+    # /dev node, a tab, content hint (if applicable), another tab, mount point
+    # Split on tabs and use the last as the mount point
+    d = %x{hdiutil attach "#{dmg}" | tail -1}.split("\t")[-1].strip
     puts "Mount #{dmg} to #{d}"
     yield d
     system "hdiutil detach \"#{d}\""
