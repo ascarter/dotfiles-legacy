@@ -58,7 +58,7 @@ module Bootstrap
     # An App is a Mac OS X Application Bundle provied by a dmg, zip, or tar.gz
     # cmdfiles is an optional list of paths on the expanded source to copy to /usr/local/bin
     module App
-      def install(app, url, headers: {}, sig: {}, cmdfiles: [], manfiles: [])
+      def install(app, url, headers: {}, sig: {}, owner: 'root', group: 'admin', cmdfiles: [], manfiles: [])
         app_name = "#{app}.app"
         app_path = File.join('/Applications', app_name)
       
@@ -67,8 +67,8 @@ module Bootstrap
             src_path = File.join(d, app_name)
             puts "Installing #{app} to #{app_path}"
             Bootstrap.sudo_cpr(src_path, app_path)
-            Bootstrap.sudo_chown(app_path, 'root')
-            Bootstrap.sudo_chgrp(app_path, 'admin')
+            Bootstrap.sudo_chown(app_path, owner)
+            Bootstrap.sudo_chgrp(app_path, group)
             cmdfiles.each { |f| Bootstrap.usr_bin_cp(File.join(d, f)) }
             manfiles.each { |f| Bootstrap.usr_man_cp(File.join(d, f)) }
           end

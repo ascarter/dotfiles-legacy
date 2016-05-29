@@ -27,7 +27,7 @@ namespace 'steam' do
 	task :install do
 	  case RUBY_PLATFORM
 	  when /darwin/
-  		Bootstrap::MacOSX::App.install(STEAM_APP_NAME, STEAM_SOURCE_URL)
+  		Bootstrap::MacOSX::App.install(STEAM_APP_NAME, STEAM_SOURCE_URL, owner: Bootstrap.current_user)
   		
   		# Warn to exclude SteamApps from TimeMachine
   		puts STEAM_TIME_MACHINE_INFO
