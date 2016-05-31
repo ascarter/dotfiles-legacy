@@ -163,17 +163,17 @@ module Bootstrap
   module_function :sudo_ln
   
   def sudo_chgrp(path, group='admin')
-    sudo "chgrp -R #{group} #{path}"
+    sudo %Q{chgrp -R #{group} "#{path}"}
   end
   module_function :sudo_chgrp
   
   def sudo_chmod(path, mode='g+w')
-    sudo "chmod #{mode} #{path}"
+    sudo %Q{chmod #{mode} "#{path}"}
   end
   module_function :sudo_chmod
   
   def sudo_chown(path, owner=current_user)
-    sudo "chown -R #{owner} #{path}"
+    sudo %Q{chown -R #{owner} "#{path}"}
   end
   module_function :sudo_chown
 
@@ -237,4 +237,12 @@ module Bootstrap
     end
   end
   module_function :sha1
+
+  def sha2(path)
+    if File.exists?(path)
+      contents = File.read(path)
+      return Digest::SHA2.hexdigest(contents)
+    end
+  end
+  module_function :sha2
 end

@@ -58,7 +58,7 @@ module Bootstrap
     # An App is a Mac OS X Application Bundle provied by a dmg, zip, or tar.gz
     # cmdfiles is an optional list of paths on the expanded source to copy to /usr/local/bin
     module App
-      def install(app, url, headers: {}, sig: nil, cmdfiles: [], manfiles: [])
+      def install(app, url, headers: {}, sig: {}, cmdfiles: [], manfiles: [])
         app_name = "#{app}.app"
         app_path = File.join('/Applications', app_name)
       
@@ -92,7 +92,7 @@ module Bootstrap
       module_function :uninstall
     
       # Mac OS X Run helper
-      def run(app, url, headers: {}, sig: nil)
+      def run(app, url, headers: {}, sig: {})
         Bootstrap.download_with_extract(url, headers: headers, sig: sig) do |d|
           app_name = "#{app}.app"
           app_path = File.join(d, app_name)
@@ -117,7 +117,7 @@ module Bootstrap
   
     # Mac OS X Installer Package
     module Pkg
-      def install(pkg, id, src, sig: nil, choices: nil, headers: {})
+      def install(pkg, id, src, sig: {}, choices: nil, headers: {})
         pkg_name = "#{pkg}.pkg"
         unless exists?(id)
           Bootstrap.download_with_extract(src, headers: headers, sig: sig) do |d|

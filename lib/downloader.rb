@@ -3,7 +3,7 @@
 module Bootstrap
   # Download source to dest directory following redirects up to limit
   # Returns downloaded file
-  def download(src, dest, headers: {}, limit: 10, sig: nil)
+  def download(src, dest, headers: {}, limit: 10, sig: {})
     raise "Too many redirects" if limit == 0
     uri = URI(src)
     Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
@@ -41,14 +41,8 @@ module Bootstrap
           print "\rDownloading #{filename}: done"
           puts ""
 
-          # Verify signature
-          if sig
-            if sig != Bootstrap.sha1(target)
-              raise "Invalid signature for package"
-            end
-            puts "#{filename} has valid signature"
-          end
-          
+          verify_signature(sig, target)
+          puts "Package has valid signature"          
           return target
         when Net::HTTPRedirection then
           # Replace spaces
@@ -63,14 +57,14 @@ module Bootstrap
   end
   module_function :download
 
-  def download_to_tempdir(src, headers: {}, limit: 10, sig: nil)
+  def download_to_tempdir(src, headers: {}, limit: 10, sig: {})
     uri = URI.parse(src)
     (path, pkg) = File.split(uri.path)
     Dir.mktmpdir { |d| yield download(src, d, headers: headers, limit: limit, sig: sig) }
   end
   module_function :download_to_tempdir
 
-  def download_with_extract(src, headers: {}, limit: 10, sig: nil)
+  def download_with_extract(src, headers: {}, limit: 10, sig: {})
     puts "Requesting #{src}"
     download_to_tempdir(src, headers: headers, limit: limit, sig: sig) do |p|
       puts "Extracting #{p}"
@@ -122,4 +116,22 @@ module Bootstrap
   end
   module_function :start_thread
   private_class_method :start_thread
+  
+
+  def verify_signature(sig, target)
+    sig.each do |k, v|
+      case k
+      when :md5
+        raise "Invalid md5 for package" if v != Bootstrap.md5(target)
+      when :sha1
+        raise "Invalid sha1 for package" if v != Bootstrap.sha1(target)
+      when :sha2
+        raise "Invalid sha2 for package" if v != Bootstrap.sha2(target)
+      else
+        raise "Unknown signature: #{k}"
+      end
+    end
+  end
+  module_function :verify_signature
+  private_class_method :verify_signature
 end
