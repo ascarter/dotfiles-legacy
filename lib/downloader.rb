@@ -28,6 +28,8 @@ module Bootstrap
                 filename = 'pkg.zip'
               when 'application/x-apple-diskimage'
                 filename = 'pkg.dmg'
+              when 'plain'
+                filename = File.basename(uri.path)
               else
                 raise "Unsupported content-type: #{content_type}"
               end
