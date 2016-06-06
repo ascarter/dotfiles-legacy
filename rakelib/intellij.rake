@@ -1,8 +1,8 @@
 # IntelliJ IDEA
 
 INTELLIJ_APP_NAME = 'IntelliJ IDEA CE'
-INTELLIJ_SOURCE_URL = 'https://download.jetbrains.com/idea/ideaIC-2016.1.2b.dmg'
-INTELLIJ_SIGNATURE = {sha2: '21d2a850ac5da0dfa0197cee85b31d797136629d82cc84d914ca91d503c1d0a1'}
+INTELLIJ_SOURCE_URL = 'https://download.jetbrains.com/idea/ideaIC-2016.1.3.dmg'
+INTELLIJ_SIGNATURE = {sha2: 'b33cf612e40598347f05115da6168c003edb57e792f1abe52cd919bfb39961c1'}
 
 namespace "intellij" do
   desc "Install IntelliJ IDEA"
