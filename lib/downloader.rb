@@ -107,7 +107,6 @@ module Bootstrap
     Thread.new do
       thread = Thread.current
       length = thread[:length] = response['Content-Length'].to_i
-      puts response.inspect
       raise 'No content' if length == 0
       open(dest, 'wb') do |io|
         response.read_body do |fragment|

@@ -58,7 +58,7 @@ module Bootstrap
     # An App is a Mac OS X Application Bundle provied by a dmg, zip, or tar.gz
     # cmdfiles is an optional list of paths on the expanded source to copy to /usr/local/bin
     module App
-      def install(app, url, headers: {}, sig: {}, owner: 'root', group: 'admin', cmdfiles: [], manfiles: [])
+      def install(app, url, headers: {}, sig: {}, owner: Bootstrap.current_user(), group: 'admin', cmdfiles: [], manfiles: [])
         app_name = "#{app}.app"
         app_path = File.join('/Applications', app_name)
       
