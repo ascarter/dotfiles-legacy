@@ -126,7 +126,7 @@ bb() {
 }
 
 # Open URL source in BBEdit
-bbcurl() { curl $1 | bbedit --new-window +1 -t $1 ; }
+bbcurl() { (curl $*) | bbedit --new-window +1 -t curl; }
 
 # Run command and send results to bbresults
 bbr() { ($* 2>&1) | bbresults --errors-default ; }
