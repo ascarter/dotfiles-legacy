@@ -42,8 +42,8 @@ runtime macros/matchit.vim
 
 " Color scheme
 if has('macunix')
-	" colorscheme macvim
-	colorscheme base16-ocean
+	colorscheme macvim
+	" colorscheme base16-ocean
 endif
 set background=dark
 
