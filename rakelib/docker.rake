@@ -1,7 +1,7 @@
 # Docker tasks
 
 DOCKER_APP_NAME = 'Docker'
-DOCKER_SOURCE_URL = 'https://dyhfha9j6srsj.cloudfront.net/Docker.dmg'
+DOCKER_SOURCE_URL = 'https://download.docker.com/mac/beta/Docker.dmg'
 
 namespace "docker" do
   desc "Install Docker"
