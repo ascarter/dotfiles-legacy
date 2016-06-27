@@ -1,8 +1,8 @@
 # Node.js tasks
 
 NODEJS_PKG_IDS = %w{org.nodejs.node.pkg}
-NODEJS_PKG_NAME = 'node-v4.4.4'
-NODEJS_SOURCE_URL = 'https://nodejs.org/dist/v4.4.4/node-v4.4.4.pkg'
+NODEJS_PKG_NAME = 'node-v4.4.6'
+NODEJS_SOURCE_URL = 'https://nodejs.org/dist/v4.4.6/node-v4.4.6.pkg'
 
 NPM_PKGS = %w{grunt-cli bower}
 
@@ -34,14 +34,14 @@ namespace 'node' do
         Bootstrap::NPM.list.each { |p| Bootstrap::NPM.uninstall(p) }
         Bootstrap::NPM.uninstall('npm')
         
-        NODEJS_PKG_IDS.each { |p| Bootstrap::MacOSX::Pkg.uninstal(p) }
+        NODEJS_PKG_IDS.each { |p| Bootstrap::MacOSX::Pkg.uninstall(p) }
         
         dirs = [
           '/usr/local/lib/node',
           '/usr/local/lib/node_modules',
           '/usr/local/include/node'
         ]
-        dirs.each { |dir| Bootstrap.sudo_remove_dir(dir) }
+        dirs.each { |dir| Bootstrap.sudo_rmdir(dir) }
       else
         warn 'Node.js and npm are not installed'
       end
