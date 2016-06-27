@@ -399,6 +399,9 @@ alias ipv="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 # external ip
 alias wanip="dig +short myip.opendns.com @resolver1.opendns.com"
 
+# SSH
+alias sshagentstart='eval "$(ssh-agent -s)"'
+
 # Docker
 # Remove stopped containers
 alias dockerrms='docker rm $(docker ps -a -q)'
