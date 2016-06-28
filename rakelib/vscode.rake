@@ -1,35 +1,26 @@
-# Visaul Studio Code
+# Microsoft Visual Studio Code
 
-namespace "vscode" do
-  desc "Install Visual Studio Code"
-  task :install do
-    case RUBY_PLATFORM
-    when /darwin/
-      unless app_exists("Visual Studio Code")
-        pkg_url = "https://go.microsoft.com/fwlink/?LinkID=620882"
-        pkg_download(pkg_url) do |p|
-          unzip(p)
-          app_install(File.join(File.dirname(p), "Visual Studio Code.app"))
-        end
-      end
+VSCODE_APP_NAME = 'Visual Studio Code'
+VSCODE_SOURCE_URL = 'https://go.microsoft.com/fwlink/?LinkID=620882'
+
+namespace 'vscode' do
+	desc 'Install vscode'
+	task :install do
+	  case RUBY_PLATFORM
+	  when /darwin/
+  		Bootstrap::MacOSX::App.install(VSCODE_APP_NAME, VSCODE_SOURCE_URL)
       
       # Install command line tools
-      usr_bin_ln('/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code', 'vscode')
-    when /linux/
-      puts "NYI"
-    when /windows/
-      puts "NYI"
-    else
-      raise "Platform not supported"
-    end
-  end
-
-  desc "Uninstall Visual Studio Code"
-  task :uninstall do
-    case RUBY_PLATFORM
-    when /darwin/
-      usr_bin_rm('vscode')
-      app_remove("Visual Studio Code")
-    end    
-  end
+      Bootstrap.usr_bin_ln('/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code', 'vscode')
+	  end
+	end
+	
+	desc 'Uninstall vscode'
+	task :uninstall do
+	  case RUBY_PLATFORM
+	  when /darwin/
+	    Bootstrap.usr_bin_rm('vscode')
+  		Bootstrap::MacOSX::App.uninstall(VSCODE_APP_NAME)
+  	end
+	end	
 end
