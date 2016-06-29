@@ -9,7 +9,7 @@ if Bootstrap.macosx?
   BBEDIT_AUTOMATOR_SOURCE_URL = 'http://pine.barebones.com/files/BBEdit11.5AutomatorActionsInstaller.zip'
   
   BBEDIT_DEFAULTS_DOMAIN = 'com.barebones.bbedit'
-  BBEDIT_SUFEED_URL = 'http://pine.barebones.com/rowboat/BBEdit.xml'
+  BBEDIT_SUFEED_URL = 'http://pine.barebones.com/rhombus/BBEdit.xml'
   
   BBEDIT_TOOLS = %w{bbdiff bbedit bbfind bbresults}
   
