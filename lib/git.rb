@@ -14,6 +14,11 @@ module Bootstrap
         system %Q{git config --global #{key} "#{value}"}
       end
       module_function :set
+      
+      def unset(key)
+        system %Q{git config --global --unset #{key}}
+      end
+      module_function :unset
     end
   
     def clone(repo, dest=nil)

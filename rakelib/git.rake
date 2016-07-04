@@ -34,7 +34,13 @@ namespace 'git' do
 
     Bootstrap::Git::Config.set('user.name', name)
     Bootstrap::Git::Config.set('user.email', email)
-    Bootstrap::Git::Config.set('user.signingkey', signingKey) unless signingKey.empty?
+    unless signingKey.empty?
+      Bootstrap::Git::Config.set('user.signingkey', signingKey)
+      Bootstrap::Git::Config.set('commit.gpgsign', true)
+    else
+      Bootstrap::Git::Config.unset('user.signingkey')
+      Bootstrap::Git::Config.unset('commit.gpgsign')
+    end
 
     # Set git commit editor
     if File.exist?(File.expand_path('/usr/local/bin/bbedit'))
