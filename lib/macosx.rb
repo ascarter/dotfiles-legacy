@@ -37,7 +37,7 @@ module Bootstrap
     
     # Mac OS X defaults
     module Defaults
-      def read(domain, key: nil, options: {})
+      def read(domain, key: nil, options: nil)
         value = %x{defaults read #{domain} #{options} #{"\"#{key}\"" unless key.nil?}}
         return value
       end

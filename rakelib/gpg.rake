@@ -16,6 +16,7 @@ GPG_PKG_IDS = [
 GPG_UNINSTALL_APP_NAME = 'Uninstall'
 GPG_SOURCE_URL = 'https://releases.gpgtools.org/GPG_Suite-2015.09.dmg'
 GPG_SIGNATURE = {sha1: 'f1fd930144720e70bd4c809dd36ac0573b0a7be2'}
+GPG_DEFAULTS_DOMAIN = 'org.gpgtools.gpgmail'
 
 namespace 'gpg' do
 	desc 'Install gpg'
@@ -29,5 +30,25 @@ namespace 'gpg' do
 	desc 'Uninstall gpg'
 	task :uninstall do
 		Bootstrap::MacOSX::App.run(GPG_UNINSTALL_APP_NAME, GPG_SOURCE_URL, sig: GPG_SIGNATURE)
-	end	
+	end
+	
+	namespace 'sign' do
+    desc 'Set default signing method to GPG'
+    task :gpg do
+      case RUBY_PLATFORM
+      when /darwin/
+        Bootstrap::MacOSX::Defaults.write(GPG_DEFAULTS_DOMAIN, 'DefaultSecurityMethod', 1, '-int')
+        puts Bootstrap::MacOSX::Defaults.read(GPG_DEFAULTS_DOMAIN)
+      end
+    end
+  
+    desc 'Set default signing method to S/MIME'
+    task :smime do
+      case RUBY_PLATFORM
+      when /darwin/
+        Bootstrap::MacOSX::Defaults.write(GPG_DEFAULTS_DOMAIN, 'DefaultSecurityMethod', 2, '-int')
+        puts Bootstrap::MacOSX::Defaults.read(GPG_DEFAULTS_DOMAIN)
+      end
+    end
+  end
 end
