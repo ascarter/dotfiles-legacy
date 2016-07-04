@@ -14,6 +14,7 @@ namespace 'git' do
       userName = Bootstrap::Git::Config.get('user.name')
       userEmail = Bootstrap::Git::Config.get('user.email')
       userGPGKey = Bootstrap::Git::Config.get('user.signingkey')
+      userDefaultSign = Bootstrap::Git::Config.get('commit.gpgsign')
     end
     
     if userName.empty?
@@ -27,17 +28,21 @@ namespace 'git' do
     
     Bootstrap.copy_and_replace(source, target)
 
-    # Set user and email
+    # Set user, email, and signing key
     name = Bootstrap.prompt('user name', userName)
     email = Bootstrap.prompt('user email', userEmail)
     signingKey = Bootstrap.prompt('user signingkey', userGPGKey)
+    defaultSign = Bootstrap.prompt('gpgsign by default?', userDefaultSign == 'true' ? 'Y' : 'N')
 
     Bootstrap::Git::Config.set('user.name', name)
     Bootstrap::Git::Config.set('user.email', email)
     unless signingKey.empty?
       Bootstrap::Git::Config.set('user.signingkey', signingKey)
-      # Bootstrap::Git::Config.set('commit.gpgsign', true)
-      Bootstrap::Git::Config.unset('commit.gpgsign')
+      if defaultSign.upcase.start_with?('Y')
+        Bootstrap::Git::Config.set('commit.gpgsign', true)
+      else
+        Bootstrap::Git::Config.unset('commit.gpgsign')
+      end
     else
       Bootstrap::Git::Config.unset('user.signingkey')
       Bootstrap::Git::Config.unset('commit.gpgsign')
