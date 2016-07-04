@@ -13,6 +13,7 @@ namespace 'git' do
     if File.exist?(target)
       userName = Bootstrap::Git::Config.get('user.name')
       userEmail = Bootstrap::Git::Config.get('user.email')
+      userGPGKey = Bootstrap::Git::Config.get('user.signingkey')
     end
     
     if userName.empty?
@@ -29,9 +30,11 @@ namespace 'git' do
     # Set user and email
     name = Bootstrap.prompt('user name', userName)
     email = Bootstrap.prompt('user email', userEmail)
+    signingKey = Bootstrap.prompt('user signingkey', userGPGKey)
 
     Bootstrap::Git::Config.set('user.name', name)
     Bootstrap::Git::Config.set('user.email', email)
+    Bootstrap::Git::Config.set('user.signingkey', signingKey) unless signingKey.empty?
 
     # Set git commit editor
     if File.exist?(File.expand_path('/usr/local/bin/bbedit'))
