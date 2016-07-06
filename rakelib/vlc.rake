@@ -1,7 +1,7 @@
 # vlc tasks
 
 VLC_APP_NAME = 'VLC'
-VLC_SOURCE_URL = 'http://get.videolan.org/vlc/2.2.3/macosx/vlc-2.2.3.dmg'
+VLC_SOURCE_URL = 'https://get.videolan.org/vlc/2.2.4/macosx/vlc-2.2.4.dmg'
 
 namespace 'vlc' do
   desc 'Install VLC'
