@@ -1,8 +1,8 @@
 # Go language tasks
 
-GOLANG_PKG_NAME = 'go1.7beta2.darwin-amd64'
+GOLANG_PKG_NAME = 'go1.7rc1.darwin-amd64'
 GOLANG_PKG_ID = 'com.googlecode.go'
-GOLANG_SOURCE_URL= 'https://storage.googleapis.com/golang/go1.7beta2.darwin-amd64.pkg'
+GOLANG_SOURCE_URL= 'https://storage.googleapis.com/golang/go1.7rc1.darwin-amd64.pkg'
 
 namespace "golang" do
   desc "Install Go language"
