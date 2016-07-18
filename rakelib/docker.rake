@@ -1,7 +1,10 @@
 # Docker tasks
 
-DOCKER_APP_NAME = 'Docker'
-DOCKER_SOURCE_URL = 'https://download.docker.com/mac/beta/Docker.dmg'
+DOCKER_APP_NAME = "Docker"
+DOCKER_SOURCE_URL = "https://download.docker.com/mac/beta/Docker.dmg"
+
+KITEMATIC_APP_NAME = "Kitematic (Beta)"
+KITEMATIC_SOURCE_URL = "https://d2a7s5xu46jmxv.cloudfront.net/Kitematic-Mac.zip"
 
 namespace "docker" do
   desc "Install Docker"
@@ -16,7 +19,25 @@ namespace "docker" do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      puts 'Use Docker app -> Settings -> Uninstall to remove'
+      puts "Use Docker app -> Settings -> Uninstall to remove"
+    end
+  end
+  
+  namespace "kitematic" do
+    desc "Install Kitematic"
+    task :install do
+      case RUBY_PLATFORM
+      when /darwin/
+        Bootstrap::MacOSX::App.install(KITEMATIC_APP_NAME, KITEMATIC_SOURCE_URL)
+      end
+    end
+    
+    desc "Uninstall Kitematic"
+    task :uninstall do
+      case RUBY_PLATFORM
+      when /darwin/
+        Bootstrap::MacOSX::App.uninstall(KITEMATIC_APP_NAME)
+      end
     end
   end
 end
