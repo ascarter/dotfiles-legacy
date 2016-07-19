@@ -74,6 +74,7 @@ Pods
 
 # Python
 *.py[cod]
+.venv/
 
 # Packages
 *.egg
