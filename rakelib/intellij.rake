@@ -1,8 +1,8 @@
 # IntelliJ IDEA
 
-INTELLIJ_APP_NAME = 'IntelliJ IDEA CE'
-INTELLIJ_SOURCE_URL = 'https://download.jetbrains.com/idea/ideaIC-2016.1.3.dmg'
-INTELLIJ_SIGNATURE = {sha2: 'b33cf612e40598347f05115da6168c003edb57e792f1abe52cd919bfb39961c1'}
+INTELLIJ_APP_NAME = "IntelliJ IDEA CE"
+INTELLIJ_SOURCE_URL = "https://download.jetbrains.com/idea/ideaIC-2016.2.dmg"
+INTELLIJ_SIGNATURE = {sha2: "0e156bc6e0ee021527f2a5e3d123cc55f0d24dfe7d0dfb96f58dd0e18f0b6161"}
 
 namespace "intellij" do
   desc "Install IntelliJ IDEA"
@@ -20,6 +20,9 @@ namespace "intellij" do
       Bootstrap::MacOSX::App.uninstall(INTELLIJ_APP_NAME)
     end
   end
+  
+  desc "Update IntelliJ IDEA"
+  task :update => [ :uninstall, :install ]
 end
 
 
