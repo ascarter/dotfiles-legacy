@@ -1,8 +1,8 @@
 # Node.js tasks
 
 NODEJS_PKG_IDS = %w{org.nodejs.node.pkg}
-NODEJS_PKG_NAME = 'node-v4.4.6'
-NODEJS_SOURCE_URL = 'https://nodejs.org/dist/v4.4.6/node-v4.4.6.pkg'
+NODEJS_PKG_NAME = 'node-v4.4.7'
+NODEJS_SOURCE_URL = 'https://nodejs.org/dist/v4.4.7/node-v4.4.7.pkg'
 
 NPM_PKGS = %w{grunt-cli bower}
 
