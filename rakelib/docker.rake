@@ -1,17 +1,18 @@
 # Docker tasks
 
 DOCKER_APP_NAME = "Docker"
-DOCKER_SOURCE_URL = "https://download.docker.com/mac/beta/Docker.dmg"
+DOCKER_SOURCE_URL = "https://download.docker.com/mac/stable/Docker.dmg"
+DOCKER_SIGNATURE = {sha2: "f170610d95c188dee8433eff33c84696c1c8a39421de548a71a1258a458e1b21"}
 
 KITEMATIC_APP_NAME = "Kitematic (Beta)"
-KITEMATIC_SOURCE_URL = "https://d2a7s5xu46jmxv.cloudfront.net/Kitematic-Mac.zip"
+KITEMATIC_SOURCE_URL = "https://download.docker.com/kitematic/Kitematic-Mac.zip"
 
 namespace "docker" do
   desc "Install Docker"
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::App.install(DOCKER_APP_NAME, DOCKER_SOURCE_URL)
+      Bootstrap::MacOSX::App.install(DOCKER_APP_NAME, DOCKER_SOURCE_URL, sig: DOCKER_SIGNATURE)
     end
   end
   
