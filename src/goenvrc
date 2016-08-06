@@ -1,10 +1,8 @@
 github.com/ChimeraCoder/gojson/...		
-github.com/derekparker/delve/cmd/dlv		
 github.com/golang/lint/golint		
 github.com/google/godepq
 github.com/govend/govend
 github.com/lukehoban/go-outline		
-github.com/mailgun/godebug		
 github.com/nsf/gocode		
 github.com/rogpeppe/godef		
 golang.org/x/tools/cmd/goimports		
