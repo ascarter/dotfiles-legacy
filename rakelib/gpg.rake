@@ -19,20 +19,20 @@ GPG_SIGNATURE = {sha1: '345d2c14cf022b8265331fc4f6feac6e77c15982'}
 GPG_DEFAULTS_DOMAIN = 'org.gpgtools.gpgmail'
 
 namespace 'gpg' do
-	desc 'Install gpg'
-	task :install do
-	  case RUBY_PLATFORM
-	  when /darwin/
-  		Bootstrap::MacOSX::Pkg.install(GPG_PKG_NAME, GPG_PKG_IDS[0], GPG_SOURCE_URL, sig: GPG_SIGNATURE)
-	  end
-	end
-	
-	desc 'Uninstall gpg'
-	task :uninstall do
-		Bootstrap::MacOSX::App.run(GPG_UNINSTALL_APP_NAME, GPG_SOURCE_URL, sig: GPG_SIGNATURE)
-	end
-	
-	namespace 'sign' do
+  desc 'Install gpg'
+  task :install do
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::MacOSX::Pkg.install(GPG_PKG_NAME, GPG_PKG_IDS[0], GPG_SOURCE_URL, sig: GPG_SIGNATURE)
+    end
+  end
+
+  desc 'Uninstall gpg'
+  task :uninstall do
+    Bootstrap::MacOSX::App.run(GPG_UNINSTALL_APP_NAME, GPG_SOURCE_URL, sig: GPG_SIGNATURE)
+  end
+
+  namespace 'sign' do
     desc 'Set default signing method to GPG'
     task :gpg do
       case RUBY_PLATFORM
@@ -41,7 +41,7 @@ namespace 'gpg' do
         puts Bootstrap::MacOSX::Defaults.read(GPG_DEFAULTS_DOMAIN)
       end
     end
-  
+
     desc 'Set default signing method to S/MIME'
     task :smime do
       case RUBY_PLATFORM

@@ -24,7 +24,6 @@ namespace "macports" do
   desc "Uninstall macports"
   task :uninstall do
     puts "Uninstall macports..."
-    macports_root = '/opt/local'
     installed_files = [
       '/opt/local',
       '/Applications/DarwinPorts',

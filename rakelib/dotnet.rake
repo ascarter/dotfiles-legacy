@@ -10,19 +10,19 @@ DOTNET_PKG_IDS = [
 DOTNET_SOURCE_URL = 'https://go.microsoft.com/fwlink/?LinkID=809124'
 
 namespace 'dotnet' do
-	desc 'Install dotnet'
-	task :install do
-	  case RUBY_PLATFORM
-	  when /darwin/
-  		Bootstrap::MacOSX::Pkg.install(DOTNET_PKG_NAME, DOTNET_PKG_IDS[0], DOTNET_SOURCE_URL)
+  desc 'Install dotnet'
+  task :install do
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::MacOSX::Pkg.install(DOTNET_PKG_NAME, DOTNET_PKG_IDS[0], DOTNET_SOURCE_URL)
     end
-	end
-	
-	desc 'Uninstall dotnet'
-	task :uninstall do
-	  case RUBY_PLATFORM
-	  when /darwin/	
-	    DOTNET_PKG_IDS.each { |p| Bootstrap::MacOSX::App.uninstall(p) }
-  	end
-	end	
+  end
+
+  desc 'Uninstall dotnet'
+  task :uninstall do
+    case RUBY_PLATFORM
+    when /darwin/
+      DOTNET_PKG_IDS.each { |p| Bootstrap::MacOSX::App.uninstall(p) }
+    end
+  end
 end

@@ -25,20 +25,20 @@ VMWARE_APP_FILES = [
 ]
 
 namespace 'vmware' do
-	desc 'Install vmware'
-	task :install do
-	  case RUBY_PLATFORM
-	  when /darwin/
+  desc 'Install vmware'
+  task :install do
+    case RUBY_PLATFORM
+    when /darwin/
       Bootstrap::MacOSX::App.run(VMWARE_APP_NAME, VMWARE_SOURCE_URL, sig: VMWARE_SIGNATURE)
     end
-	end
-	
-	desc 'Uninstall vmware'
-	task :uninstall do
-	  case RUBY_PLATFORM
-	  when /darwin/
-  		Bootstrap::MacOSX::App.uninstall(VMWARE_APP_NAME)
-  		VMWARE_APP_FILES.each { |f| Bootstrap.file_remove(File.expand_path(f)) }
-  	end
-	end	
+  end
+
+  desc 'Uninstall vmware'
+  task :uninstall do
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::MacOSX::App.uninstall(VMWARE_APP_NAME)
+      VMWARE_APP_FILES.each { |f| Bootstrap.file_remove(File.expand_path(f)) }
+    end
+  end
 end
