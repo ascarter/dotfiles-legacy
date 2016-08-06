@@ -1,21 +1,18 @@
-# homebrew helpers
-
 module Bootstrap
+  # Homebrew helpers
   module Homebrew
     def command
       @cmd ||= File.join(prefix, 'bin', 'brew')
-      if not @cmd
-        raise Exception "Missing homebrew"
-      end
-      return @cmd
+      raise Exception 'Missing homebrew' unless @cmd
+      @cmd
     end
     module_function :command
 
     def prefix
-      %x{brew --prefix}.strip()
+      `brew --prefix`.strip
     end
     module_function :prefix
-  
+
     def bin_path(cmd)
       File.join(prefix, 'bin', cmd)
     end
@@ -26,7 +23,7 @@ module Bootstrap
     end
     module_function :update
 
-    def install(package, args=nil)
+    def install(package, args = nil)
       # Check if package installed already
       if installed?(package)
         # Package is installed - update it if outdated
@@ -48,17 +45,11 @@ module Bootstrap
     module_function :uninstall
 
     def outdated(package)
-      outdated_packages = %x{#{command} outdated --quiet}
-
-      if outdated_packages.include?(package)
-        return true
-      else
-        return false
-      end
+      `#{command} outdated --quiet`.include?(package)
     end
     module_function :outdated
 
-    def upgrade(package=nil, args=nil)
+    def upgrade(package = nil, args = nil)
       if !package.nil? && !outdated(package)
         warn "#{package} is up to date"
       else
@@ -68,17 +59,17 @@ module Bootstrap
     module_function :upgrade
 
     def installed?(package)
-      return system("#{command} list #{package} > /dev/null 2>&1")
+      system("#{command} list #{package} > /dev/null 2>&1")
     end
     module_function :installed?
-  
+
     def list
-      return %x{#{command} list}
+      `#{command} list`
     end
     module_function :list
-  
+
     def info(package)
-      return %x{#{command} info #{package}}
+      `#{command} info #{package}`
     end
     module_function :info
 

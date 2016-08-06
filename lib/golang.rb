@@ -1,8 +1,5 @@
-#
-# go helpers
-#
-
 module Bootstrap
+  # go helpers
   module Go
     def get(workspace, pkg)
       ENV['GOPATH'] = workspace

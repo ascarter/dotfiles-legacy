@@ -1,21 +1,22 @@
-# Mac OS X application helpers
-
 module Bootstrap
+  # Mac OS X application helpers
   module MacOSX
-    def path_helper(path_file, paths, type='paths')
-      raise ArgumentError, "Invalid path type" unless ['paths', 'manpaths'].include? type
+    def path_helper(path_file, paths, type = 'paths')
+      unless %w(paths manpaths).include?(type)
+        raise ArgumentError, 'Invalid path type'
+      end
 
       fullpath = File.join("/etc/#{type}.d", path_file)
-      unless File.exist?(fullpath)
+      if File.exist?(fullpath)
+        warn "#{fullpath} already exists"
+      else
         Bootstrap.sudo "touch #{fullpath}"
         paths.each { |p| Bootstrap.sudo "echo '#{p}' >> #{fullpath}" }
-      else
-        warn "#{fullpath} already exists"
       end
     end
     module_function :path_helper
 
-    def rm_path_helper(path_file, type='paths')
+    def rm_path_helper(path_file, type = 'paths')
       fullpath = File.join("/etc/#{type}.d", path_file)
       if File.exist?(fullpath)
         Bootstrap.sudo_rm(fullpath)
@@ -24,45 +25,47 @@ module Bootstrap
       end
     end
     module_function :rm_path_helper
-    
+
     def run_applescript(script)
       system "osascript \"#{script}\""
     end
     module_function :run_applescript
 
-    def build_locatedb()
+    def build_locatedb
       Bootstrap.sudo 'launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist'
     end
     module_function :build_locatedb
-    
+
     # Mac OS X defaults
     module Defaults
       def read(domain, key: nil, options: nil)
-        value = %x{defaults read #{domain} #{options} #{"\"#{key}\"" unless key.nil?}}
-        return value
+        value = `defaults read #{domain} #{options} #{"\"#{key}\"" unless key.nil?}`
+        value
       end
       module_function :read
 
-      def write(domain, key, value, options=nil)
-        %x{defaults write #{domain} "#{key}" #{options} "#{value}"}
+      def write(domain, key, value, options = nil)
+        `defaults write #{domain} "#{key}" #{options} "#{value}"`
       end
       module_function :write
 
       def delete(domain, key: nil, options: {})
-        cmd = "defaults delete #{domain}"
-        %x{defaults delete #{domain} #{"#{key}" unless key.nil?} #{options}}
+        `defaults delete #{domain} #{key.to_s unless key.nil?} #{options}`
       end
       module_function :delete
     end
 
     # An App is a Mac OS X Application Bundle provied by a dmg, zip, or tar.gz
-    # cmdfiles is an optional list of paths on the expanded source to copy to /usr/local/bin
+    # cmdfiles is an optional list of paths on the expanded source
+    # to copy to /usr/local/bin
     module App
-      def install(app, url, headers: {}, sig: {}, owner: Bootstrap.current_user(), group: 'admin', cmdfiles: [], manfiles: [])
+      def install(app, url, headers: {}, sig: {}, owner: Bootstrap.current_user, group: 'admin', cmdfiles: [], manfiles: [])
         app_name = "#{app}.app"
         app_path = File.join('/Applications', app_name)
-      
-        unless File.exists?(app_path)
+
+        if File.exist?(app_path)
+          warn "#{app} already installed"
+        else
           Bootstrap.download_with_extract(url, headers: headers, sig: sig) do |d|
             src_path = File.join(d, app_name)
             puts "Installing #{app} to #{app_path}"
@@ -72,17 +75,15 @@ module Bootstrap
             cmdfiles.each { |f| Bootstrap.usr_bin_cp(File.join(d, f)) }
             manfiles.each { |f| Bootstrap.usr_man_cp(File.join(d, f)) }
           end
-        else
-          warn "#{app} already installed"
         end
       end
       module_function :install
-  
+
       def uninstall(app)
         app_name = "#{app}.app"
         app_path = File.join('/Applications', app_name)
-      
-        if File.exists?(app_path)
+
+        if File.exist?(app_path)
           puts "Uninstalling #{app}"
           Bootstrap.sudo_rmdir app_path
         else
@@ -90,55 +91,55 @@ module Bootstrap
         end
       end
       module_function :uninstall
-    
+
       # Mac OS X Run helper
       def run(app, url, headers: {}, sig: {})
         Bootstrap.download_with_extract(url, headers: headers, sig: sig) do |d|
           app_name = "#{app}.app"
           app_path = File.join(d, app_name)
-          system %Q{open --wait-apps "#{app_path}"}
+          system %(open --wait-apps "#{app_path}")
         end
       end
       module_function :run
-    
+
       def hide(app)
         script = "tell application \"Finder\" to set visible process \"#{app}\" to false"
         system "osascript -e '#{script}'"
       end
       module_function :hide
-      
+
       def exists?(app)
         app_name = "#{app}.app"
         app_path = File.join('/Applications', app_name)
-        return File.exists?(app_path)
+        File.exist?(app_path)
       end
       module_function :exists?
     end
-  
+
     # Mac OS X Installer Package
     module Pkg
       def install(pkg, id, src, sig: {}, choices: nil, headers: {})
         pkg_name = "#{pkg}.pkg"
-        unless exists?(id)
+        if exists?(id)
+          warn "Package #{pkg} already installed"
+        else
           Bootstrap.download_with_extract(src, headers: headers, sig: sig) do |d|
             src_path = File.join(d, pkg_name)
             puts "Installing #{pkg}"
-            cmd = %Q{installer -package "#{src_path}" -target /}
-            if !choices.nil?
-              if !File.exist?(choices)
+            cmd = %(installer -package "#{src_path}" -target /)
+            unless choices.nil?
+              unless File.exist?(choices)
                 raise "Choices file #{choices} not found"
               end
-              cmd += %Q{ -applyChoiceChangeXML "#{choices}"}
+              cmd += %( -applyChoiceChangeXML "#{choices}")
             end
             Bootstrap.sudo cmd
           end
-        else
-          warn "Package #{pkg} already installed"
         end
       end
       module_function :install
-    
-      def uninstall(id, dryrun=false)
+
+      def uninstall(id, dryrun = false)
         i = info(id)
         puts "pkg info: #{i}" if dryrun
 
@@ -147,25 +148,26 @@ module Bootstrap
 
           # Remove files
           files.each do |f|
-            path = File.expand_path(File.join(i["volume"], i["location"], f))
+            path = File.expand_path(File.join(i['volume'], i['location'], f))
             Bootstrap.sudo_rm(path) unless dryrun
           end
 
           # Forget package
           Bootstrap.sudo "pkgutil --forget #{id}" unless dryrun
 
-          # Don't remove directories - this needs to be per package so return them
+          # Don't remove directories
+          # this needs to be per package so return them
           return dirs
         else
           puts "Package #{id} is not installed"
         end
-      end    
+      end
       module_function :uninstall
 
       def ls(id)
-        if system "pkgutil --pkgs=\"#{id.gsub(".", "\.")}\""
-          files = %x{pkgutil --only-files --files #{id}}
-          dirs = %x{pkgutil --only-dirs --files #{id}}
+        if system "pkgutil --pkgs=\"#{id.tr('.', "\.")}\""
+          files = `pkgutil --only-files --files #{id}`
+          dirs = `pkgutil --only-dirs --files #{id}`
           return files.split, dirs.split
         else
           warn "Package #{id} not installed"
@@ -175,22 +177,22 @@ module Bootstrap
 
       def info(id)
         i = {}
-        o, e, s = Open3.capture3("pkgutil --pkg-info #{id}")
+        o, _e, s = Open3.capture3("pkgutil --pkg-info #{id}")
         return nil unless s.success?
         o.each_line do |l|
           parts = l.split(':')
           i[parts[0].strip] = parts[1].strip
         end
-        return i
+        i
       end
       module_function :info
 
       def exists?(id)
-        return !info(id).nil?
+        !info(id).nil?
       end
       module_function :exists?
     end
-    
+
     # Mac OS X Safari Extension
     module SafariExtension
       def install(ext, url, headers: {})
@@ -198,35 +200,41 @@ module Bootstrap
         downloads_file = File.join(Bootstrap.home_dir, 'Downloads', ext_name)
         Bootstrap.download_with_extract(url, headers: headers) do |d|
           ext_path = File.join(d, ext_name)
-          system %Q{ditto "#{ext_path}" "#{downloads_file}"}
+          system %(ditto "#{ext_path}" "#{downloads_file}")
         end
-        system %Q{open -a Safari --new --fresh "#{downloads_file}"}
+        system %(open -a Safari --new --fresh "#{downloads_file}")
       end
       module_function :install
     end
-    
+
     # Mac OS X color picker
     module ColorPicker
       def install(picker, url, headers: {})
         picker_name = "#{File.basename(picker)}.colorPicker"
         picker_path = File.join(File.dirname(picker), picker_name)
-        dest = File.join(Bootstrap.home_dir(), 'Library', 'ColorPickers', picker_name)
-        unless File.exists?(dest)
+        dest = File.join(Bootstrap.home_dir,
+                         'Library',
+                         'ColorPickers',
+                         picker_name)
+        if File.exist?(dest)
+          warn "#{picker} already installed"
+        else
           Bootstrap.download_with_extract(url, headers: headers) do |d|
             src = File.join(d, picker_path)
             puts "Installing #{picker}"
             FileUtils.cp_r(src, dest)
           end
-        else
-          warn "#{picker} already installed"
         end
       end
       module_function :install
-      
+
       def uninstall(picker)
         picker_name = "#{picker}.colorPicker"
-        picker_path = File.join(Bootstrap.home_dir(), 'Library', 'ColorPickers', picker_name)
-        if File.exists?(picker_path)
+        picker_path = File.join(Bootstrap.home_dir,
+                                'Library',
+                                'ColorPickers',
+                                picker_name)
+        if File.exist?(picker_path)
           puts "Uninstalling #{picker}"
           FileUtils.rm_rf(picker_path)
         else

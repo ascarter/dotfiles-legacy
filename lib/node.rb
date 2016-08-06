@@ -1,14 +1,14 @@
-# Node.js / NPM helpers
-
 module Bootstrap
+  # Node.js helpers
   module NodeJS
     def version
-      puts "Node.js: #{%x{/usr/local/bin/node --version}}"
-      puts "npm:     #{%x{/usr/local/bin/npm --version}}"
+      puts "Node.js: #{`/usr/local/bin/node --version`}"
+      puts "npm:     #{`/usr/local/bin/npm --version`}"
     end
     module_function :version
   end
 
+  # NPM helpers
   module NPM
     def install(pkg)
       if !installed?(pkg)
@@ -19,7 +19,7 @@ module Bootstrap
     end
     module_function :install
 
-    def update(pkg="")
+    def update(pkg = '')
       Bootstrap.sudo "npm update --global #{pkg}"
     end
     module_function :update
@@ -34,25 +34,25 @@ module Bootstrap
     module_function :uninstall
 
     def installed?(pkg)
-      o, e, s = Open3.capture3("npm list --global --parseable #{pkg}")
-      return (s.exitstatus == 0)
+      _o, _e, s = Open3.capture3("npm list --global --parseable #{pkg}")
+      s.exitstatus.zero?
     end
     module_function :installed?
-    
+
     def list
       packages = []
-      %x{npm list --global --parseable --depth=0}.split("\n").each do |pkg|
+      `npm list --global --parseable --depth=0`.split("\n").each do |pkg|
         pkg_name = File.basename(pkg)
-        unless %w{lib npm}.include?(pkg_name)
+        unless %w(lib npm).include?(pkg_name)
           packages.push(File.basename(pkg_name))
         end
       end
-      return packages
+      packages
     end
     module_function :list
 
     def ls
-      puts "Installed npm modules:"
+      puts 'Installed npm modules:'
       npm_list.each { |pkg| puts " #{pkg}" }
     end
     module_function :ls

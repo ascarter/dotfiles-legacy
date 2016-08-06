@@ -26,56 +26,57 @@ when /darwin/
   require_relative 'macosx'
 end
 
+# Bootstrap contains the support system for the dotfiles system
 module Bootstrap
   # Helpers
 
   def macosx?
-    return RUBY_PLATFORM =~ /darwin/
+    RUBY_PLATFORM =~ /darwin/
   end
   module_function :macosx?
-  
+
   def linux?
-    return RUBY_PLATFORM =~ /linux/
+    RUBY_PLATFORM =~ /linux/
   end
   module_function :linux?
-  
+
   def windows?
-    return RUBY_PLATFORM =~ /windows/
+    RUBY_PLATFORM =~ /windows/
   end
   module_function :windows?
 
-  def prompt(message, default=nil)
-      print "Enter #{message}#{" [#{default}]" unless nil}: "
-      response = $stdin.gets.chomp
-      return response.empty? ? default : response
+  def prompt(message, default = nil)
+    print "Enter #{message}#{" [#{default}]" unless defult.nil?}: "
+    response = $stdin.gets.chomp
+    response.empty? ? default : response
   end
   module_function :prompt
-  
+
   def home_dir
-    return File.expand_path(ENV['HOME'])
+    File.expand_path(ENV['HOME'])
   end
   module_function :home_dir
-  
+
   def current_user
-    return Etc.getlogin
+    Etc.getlogin
   end
   module_function :current_user
-  
-  def user_info(user=Etc.getlogin)
-    return Etc.getpwnam(user)
+
+  def user_info(user = Etc.getlogin)
+    Etc.getpwnam(user)
   end
   module_function :user_info
 
   def link_file(source, target)
-    unless File.exist?(target)
+    if File.exist?(target)
+      puts "Symlink #{target} exists"
+    else
       puts "Symlink #{source}"
       File.symlink(source, target)
-    else
-      puts "Symlink #{target} exists"
     end
   end
   module_function :link_file
-  
+
   def backup(target)
     backup = "#{target}.orig"
     if File.exist?(target)
@@ -84,24 +85,24 @@ module Bootstrap
     end
   end
   module_function :backup
-  
+
   def replace(source, target)
     backup(target)
     link_file(source, target)
   end
   module_function :replace
-  
+
   def copy_and_replace(source, target)
     backup(target)
     FileUtils.copy(source, target)
   end
   module_function :copy_and_replace
-  
+
   def file_remove(target)
-    if File.exist?(target) and File.directory?(target)
+    if File.exist?(target) && File.directory?(target)
       puts "Removing directory #{target}"
       FileUtils.remove_dir(target)
-    elsif File.exist?(target) or File.symlink?(target)
+    elsif File.exist?(target) || File.symlink?(target)
       puts "Removing #{target}"
       File.delete(target)
     else
@@ -109,16 +110,16 @@ module Bootstrap
     end
   end
   module_function :file_remove
-  
+
   # sudo
-  
+
   def sudo(cmd)
     system "sudo sh -c '#{cmd}'"
   end
   module_function :sudo
 
   def sudo_rm(target)
-    if File.exist?(target) or File.symlink?(target) or File.directory?(target)
+    if File.exist?(target) || File.symlink?(target) || File.directory?(target)
       puts "Removing #{target}"
       sudo "rm -f #{target}"
     end
@@ -128,52 +129,52 @@ module Bootstrap
   def sudo_rmdir(target)
     if File.directory?(target)
       puts "Removing directory #{target}"
-      sudo %Q{rm -Rf "#{target}"}
+      sudo %(rm -Rf "#{target}")
     end
   end
   module_function :sudo_rmdir
-  
+
   def sudo_mkdir(path)
     unless File.exist?(path)
       puts "Creating #{path}"
       sudo "mkdir -p #{path}"
     end
   end
-  module_function :sudo_mkdir  
+  module_function :sudo_mkdir
 
   def sudo_cp(src, target)
     puts "Copying #{src} to #{target}"
-    sudo %Q{cp "#{src}" "#{target}"}
+    sudo %(cp "#{src}" "#{target}")
   end
   module_function :sudo_cp
 
   def sudo_cpr(src, target)
     puts "Copying #{src} to #{target}"
-    sudo %Q{cp -R "#{src}" "#{target}"}
+    sudo %(cp -R "#{src}" "#{target}")
   end
   module_function :sudo_cpr
-  
+
   def sudo_ln(src, target)
-    if File.exists?(src)
-      sudo %Q{ln -s "#{src}" "#{target}"}
+    if File.exist?(src)
+      sudo %(ln -s "#{src}" "#{target}")
     else
       warn "#{src} missing"
     end
   end
   module_function :sudo_ln
-  
-  def sudo_chgrp(path, group='admin')
-    sudo %Q{chgrp -R #{group} "#{path}"}
+
+  def sudo_chgrp(path, group = 'admin')
+    sudo %(chgrp -R #{group} "#{path}")
   end
   module_function :sudo_chgrp
-  
-  def sudo_chmod(path, mode='g+w')
-    sudo %Q{chmod #{mode} "#{path}"}
+
+  def sudo_chmod(path, mode = 'g+w')
+    sudo %(chmod #{mode} "#{path}")
   end
   module_function :sudo_chmod
-  
-  def sudo_chown(path, owner=current_user)
-    sudo %Q{chown -R #{owner} "#{path}"}
+
+  def sudo_chown(path, owner = current_user)
+    sudo %(chown -R #{owner} "#{path}")
   end
   module_function :sudo_chown
 
@@ -181,57 +182,59 @@ module Bootstrap
 
   def usr_bin_exists?(cmd)
     target = File.join('/usr/local/bin', cmd)
-    return File.exist?(target)
+    File.exist?(target)
   end
   module_function :usr_bin_exists?
 
-  def usr_bin_cp(src, dest=nil)
+  def usr_bin_cp(src, dest = nil)
     target = File.join('/usr/local/bin', dest.nil? ? File.basename(src) : dest)
-    unless File.exist?(target)
-      sudo_cp(src, target)
-    else
+    if File.exist?(target)
       warn "#{target} already exists"
+    else
+      sudo_cp(src, target)
     end
   end
   module_function :usr_bin_cp
-  
+
   def usr_bin_rm(cmd)
     cmd_file = File.join('/usr/local/bin', cmd)
     sudo_rm(cmd_file) if File.exist?(cmd_file)
   end
   module_function :usr_bin_rm
-  
+
   def usr_bin_ln(src, target)
     src_file = File.expand_path(src)
     target_file = File.join('/usr/local/bin', target)
-    unless File.exist?(target_file)
-      sudo_ln(src_file, target_file)
-    else
+    if File.exist?(target_file)
       warn "#{target} already exists"
+    else
+      sudo_ln(src_file, target_file)
     end
   end
   module_function :usr_bin_ln
-  
-  def usr_man_cp(src, dest=nil)
+
+  def usr_man_cp(src, dest = nil)
     dest_filename = dest.nil? ? File.basename(src) : dest
-    target = File.join('/usr/local/share/man', "man#{File.extname(dest_filename).split('.')[1]}", dest_filename)
-    unless File.exist?(target)
-      sudo_cp(src, target)
-    else
+    target = File.join('/usr/local/share/man',
+                       "man#{File.extname(dest_filename).split('.')[1]}",
+                       dest_filename)
+    if File.exist?(target)
       warn "#{target} already exists"
+    else
+      sudo_cp(src, target)
     end
   end
   module_function :usr_man_cp
-  
+
   def usr_man_rm(page)
     page_file = File.join('/usr/local/share/man', page)
     sudo_rm(page_file) if File.exist?(page_file)
   end
   module_function :usr_man_rm
-  
+
   # Digest
   def sha1(path)
-    if File.exists?(path)
+    if File.exist?(path)
       contents = File.read(path)
       return Digest::SHA1.hexdigest(contents)
     end
@@ -239,7 +242,7 @@ module Bootstrap
   module_function :sha1
 
   def sha2(path)
-    if File.exists?(path)
+    if File.exist?(path)
       contents = File.read(path)
       return Digest::SHA2.hexdigest(contents)
     end
