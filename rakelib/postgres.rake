@@ -1,10 +1,10 @@
 # PostgreSQL
 
-POSTGRES_APP_NAME = 'Postgres'
-POSTGRES_SOURCE_URL = 'https://github.com/PostgresApp/PostgresApp/releases/download/9.5.2/Postgres-9.5.2.zip'
+POSTGRES_APP_NAME = 'Postgres'.freeze
+POSTGRES_SOURCE_URL = 'https://github.com/PostgresApp/PostgresApp/releases/download/9.5.4/Postgres-9.5.4.zip'.freeze
 
-namespace "postgres" do
-  desc "Install PostgreSQL"
+namespace 'postgres' do
+  desc 'Install PostgreSQL'
   task :install do
     case RUBY_PLATFORM
     when /darwin/
@@ -12,13 +12,14 @@ namespace "postgres" do
     end
   end
 
-  desc "Uninstall PostgreSQL"
+  desc 'Uninstall PostgreSQL'
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
       Bootstrap::MacOSX::App.uninstall(POSTGRES_APP_NAME)
     end
   end
+
+  desc 'Update PostgreSQL to latest version'
+  task update: [:uninstall, :install]
 end
-
-
