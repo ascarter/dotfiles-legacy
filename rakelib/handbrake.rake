@@ -15,7 +15,7 @@ namespace 'handbrake' do
       
       # Install command line utility
       unless Bootstrap.usr_bin_exists?('HandbrakeCLI')
-        Bootstrap.download_with_extract(HANDBRAKE_CLI_SRC_URL) do |d|
+        Bootstrap::Downloader.download_with_extract(HANDBRAKE_CLI_SRC_URL) do |d|
           Bootstrap.usr_bin_cp(File.join(d, HANDBRAKE_CLI_APP_NAME), HANDBRAKE_CLI_APP_NAME)
           Bootstrap.usr_bin_ln(File.join('/usr/local/bin', HANDBRAKE_CLI_APP_NAME), 'handbrake')
         end

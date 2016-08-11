@@ -66,7 +66,7 @@ module Bootstrap
         if File.exist?(app_path)
           warn "#{app} already installed"
         else
-          Bootstrap.download_with_extract(url, headers: headers, sig: sig) do |d|
+          Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
             src_path = File.join(d, app_name)
             puts "Installing #{app} to #{app_path}"
             Bootstrap.sudo_cpr(src_path, app_path)
@@ -94,7 +94,7 @@ module Bootstrap
 
       # Mac OS X Run helper
       def run(app, url, headers: {}, sig: {})
-        Bootstrap.download_with_extract(url, headers: headers, sig: sig) do |d|
+        Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
           app_name = "#{app}.app"
           app_path = File.join(d, app_name)
           system %(open --wait-apps "#{app_path}")
@@ -123,7 +123,7 @@ module Bootstrap
         if exists?(id)
           warn "Package #{pkg} already installed"
         else
-          Bootstrap.download_with_extract(src, headers: headers, sig: sig) do |d|
+          Bootstrap::Downloader.download_with_extract(src, headers: headers, sig: sig) do |d|
             src_path = File.join(d, pkg_name)
             puts "Installing #{pkg}"
             cmd = %(installer -package "#{src_path}" -target /)
@@ -198,7 +198,7 @@ module Bootstrap
       def install(ext, url, headers: {})
         ext_name = "#{ext}.safariextz"
         downloads_file = File.join(Bootstrap.home_dir, 'Downloads', ext_name)
-        Bootstrap.download_with_extract(url, headers: headers) do |d|
+        Bootstrap::Downloader.download_with_extract(url, headers: headers) do |d|
           ext_path = File.join(d, ext_name)
           system %(ditto "#{ext_path}" "#{downloads_file}")
         end
@@ -219,7 +219,7 @@ module Bootstrap
         if File.exist?(dest)
           warn "#{picker} already installed"
         else
-          Bootstrap.download_with_extract(url, headers: headers) do |d|
+          Bootstrap::Downloader.download_with_extract(url, headers: headers) do |d|
             src = File.join(d, picker_path)
             puts "Installing #{picker}"
             FileUtils.cp_r(src, dest)
