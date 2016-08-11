@@ -1,7 +1,7 @@
 # bzr tasks
 
-namespace "bzr" do
-  desc "Install bzr"
+namespace 'bzr' do
+  desc 'Install bzr'
   task :install do
     case RUBY_PLATFORM
     when /darwin/
@@ -9,10 +9,10 @@ namespace "bzr" do
       Bootstrap::MacOSX::Homebrew.install('bzr')
     end
 
-    puts %x{bzr --version}
+    puts `bzr --version`
   end
 
-  desc "Uninstall bzr"
+  desc 'Uninstall bzr'
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/

@@ -1,17 +1,17 @@
 # Mercurial tasks
 
-namespace "hg" do
-  desc "Install hg"
+namespace 'hg' do
+  desc 'Install hg'
   task :install do
     case RUBY_PLATFORM
     when /darwin/
       Bootstrap::MacOSX::Homebrew.install('hg')
     end
 
-    puts %x{hg --version}
+    puts `hg --version`
   end
 
-  desc "Uninstall hg"
+  desc 'Uninstall hg'
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/

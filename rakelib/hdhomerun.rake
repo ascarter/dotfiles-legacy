@@ -1,15 +1,15 @@
 # hdhomerun tasks
 
-HDHOMERUN_PKG_NAME = "HDHomeRun Utilities"
+HDHOMERUN_PKG_NAME = 'HDHomeRun Utilities'.freeze
 HDHOMERUN_PKG_IDS = [
-  "com.silicondust.hdhomerun.config.gui",
-  "com.silicondust.hdhomerun_view",
-  "com.silicondust.libhdhomerun"
-]
-HDHOMERUN_SOURCE_URL = "http://download.silicondust.com/hdhomerun/hdhomerun_mac.dmg"
+  'com.silicondust.hdhomerun.config.gui',
+  'com.silicondust.hdhomerun_view',
+  'com.silicondust.libhdhomerun'
+].freeze
+HDHOMERUN_SOURCE_URL = 'http://download.silicondust.com/hdhomerun/hdhomerun_mac.dmg'.freeze
 
-namespace "hdhomerun" do
-  desc "Install hdhomerun"
+namespace 'hdhomerun' do
+  desc 'Install hdhomerun'
   task :install do
     case RUBY_PLATFORM
     when /darwin/
@@ -17,11 +17,11 @@ namespace "hdhomerun" do
     end
   end
 
-  desc "Uninstall hdhomerun"
+  desc 'Uninstall hdhomerun'
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      HDHOMERUN_PKG_IDS.each { |p|  Bootstrap::MacOSX::Pkg.uninstall(p) }
+      HDHOMERUN_PKG_IDS.each { |p| Bootstrap::MacOSX::Pkg.uninstall(p) }
     end
   end
 end

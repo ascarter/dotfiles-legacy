@@ -1,7 +1,7 @@
 # TypeScript tasks
 
-namespace "typescript" do
-  desc "Install TypeScript"
+namespace 'typescript' do
+  desc 'Install TypeScript'
   task :install do
     # Verify npm is installed
     unless File.exist?('/usr/local/bin/tsc')
@@ -13,13 +13,11 @@ namespace "typescript" do
       end
     end
 
-    puts %x{tsc --version}
+    puts `tsc --version`
   end
 
-  desc "Uninstall TypeScript"
+  desc 'Uninstall TypeScript'
   task :uninstall do
-    if File.exist?('/usr/local/bin/tsc')
-      npm_uninstall('typescript')
-    end
+    npm_uninstall('typescript') if File.exist?('/usr/local/bin/tsc')
   end
 end

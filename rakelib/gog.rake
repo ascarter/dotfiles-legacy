@@ -1,9 +1,9 @@
 # gog tasks
 
-GOG_APP_NAME = 'GalaxyClient'
-GOG_PKG_NAME = 'galaxy_client_1.1.11.56'
-GOG_PKG_ID = 'com.gog'
-GOG_SOURCE_URL = 'http://cdn.gog.com/open/galaxy/client/galaxy_client_1.1.11.56.pkg'
+GOG_APP_NAME = 'GalaxyClient'.freeze
+GOG_PKG_NAME = 'galaxy_client_1.1.11.56'.freeze
+GOG_PKG_ID = 'com.gog'.freeze
+GOG_SOURCE_URL = 'http://cdn.gog.com/open/galaxy/client/galaxy_client_1.1.11.56.pkg'.freeze
 
 namespace 'gog' do
   desc 'Install gog'
@@ -20,5 +20,5 @@ namespace 'gog' do
     when /darwin/
       Bootstrap::MacOSX::App.uninstall(GOG_APP_NAME)
     end
-  end	
+  end
 end

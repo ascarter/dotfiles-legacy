@@ -1,7 +1,7 @@
 # Chrome tasks
 
-CHROME_APP_NAME = 'Google Chrome'
-CHROME_SOURCE_URL = 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg'
+CHROME_APP_NAME = 'Google Chrome'.freeze
+CHROME_SOURCE_URL = 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg'.freeze
 
 namespace 'chrome' do
   desc 'Install Google Chrome'
@@ -11,7 +11,7 @@ namespace 'chrome' do
       Bootstrap::MacOSX::App.install(CHROME_APP_NAME, CHROME_SOURCE_URL)
     end
   end
-  
+
   desc 'Uninstall Google Chrome'
   task :uninstall do
     case RUBY_PLATFORM

@@ -1,10 +1,10 @@
 # Sublime Text tasks
 
-namespace "sublime" do
-  desc "Install sublime"
+namespace 'sublime' do
+  desc 'Install sublime'
   task :install do
     if RUBY_PLATFORM =~ /darwin/
-      subl_root = File.expand_path("/Applications/Sublime Text.app/Contents/SharedSupport")
+      subl_root = File.expand_path('/Applications/Sublime Text.app/Contents/SharedSupport')
     end
     if File.exist?(subl_root)
       # Symlink sublime programs
@@ -17,14 +17,9 @@ namespace "sublime" do
     end
   end
 
-  desc "Uninstall sublime"
+  desc 'Uninstall sublime'
   task :uninstall do
-    if RUBY_PLATFORM =~ /darwin/
-      subl_path = '/usr/local/bin/subl'
-    end
-    if File.exist?(subl_path)
-      sudo_remove(subl_path)
-    end
-
+    subl_path = '/usr/local/bin/subl' if RUBY_PLATFORM =~ /darwin/
+    sudo_remove(subl_path) if File.exist?(subl_path)
   end
 end

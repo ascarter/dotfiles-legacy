@@ -1,11 +1,10 @@
 # MySQL
 
+MYSQL_PKG_NAME = 'mysql-5.7.12-osx10.11-x86_64'.freeze
+MYSQL_PKG_ID = 'org.mysql'.freeze
+MYSQL_SRC_URL = 'http://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.12-osx10.11-x86_64.dmg'.freeze
 
-MYSQL_PKG_NAME='mysql-5.7.12-osx10.11-x86_64'
-MYSQL_PKG_ID='org.mysql'
-MYSQL_SRC_URL='http://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.12-osx10.11-x86_64.dmg'
-
-namespace "mysql" do
+namespace 'mysql' do
   desc 'Install MySQL server'
   task :install do
     case RUBY_PLATFORM
@@ -13,7 +12,7 @@ namespace "mysql" do
       Bootstrap::MacOSX::Pkg.install(MYSQL_PKG_NAME, MYSQL_PKG_ID, MYSQL_PKG_URL)
     end
   end
-  
+
   desc 'Uninstall MySQL server'
   task :uninstall do
     case RUBY_PLATFORM
@@ -23,21 +22,19 @@ namespace "mysql" do
   end
 
   if Bootstrap.macosx?
-    SEQUELPRO_APP_NAME = 'Sequel Pro'
-    SEQUELPRO_SOURCE_URL = 'https://github.com/sequelpro/sequelpro/releases/download/release-1.1.2/sequel-pro-1.1.2.dmg'
+    SEQUELPRO_APP_NAME = 'Sequel Pro'.freeze
+    SEQUELPRO_SOURCE_URL = 'https://github.com/sequelpro/sequelpro/releases/download/release-1.1.2/sequel-pro-1.1.2.dmg'.freeze
 
-    namespace "sequelpro" do
-      desc "Install Sequel Pro"
+    namespace 'sequelpro' do
+      desc 'Install Sequel Pro'
       task :install do
         Bootstrap::MacOSX::App.install(SEQUELPRO_APP_NAME, SEQUELPRO_SOURCE_URL)
       end
-  
-      desc "Uninstall Sequel Pro"
+
+      desc 'Uninstall Sequel Pro'
       task :uninstall do
         Bootstrap::MacOSX::App.uninstall(SEQUELPRO_APP_NAME)
       end
     end
   end
 end
-
-

@@ -1,6 +1,6 @@
 # gpg tasks
 
-GPG_PKG_NAME = 'Install'
+GPG_PKG_NAME = 'Install'.freeze
 GPG_PKG_IDS = [
   'org.gpgtools.macgpg2.pkg',
   'org.gpgtools.checkprivatekey.pkg',
@@ -11,12 +11,12 @@ GPG_PKG_IDS = [
   'org.gpgtools.key',
   'org.gpgtools.libmacgpg.xpc.pkg',
   'org.gpgtools.libmacgpgB.pkg',
-  'org.gpgtools.pinentry-mac.pkg',
-]
-GPG_UNINSTALL_APP_NAME = 'Uninstall'
-GPG_SOURCE_URL = 'https://releases.gpgtools.org/GPG_Suite-2016.07_v2.dmg'
-GPG_SIGNATURE = {sha1: '345d2c14cf022b8265331fc4f6feac6e77c15982'}
-GPG_DEFAULTS_DOMAIN = 'org.gpgtools.gpgmail'
+  'org.gpgtools.pinentry-mac.pkg'
+].freeze
+GPG_UNINSTALL_APP_NAME = 'Uninstall'.freeze
+GPG_SOURCE_URL = 'https://releases.gpgtools.org/GPG_Suite-2016.07_v2.dmg'.freeze
+GPG_SIGNATURE = { sha1: '345d2c14cf022b8265331fc4f6feac6e77c15982' }.freeze
+GPG_DEFAULTS_DOMAIN = 'org.gpgtools.gpgmail'.freeze
 
 namespace 'gpg' do
   desc 'Install gpg'

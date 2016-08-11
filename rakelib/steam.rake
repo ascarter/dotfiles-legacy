@@ -1,9 +1,9 @@
 # steam tasks
 
-STEAM_APP_NAME = 'Steam'
-STEAM_SOURCE_URL = 'https://steamcdn-a.akamaihd.net/client/installer/steam.dmg'
+STEAM_APP_NAME = 'Steam'.freeze
+STEAM_SOURCE_URL = 'https://steamcdn-a.akamaihd.net/client/installer/steam.dmg'.freeze
 
-STEAM_TIME_MACHINE_INFO = <<EOF
+STEAM_TIME_MACHINE_INFO = <<EOF.freeze
 
 Exclude Steam from Time Machine
 ===============================
@@ -23,23 +23,23 @@ This will avoid large amounts of data being backed up with only minor updates.
 EOF
 
 namespace 'steam' do
-	desc 'Install steam'
-	task :install do
-	  case RUBY_PLATFORM
-	  when /darwin/
-  		Bootstrap::MacOSX::App.install(STEAM_APP_NAME, STEAM_SOURCE_URL, owner: Bootstrap.current_user)
-  		
-  		# Warn to exclude SteamApps from TimeMachine
-  		puts STEAM_TIME_MACHINE_INFO
-  	end
-	end
-	
-	desc 'Uninstall steam'
-	task :uninstall do
-	  case RUBY_PLATFORM
-	  when /darwin/
-  		Bootstrap::MacOSX::App.uninstall(STEAM_APP_NAME)
-  		Bootstrap.file_remove(File.join(Bootstrap.home_dir, 'Library', 'Application Support', 'Steam'))
-  	end
-	end	
+  desc 'Install steam'
+  task :install do
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::MacOSX::App.install(STEAM_APP_NAME, STEAM_SOURCE_URL, owner: Bootstrap.current_user)
+
+      # Warn to exclude SteamApps from TimeMachine
+      puts STEAM_TIME_MACHINE_INFO
+    end
+  end
+
+  desc 'Uninstall steam'
+  task :uninstall do
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::MacOSX::App.uninstall(STEAM_APP_NAME)
+      Bootstrap.file_remove(File.join(Bootstrap.home_dir, 'Library', 'Application Support', 'Steam'))
+    end
+  end
 end

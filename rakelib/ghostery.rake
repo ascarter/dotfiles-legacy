@@ -1,17 +1,17 @@
 # Ghostery tasks
 
-GHOSTERY_SAFARI_EXTENSION = 'Ghostery'
-GHOSTERY_SOURCE_URL = 'https://www.ghostery.com/safari/Ghostery.safariextz'
+GHOSTERY_SAFARI_EXTENSION = 'Ghostery'.freeze
+GHOSTERY_SOURCE_URL = 'https://www.ghostery.com/safari/Ghostery.safariextz'.freeze
 
 namespace 'ghostery' do
   desc 'Install Ghostery'
   task :install do
     case RUBY_PLATFORM
-    when /darwin/ 
+    when /darwin/
       Bootstrap::MacOSX::SafariExtension.install(GHOSTERY_SAFARI_EXTENSION, GHOSTERY_SOURCE_URL)
     end
   end
-  
+
   desc 'Uninstall Ghostery'
   task :uninstall do
   end

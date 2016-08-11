@@ -1,7 +1,7 @@
 # Readability tasks
 
-READABILITY_SAFARI_EXTENSION = 'readability-1.10'
-READABILITY_SOURCE_URL = 'https://www.readability.com/extension/safari'
+READABILITY_SAFARI_EXTENSION = 'readability-1.10'.freeze
+READABILITY_SOURCE_URL = 'https://www.readability.com/extension/safari'.freeze
 
 namespace 'readability' do
   desc 'Install Readbility'
@@ -11,7 +11,7 @@ namespace 'readability' do
       Bootstrap::MacOSX::SafariExtension.install(READABILITY_SAFARI_EXTENSION, READABILITY_SOURCE_URL)
     end
   end
-  
+
   desc 'Uninstall Readability'
   task :uninstall do
   end

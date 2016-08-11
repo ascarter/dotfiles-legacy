@@ -6,7 +6,7 @@ if Bootstrap.macosx?
     task :install do
       Bootstrap.sudo 'xcode-select --install'
     end
-  
+
     desc 'Install Xcode themes'
     task :themes do
       src = File.join(File.dirname(__FILE__), '../xcode/themes')

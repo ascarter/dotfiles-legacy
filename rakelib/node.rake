@@ -1,10 +1,10 @@
 # Node.js tasks
 
-NODEJS_PKG_IDS = %w{org.nodejs.node.pkg}
-NODEJS_PKG_NAME = 'node-v4.4.7'
-NODEJS_SOURCE_URL = 'https://nodejs.org/dist/v4.4.7/node-v4.4.7.pkg'
+NODEJS_PKG_IDS = %w(org.nodejs.node.pkg).freeze
+NODEJS_PKG_NAME = 'node-v4.4.7'.freeze
+NODEJS_SOURCE_URL = 'https://nodejs.org/dist/v4.4.7/node-v4.4.7.pkg'.freeze
 
-NPM_PKGS = %w{grunt-cli bower}
+NPM_PKGS = %w(grunt-cli bower).freeze
 
 namespace 'node' do
   desc 'Install node.js'
@@ -33,9 +33,9 @@ namespace 'node' do
       if File.exist?('/usr/local/bin/node') && File.exist?('/usr/local/bin/npm')
         Bootstrap::NPM.list.each { |p| Bootstrap::NPM.uninstall(p) }
         Bootstrap::NPM.uninstall('npm')
-        
+
         NODEJS_PKG_IDS.each { |p| Bootstrap::MacOSX::Pkg.uninstall(p) }
-        
+
         dirs = [
           '/usr/local/lib/node',
           '/usr/local/lib/node_modules',
