@@ -1,15 +1,17 @@
 # Go language tasks
 
-GOLANG_PKG_NAME = 'go1.7rc5.darwin-amd64'.freeze
+GOLANG_PKG_NAME = 'go1.7rc6.darwin-amd64'.freeze
 GOLANG_PKG_ID = 'com.googlecode.go'.freeze
-GOLANG_SOURCE_URL = 'https://storage.googleapis.com/golang/go1.7rc5.darwin-amd64.pkg'.freeze
+GOLANG_SOURCE_URL = 'https://storage.googleapis.com/golang/go1.7rc6.darwin-amd64.pkg'.freeze
 
 namespace 'golang' do
   desc 'Install Go language'
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::Pkg.install(GOLANG_PKG_NAME, GOLANG_PKG_ID, GOLANG_SOURCE_URL)
+      Bootstrap::MacOSX::Pkg.install(GOLANG_PKG_NAME,
+                                     GOLANG_PKG_ID,
+                                     GOLANG_SOURCE_URL)
     end
 
     # Add go tool to the working path
@@ -33,7 +35,9 @@ namespace 'golang' do
     go = File.join('/usr/local/go', 'bin', 'go')
     if File.exist?(go)
       puts `#{go} version`
-      puts Bootstrap::MacOSX::Pkg.info(GOLANG_PKG_ID) if RUBY_PLATFORM =~ /darwin/
+      if RUBY_PLATFORM =~ /darwin/
+        puts Bootstrap::MacOSX::Pkg.info(GOLANG_PKG_ID)
+      end
     else
       warn 'Go language is not installed'
     end
