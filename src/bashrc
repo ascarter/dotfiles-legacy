@@ -129,7 +129,8 @@ bb() {
 bbcurl() { (curl $*) | bbedit --new-window +1 -t curl; }
 
 # Run command and send results to bbresults
-bbr() { ($* 2>&1) | bbresults --errors-default ; }
+# filters any leading whitespace
+bbr() { ($* 2>&1) | sed -e 's/^[ \t]*//' | bbresults --errors-default ; }
 
 # Run make and send results to bbresults
 bbmake() { bbr make $* ; }
