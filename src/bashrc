@@ -429,6 +429,9 @@ alias pipbrew='CFLAGS="-I/opt/homebrew/include -L/opt/homebrew/lib" pip'
 alias pdb='python -m pdb'
 alias pyunittest='python -m unittest discover --buffer'
 
+# Node.js
+alias npmlist='npm list --depth=0'
+
 # Subverison
 alias svnfmdiff='svn diff --diff-cmd /usr/local/bin/fmdiff'
 alias svnfmmerge='svn merge --diff3-cmd /usr/local/bin/fmdiff3'
