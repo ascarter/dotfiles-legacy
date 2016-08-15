@@ -53,7 +53,7 @@ module Bootstrap
 
     def ls
       puts 'Installed npm modules:'
-      npm_list.each { |pkg| puts " #{pkg}" }
+      list.each { |pkg| puts " #{pkg}" }
     end
     module_function :ls
   end
