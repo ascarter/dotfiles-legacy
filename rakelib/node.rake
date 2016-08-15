@@ -4,7 +4,7 @@ NODEJS_PKG_IDS = %w(org.nodejs.node.pkg).freeze
 NODEJS_PKG_NAME = 'node-v4.4.7'.freeze
 NODEJS_SOURCE_URL = 'https://nodejs.org/dist/v4.4.7/node-v4.4.7.pkg'.freeze
 
-NPM_PKGS = %w(grunt-cli bower standard).freeze
+NPM_PKGS = %w(grunt-cli bower eslint).freeze
 
 namespace 'node' do
   desc 'Install node.js'
