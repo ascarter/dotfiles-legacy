@@ -398,6 +398,9 @@ alias wanip="dig +short myip.opendns.com @resolver1.opendns.com"
 # SSH
 alias sshagentstart='eval "$(ssh-agent -s)"'
 
+# AWS
+alias awst='aws --output table'
+
 # Docker
 # Remove stopped containers
 alias dockerrms='docker rm $(docker ps -a -q)'
