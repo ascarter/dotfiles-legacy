@@ -99,11 +99,6 @@ if [ -d /Applications/Postgres.app ]; then
 	export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
 fi
 
-# Heroku Toolbelt
-if [ -d /usr/local/heroku ]; then
-	export PATH="/usr/local/heroku/bin:$PATH"
-fi
-
 # ========================================
 # Shell functions
 # ========================================
