@@ -1,8 +1,8 @@
 # IntelliJ IDEA
 
 INTELLIJ_APP_NAME = 'IntelliJ IDEA CE'.freeze
-INTELLIJ_SOURCE_URL = 'https://download.jetbrains.com/idea/ideaIC-2016.2.dmg'.freeze
-INTELLIJ_SIGNATURE = { sha2: '0e156bc6e0ee021527f2a5e3d123cc55f0d24dfe7d0dfb96f58dd0e18f0b6161' }.freeze
+INTELLIJ_SOURCE_URL = 'https://download.jetbrains.com/idea/ideaIC-2016.2.2.dmg'.freeze
+INTELLIJ_SIGNATURE = { sha2: '47641ade715a1fed88ab8d3656f9505e420d180a5df79cf469b21217ba6c99f6' }.freeze
 
 namespace 'intellij' do
   desc 'Install IntelliJ IDEA'
