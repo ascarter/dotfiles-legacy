@@ -29,9 +29,9 @@ namespace 'fonts' do
   #   end
 
   namespace 'sfmono' do
-    desc 'Install SF Mono (requires Xcode 8 beta)'
+    desc 'Install SF Mono (requires Xcode 8 or later)'
     task :install do
-      src = '/Applications/Xcode-beta.app/Contents/SharedFrameworks/DVTKit.framework/Versions/A/Resources/Fonts/SFMono*.otf'
+      src = '/Applications/Xcode.app/Contents/SharedFrameworks/DVTKit.framework/Versions/A/Resources/Fonts/SFMono*.otf'
       Dir.glob(src).each { |f| FileUtils.cp(f, File.join(FONT_DIR, File.basename(f))) }
     end
 
