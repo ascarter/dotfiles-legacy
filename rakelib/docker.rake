@@ -2,7 +2,10 @@
 
 DOCKER_APP_NAME = 'Docker'.freeze
 DOCKER_SOURCE_URL = 'https://download.docker.com/mac/stable/Docker.dmg'.freeze
-DOCKER_SIGNATURE = { sha2: 'f170610d95c188dee8433eff33c84696c1c8a39421de548a71a1258a458e1b21' }.freeze
+DOCKER_SHA256SUM = 'https://download.docker.com/mac/stable/Docker.dmg.sha256sum'.freeze
+
+DOCKER_BETA_SOURCE_URL = 'https://download.docker.com/mac/beta/Docker.dmg'.freeze
+DOCKER_BETA_SHA256SUM = 'https://download.docker.com/mac/beta/Docker.dmg.sha256sum'.freeze
 
 KITEMATIC_APP_NAME = 'Kitematic (Beta)'.freeze
 KITEMATIC_SOURCE_URL = 'https://download.docker.com/kitematic/Kitematic-Mac.zip'.freeze
@@ -12,20 +15,29 @@ namespace 'docker' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::App.install(DOCKER_APP_NAME,
-                                     DOCKER_SOURCE_URL,
-                                     sig: DOCKER_SIGNATURE)
+      Bootstrap::MacOSX::App.install(DOCKER_APP_NAME, DOCKER_SOURCE_URL)
     end
   end
-
+  
   desc 'Uninstall Docker'
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      puts 'Use Docker app -> Settings -> Uninstall to remove'
+      sh "/Applications/Docker.app/Contents/MacOS/Docker --uninstall"
+      Bootstrap::MacOSX::App.uninstall(DOCKER_APP_NAME)
     end
   end
 
+  namespace 'beta' do
+    desc 'Install Docker Beta'
+    task :install do
+      case RUBY_PLATFORM
+      when /darwin/
+        Bootstrap::MacOSX::App.install(DOCKER_APP_NAME, DOCKER_BETA_SOURCE_URL)
+      end
+    end
+  end
+  
   namespace 'kitematic' do
     desc 'Install Kitematic'
     task :install do
