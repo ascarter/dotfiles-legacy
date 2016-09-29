@@ -1,8 +1,8 @@
 # Java JDK
 
-JDK_PKG_NAME = 'JDK 8 Update 92'.freeze
-JDK_PKG_IDS = %w(com.oracle.jdk8u92 com.oracle.jre).freeze
-JDK_SOURCE_URL = 'http://download.oracle.com/otn-pub/java/jdk/8u92-b14/jdk-8u92-macosx-x64.dmg'.freeze
+JDK_PKG_NAME = 'JDK 8 Update 101'.freeze
+JDK_PKG_IDS = %w(com.oracle.jdk8u101 com.oracle.jre).freeze
+JDK_SOURCE_URL = 'http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-macosx-x64.dmg'.freeze
 JDK_DOWNLOAD_HEADERS = {
   'Cookie' => 'oraclelicense=accept-securebackup-cookie'
 }.freeze
