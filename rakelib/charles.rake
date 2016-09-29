@@ -1,7 +1,7 @@
 # charles tasks
 
 CHARLES_APP_NAME = 'Charles'.freeze
-CHARLES_SOURCE_URL = 'https://charles-52f.kxcdn.com/release/4.0/charles-proxy-4.0.dmg'.freeze
+CHARLES_SOURCE_URL = 'https://www.charlesproxy.com/assets/release/4.0.1/charles-proxy-4.0.1.dmg'.freeze
 
 namespace 'charles' do
   desc 'Install charles'
