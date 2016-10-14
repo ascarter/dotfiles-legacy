@@ -1,7 +1,7 @@
 # Emacs tasks
 
 EMACS_APP_NAME = 'Emacs'.freeze
-EMACS_SOURCE_URL = 'http://emacsformacosx.com/emacs-builds/Emacs-24.5-1-universal.dmg'.freeze
+EMACS_SOURCE_URL = 'https://emacsformacosx.com/emacs-builds/Emacs-25.1-1-universal.dmg'.freeze
 
 namespace 'emacs' do
   desc 'Install Emacs'
