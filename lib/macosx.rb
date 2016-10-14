@@ -207,6 +207,30 @@ module Bootstrap
       module_function :install
     end
 
+    # Mac OS X Font
+    module Font
+      def install(font, url, font_type: 'otf', headers: {}, sig: {}, owner: Bootstrap.current_user, group: 'admin')
+        Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+          src = File.join(d, "#{font}.#{font_type}")
+          sh "open #{d}"
+          STDIN.gets
+          puts "Installing #{font} from #{src}"
+          Dir.glob(src).each do |f|
+            dest = File.join(Bootstrap.font_dir, File.basename(f))
+            puts "Copying #{f} to #{dest}"
+            FileUtils.cp(f, dest)
+          end
+        end
+      end
+      module_function :install
+
+      def uninstall(font, font_type: 'otf')
+        src = File.join(Bootstrap.font_dir, "#{font}.#{font_type}")
+        Dir.glob(src).each { |f| FileUtils.rm(f) }
+      end
+      module_function :uninstall
+    end
+
     # Mac OS X color picker
     module ColorPicker
       def install(picker, url, headers: {})

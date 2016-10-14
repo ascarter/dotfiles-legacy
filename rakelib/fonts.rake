@@ -2,6 +2,9 @@
 
 FONT_DIR = File.join(Bootstrap.home_dir, 'Library', 'Fonts')
 
+FONT_AWESOME_SOURCE_URL = 'http://fontawesome.io/assets/font-awesome-4.6.3.zip'.freeze
+SFMONO_SOURCE_PATH = '/Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono*.otf'.freeze
+
 namespace 'fonts' do
   task default: [:all]
 
@@ -31,14 +34,27 @@ namespace 'fonts' do
   namespace 'sfmono' do
     desc 'Install SF Mono (requires Xcode 8 or later)'
     task :install do
-      src = '/Applications/Xcode.app/Contents/SharedFrameworks/DVTKit.framework/Versions/A/Resources/Fonts/SFMono*.otf'
-      Dir.glob(src).each { |f| FileUtils.cp(f, File.join(FONT_DIR, File.basename(f))) }
+      Dir.glob(SFMONO_SOURCE_PATH).each do |f|
+        FileUtils.cp(f, File.join(FONT_DIR, File.basename(f)))
+      end
     end
 
     desc 'Uninstall SF mono'
     task :uninstall do
-      src = File.join(FONT_DIR, 'SFMono*.otf')
-      Dir.glob(src).each { |f| FileUtils.rm(f) }
+      Bootstrap::MacOSX::Font.uninstall('SFMono*')
     end
   end
+
+  namespace 'fontawesome' do
+    desc 'Install FontAwesome'
+    task :install do
+      Bootstrap::MacOSX::Font.install('FontAwesome', FONT_AWESOME_SOURCE_URL)
+    end
+
+    desc 'Uninstall FontAwesome'
+    task :uninstall do
+      Bootstrap::MacOSX::Font.uninstall('FontAwesome')
+    end
+  end
+
 end

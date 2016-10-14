@@ -1,0 +1,14 @@
+#!/bin/sh
+ 
+parameter=""
+if [ -z "$1" ]; then
+	echo "usage: `basename $0` [  | - ]"
+elif [ "$1" = "-" ]; then
+	parameter=`cat /dev/stdin`
+else
+	parameter="$*"
+fi
+ 
+if [ ! -z "$parameter" ]; then
+	open "xscope:text=$parameter"
+fi

@@ -111,6 +111,14 @@ module Bootstrap
   end
   module_function :file_remove
 
+  def font_dir
+    case RUBY_PLATFORM
+    when /darwin/
+      return File.join(home_dir, 'Library', 'Fonts')
+    end
+  end
+  module_function :font_dir
+
   # sudo
 
   def sudo(cmd)
