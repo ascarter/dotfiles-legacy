@@ -67,7 +67,7 @@ task :uninstall do
   src = File.expand_path('src')
   Dir.new(src).each do |file|
     unless %w(. ..).include?(file)
-      target = File.join(home_dir(), ".#{file}")
+      target = File.join(Bootstrap.home_dir(), ".#{file}")
       file_remove(target)
     end
   end
