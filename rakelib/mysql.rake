@@ -1,15 +1,19 @@
 # MySQL
 
-MYSQL_PKG_NAME = 'mysql-5.7.12-osx10.11-x86_64'.freeze
-MYSQL_PKG_ID = 'org.mysql'.freeze
-MYSQL_SRC_URL = 'http://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.12-osx10.11-x86_64.dmg'.freeze
+MYSQL_PKG_NAME = 'mysql-5.7.16-osx10.11-x86_64'.freeze
+MYSQL_PKG_IDS= %w(com.mysql.mysql com.mysql.launchd com.mysql.prefpane).freeze
+MYSQL_SOURCE_URL = 'http://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.16-osx10.11-x86_64.dmg'.freeze
+MYSQL_SIGNATURE = { md5: 'b317aaa342496b4d4feb93972c7eb9a1' }.freeze
+MYSQL_ROOT = '/usr/local/mysql'.freeze
 
 namespace 'mysql' do
   desc 'Install MySQL server'
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::Pkg.install(MYSQL_PKG_NAME, MYSQL_PKG_ID, MYSQL_PKG_URL)
+      Bootstrap::MacOSX::Pkg.install(MYSQL_PKG_NAME, MYSQL_PKG_IDS[0], MYSQL_SOURCE_URL, sig: MYSQL_SIGNATURE)
+      Bootstrap::MacOSX.path_helper('mysql', [File.join(MYSQL_ROOT, 'bin')])
+      Bootstrap::MacOSX.path_helper('mysql', [File.join(MYSQL_ROOT, 'man')], 'manpaths')
     end
   end
 
@@ -17,7 +21,8 @@ namespace 'mysql' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::Pkg.uninstall(MYSQL_PKG_ID)
+      MYSQL_PKG_IDS.each { |p| Bootstrap::MacOSX::Pkg.uninstall(p) }
+      %w(paths manpaths).each { |t| Bootstrap::MacOSX.rm_path_helper('mysql', t) }
     end
   end
 
