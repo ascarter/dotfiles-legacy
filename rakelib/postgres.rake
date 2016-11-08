@@ -1,7 +1,7 @@
 # PostgreSQL
 
 POSTGRES_APP_NAME = 'Postgres'.freeze
-POSTGRES_SOURCE_URL = 'https://github.com/PostgresApp/PostgresApp/releases/download/9.6.0/Postgres-9.6.0.zip'.freeze
+POSTGRES_SOURCE_URL = 'https://github.com/PostgresApp/PostgresApp/releases/download/9.6.1/Postgres-9.6.1.zip'.freeze
 
 namespace 'postgres' do
   desc 'Install PostgreSQL'
