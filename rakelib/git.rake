@@ -17,7 +17,7 @@ namespace 'git' do
       userDefaultSign = Bootstrap::Git::Config.get('commit.gpgsign')
     end
 
-    if userName.empty?
+    if userName.nil? || userName.empty?
       # Get user and email
       uinfo = Etc.getpwnam(Etc.getlogin)
       userName = uinfo.gecos
