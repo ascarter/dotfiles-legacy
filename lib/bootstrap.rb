@@ -46,7 +46,7 @@ module Bootstrap
   module_function :windows?
 
   def prompt(message, default = nil)
-    print "Enter #{message}#{" [#{default}]" unless defult.nil?}: "
+    print "Enter #{message}#{" [#{default}]" unless default.nil?}: "
     response = $stdin.gets.chomp
     response.empty? ? default : response
   end
