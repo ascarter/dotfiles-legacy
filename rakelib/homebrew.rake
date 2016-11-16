@@ -16,7 +16,7 @@ if Bootstrap.macosx?
         Bootstrap.sudo_mkdir(HOMEBREW_ROOT)
         Bootstrap.sudo_chgrp(HOMEBREW_ROOT, 'admin')
         Bootstrap.sudo_chmod(HOMEBREW_ROOT)
-        system "curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C #{homebrew_root}"
+        system "curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C #{HOMEBREW_ROOT}"
       end
 
       Bootstrap::MacOSX.path_helper('homebrew', [File.join(HOMEBREW_ROOT, 'bin')])
@@ -74,9 +74,11 @@ if Bootstrap.macosx?
 
       desc 'Uninstall tools'
       task :uninstall do
-        HOMEBREW_TOOLS.each { |p| Bootstrap::Homebrew.uninstall(p) }
-        HOMEBREW_TAPS.each { |p| Bootstrap::Homebrew.untap(p) }
-        HOMEBREW_OVERRIDES.each { |p| Bootstrap.usr_bin_rm(p) }
+      	if File.exist?(File.join(HOMEBREW_ROOT, 'bin', 'brew'))
+					HOMEBREW_TOOLS.each { |p| Bootstrap::Homebrew.uninstall(p) }
+					HOMEBREW_TAPS.each { |p| Bootstrap::Homebrew.untap(p) }
+					HOMEBREW_OVERRIDES.each { |p| Bootstrap.usr_bin_rm(p) }
+				end
       end
     end
   end

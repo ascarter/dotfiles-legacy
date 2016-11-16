@@ -10,6 +10,7 @@ module Bootstrap
       if File.exist?(fullpath)
         warn "#{fullpath} already exists"
       else
+      	Bootstrap.sudo "mkdir -p #{File.dirname(fullpath)}"
         Bootstrap.sudo "touch #{fullpath}"
         paths.each { |p| Bootstrap.sudo "echo '#{p}' >> #{fullpath}" }
       end

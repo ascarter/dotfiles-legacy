@@ -82,18 +82,21 @@ when /darwin/
   desc 'Install Mac development environment'
   task :macdev => [
     :install,
+    '1password:install',
+    'homebrew:install',
     'android:install',
     'bbedit:install',
     'coderunner:install',
     'colorpicker:install',
+    'emacs:install',
     'github:install',
     'golang:install',
-    'homebrew:install',
     'icloud:install',
     'intellij:install',
     'mysql:sequelpro:install',
+    'paw:install',
     'postgres:install',
-    'safari:install',
+    'sketch:install',
     'xquartz:install',
   ]
 when /linux/
