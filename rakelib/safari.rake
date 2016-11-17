@@ -2,9 +2,9 @@
 
 if Bootstrap.macosx?
   SAFARI_APP_NAME = 'Safari Technology Preview'.freeze
-  SAFARI_PKG_ID = 'com.apple.pkg.SafariTechPreviewElCapitan'.freeze
+  SAFARI_PKG_ID = 'com.apple.pkg.SafariTechPreview'.freeze
   SAFARI_PKG_NAME = 'Safari Technology Preview'.freeze
-  SAFARI_SOURCE_URL = 'http://appldnld.apple.com/STP/SafariTechnologyPreview.dmg'.freeze
+  SAFARI_SOURCE_URL = 'https://secure-appldnld.apple.com/STP/031-91487-2016111-55B288AC-CBDD-4422-815E-CEEA2C345EE7/SafariTechnologyPreview.dmg'.freeze
 
   namespace 'safari' do
     desc 'Install Safari Developer Preview'
