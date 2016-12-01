@@ -36,7 +36,7 @@ namespace 'rbenv' do
     end
 
     default_gem_file = File.join(rbenv_root, 'default-gems')
-    default_gems = %w(gem-ctags bundler)
+    default_gems = %w(gem-ctags bundler rubocop)
     if File.exist?(default_gem_file)
       warn "#{default_gem_file} already exists"
     else
