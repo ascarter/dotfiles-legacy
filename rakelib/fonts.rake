@@ -2,7 +2,7 @@
 
 FONT_DIR = File.join(Bootstrap.home_dir, 'Library', 'Fonts')
 
-FONT_AWESOME_SOURCE_URL = 'http://fontawesome.io/assets/font-awesome-4.6.3.zip'.freeze
+FONT_AWESOME_SOURCE_URL = 'http://fontawesome.io/assets/font-awesome-4.7.0.zip'.freeze
 SFMONO_SOURCE_PATH = '/Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono*.otf'.freeze
 
 namespace 'fonts' do
@@ -48,7 +48,8 @@ namespace 'fonts' do
   namespace 'fontawesome' do
     desc 'Install FontAwesome'
     task :install do
-      Bootstrap::MacOSX::Font.install('FontAwesome', FONT_AWESOME_SOURCE_URL)
+      fontPath = File.join(File.basename(FONT_AWESOME_SOURCE_URL, '.zip'), 'fonts', 'FontAwesome')
+      Bootstrap::MacOSX::Font.install(fontPath, FONT_AWESOME_SOURCE_URL)
     end
 
     desc 'Uninstall FontAwesome'

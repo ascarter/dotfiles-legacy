@@ -213,8 +213,6 @@ module Bootstrap
       def install(font, url, font_type: 'otf', headers: {}, sig: {}, owner: Bootstrap.current_user, group: 'admin')
         Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
           src = File.join(d, "#{font}.#{font_type}")
-          sh "open #{d}"
-          STDIN.gets
           puts "Installing #{font} from #{src}"
           Dir.glob(src).each do |f|
             dest = File.join(Bootstrap.font_dir, File.basename(f))
