@@ -2,7 +2,7 @@
 
 if Bootstrap.macosx?
   HOMEBREW_ROOT = '/opt/homebrew'.freeze
-  HOMEBREW_TOOLS = %w(awscli bash-completion gist graphviz htop jq memcached protobuf redis unar wget).freeze
+  HOMEBREW_TOOLS = %w(awscli bash-completion gist graphviz htop jq memcached redis sqlite3 unar wget).freeze
   HOMEBREW_TAPS = %w(universal-ctags/universal-ctags).freeze
   HOMEBREW_OVERRIDES = %w(ctags).freeze
 
@@ -14,6 +14,7 @@ if Bootstrap.macosx?
         warn 'homebrew installed'
       else
         Bootstrap.sudo_mkdir(HOMEBREW_ROOT)
+        Bootstrap.sudo_chown(HOMEBREW_ROOT)
         Bootstrap.sudo_chgrp(HOMEBREW_ROOT, 'admin')
         Bootstrap.sudo_chmod(HOMEBREW_ROOT)
         system "curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C #{HOMEBREW_ROOT}"
@@ -45,7 +46,7 @@ if Bootstrap.macosx?
 
     desc 'Uninstall homebrew'
     task uninstall: ['homebrew:tools:uninstall'] do
-      Bootstrap.sudo_rmdir homebrew_root
+      Bootstrap.sudo_rmdir HOMEBREW_ROOT
       %w(paths manpaths).each { |t| Bootstrap::MacOSX.rm_path_helper('homebrew', t) }
       installed_dirs = [
         '~/Library/Caches/Homebrew',
