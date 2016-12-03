@@ -3,7 +3,7 @@
 if Bootstrap.macosx?
   XQUARTZ_PKG_NAME = 'XQuartz'.freeze
   XQUARTZ_PKG_ID = 'org.macosforge.xquartz.pkg'.freeze
-  XQUARTZ_SOURCE_URL = 'https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.8.dmg'.freeze
+  XQUARTZ_SOURCE_URL = 'https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.11.dmg'.freeze
 
   namespace 'xquartz' do
     desc 'Install XQuartz X11'
