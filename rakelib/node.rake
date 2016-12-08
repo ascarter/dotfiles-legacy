@@ -4,7 +4,7 @@ NODEJS_PKG_IDS = %w(org.nodejs.node.pkg).freeze
 NODEJS_PKG_NAME = 'node-v7.2.0'.freeze
 NODEJS_SOURCE_URL = 'https://nodejs.org/dist/v7.2.0/node-v7.2.0.pkg'.freeze
 
-NPM_PKGS = %w(bower eslint grunt-cli gulp-cli js-beautify yarn).freeze
+NPM_PKGS = %w(bower eslint grunt-cli gulp-cli js-beautify webpack yarn).freeze
 
 namespace 'node' do
   desc 'Install node.js'
