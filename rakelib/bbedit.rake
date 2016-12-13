@@ -2,7 +2,7 @@
 
 if Bootstrap.macosx?
   BBEDIT_APP_NAME = 'BBEdit'.freeze
-  BBEDIT_SOURCE_URL = 'https://s3.amazonaws.com/BBSW-download/BBEdit_11.6.2.dmg'.freeze
+  BBEDIT_SOURCE_URL = 'https://s3.amazonaws.com/BBSW-download/BBEdit_11.6.3.dmg'.freeze
 
   BBEDIT_AUTOMATOR_PKG_NAME = 'BBEditAutomatorActionsInstaller-11.5'.freeze
   BBEDIT_AUTOMATOR_PKG_ID = '.automatorActions'.freeze
