@@ -1,7 +1,7 @@
 # firefox tasks
 
 FIREFOX_APP_NAME = 'Firefox'.freeze
-FIREFOX_SOURCE_URL = 'https://download.mozilla.org/?product=firefox-49.0.1-SSL&os=osx&lang=en-US'.freeze
+FIREFOX_SOURCE_URL = 'https://download.mozilla.org/?product=firefox-50.1.0-SSL&os=osx&lang=en-US'.freeze
 
 namespace 'firefox' do
   desc 'Install firefox'
