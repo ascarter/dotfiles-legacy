@@ -1,7 +1,10 @@
 #  -*- mode: unix-shell-script; -*-
 
 # Add ssh keys added via ssh-add -K <key>
-ssh-add -A
+case $(uname) in
+Darwin )
+	ssh-add -A
+esac
 
 # ========================================
 # Path settings
@@ -18,19 +21,9 @@ fi
 
 # Homebrew
 if [ -n "`which brew`" ]; then
-    BREW_PREFIX=`brew --prefix`
+	BREW_PREFIX=`brew --prefix`
 	export HOMEBREW_NO_EMOJI=1
 	export HOMEBREW_NO_ANALYTICS=1
-	
-	# Extend gcc library/include paths to homebrew
-# 	if [ -d ${BREW_PREFIX}/lib ]; then
-#     	export LIBRARY_PATH=${BREW_PREFIX}/lib
-#     fi
-#     if [ -d ${BREW_PREFIX}/include ]; then
-#     	export C_INCLUDE_PATH=${BREW_PREFIX}/include
-# 	    export CPLUS_INCLUDE_PATH=${BREW_PREFIX}/include
-# 	    export OBJC_INCLUDE_PATH=${BREW_PREFIX}/include
-#     fi
 fi
 
 # Go
@@ -40,7 +33,7 @@ if [ -d ~/.go ]; then
 fi
 
 if [ -d ~/.gows ]; then
-    source ~/.gows/gows
+		source ~/.gows/gows
 fi
 
 # Ruby (rbenv)
@@ -48,26 +41,6 @@ if [ -d ~/.rbenv ]; then
 	export PATH=~/.rbenv/bin:${PATH}
 	eval "$(rbenv init -)"
 fi
-
-# Add local bin directory for Ruby/Bundler
-# export PATH=./bin:${PATH}
-
-# Python
-# case $(uname) in
-# Darwin )
-# 	# Apple default python:
-# 	# /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/Python.framework/Versions/2.7
-# 	# Setting PATH for Python 2.7
-# 	PYROOT=$(python-config --exec-prefix)
-# 	PATH="${PYROOT}/bin:${PATH}"
-# 	export PATH
-# esac
-
-# Python virtualenv
-# export WORKON_HOME=$HOME/.virtualenvs
-# if [[ -e ${PYROOT}/bin/virtualenvwrapper.sh ]]; then
-#   . ${PYROOT}/bin/virtualenvwrapper.sh
-# fi
 
 # Java
 if [[ -e /usr/libexec/java_home ]]; then
@@ -78,12 +51,12 @@ if [[ -e /usr/libexec/java_home ]]; then
 		export JAVA_HOME=`/usr/libexec/java_home`
 	fi
 else
-    export JAVA_HOME=$(readlink -f `which java` | sed "s:bin/java::")
+	export JAVA_HOME=$(readlink -f `which java` | sed "s:bin/java::")
 fi
 
 # Android
 if [ -d ~/Library/Android/sdk ]; then
-    export ANDROID_HOME=~/Library/Android/sdk
+	export ANDROID_HOME=~/Library/Android/sdk
 	export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 fi
 
@@ -113,14 +86,14 @@ batterycharge() { echo `python ~/.bin/batterycharge.py $*` 2>/dev/null ; }
 # If bb is passed a directory, cd to it and open it in BBEdit
 # If bb is passed a file, open it in BBEdit
 bb() {
-    if [[ -z "$1" ]]; then
-        bbedit --launch
-    else
-        bbedit "$1"
-        if [[ -d "$1" ]]; then
-            cd "$1"
-        fi
-    fi
+	if [[ -z "$1" ]]; then
+		bbedit --launch
+	else
+		bbedit "$1"
+		if [[ -d "$1" ]]; then
+			cd "$1"
+		fi
+	fi
 }
 
 # Open URL source in BBEdit
@@ -139,17 +112,17 @@ bbrun() { ($* 2>&1) | bbedit --new-window +1 -t "$*" ; }
 # Open query in dash
 dashq() {
 	if [ "${2}" ]; then
-        open dash://${1}:${2}
-    else
-        open dash://${1}
-    fi
+		open dash://${1}:${2}
+	else
+		open dash://${1}
+	fi
 }
 
 # Fix open with list in Finder
 fixow() {
-  /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain user
-  killall Finder
-  echo "Open With has been rebuilt, Finder will relaunch"
+	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain user
+	killall Finder
+	echo "Open With has been rebuilt, Finder will relaunch"
 }
 
 # Open gem doc page
@@ -170,11 +143,11 @@ mailattach() { uuencode ${1} `basename $1` | mail -s "${2}" ${3} ; }
 # Open man page with default x-man handler
 # On Mac OS X, opens a nice terminal window
 manx() {
-    if [ "${2}" ]; then
-        open x-man-page://${1}/${2}
-    else
-    	open x-man-page://${1}
-    fi
+	if [ "${2}" ]; then
+		open x-man-page://${1}/${2}
+	else
+		open x-man-page://${1}
+	fi
 }
 
 # Open man page as PDF
@@ -198,7 +171,7 @@ tabname() { printf "\e]1;${1}\a" ; }
 winname() { printf "\e]2;${1}\a" ; }
 
 # Search up path until target directory is found
-upsearch() {                                                               
+upsearch() {
 	local P=$(pwd)
 	while [[ "$P" != "" && ! -e "$P/$1" ]]; do
 		P=${P%/*}
@@ -224,14 +197,18 @@ if [ -e /usr/local/bin/bbedit ]; then
     export VISUAL="bbedit"
     export LESSEDIT='bbedit -l %lm %f'
     export TEXEDIT='bbedit -w -l %d "%s"'
+elif [ -e /usr/local/bin/bbedit ]; then
+	# bbedit
+	export EDITOR="bbedit -w"
+	export VISUAL="bbedit"
+	export LESSEDIT='bbedit -l %lm %f'
+	export TEXEDIT='bbedit -w -l %d "%s"'
 else
-    # vim
-    export EDITOR="mvim"
-    export GIT_EDITOR="${EDITOR} --nofork"
-    export SVN_EDITOR="${EDITOR} --nofork"
-    export VISUAL="mvim"
-    export LESSEDIT='vim ?lm+%lm. %f'
-    export TEXEDIT='vim +%d %s'
+	# vim
+	export EDITOR="mvim --nofork"
+	export VISUAL="mvim"
+	export LESSEDIT='vim ?lm+%lm. %f'
+	export TEXEDIT='vim +%d %s'
 fi
 
 # less
@@ -269,7 +246,7 @@ Darwin )
 		local REPLACE='%20'
 		local PWD_URL="file://$HOSTNAME${PWD//$SEARCH/$REPLACE}"
 		printf '\e]7;%s\a' "$PWD_URL"
-    }
+	}
 esac
 
 prompt_command() {
@@ -286,7 +263,7 @@ prompt_command() {
 	else
 		PROMPT_DIR="\w"
 	fi
-	
+
 	if [ $TERM = "xterm-256color" -o $TERM = "xterm-color" -o $TERM = "dtterm" -o $TERM = "linux" ]; then
 		export CLICOLOR=1
 		export GIT_PS1_SHOWCOLORHINTS=1
@@ -305,9 +282,9 @@ PROMPT_COMMAND=prompt_command
 export PROMPT_DIRTRIM=3
 
 if which dircolors &>/dev/null; then
-    if [ -e ~/.dircolors ]; then
-        eval `dircolors ~/.dircolors`
-    fi
+	if [ -e ~/.dircolors ]; then
+			eval `dircolors ~/.dircolors`
+	fi
 else
 	terminal_theme dark
 fi
@@ -323,16 +300,16 @@ Darwin )
 	alias ll='ls -l'
 	alias la='ls -a'
 	alias lsz="ls -lAh | grep -m 1 total | sed 's/total //'"
-	
+
 	# System shortcuts
 	alias lockscreen='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
-	
+
 	# System information
 	alias about='system_profiler SPHardwareDataType SPStorageDataType'
 	alias aboutsys='system_profiler SPSoftwareDataType'
 	# Use sw_vers for version
 	alias sysver='sw_vers'
-	
+
 	# Airport utility
 	alias airport=/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport
 
@@ -351,13 +328,13 @@ Darwin )
 	alias bbtags='bbedit --maketags'
 
 	# Dev tools
-    alias gtower='gittower $(P=$(pwd); while [[ "$P" != "" && ! -e "$P/.git" ]]; do P=${P%/*}; done; echo "$P")'
+		alias gtower='gittower $(P=$(pwd); while [[ "$P" != "" && ! -e "$P/.git" ]]; do P=${P%/*}; done; echo "$P")'
 	alias extags='/opt/homebrew/bin/ctags'
 	alias eclipse='open /Developer/Applications/Eclipse.app'
 	alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
 	alias terminal-notifier='/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier'
 	alias verifyxcode='spctl --assess --verbose /Applications/Xcode.app'
-	
+
 	# Java
 	alias java_home='/usr/libexec/java_home'
 
@@ -371,7 +348,7 @@ Linux )
 	alias la='ls -A'
 	alias ll='ls -l'
 	alias lsz="ls -lAh | grep -m 1 total | sed 's/total //'"
-	
+
 	alias glock='gnome-screensaver-command --lock'
 	alias xlock='xscreensaver-command -lock'
 	;;
@@ -454,9 +431,9 @@ alias whistlertom='curl -o ~/Documents/whistler_tom.pdf -L "http://online.whistl
 
 # Source any user bash completion scripts
 if [ -d ~/.bash_completion.d ]; then
-    for f in ~/.bash_completion.d/*; do
-        source ${f}
-    done
+	for f in ~/.bash_completion.d/*; do
+		source ${f}
+	done
 fi
 
 # Source docker completion
@@ -468,13 +445,13 @@ fi
 
 # Homebrew - will also call user's ~/.bash_completion too
 if [ -n "`which brew`" ]; then
-    if [ -f `brew --prefix`/etc/bash_completion ]; then
-        . `brew --prefix`/etc/bash_completion
-    fi
-    
-    if [ -e `brew --prefix`/bin/aws_completer ]; then
-	    complete -C aws_completer aws
-    fi
+	if [ -f `brew --prefix`/etc/bash_completion ]; then
+		. `brew --prefix`/etc/bash_completion
+	fi
+
+	if [ -e `brew --prefix`/bin/aws_completer ]; then
+		complete -C aws_completer aws
+	fi
 fi
 
 # Pip
