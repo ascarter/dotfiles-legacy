@@ -189,14 +189,10 @@ done
 # ========================================
 
 # Editor
-if [ -e /usr/local/bin/bbedit ]; then
-    # bbedit
-    export GIT_EDITOR="bbedit -w"
-    export SVN_EDITOR="bbedit -w"
-    export EDITOR="bbedit -w"
-    export VISUAL="bbedit"
-    export LESSEDIT='bbedit -l %lm %f'
-    export TEXEDIT='bbedit -w -l %d "%s"'
+if [ -e /usr/local/bin/atom ]; then
+	# Atom
+	export EDITOR="atom --wait"
+	export VISUAL="atom"
 elif [ -e /usr/local/bin/bbedit ]; then
 	# bbedit
 	export EDITOR="bbedit -w"
