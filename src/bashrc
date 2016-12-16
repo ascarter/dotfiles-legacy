@@ -375,7 +375,7 @@ alias ipv="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 alias wanip="dig +short myip.opendns.com @resolver1.opendns.com"
 
 # SSH
-alias sshagentstart='eval "$(ssh-agent -s)"'
+alias sshagentstart='eval "$(ssh-agent -s)" && ssh-add -A'
 
 # AWS
 alias awst='aws --output table'
