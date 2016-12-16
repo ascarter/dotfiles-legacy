@@ -189,11 +189,7 @@ done
 # ========================================
 
 # Editor
-if [ -e /usr/local/bin/atom ]; then
-	# Atom
-	export EDITOR="atom --wait"
-	export VISUAL="atom"
-elif [ -e /usr/local/bin/bbedit ]; then
+if [ -e /usr/local/bin/bbedit ]; then
 	# bbedit
 	export EDITOR="bbedit -w"
 	export VISUAL="bbedit"
@@ -206,6 +202,13 @@ else
 	export LESSEDIT='vim ?lm+%lm. %f'
 	export TEXEDIT='vim +%d %s'
 fi
+
+# Other editors
+# if [ -e /usr/local/bin/atom ]; then
+# 	# Atom
+# 	export EDITOR="atom --wait"
+# 	export VISUAL="atom"
+# fi
 
 # less
 export PAGER=less
