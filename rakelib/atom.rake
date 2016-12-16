@@ -2,7 +2,7 @@
 
 ATOM_APP_NAME = 'Atom'.freeze
 ATOM_SRC_URL = 'https://atom.io/download/mac'.freeze
-ATOM_PKGS = %w(dash atom-ctags).freeze
+ATOM_PKGS = %w(dash file-icons gloom native-ui nord-atom-syntax nord-atom-ui seti-syntax seti-ui).freeze
 
 namespace 'atom' do
   desc 'Install atom'
