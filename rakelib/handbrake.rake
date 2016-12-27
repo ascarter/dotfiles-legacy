@@ -1,10 +1,10 @@
 # HandBrake tasks
 
 HANDBRAKE_APP_NAME = 'Handbrake'.freeze
-HANDBRAKE_SRC_URL = 'http://handbrake.fr/rotation.php?file=HandBrake-0.10.5-MacOSX.6_GUI_x86_64.dmg'.freeze
+HANDBRAKE_SRC_URL = 'https://handbrake.fr/rotation.php?file=HandBrake-1.0.0.dmg'.freeze
 
 HANDBRAKE_CLI_APP_NAME = 'HandbrakeCLI'.freeze
-HANDBRAKE_CLI_SRC_URL = 'https://handbrake.fr/rotation.php?file=HandBrake-0.10.5-MacOSX.6_CLI_x86_64.dmg'.freeze
+HANDBRAKE_CLI_SRC_URL = 'https://handbrake.fr/rotation.php?file=HandBrakeCLI-1.0.0.dmg'.freeze
 
 namespace 'handbrake' do
   desc 'Install HandBrake'
@@ -31,7 +31,7 @@ namespace 'handbrake' do
     case RUBY_PLATFORM
     when /darwin/
       Bootstrap::Homebrew.uninstall('libdvdcss')
-      Bootstrap::MacOSX::App.remove(HANDBRAKE_APP_NAME)
+      Bootstrap::MacOSX::App.uninstall(HANDBRAKE_APP_NAME)
       Bootstrap.usr_bin_rm('handbrake')
       Bootstrap.usr_bin_rm(HANDBRAKE_CLI_APP_NAME)
     end
