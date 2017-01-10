@@ -3,6 +3,9 @@
 POSTGRES_APP_NAME = 'Postgres'.freeze
 POSTGRES_SOURCE_URL = 'https://github.com/PostgresApp/PostgresApp/releases/download/v2.0.1/Postgres-2.0.1.dmg'.freeze
 
+PGADMIN_APP_NAME = 'pgAdmin 4'.freeze
+PGADMIN_SOURCE_URL = 'https://ftp.postgresql.org/pub/pgadmin3/pgadmin4/v1.1/macos/pgadmin4-1.1.dmg'.freeze
+
 namespace 'postgres' do
   desc 'Install PostgreSQL'
   task :install do
@@ -24,4 +27,22 @@ namespace 'postgres' do
 
   desc 'Update PostgreSQL to latest version'
   task update: [:uninstall, :install]
+
+  namespace 'pgadmin' do
+    desc 'Install pgAdmin'
+    task :install do
+      case RUBY_PLATFORM
+      when /darwin/
+        Bootstrap::MacOSX::App.install(PGADMIN_APP_NAME, PGADMIN_SOURCE_URL)
+      end
+    end
+
+    desc 'Uninstall pgAdmin'
+    task :uninstall do
+      case RUBY_PLATFORM
+      when /darwin/
+        Bootstrap::MacOSX::App.uninstall(PGADMIN_APP_NAME)
+      end
+    end
+  end
 end
