@@ -187,15 +187,20 @@ module Bootstrap
   module_function :sudo_chown
 
   # usr tools
+  
+  def usr_bin_cmd(cmd)
+    return File.join('/usr/local/bin', cmd)
+  end
+  module_function :usr_bin_cmd
 
   def usr_bin_exists?(cmd)
-    target = File.join('/usr/local/bin', cmd)
+    target = usr_bin_cmd(cmd)
     File.exist?(target)
   end
   module_function :usr_bin_exists?
 
   def usr_bin_cp(src, dest = nil)
-    target = File.join('/usr/local/bin', dest.nil? ? File.basename(src) : dest)
+    target = usr_bin_cmd(dest.nil? ? File.basename(src) : dest)
     if File.exist?(target)
       warn "#{target} already exists"
     else
@@ -205,14 +210,14 @@ module Bootstrap
   module_function :usr_bin_cp
 
   def usr_bin_rm(cmd)
-    cmd_file = File.join('/usr/local/bin', cmd)
+    cmd_file = usr_bin_cmd(cmd)
     sudo_rm(cmd_file) if File.exist?(cmd_file)
   end
   module_function :usr_bin_rm
 
   def usr_bin_ln(src, target)
     src_file = File.expand_path(src)
-    target_file = File.join('/usr/local/bin', target)
+    target_file = usr_bin_cmd(target)
     if File.exist?(target_file)
       warn "#{target} already exists"
     else
