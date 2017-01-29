@@ -1,8 +1,8 @@
 # Go language tasks
 
-GOLANG_PKG_NAME = 'go1.7.4.darwin-amd64'.freeze
+GOLANG_PKG_NAME = 'go1.7.5.darwin-amd64'.freeze
 GOLANG_PKG_ID = 'com.googlecode.go'.freeze
-GOLANG_SOURCE_URL = 'https://storage.googleapis.com/golang/go1.7.4.darwin-amd64.pkg'.freeze
+GOLANG_SOURCE_URL = 'https://storage.googleapis.com/golang/go1.7.5.darwin-amd64.pkg'.freeze
 
 namespace 'golang' do
   desc 'Install Go language'
