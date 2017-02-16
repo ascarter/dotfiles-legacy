@@ -62,7 +62,7 @@ module Bootstrap
   module Yarn
     def install(pkg)
       if !installed?(pkg)
-        Bootstrap.sudo "yarn global add #{pkg}"
+        system "yarn global add #{pkg}"
       else
         warn "#{pkg} already installed"
       end
@@ -70,13 +70,13 @@ module Bootstrap
     module_function :install
 
     def update(pkg = '')
-      Bootstrap.sudo "yarn global update #{pkg}"
+      system "yarn global update #{pkg}"
     end
     module_function :update
 
     def uninstall(pkg)
       if installed?(pkg)
-        Bootstrap.sudo "yarn global remove #{pkg}"
+        system "yarn global remove #{pkg}"
       else
         warn "#{pkg} is not installed"
       end
@@ -93,7 +93,7 @@ module Bootstrap
 
     def list
       packages = []
-      `sudo yarn global ls --no-emoji --no-progress 2>&1`.split("\n").each do |line|
+      `yarn global ls --no-emoji --no-progress 2>&1`.split("\n").each do |line|
       	line.match(/^info "(\S+)"/) do |m|
       		packages.push(m[1])
       	end
