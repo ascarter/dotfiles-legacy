@@ -224,7 +224,7 @@ module Bootstrap
       module_function :install
 
       def uninstall(font, font_type: 'otf')
-        src = File.join(Bootstrap.font_dir, "#{font}.#{font_type}")
+        src = File.join(Bootstrap.font_dir, "#{font}*.#{font_type}")
         Dir.glob(src).each { |f| FileUtils.rm(f) }
       end
       module_function :uninstall
