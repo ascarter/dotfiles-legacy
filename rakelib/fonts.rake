@@ -3,6 +3,7 @@
 FONT_DIR = File.join(Bootstrap.home_dir, 'Library', 'Fonts')
 
 SFMONO_SOURCE_PATH = '/Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono*.otf'.freeze
+GOFONT_SOURCE_URL = 'https://go.googlesource.com/image/+archive/master/font/gofont/ttfs.tar.gz'.freeze
 FONT_AWESOME_SOURCE_URL = 'http://fontawesome.io/assets/font-awesome-4.7.0.zip'.freeze
 HACK_SOURCE_URL = 'https://github.com/chrissimpkins/Hack/releases/download/v2.020/Hack-v2_020-ttf.zip'.freeze
 
@@ -10,10 +11,10 @@ namespace 'fonts' do
   task default: [:all]
 
   desc 'Install all fonts'
-  task install: ['sfmono:install', 'hack:install']
+  task install: ['sfmono:install', 'gofont:install', 'hack:install']
 
   desc 'Uninstall all fonts'
-  task uninstall: ['sfmono:uninstall', 'hack:uninstall']
+  task uninstall: ['sfmono:uninstall', 'gofont:uninstall', 'hack:uninstall']
 
   #   desc "Adobe SourceCodePro"
   #   task :sourcecodepro do
@@ -42,7 +43,20 @@ namespace 'fonts' do
 
     desc 'Uninstall SF mono'
     task :uninstall do
-      Bootstrap::MacOSX::Font.uninstall('SFMono*')
+      Bootstrap::MacOSX::Font.uninstall('SFMono')
+    end
+  end
+
+  namespace 'gofont' do
+    desc 'Install Go font'
+    task :install do
+      fontPath = File.join(File.basename(GOFONT_SOURCE_URL, '.tar.gz'))
+      Bootstrap::MacOSX::Font.install('Go-*', GOFONT_SOURCE_URL, font_type: 'ttf')
+    end
+
+    desc 'Uninstall Go font'
+    task :uninstall do
+      Bootstrap::MacOSX::Font.uninstall('Go', font_type: 'ttf')
     end
   end
 
@@ -62,13 +76,12 @@ namespace 'fonts' do
   namespace 'hack' do
     desc 'Install Hack font'
     task :install do
-      fontPath = File.join(File.basename(HACK_SOURCE_URL, '.zip'))
       Bootstrap::MacOSX::Font.install('Hack-*', HACK_SOURCE_URL, font_type: 'ttf')
     end
-    
+
     desc 'Uninstall Hack font'
     task :uninstall do
-      Bootstrap::MacOSX::Font.uninstall('Hack')
+      Bootstrap::MacOSX::Font.uninstall('Hack', font_type: 'ttf')
     end
   end
 end
