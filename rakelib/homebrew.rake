@@ -17,7 +17,8 @@ if Bootstrap.macosx?
         Bootstrap.sudo_chown(HOMEBREW_ROOT)
         Bootstrap.sudo_chgrp(HOMEBREW_ROOT, 'admin')
         Bootstrap.sudo_chmod(HOMEBREW_ROOT)
-        system "curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C #{HOMEBREW_ROOT}"
+
+				system "curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C #{HOMEBREW_ROOT}"
       end
 
       Bootstrap::MacOSX.path_helper('homebrew', [File.join(HOMEBREW_ROOT, 'bin')])
@@ -46,14 +47,9 @@ if Bootstrap.macosx?
 
     desc 'Uninstall homebrew'
     task uninstall: ['homebrew:tools:uninstall'] do
-      Bootstrap.sudo_rmdir HOMEBREW_ROOT
+			system %(ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)")
       %w(paths manpaths).each { |t| Bootstrap::MacOSX.rm_path_helper('homebrew', t) }
-      installed_dirs = [
-        '~/Library/Caches/Homebrew',
-        '~/Library/Logs/Homebrew',
-        '/Library/Caches/Homebrew'
-      ]
-      installed_dirs.each { |d| Bootstrap.sudo_rmdir d }
+      Bootstrap.sudo_rmdir HOMEBREW_ROOT
     end
 
     namespace 'tools' do
