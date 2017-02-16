@@ -1,10 +1,10 @@
 # Node.js tasks
 
 NODEJS_PKG_IDS = %w(org.nodejs.node.pkg).freeze
-NODEJS_PKG_NAME = 'node-v7.2.0'.freeze
-NODEJS_SOURCE_URL = 'https://nodejs.org/dist/v7.2.0/node-v7.2.0.pkg'.freeze
+NODEJS_PKG_NAME = 'node-v7.5.0'.freeze
+NODEJS_SOURCE_URL = 'https://nodejs.org/dist/v7.5.0/node-v7.5.0.pkg'.freeze
 
-NPM_PKGS = %w(bower eslint grunt-cli gulp-cli js-beautify webpack yarn).freeze
+NPM_PKGS = %w(eslint js-beautify).freeze
 
 namespace 'node' do
   desc 'Install node.js'
@@ -17,7 +17,7 @@ namespace 'node' do
     Bootstrap::NodeJS.version
 
     # Install npm packages
-    NPM_PKGS.each { |pkg| Bootstrap::NPM.install(pkg) }
+    # NPM_PKGS.each { |pkg| Bootstrap::NPM.install(pkg) }
   end
 
   desc 'List installed modules'
