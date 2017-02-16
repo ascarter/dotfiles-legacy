@@ -28,7 +28,10 @@ fi
 
 # Go
 if [ -d ~/.go ]; then
-	export GOPATH=~/.go
+	export GOPATH=${GOPATH}:~/.go
+fi
+
+if [ -n "${GOPATH}" ]; then
 	export PATH=$PATH:${GOPATH//://bin:}/bin
 fi
 
