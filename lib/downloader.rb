@@ -15,7 +15,7 @@ module Bootstrap
           case response
           when Net::HTTPSuccess then
             case File.extname(uri.path)
-            when '.zip', '.dmg', '.pkg', '.safariextz'
+            when '.zip', '.dmg', '.pkg', '.tar.gz', '.safariextz'
               filename = File.basename(uri.path)
             when '.html'
               system "open #{src}"
@@ -31,6 +31,8 @@ module Bootstrap
                   filename = 'pkg.zip'
                 when 'application/x-apple-diskimage'
                   filename = 'pkg.dmg'
+                when 'application/x-gzip'
+                  filename = 'pkg.gz'
                 when 'plain'
                   filename = File.basename(uri.path)
                 else
@@ -77,6 +79,8 @@ module Bootstrap
         case ext
         when '.zip'
           unzip(p) { |d| yield d }
+        when '.gz'
+          gunzip(p) { |d| yield d }
         when '.dmg'
           mount_dmg(p) { |d| yield d }
         when '.pkg', '.safariextz'
@@ -95,6 +99,28 @@ module Bootstrap
     end
     module_function :unzip
 
+    def gunzip(gzipfile, exdir: nil)
+      exdir = File.dirname(gzipfile) if exdir.nil?
+      FileUtils.mkdir_p(exdir)
+      system "cd #{exdir} && gunzip -q #{gzipfile}"
+      p = File.basename(gzipfile, ".gz")
+      case File.extname(p)
+      when '.tar'
+        untar(p, exdir: exdir) { |d| yield d }
+      else
+        yield exdir
+      end
+    end
+    module_function :gunzip
+
+    def untar(tarfile, exdir: nil)
+      exdir = File.dirname(tarfile) if exdir.nil?
+      FileUtils.mkdir_p(exdir)
+      system "tar -x -f #{File.join(exdir, tarfile)} -C #{exdir}"
+      yield exdir
+    end
+    module_function :untar
+
     def mount_dmg(dmg)
       # hdiutil attach returns:
       # /dev node, a tab, content hint (if applicable), another tab, mount point
@@ -109,12 +135,17 @@ module Bootstrap
     def start_thread(response, dest)
       Thread.new do
         thread = Thread.current
-        length = thread[:length] = response['Content-Length'].to_i
-        raise 'No content' if length.zero?
+        if response.key?('Content-Length')
+          length = thread[:length] = response['Content-Length'].to_i
+          raise 'No content' if length.zero?
+        end
         open(dest, 'wb') do |io|
           response.read_body do |fragment|
             thread[:done] = (thread[:done] || 0) + fragment.length
-            thread[:progress] = thread[:done].quo(length) * 100
+            # Show progress only if repsonse provides content length
+            if response.key?('Content-Length')
+              thread[:progress] = thread[:done].quo(length) * 100
+            end
             io.write fragment
           end
         end
