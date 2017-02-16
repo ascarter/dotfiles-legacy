@@ -42,6 +42,11 @@ if [ -d ~/.rbenv ]; then
 	eval "$(rbenv init -)"
 fi
 
+# NodeJS/Yarn
+if [ -n "`which yarn`" ]; then
+	export PATH=${PATH}:`yarn global bin`
+fi
+
 # Java
 if [[ -e /usr/libexec/java_home ]]; then
 	# Verify that java is installed
