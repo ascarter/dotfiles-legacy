@@ -1,12 +1,14 @@
 module Bootstrap
   # go helpers
   module Go
-    def get(workspace, pkg)
-      ENV['GOPATH'] = workspace
-      cmd = "go get -u #{pkg}"
-      puts cmd
-      system cmd
+    def get(pkg)
+      Bootstrap.system_echo "go get -u #{pkg}"
     end
     module_function :get
+
+    def clean(pkg)
+      Bootstrap.system_echo "go clean -i #{pkg}"
+    end
+    module_function :clean
   end
 end
