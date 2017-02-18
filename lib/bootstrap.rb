@@ -119,6 +119,19 @@ module Bootstrap
   end
   module_function :font_dir
 
+  # shell
+
+  def system_echo(cmd)
+    puts cmd
+    Open3.popen2e(cmd) do |i, oe, t|
+      oe.each { |line| puts line }
+      unless t.value.success?
+        abort "FAILED: #{cmd}"
+      end
+    end
+  end
+  module_function :system_echo
+
   # sudo
 
   def sudo(cmd)
@@ -187,7 +200,7 @@ module Bootstrap
   module_function :sudo_chown
 
   # usr tools
-  
+
   def usr_bin_cmd(cmd)
     return File.join('/usr/local/bin', cmd)
   end
