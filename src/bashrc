@@ -27,16 +27,15 @@ if [ -n "`which brew`" ]; then
 fi
 
 # Go
-if [ -d ~/.go ]; then
-	export GOPATH=${GOPATH}:~/.go
-fi
-
-if [ -n "${GOPATH}" ]; then
-	export PATH=$PATH:${GOPATH//://bin:}/bin
-fi
-
-if [ -d ~/.gows ]; then
-		source ~/.gows/gows
+if [ -n "`which go`" ]; then
+	# Prefer ~/Projects, fall back to ~/workspace
+	if [ -d ~/Projects ]; then
+		export GOPATH=~/Projects
+	elif [ -d ~/workspace ]; then
+		export GOPATH=~/workspace
+	fi
+	
+	export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
 # Ruby (rbenv)
