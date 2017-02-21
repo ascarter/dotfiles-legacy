@@ -522,16 +522,6 @@ if [ -n "`which pip`" ]; then
 	eval "`pip completion --bash`"
 fi
 
-# npm
-# if [ -n "`which npm`" ]; then
-#     eval "$(npm completion -)"
-# fi
-
-# grunt
-# if [ -n "`which grunt`" ]; then
-#     eval "$(grunt --completion=bash)"
-# fi
-
 # ========================================
 # Per-machine extras
 # ========================================
