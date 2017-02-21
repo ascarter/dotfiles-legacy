@@ -77,6 +77,33 @@ namespace 'golang' do
       end
     end
 
+    task :readme do
+      readme_path = File.join(Bootstrap.workspace_dir, 'README.md')
+      unless File.exists?(readme_path)
+        # Write projects README
+        File.open(readme_path, 'w') do |f|
+          f.write <<-EOF
+# Development Projects Workspace
+
+This is a workspace for software development projects. It uses the prescribed layout
+for [Go](https://golang.org/doc/code.html#Workspaces). This layout is compatible with
+other languages as well.
+
+The following are the directories and their usage:
+
+	* `src` contains source code for projects
+	* `pkg` contains package objects (Go specific)
+	* `bin` contains executable commands and should be added to `PATH` environment variable
+
+EOF
+        end
+      end
+    end
+
+    Rake::Task[:init].enhance do
+	Rake::Task['golang:workspace:readme'].invoke
+	end
+
     desc 'Clean Go workspace'
     task :clean do
       gopath = ENV['GOPATH']
