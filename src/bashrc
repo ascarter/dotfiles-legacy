@@ -433,6 +433,8 @@ alias devgrep="grep -n -r --exclude='.svn' --exclude='*.swp' --exclude='.git'"
 alias ip='ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d " " -f2'
 # verbose ip list
 alias ipv="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
+# local ip - expects en0 | en1 | ...
+alias localip="ipconfig getifaddr"
 # external ip
 alias wanip="dig +short myip.opendns.com @resolver1.opendns.com"
 
