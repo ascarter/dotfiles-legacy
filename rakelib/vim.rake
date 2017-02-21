@@ -1,7 +1,7 @@
 # Vim tasks
 
 VIM_APP_NAME = 'MacVim'.freeze
-VIM_SOURCE_URL = 'https://github.com/macvim-dev/macvim/releases/download/snapshot-103/MacVim.dmg'.freeze
+VIM_SOURCE_URL = 'https://github.com/macvim-dev/macvim/releases/download/snapshot-127/MacVim.dmg'.freeze
 VIM_TOOLS = %w(gvim mvimdiff mview mex rmvim vim).freeze
 
 namespace 'vim' do
@@ -13,7 +13,8 @@ namespace 'vim' do
 
       # Symlink vim programs to mvim on mac
       mvim = '/usr/local/bin/mvim'
-      if File.exist?(mvim)
+      if Bootstrap.usr_bin_exists?("mvim")
+        mvim = Bootstrap.usr_bin_cmd("mvim")
         # Gui, Diff, Read-only, Ex, Restricted
         VIM_TOOLS.each { |p| Bootstrap.usr_bin_ln(mvim, p) }
       end
@@ -25,9 +26,9 @@ namespace 'vim' do
     puts `vim --version`
   end
 
-  Rake::Task['vim:install'].enhance do
-    Rake::Task['vim:vundle'].invoke
-  end
+#   Rake::Task['vim:install'].enhance do
+#     Rake::Task['vim:vundle'].invoke
+#   end
 
   desc 'Update vundle'
   task :vundle do
@@ -47,6 +48,9 @@ namespace 'vim' do
     when /darwin/
       # Remove symlinks
       VIM_TOOLS.each { |p| Bootstrap.usr_bin_rm(p) }
+      
+      # Remove mvim
+      Bootstrap.usr_bin_rm("mvim")
 
       # Remove bundles
       bundle_path = File.expand_path(File.join(Bootstrap.home_dir, '.vim/bundle'))
