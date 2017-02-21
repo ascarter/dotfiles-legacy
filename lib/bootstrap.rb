@@ -57,6 +57,11 @@ module Bootstrap
   end
   module_function :home_dir
 
+  def workspace_dir
+    File.join(Bootstrap.home_dir, 'Projects')
+  end
+  module_function :workspace_dir
+
   def current_user
     Etc.getlogin
   end
