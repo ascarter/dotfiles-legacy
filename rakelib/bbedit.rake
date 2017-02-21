@@ -28,6 +28,9 @@ if Bootstrap.macosx?
       Bootstrap::MacOSX::Pkg.install(BBEDIT_AUTOMATOR_PKG_NAME,
                                      BBEDIT_AUTOMATOR_PKG_ID,
                                      BBEDIT_AUTOMATOR_SOURCE_URL)
+      
+      # Remove outdated update default setting
+      Bootstrap::MacOSX::Defaults.delete 'com.barebones.bbedit', :key => 'SUFeedURL'
 
       puts `bbedit --version`
     end
