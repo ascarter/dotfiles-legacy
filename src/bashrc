@@ -454,6 +454,7 @@ alias dockerdefault='eval "$(docker-machine env default)"'
 
 # Go
 alias gopresent='present -play=true &; open -g http://127.0.0.1:3999; fg'
+alias gogetd='go get -d'
 
 # Ruby
 alias binit="bundle install --path vendor/bundle"
@@ -484,6 +485,8 @@ alias svnbbup='svn update --diff3-cmd bbdiff'
 
 # Shortcuts
 alias projects='cd ~/Projects'
+alias src='cd ~/Projects/src'
+alias mysrc='cd ~/Projects/src/github.com/ascarter'
 
 # Ski
 alias whistlertom='curl -o ~/Documents/whistler_tom.pdf -L "http://online.whistlerblackcomb.com/TomPDF/Default.aspx?Season=1&Type=bg" && ql ~/Documents/whistler_tom.pdf'
