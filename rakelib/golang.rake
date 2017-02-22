@@ -65,13 +65,20 @@ namespace 'golang' do
   namespace 'workspace' do
     desc 'Init Go workspace'
     task :init do
-      gopath = ENV['GOPATH']
-      unless gopath.nil?
-        %w(bin pkg src).each do |d|
-          p = File.join(gopath, d)
-          unless File.exist?(p)
-            puts "Initializing #{p}"
-            FileUtils.mkdir_p(p)
+      ENV['GOPATH'] = Bootstrap.workspace_dir
+      %w(bin pkg src).each do |d|
+        p = File.join(Bootstrap.workspace_dir, d)
+        unless File.exist?(p)
+          puts "Initializing #{p}"
+          FileUtils.mkdir_p(p)
+        end
+
+        # Add extra directories
+        case d
+        when "src"
+          # Create scratch directories
+          %w(go javascript ruby).each do |s|
+            FileUtils.mkdir_p(File.join(p, 'scratch', s))
           end
         end
       end
@@ -101,8 +108,8 @@ EOF
     end
 
     Rake::Task[:init].enhance do
-	Rake::Task['golang:workspace:readme'].invoke
-	end
+      Rake::Task['golang:workspace:readme'].invoke
+    end
 
     desc 'Clean Go workspace'
     task :clean do
