@@ -9,7 +9,6 @@ GOTOOLS = [
   'golang.org/x/tools/cmd/callgraph'.freeze,
   'golang.org/x/tools/cmd/goimports'.freeze,
   'golang.org/x/tools/cmd/gorename'.freeze,
-  'golang.org/x/tools/cmd/gotype'.freeze,
   'golang.org/x/tools/cmd/guru'.freeze,
   'golang.org/x/tools/cmd/html2article'.freeze,
   'golang.org/x/tools/cmd/present'.freeze
