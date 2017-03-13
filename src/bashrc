@@ -1,8 +1,10 @@
 #  -*- mode: unix-shell-script; -*-
 
-# Add ssh keys added via ssh-add -K <key>
+# Platform settings
 case $(uname) in
 Darwin )
+	ulimit -n 5000
+	# Add ssh keys added via ssh-add -K <key>
 	ssh-add -A
 esac
 
