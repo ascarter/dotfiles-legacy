@@ -288,66 +288,6 @@ else
 	terminal_theme dark
 fi
 
-# terminal adjustments
-case $(uname) in
-Darwin )
-	screen_bounds() {
-		osascript -e "tell application \"Finder\" to get bounds of window of desktop"
-	}
-
-	screen_width() {
-		echo $(( $(screen_bounds | cut -d"," -f3) - $(screen_bounds | cut -d"," -f1) ))
-	}
-
-	screen_height() {
-		echo $(( $(screen_bounds | cut -d"," -f4) - $(screen_bounds | cut -d"," -f2) ))
-	}
-
-	window_bounds() {
-		osascript -e "tell application \"Terminal\" to get bounds of window 1"
-	}
-
-	window_width() {
-		echo $(( $(window_bounds | cut -d"," -f3) - $(window_bounds | cut -d"," -f1) ))
-	}
-
-	window_height() {
-		echo $(( $(window_bounds | cut -d"," -f4) - $(window_bounds | cut -d"," -f2) ))
-	}
-
-	window_screen_width() {
-		echo $(( $(screen_width) - $(window_width) ))
-	}
-	
-	movew() {
-		case ${1} in
-			lefttop)
-				printf "\e[3;0;0t"
-				;;
-			leftbottom)
-				printf "\e[3;0;$(( $(screen_height) - $(window_height) - 20 ))t"
-				;;
-			righttop)
-				printf "\e[3;$(( $(screen_width) - $(window_width) ));0t"
-				;;
-			rightbottom)
-				printf "\e[3;$(( $(screen_width) - $(window_width) ));$(( $(screen_height) - $(window_height) - 20 ))t"
-				;;
-		esac
-	}
-	
-	sizew() {
-		case ${1} in
-			small)
-				printf '\e[8;40;80t'
-				;;
-			big)
-				printf '\e[8;0;120t'
-				;;
-		esac
-	}	
-esac
-
 # ========================================
 # Aliases
 # ========================================
@@ -413,7 +353,8 @@ Linux )
 	;;
 esac
 
-alias resizet='resize -s 0 120'
+alias rs='resize -s 40 120'
+alias rst='resize -s 0 120'
 
 # refresh shell
 alias reload='source ~/.profile'
