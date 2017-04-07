@@ -2,7 +2,7 @@
 
 ATOM_APP_NAME = 'Atom'.freeze
 ATOM_SRC_URL = 'https://atom.io/download/mac'.freeze
-ATOM_PKGS = %w(dash file-icons gloom go-plus native-ui nord-atom-syntax nord-atom-ui seti-syntax seti-ui).freeze
+ATOM_PKGS = %w(dash go-plus go-debug native-ui nord-atom-syntax nord-atom-ui seti-syntax seti-ui sort-lines).freeze
 
 namespace 'atom' do
   desc 'Install atom'
@@ -42,7 +42,7 @@ namespace 'atom' do
       %w(atom apm).each { |c| Bootstrap.usr_bin_rm(c) }
 
       # Application
-      Bootstrap::MacOSX::App.uninstall('Atom')
+      Bootstrap::MacOSX::App.uninstall(ATOM_APP_NAME)
     end
   end
 end
