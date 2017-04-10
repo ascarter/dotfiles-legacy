@@ -36,7 +36,7 @@ if [ -n "`which go`" ]; then
 	elif [ -d ~/workspace ]; then
 		export GOPATH=~/workspace
 	fi
-	
+
 	export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
@@ -284,10 +284,8 @@ export PROMPT_DIRTRIM=3
 
 if which dircolors &>/dev/null; then
 	if [ -e ~/.dircolors ]; then
-			eval `dircolors ~/.dircolors`
+			eval `dircolors ~/.dir_colors`
 	fi
-else
-	terminal_theme dark
 fi
 
 # ========================================
