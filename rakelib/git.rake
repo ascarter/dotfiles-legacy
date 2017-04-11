@@ -36,7 +36,7 @@ namespace 'git' do
 
     Bootstrap::Git::Config.set('user.name', name)
     Bootstrap::Git::Config.set('user.email', email)
-    if signingKey.empty?
+    if signingKey.nil? || signingKey.empty?
       Bootstrap::Git::Config.unset('user.signingkey')
       Bootstrap::Git::Config.unset('commit.gpgsign')
     else
