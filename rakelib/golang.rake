@@ -23,6 +23,10 @@ namespace 'golang' do
                                      GOLANG_PKG_ID,
                                      GOLANG_SOURCE_URL)
     end
+
+	# Add go tool to the working path
+    ENV['PATH'] += ':/usr/local/go/bin'
+
     puts `go version`
   end
 
