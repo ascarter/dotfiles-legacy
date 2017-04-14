@@ -1,25 +1,36 @@
 # Sublime Text tasks
+SUBL_APP_NAME = 'Sublime Text'.freeze
+SUBL_SOURCE_URL = 'https://download.sublimetext.com/Sublime%20Text%20Build%203126.dmg'.freeze
 
 namespace 'sublime' do
   desc 'Install sublime'
   task :install do
-    if RUBY_PLATFORM =~ /darwin/
-      subl_root = File.expand_path('/Applications/Sublime Text.app/Contents/SharedSupport')
-    end
-    if File.exist?(subl_root)
-      # Symlink sublime programs
-      subl_path = File.join(subl_root, 'bin', 'subl')
-      usr_bin = '/usr/local/bin'
-      if File.exist?(subl_path)
-        ln_path = File.join(usr_bin, 'subl')
-        sudo "ln -s \"#{subl_path}\" \"#{ln_path}\"" unless File.exist?(ln_path)
+    case RUBY_PLATFORM
+    when /darwin/
+      Bootstrap::MacOSX::App.install(SUBL_APP_NAME, SUBL_SOURCE_URL)
+    
+      # TODO: set license key
+    
+      if RUBY_PLATFORM =~ /darwin/
+        subl_root = File.expand_path("/Applications/#{SUBL_APP_NAME}.app/Contents/SharedSupport")
+      end
+    
+      if File.exist?(subl_root)
+        # Symlink sublime programs
+        subl_path = File.join(subl_root, 'bin', 'subl')
+        Bootstrap.usr_bin_ln(subl_path, 'subl')
       end
     end
   end
 
   desc 'Uninstall sublime'
   task :uninstall do
-    subl_path = '/usr/local/bin/subl' if RUBY_PLATFORM =~ /darwin/
-    sudo_remove(subl_path) if File.exist?(subl_path)
+    case RUBY_PLATFORM
+    when /darwin/
+      # Remove symlinks
+      Bootstrap.usr_bin_rm('subl')
+      
+      Bootstrap::MacOSX::App.uninstall(SUBL_APP_NAME)
+    end
   end
 end
