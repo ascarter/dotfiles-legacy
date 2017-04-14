@@ -15,8 +15,13 @@ task :chsh do
   system 'chsh -s /bin/bash'
 end
 
+desc 'Create /usr/local directory'
+task :usrlocal do
+	Bootstrap.sudo_mkdir('/usr/local')
+end
+
 desc 'Bootstrap dotfiles to home directory using symlinks'
-task :bootstrap do
+task :bootstrap => [ :usrlocal ] do
   replace_all = false
   srcdir = File.expand_path('src')
   Dir.new(srcdir).each do |file|
@@ -82,22 +87,22 @@ when /darwin/
   desc 'Install Mac development environment'
   task :macdev => [
     :install,
+    'icloud:install',
     '1password:install',
     'homebrew:install',
-    'android:install',
     'bbedit:install',
+    'github:install',
     'coderunner:install',
     'colorpicker:install',
     'emacs:install',
-    'github:install',
     'golang:install',
-    'icloud:install',
-    'intellij:install',
-    'mysql:sequelpro:install',
     'paw:install',
     'postgres:install',
+    'mysql:sequelpro:install',
     'sketch:install',
     'xquartz:install',
+    'intellij:install',
+    'android:install',
   ]
 when /linux/
   desc 'Install Linux development environment'
