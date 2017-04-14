@@ -2,8 +2,8 @@
 
 if Bootstrap.macosx?
   BBEDIT_APP_NAME = 'BBEdit'.freeze
-  BBEDIT_SOURCE_URL = 'https://s3.amazonaws.com/BBSW-download/BBEdit-11.6.5_397059.dmg'.freeze
-  BBEDIT_SIGNATURE_SHA256 = { sha2: '5edd44a1f201f74a7630bdac1e5473027bd94300bbd15ee4471da3d24ba8b0a7' }.freeze
+  BBEDIT_SOURCE_URL = 'https://s3.amazonaws.com/BBSW-download/BBEdit_11.6.5.dmg'.freeze
+  # BBEDIT_SIGNATURE_SHA256 = { sha2: '5edd44a1f201f74a7630bdac1e5473027bd94300bbd15ee4471da3d24ba8b0a7' }.freeze
 
   BBEDIT_AUTOMATOR_PKG_NAME = 'BBEditAutomatorActionsInstaller-11.5'.freeze
   BBEDIT_AUTOMATOR_PKG_ID = '.automatorActions'.freeze
@@ -16,7 +16,7 @@ if Bootstrap.macosx?
   namespace 'bbedit' do
     desc 'Install BBEdit'
     task :install do
-      Bootstrap::MacOSX::App.install(BBEDIT_APP_NAME, BBEDIT_SOURCE_URL, sig: BBEDIT_SIGNATURE_SHA256)
+      Bootstrap::MacOSX::App.install(BBEDIT_APP_NAME, BBEDIT_SOURCE_URL) #, sig: BBEDIT_SIGNATURE_SHA256)
 
       # TODO: Set license key
 
