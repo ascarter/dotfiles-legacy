@@ -80,7 +80,7 @@ end
 
 # Work configuration
 desc 'Work development configuration'
-task :workdev => [ :macdev, 'hipchat:install', 'zoom:install', 'viscosity:install' ]
+task :workdev => [ :macdev, 'zoom:install', 'viscosity:install' ]
 
 case RUBY_PLATFORM
 when /darwin/
