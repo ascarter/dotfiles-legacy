@@ -1,7 +1,7 @@
-Xft.dpi: 96
+Xft.dpi: 133
 Xft.antialias: true
-XTerm.*.faceName: Menlo
-XTerm.*.faceSize: 12
+XTerm.*.faceName: SF Mono
+XTerm.*.faceSize: 8
 Xterm.*.geometry: 80x24
 
 ! Base16 Ocean Dark
