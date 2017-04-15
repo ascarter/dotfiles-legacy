@@ -1,10 +1,10 @@
 # HandBrake tasks
 
 HANDBRAKE_APP_NAME = 'Handbrake'.freeze
-HANDBRAKE_SRC_URL = 'https://handbrake.fr/rotation.php?file=HandBrake-1.0.0.dmg'.freeze
+HANDBRAKE_SRC_URL = 'http://handbrake.fr/rotation.php?file=HandBrake-1.0.7.dmg'.freeze
 
 HANDBRAKE_CLI_APP_NAME = 'HandbrakeCLI'.freeze
-HANDBRAKE_CLI_SRC_URL = 'https://handbrake.fr/rotation.php?file=HandBrakeCLI-1.0.0.dmg'.freeze
+HANDBRAKE_CLI_SRC_URL = 'https://handbrake.fr/rotation.php?file=HandBrakeCLI-1.0.7.dmg'.freeze
 
 namespace 'handbrake' do
   desc 'Install HandBrake'
