@@ -52,27 +52,45 @@
 #                      black foreground and red background for setuid executa-
 #                      bles, etc.
 
-terminal_theme() {
-    export CLICOLOR=1    
-    case "${1}" in
-        light)
-            export LSCOLORS=exfxcxdxbxegedabagacad
-            ;;
-        lightbold)
-            export LSCOLORS=ExFxCxDxBxegedabagacad
-            ;;
-        dark)
-            export LSCOLORS=gxfxcxdxbxegedabagacad
-            ;;
-        darkbold)
-            export LSCOLORS=GxFxCxDxBxegedabagaced
-            ;;
-        df)
-            export LSCOLORS=CxGxcxdxBxegedabagacad
-            ;;
-        *)
-            printf "terminal_theme [light | lightbold | dark | darkbold | df]\n"
-            return
-            ;;
-    esac
+termtheme() {
+	case $(uname) in	
+	Darwin)
+		_macos_termtheme $1
+		;;
+ 	esac
+}
+
+_macos_termtheme() {
+	export CLICOLOR=1
+	case "${1}" in
+	light)
+		export LSCOLORS=exfxcxdxbxegedabagacad
+		;;
+	lightbold)
+		export LSCOLORS=ExFxCxDxBxegedabagacad
+		;;
+	dark)
+		export LSCOLORS=gxfxcxdxbxegedabagacad
+		;;
+	darkbold)
+		export LSCOLORS=GxFxCxDxBxegedabagaced
+		;;
+	df)
+		export LSCOLORS=CxGxcxdxBxegedabagacad
+		;;
+	panic)
+		# Panic palette
+		export LSCOLORS=GxFxCxDxBxegedabagaced
+		;;
+	oceandark)
+		# Base16 ocean dark
+		#               d l s p e b c e e d d
+		#                 n     x s s u g s w
+		export LSCOLORS=HxCxFxdxbxegedabagacad
+		;;
+	*)
+		printf "terminal_theme [light | lightbold | dark | darkbold | df]\n"
+		return
+		;;
+	esac
 }
