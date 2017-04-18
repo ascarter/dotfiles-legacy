@@ -90,7 +90,8 @@ _macos_termtheme() {
 		;;
 	solarized)
 		# Solarized
-		gxBxhxDxfxhxhxhxhxcxcx
+		export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+		;;
 	*)
 		printf "terminal_theme [light | lightbold | dark | darkbold | df | panic | oceandark | solarized]\n"
 		return
