@@ -88,8 +88,11 @@ _macos_termtheme() {
 		#                 n     x s s u g s w
 		export LSCOLORS=HxCxFxdxbxegedabagacad
 		;;
+	solarized)
+		# Solarized
+		gxBxhxDxfxhxhxhxhxcxcx
 	*)
-		printf "terminal_theme [light | lightbold | dark | darkbold | df]\n"
+		printf "terminal_theme [light | lightbold | dark | darkbold | df | panic | oceandark | solarized]\n"
 		return
 		;;
 	esac
