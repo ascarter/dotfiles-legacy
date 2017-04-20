@@ -13,6 +13,7 @@ if Bootstrap.macosx?
 			Bootstrap::MacOSX::App.launch(THINGS_APP_NAME)
 		end
 	
+		desc 'Install Things Helper'
 		task :helper do
 			Bootstrap::MacOSX::App.run(THINGS_HELPER_APP_NAME, THINGS_HELPER_SOURCE_URL)
 		end
