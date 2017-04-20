@@ -22,14 +22,14 @@ if Bootstrap.macosx?
 
       # Install command line utils
       unless File.exist?('/usr/local/bin/bbedit')
-        Bootstrap::MacOSX.run_applescript(BBEDIT_INSTALL_TOOLS_SCPT)
+        Bootstrap::MacOSX.run_applescript(BBEDIT_INSTALL_TOOLS_SCPT, wait: true)
       end
 
       # Install automator actions
       Bootstrap::MacOSX::Pkg.install(BBEDIT_AUTOMATOR_PKG_NAME,
                                      BBEDIT_AUTOMATOR_PKG_ID,
                                      BBEDIT_AUTOMATOR_SOURCE_URL)
-      
+
       # Remove outdated update default setting
       Bootstrap::MacOSX::Defaults.delete 'com.barebones.bbedit', :key => 'SUFeedURL'
 

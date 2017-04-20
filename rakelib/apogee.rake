@@ -20,7 +20,7 @@ namespace 'apogee' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX.run(APOGEE_UNINSTALLER_APP, APOGEE_SOURCE_URL)
+      Bootstrap::MacOSX.run(APOGEE_UNINSTALLER_APP, APOGEE_SOURCE_URL, wait: true)
     end
   end
 end
