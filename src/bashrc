@@ -236,7 +236,7 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 if [ $TERM = "xterm-256color" -o $TERM = "xterm-color" -o $TERM = "dtterm" -o $TERM = "linux" ]; then
 	case $(uname) in
 	Darwin ) 
-		termtheme oceandark
+		termtheme dark
 		;;
 	esac
 fi
