@@ -94,14 +94,15 @@ module Bootstrap
       module_function :uninstall
 
       # Mac OS X Run helper
-      def run(app, url, headers: {}, sig: {})
+      def run(app, url, headers: {}, sig: {}, wait: false)
+        open_flags = wait ? "--wait-apps" : ""
         Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
           app_path = File.join(d, "#{app}.app")
-          system %(open --wait-apps "#{app_path}")
+          system %(open #{open_flags} "#{app_path}")
         end
       end
       module_function :run
-      
+
       def launch(app)
         system %(open -a "#{app}")
       end
@@ -112,7 +113,7 @@ module Bootstrap
         system "osascript -e '#{script}'"
       end
       module_function :hide
-      
+
       def exists?(app)
         app_name = "#{app}.app"
         app_path = File.join('/Applications', app_name)

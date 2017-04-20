@@ -12,15 +12,28 @@ if Bootstrap.macosx?
 			Bootstrap::MacOSX::App.install(THINGS_APP_NAME, THINGS_SOURCE_URL)
 			Bootstrap::MacOSX::App.launch(THINGS_APP_NAME)
 		end
-	
-		desc 'Install Things Helper'
-		task :helper do
-			Bootstrap::MacOSX::App.run(THINGS_HELPER_APP_NAME, THINGS_HELPER_SOURCE_URL)
-		end
-	
+
 		desc 'Uninstall Things'
 		task :uninstall do
 			Bootstrap::MacOSX::App.uninstall(THINGS_APP_NAME)
-		end 
+		end
+
+		namespace 'helper' do
+      desc 'Install Things Helper'
+		  task :install do
+        Bootstrap::MacOSX::App.run(THINGS_HELPER_APP_NAME, THINGS_HELPER_SOURCE_URL)
+		  end
+
+  		desc 'Uninstall Things Helper'
+		  task :uninstall do
+		    helper_path = File.join(Bootstrap.home_dir, 'Library', 'Application Support', 'Things Sandbox Helper')
+        if File.exist?(helper_path)
+          puts "Uninstalling Things Helper"
+          Bootstrap.sudo_rmdir helper_path
+        else
+          warn "Things Helper is not installed"
+        end
+		  end
+		end
 	end
 end
