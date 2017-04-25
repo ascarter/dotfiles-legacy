@@ -63,6 +63,11 @@ termtheme() {
 _macos_termtheme() {
 	export CLICOLOR=1
 	case "${1}" in
+	appledark)
+		#               d l s p e b c e e d d
+		#                 n     x s s u g s w
+		export LSCOLORS=dxfxcxdxDxegedabagacad
+		;;
 	light)
 		export LSCOLORS=exfxcxdxbxegedabagacad
 		;;

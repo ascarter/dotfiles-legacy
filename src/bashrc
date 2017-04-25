@@ -234,7 +234,7 @@ case "${TERM}" in
 xterm-256color|xterm-color|dtterm|linux)
 	case $(uname) in
 	Darwin ) 
-		termtheme dark
+		termtheme appledark
 		;;
 	esac
 	;;
