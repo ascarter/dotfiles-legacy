@@ -1,6 +1,9 @@
 #  -*- mode: unix-shell-script; -*-
 
+# ========================================
 # Platform settings
+# ========================================
+
 case $(uname) in
 Darwin )
 	ulimit -n 5000
@@ -247,7 +250,7 @@ export GIT_PS1_SHOWUNTRACKEDFILES=1
 export GIT_PS1_SHOWUPSTREAM="auto"
 
 # Prompt
-prompt_command() {
+_git_prompt_command() {
 	if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
 		PROMPT_DIR="\W"
 	else
@@ -266,29 +269,11 @@ prompt_command() {
 }
 
 PS1='\n\u@\h:\W\n\$ '
-PROMPT_COMMAND=prompt_command
-
+#PROMPT_COMMAND=prompt_command
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }_git_prompt_command"
 
 # Limit paths to 3 levels (Bash version 4+)
 export PROMPT_DIRTRIM=3
-
-# Tell terminal about working directory at each prompt
-case $(uname) in
-Darwin )
-	update_terminal_cwd() {
-		# Identify the directory using a "file:" scheme URL,
-		# including the host name to disambiguate local vs.
-		# remote connections. Percent-escape spaces.
-		#
-		# Source: https://opensource.apple.com/source/bash/bash-97/bashrc
-		local SEARCH=' '
-		local REPLACE='%20'
-		local PWD_URL="file://$HOSTNAME${PWD//$SEARCH/$REPLACE}"
-		printf '\e]7;%s\a' "$PWD_URL"
-	}
-	PROMPT_COMMAND="update_terminal_cwd; $PROMPT_COMMAND"
-esac
-
 
 if which dircolors &>/dev/null; then
 	if [ -e ~/.dircolors ]; then
