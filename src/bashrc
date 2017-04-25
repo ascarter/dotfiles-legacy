@@ -226,26 +226,53 @@ export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit
 # Terminal settings
 # ========================================
 
+# Colors
+case "${TERM}" in
+xterm-256color|xterm-color|dtterm|linux)
+	case $(uname) in
+	Darwin ) 
+		termtheme dark
+		;;
+	esac
+	;;
+esac
+
+# Docker
+# PS1='[\u@\h \W$(__docker_machine_ps1 " [%s]")]\$ '
+
 # Set Git PS conditions
 export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWSTASHSTATE=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
 export GIT_PS1_SHOWUPSTREAM="auto"
 
-# Colors
-if [ $TERM = "xterm-256color" -o $TERM = "xterm-color" -o $TERM = "dtterm" -o $TERM = "linux" ]; then
-	case $(uname) in
-	Darwin ) 
-		termtheme dark
+# Prompt
+prompt_command() {
+	if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
+		PROMPT_DIR="\W"
+	else
+		PROMPT_DIR="\w"
+	fi
+
+	case "${TERM}" in
+	xterm-256color|xterm-color|dtterm|linux)
+		export GIT_PS1_SHOWCOLORHINTS=1
+		__git_ps1 "$(tput bold)\n\u@\h$(tput sgr0):${PROMPT_DIR}" "\n\\\$ "
+		;;
+	*)
+		__git_ps1 "\n\u@\h$:${PROMPT_DIR}" "\n\\\$ "
 		;;
 	esac
-fi
+}
 
-# Docker
-# PS1='[\u@\h \W$(__docker_machine_ps1 " [%s]")]\$ '
+PS1='\n\u@\h:\W\n\$ '
+PROMPT_COMMAND=prompt_command
 
-# Prompt
 
+# Limit paths to 3 levels (Bash version 4+)
+export PROMPT_DIRTRIM=3
+
+# Tell terminal about working directory at each prompt
 case $(uname) in
 Darwin )
 	update_terminal_cwd() {
@@ -259,36 +286,9 @@ Darwin )
 		local PWD_URL="file://$HOSTNAME${PWD//$SEARCH/$REPLACE}"
 		printf '\e]7;%s\a' "$PWD_URL"
 	}
+	PROMPT_COMMAND="update_terminal_cwd; $PROMPT_COMMAND"
 esac
 
-prompt_command() {
-	case $(uname) in
-	Darwin )
-		update_terminal_cwd
-		;;
-	Linux )
-		# TODO: Update title
-	esac
-
-	if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
-		PROMPT_DIR="\W"
-	else
-		PROMPT_DIR="\w"
-	fi
-
-	if [ $TERM = "xterm-256color" -o $TERM = "xterm-color" -o $TERM = "dtterm" -o $TERM = "linux" ]; then
-		export GIT_PS1_SHOWCOLORHINTS=1
-		__git_ps1 "$(tput bold)\n\u@\h$(tput sgr0):${PROMPT_DIR}" "\n\\\$ "
-	else
-		__git_ps1 "\n\u@\h$:${PROMPT_DIR}" "\n\\\$ "
-	fi
-}
-
-PS1='\n\u@\h:\W\n\$ '
-PROMPT_COMMAND=prompt_command
-
-# Limit paths to 3 levels (Bash version 4+)
-export PROMPT_DIRTRIM=3
 
 if which dircolors &>/dev/null; then
 	if [ -e ~/.dircolors ]; then
