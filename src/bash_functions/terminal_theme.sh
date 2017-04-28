@@ -68,12 +68,6 @@ _macos_termtheme() {
 		#                 n     x s s u g s w
 		export LSCOLORS=dxfxcxdxDxegedabagacad
 		;;
-	light)
-		export LSCOLORS=exfxcxdxbxegedabagacad
-		;;
-	lightbold)
-		export LSCOLORS=ExFxCxDxBxegedabagacad
-		;;
 	dark)
 		export LSCOLORS=gxfxcxdxbxegedabagacad
 		;;
@@ -82,6 +76,12 @@ _macos_termtheme() {
 		;;
 	df)
 		export LSCOLORS=CxGxcxdxBxegedabagacad
+		;;
+	light)
+		export LSCOLORS=exfxcxdxbxegedabagacad
+		;;
+	lightbold)
+		export LSCOLORS=ExFxCxDxBxegedabagacad
 		;;
 	panic)
 		# Panic palette
@@ -100,8 +100,17 @@ _macos_termtheme() {
 	spartan)
 		export LSCOLORS=dxgxcxbxfxegedabagacad
 		;;
-	*)
-		printf "terminal_theme [light | lightbold | dark | darkbold | df | panic | oceandark | solarized]\n"
+	'')
+		# Use default color scheme
+		export LSCOLORS=exfxcxdxbxegedabagacad
+		;;
+	help|*)
+		printf "terminal_theme [theme]\n"
+		printf "\nThemes:\n"
+		for t in appledark dark darkbold df light lightbold panic oceandark solarized spartan; do
+			printf "\t%s\n" $t
+		done
+		printf "\n\nColors reset to default if no theme\n"
 		return
 		;;
 	esac
