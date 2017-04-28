@@ -191,10 +191,14 @@ for f in ~/.bash_functions/*; do
 	. ${f}
 done
 
-# Source git-prompt for macOS
-if [ -d /Library/Developer/CommandLineTools ]; then
-	. /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
-fi
+# Source git-prompt
+case $(uname) in
+Darwin )
+	if [ -d /Library/Developer/CommandLineTools ]; then
+		. /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
+	fi
+	;;
+esac
 
 # ========================================
 # Shell preferences
@@ -274,8 +278,9 @@ _git_prompt_command() {
 }
 
 PS1='\n\u@\h:\W\n\$ '
-#PROMPT_COMMAND=prompt_command
-PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }_git_prompt_command"
+if [[ $(type -t '__git_ps1') == function ]]; then
+	PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }_git_prompt_command"
+fi
 
 # Limit paths to 3 levels (Bash version 4+)
 export PROMPT_DIRTRIM=3
@@ -442,10 +447,14 @@ if [ -d ~/.bash_completion.d ]; then
 	done
 fi
 
-# Source git completions on macOS
-if [ -d /Library/Developer/CommandLineTools ]; then
-	. /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
-fi
+# Source git completions
+case $(uname) in
+Darwin )
+	if [ -d /Library/Developer/CommandLineTools ]; then
+		. /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
+	fi
+	;;
+esac
 
 # Source docker completion
 if [ -d /Applications/Docker.app ]; then
