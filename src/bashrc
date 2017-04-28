@@ -191,6 +191,11 @@ for f in ~/.bash_functions/*; do
 	. ${f}
 done
 
+# Source git-prompt for macOS
+if [ -d /Library/Developer/CommandLineTools ]; then
+	. /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
+fi
+
 # ========================================
 # Shell preferences
 # ========================================
@@ -435,6 +440,11 @@ if [ -d ~/.bash_completion.d ]; then
 	for f in ~/.bash_completion.d/*; do
 		source ${f}
 	done
+fi
+
+# Source git completions on macOS
+if [ -d /Library/Developer/CommandLineTools ]; then
+	. /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
 fi
 
 # Source docker completion
