@@ -1,7 +1,5 @@
 [color]
     ui = auto
-[color.status]
-	untracked = dim white
 [core]
     excludesfile = ~/.gitignore
     autocrlf = input
