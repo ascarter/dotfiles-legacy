@@ -240,7 +240,7 @@ export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit
 
 # Colors
 case "${TERM}" in
-xterm-256color|xterm-color|dtterm|linux)
+xterm-256color|xterm-color|xterm|dtterm|linux)
 	case $(uname) in
 	Darwin ) 
 		termtheme spartan
