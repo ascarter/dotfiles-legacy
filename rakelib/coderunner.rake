@@ -14,5 +14,28 @@ if Bootstrap.macosx?
     task :uninstall do
       Bootstrap::MacOSX::App.uninstall(CODERUNNER_APP_NAME)
     end
+    
+    namespace 'themes' do
+      desc 'Install CodeRunner themes'
+      task :install do
+        srcdir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'themes', 'coderunner'))
+        dest = File.expand_path(File.join(Bootstrap.library_dir, 'Application Support', 'CodeRunner', 'Themes'))
+        FileUtils.mkdir_p(dest)
+        Dir.glob(File.join(srcdir, '*.tmTheme')).each do |f|
+          target = File.join(dest, File.basename(f))
+          Bootstrap.link_file(f, target)
+        end
+      end
+      
+      desc 'Uninstall Xcode themes'
+      task :uninstall do
+        srcdir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'themes', 'coderunner'))
+        dest = File.expand_path(File.join(Bootstrap.library_dir, 'Application Support', 'CodeRunner', 'Themes'))
+        Dir.glob(File.join(srcdir, '*.tmTheme')).each do |f|
+          target = File.join(dest, File.basename(f))
+          Bootstrap.file_remove(target)
+        end
+      end
+    end
   end
 end
