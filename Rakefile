@@ -22,41 +22,8 @@ end
 
 desc 'Bootstrap dotfiles to home directory using symlinks'
 task :bootstrap => [ :usrlocal ] do
-  replace_all = false
-  srcdir = File.expand_path('src')
-  Dir.new(srcdir).each do |file|
-    unless %w(. ..).include?(file)
-      source = File.join(srcdir, file)
-      target = File.expand_path(File.join(Bootstrap.home_dir(), ".#{file}"))
-      if File.exist?(target) or File.symlink?(target) or File.directory?(target)
-        if File.identical?(source, target)
-          puts "Identical #{file}"
-        else
-          puts 'Diff:'
-          system "diff #{source} #{target}"
-          if replace_all
-            Bootstrap.replace(source, target)
-          else
-            print "Replace existing file #{file}? [ynaq] "
-            case $stdin.gets.chomp
-            when 'a'
-              replace_all = true
-              Bootstrap.replace(source, target)
-            when 'y'
-              Bootstrap.replace(source, target)
-            when 'q'
-              warn 'Abort'
-              exit
-            else
-              puts "Skipping #{file}"
-            end
-          end
-        end
-      else
-        Bootstrap.link_file(source, target)
-      end
-    end
-  end
+  Bootstrap.bootstrap(File.expand_path('home'), Bootstrap.home_dir())
+  Bootstrap.bootstrap(File.expand_path('config'), Bootstrap.config_dir())
 end
 
 desc 'Configure environment'
@@ -69,13 +36,8 @@ end
 
 desc 'Uninstall dotfiles from home directory'
 task :uninstall do
-  src = File.expand_path('src')
-  Dir.new(src).each do |file|
-    unless %w(. ..).include?(file)
-      target = File.join(Bootstrap.home_dir(), ".#{file}")
-      Bootstrap.file_remove(target)
-    end
-  end
+  Bootstrap.unbootstrap(File.expand_path('home'), Bootstrap.home_dir())
+  Bootstrap.unbootstrap(File.expand_path('config'), Bootstrap.config_dir())
 end
 
 # Work configuration

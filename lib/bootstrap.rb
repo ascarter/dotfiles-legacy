@@ -28,6 +28,59 @@ end
 
 # Bootstrap contains the support system for the dotfiles system
 module Bootstrap
+  # bootstrap links all the files in src to same file with '.' prepended at dest
+  def bootstrap(src, dest)
+    replace_all = false
+
+    # Ensure that the target exists
+    FileUtils.mkdir_p(dest)
+
+    # Link each file as '#{dest}/.#{file}'
+    Dir.new(src).each do |file|
+      next if %w(. ..).include?(file)
+
+      source = File.join(src, file)
+      target = File.expand_path(File.join(dest, ".#{file}"))
+      if File.exist?(target) or File.symlink?(target) or File.directory?(target)
+        if File.identical?(source, target)
+          puts "Identical #{file}"
+        else
+          puts 'Diff:'
+          system "diff #{source} #{target}"
+          if replace_all
+            Bootstrap.replace(source, target)
+          else
+            print "Replace existing file #{file}? [ynaq] "
+            case $stdin.gets.chomp
+            when 'a'
+              replace_all = true
+              replace(source, target)
+            when 'y'
+              replace(source, target)
+            when 'q'
+              warn 'Abort'
+              exit
+            else
+              puts "Skipping #{file}"
+            end
+          end
+        end
+      else
+        link_file(source, target)
+      end
+    end
+  end
+  module_function :bootstrap
+
+  def unbootstrap(src, dest)
+    Dir.new(src).each do |file|
+      next if %w(. ..).include?(file)
+      target = File.join(dest, ".#{file}")
+      Bootstrap.file_remove(target)
+    end
+  end
+  module_function :unbootstrap
+
   # Helpers
 
   def macosx?
@@ -57,11 +110,16 @@ module Bootstrap
   end
   module_function :home_dir
 
+  def config_dir
+    File.expand_path(File.join(home_dir, '.config'))
+  end
+  module_function :config_dir
+
   def library_dir
     File.expand_path(File.join(home_dir, 'Library'))
   end
   module_function :library_dir
-  
+
   def workspace_dir
     File.join(Bootstrap.home_dir, 'Projects')
   end

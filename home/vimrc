@@ -33,7 +33,7 @@ set visualbell
 " Status line
 if has('statusline')
 	set laststatus=2
-	set statusline=%<%f%{tagbar#currenttag('[%s]\ ','')}\ %w%h%m%r%=%-14.(%l,%c%V%)\ %P
+	" set statusline=%<%f%{tagbar#currenttag('[%s]\ ','')}\ %w%h%m%r%=%-14.(%l,%c%V%)\ %P
 endif
 
 set hidden
