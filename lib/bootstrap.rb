@@ -29,18 +29,18 @@ end
 # Bootstrap contains the support system for the dotfiles system
 module Bootstrap
   # bootstrap links all the files in src to same file with '.' prepended at dest
-  def bootstrap(src, dest)
+  def bootstrap(src, dest, dotfiles=true)
     replace_all = false
 
     # Ensure that the target exists
     FileUtils.mkdir_p(dest)
 
-    # Link each file as '#{dest}/.#{file}'
+    # Link each file
     Dir.new(src).each do |file|
       next if %w(. ..).include?(file)
 
       source = File.join(src, file)
-      target = File.expand_path(File.join(dest, ".#{file}"))
+      target = File.expand_path(File.join(dest, file))
       if File.exist?(target) or File.symlink?(target) or File.directory?(target)
         if File.identical?(source, target)
           puts "Identical #{file}"
@@ -75,7 +75,7 @@ module Bootstrap
   def unbootstrap(src, dest)
     Dir.new(src).each do |file|
       next if %w(. ..).include?(file)
-      target = File.join(dest, ".#{file}")
+      target = File.join(dest, file)
       Bootstrap.file_remove(target)
     end
   end
