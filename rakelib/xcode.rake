@@ -21,10 +21,10 @@ if Bootstrap.macosx?
     namespace 'themes' do
       desc 'Install Xcode themes'
       task :install do
-        src = File.expand_path(File.join(File.dirname(__FILE__), '../themes/xcode'))
+        srcdir = File.expand_path(File.join(File.dirname(__FILE__), '../themes/xcode'))
         dest = File.expand_path(File.join(Bootstrap.library_dir, 'Developer', 'Xcode', 'UserData', 'FontAndColorThemes'))
         FileUtils.mkdir_p(dest)
-        Dir.glob(File.join(src, '*.xccolortheme')).each do |f|
+        Dir.glob(File.join(srcdir, '*.xccolortheme')).each do |f|
           target = File.join(dest, File.basename(f))
           Bootstrap.link_file(f, target)
         end
@@ -32,9 +32,9 @@ if Bootstrap.macosx?
       
       desc 'Uninstall Xcode themes'
       task :uninstall do
-        src = File.expand_path(File.join(File.dirname(__FILE__), '../themes/xcode'))
+        srcdir = File.expand_path(File.join(File.dirname(__FILE__), '../themes/xcode'))
         dest = File.expand_path(File.join(Bootstrap.library_dir, 'Developer', 'Xcode', 'UserData', 'FontAndColorThemes'))
-        Dir.glob(File.join(src, '*.xccolortheme')).each do |f|
+        Dir.glob(File.join(srcdir, '*.xccolortheme')).each do |f|
           target = File.join(dest, File.basename(f))
           Bootstrap.file_remove(target)
         end
