@@ -57,6 +57,11 @@ module Bootstrap
   end
   module_function :home_dir
 
+  def library_dir
+    File.expand_path(File.join(home_dir, 'Library'))
+  end
+  module_function :library_dir
+  
   def workspace_dir
     File.join(Bootstrap.home_dir, 'Projects')
   end

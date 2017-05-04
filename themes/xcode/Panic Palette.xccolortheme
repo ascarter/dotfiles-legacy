@@ -5,23 +5,23 @@
 	<key>DVTConsoleDebuggerInputTextColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTConsoleDebuggerInputTextFont</key>
-	<string>Menlo-Bold - 11.0</string>
+	<string>SFMono-Bold - 11.0</string>
 	<key>DVTConsoleDebuggerOutputTextColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTConsoleDebuggerOutputTextFont</key>
-	<string>Menlo-Regular - 11.0</string>
+	<string>SFMono-Regular - 11.0</string>
 	<key>DVTConsoleDebuggerPromptTextColor</key>
 	<string>0.317071 0.437736 1 1</string>
 	<key>DVTConsoleDebuggerPromptTextFont</key>
-	<string>Menlo-Bold - 11.0</string>
+	<string>SFMono-Bold - 11.0</string>
 	<key>DVTConsoleExectuableInputTextColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTConsoleExectuableInputTextFont</key>
-	<string>Menlo-Regular - 11.0</string>
+	<string>SFMono-Regular - 11.0</string>
 	<key>DVTConsoleExectuableOutputTextColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTConsoleExectuableOutputTextFont</key>
-	<string>Menlo-Bold - 11.0</string>
+	<string>SFMono-Bold - 11.0</string>
 	<key>DVTConsoleTextBackgroundColor</key>
 	<string>0.999896 1 0.999838 1</string>
 	<key>DVTConsoleTextInsertionPointColor</key>
@@ -30,10 +30,48 @@
 	<string>0.654656 0.792518 0.999198 1</string>
 	<key>DVTDebuggerInstructionPointerColor</key>
 	<string>0.705792 0.8 0.544 1</string>
+	<key>DVTMarkupTextBackgroundColor</key>
+	<string>0.13888 0.177152 0.2272 1</string>
+	<key>DVTMarkupTextBorderColor</key>
+	<string>0.20777 0.24298 0.289024 1</string>
+	<key>DVTMarkupTextCodeFont</key>
+	<string>SFMono-Regular - 10.0</string>
+	<key>DVTMarkupTextEmphasisColor</key>
+	<string>0.965473 0.97 0.9312 1</string>
+	<key>DVTMarkupTextEmphasisFont</key>
+	<string>.AppleSystemUIFontItalic - 10.0</string>
+	<key>DVTMarkupTextInlineCodeColor</key>
+	<string>0.965473 0.97 0.9312 0.7</string>
+	<key>DVTMarkupTextLinkColor</key>
+	<string>0.3916 0.798627 0.89 1</string>
+	<key>DVTMarkupTextLinkFont</key>
+	<string>.AppleSystemUIFont - 10.0</string>
+	<key>DVTMarkupTextNormalColor</key>
+	<string>0.965473 0.97 0.9312 1</string>
+	<key>DVTMarkupTextNormalFont</key>
+	<string>.AppleSystemUIFont - 10.0</string>
+	<key>DVTMarkupTextOtherHeadingColor</key>
+	<string>0.965473 0.97 0.9312 0.5</string>
+	<key>DVTMarkupTextOtherHeadingFont</key>
+	<string>.AppleSystemUIFont - 14.0</string>
+	<key>DVTMarkupTextPrimaryHeadingColor</key>
+	<string>0.965473 0.97 0.9312 1</string>
+	<key>DVTMarkupTextPrimaryHeadingFont</key>
+	<string>.AppleSystemUIFont - 24.0</string>
+	<key>DVTMarkupTextSecondaryHeadingColor</key>
+	<string>0.965473 0.97 0.9312 1</string>
+	<key>DVTMarkupTextSecondaryHeadingFont</key>
+	<string>.AppleSystemUIFont - 18.0</string>
+	<key>DVTMarkupTextStrongColor</key>
+	<string>0.965473 0.97 0.9312 1</string>
+	<key>DVTMarkupTextStrongFont</key>
+	<string>.AppleSystemUIFontEmphasized - 10.0</string>
 	<key>DVTSourceTextBackground</key>
 	<string>0.064 0.1056 0.16 1</string>
 	<key>DVTSourceTextBlockDimBackgroundColor</key>
 	<string>0.5 0.5 0.5 1</string>
+	<key>DVTSourceTextCurrentLineHighlightColor</key>
+	<string>0.048 0.1542 0.27 1</string>
 	<key>DVTSourceTextInsertionPointColor</key>
 	<string>0.99 0.76428 0.2772 1</string>
 	<key>DVTSourceTextInvisiblesColor</key>
@@ -92,51 +130,51 @@
 	<key>DVTSourceTextSyntaxFonts</key>
 	<dict>
 		<key>xcode.syntax.attribute</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.character</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.comment</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.comment.doc</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.comment.doc.keyword</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.identifier.class</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.identifier.class.system</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.identifier.constant</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.identifier.constant.system</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.identifier.function</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.identifier.function.system</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.identifier.macro</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.identifier.macro.system</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.identifier.type</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.identifier.type.system</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.identifier.variable</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.identifier.variable.system</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.keyword</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.number</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.plain</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.preprocessor</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.string</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 		<key>xcode.syntax.url</key>
-		<string>InputMono-Light - 11.0</string>
+		<string>SFMono-Regular - 11.0</string>
 	</dict>
 </dict>
 </plist>
