@@ -299,9 +299,6 @@ case $(uname) in
 Darwin )
 	# ls
 	alias ls='ls -hFGH'
-	alias ll='ls -l'
-	alias la='ls -a'
-	alias lsz="ls -lAh | grep -m 1 total | sed 's/total //'"
 
 	# System shortcuts
 	alias lockscreen='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
@@ -347,14 +344,17 @@ Darwin )
 	;;
 Linux )
 	alias ls='ls -hFH --color=auto'
-	alias la='ls -A'
-	alias ll='ls -l'
-	alias lsz="ls -lAh | grep -m 1 total | sed 's/total //'"
 
 	alias glock='gnome-screensaver-command --lock'
 	alias xlock='xscreensaver-command -lock'
 	;;
 esac
+
+alias ll='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
+alias lsd="ls -l | grep --color=never '^d'"
+alias lsz="ls -lAh | grep -m 1 total | sed 's/total //'"
 
 alias rs='resize -s 40 120'
 alias rst='resize -s 0 120'
@@ -373,14 +373,23 @@ alias filetree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 
 # Search/grep
 alias devgrep="grep -n -r --exclude='.svn' --exclude='*.swp' --exclude='.git'"
 
+# IP addresses
 # ip list
 alias ip='ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d " " -f2'
 # verbose ip list
 alias ipv="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
-# local ip - expects en0 | en1 | ...
-alias localip="ipconfig getifaddr"
+alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+# local ip
+alias localip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
 # external ip
 alias wanip="dig +short myip.opendns.com @resolver1.opendns.com"
+
+# local ip - expects en0 | en1 | ...
+# alias localip="ipconfig getifaddr"
+
+# View HTTP traffic
+alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
 # SSH
 alias sshagentstart='eval "$(ssh-agent -s)" && ssh-add -A'
@@ -435,6 +444,17 @@ alias mysrc='cd ~/Projects/src/github.com/ascarter'
 
 # Ski
 alias whistlertom='curl -o ~/Documents/whistler_tom.pdf -L "http://online.whistlerblackcomb.com/TomPDF/Default.aspx?Season=1&Type=bg" && ql ~/Documents/whistler_tom.pdf'
+
+# Stopwatch
+alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
+
+# Intuitive map function
+# For example, to list all directories that contain a certain file:
+# find . -name .gitattributes | map dirname
+alias map="xargs -n1"
+
+# Canonical hex dump; some systems have this symlinked
+command -v hd > /dev/null || alias hd="hexdump -C"
 
 # ========================================
 # Bash completions
