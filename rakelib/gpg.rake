@@ -14,8 +14,8 @@ GPG_PKG_IDS = [
   'org.gpgtools.pinentry-mac.pkg'
 ].freeze
 GPG_UNINSTALL_APP_NAME = 'Uninstall'.freeze
-GPG_SOURCE_URL = 'https://releases.gpgtools.org/GPG_Suite-2017.1b2.dmg'.freeze
-GPG_SIGNATURE = { sha2: 'f74fd4788cfa0820933499768fa7dfe1c0b295bbae9f43812dc3590923975de4' }.freeze
+GPG_SOURCE_URL = 'https://releases.gpgtools.org/GPG_Suite-2017.1b3-v2.dmg'.freeze
+GPG_SIGNATURE = { sha256: ' a29edb4f44abfb1608a6a957aca21e6cc21d1b2c5f400ea5008f2ac18cb8cbc1' }.freeze
 GPG_DEFAULTS_DOMAIN = 'org.gpgtools.gpgmail'.freeze
 
 namespace 'gpg' do
