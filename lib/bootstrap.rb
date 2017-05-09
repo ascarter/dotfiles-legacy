@@ -335,11 +335,11 @@ module Bootstrap
   end
   module_function :sha1
 
-  def sha2(path)
+  def sha256(path)
     if File.exist?(path)
       contents = File.read(path)
-      return Digest::SHA2.hexdigest(contents)
+      return Digest::SHA256.hexdigest(contents)
     end
   end
-  module_function :sha2
+  module_function :sha256
 end

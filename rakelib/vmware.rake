@@ -5,7 +5,7 @@ VMWARE_SOURCE_URL = 'https://www.vmware.com/go/try-fusionpro-en'.freeze
 VMWARE_SIGNATURE = {
   md5: '4584b6405b612da75792b1519da3c205',
   sha1: '9e584951f39583f1a9d74cd64ecef26dd37217a2',
-  sha2: '29cad381a36374e58a85fb58f7aaad8cae41ad50ef07fdda0db6d782c95c0a95'
+  sha256: '29cad381a36374e58a85fb58f7aaad8cae41ad50ef07fdda0db6d782c95c0a95'
 }.freeze
 VMWARE_APP_FILES = [
   '/Library/Application Support/VMware',

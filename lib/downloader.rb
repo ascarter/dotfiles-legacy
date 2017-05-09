@@ -161,8 +161,8 @@ module Bootstrap
           raise 'Invalid md5 for package' if v != Bootstrap.md5(target)
         when :sha1
           raise 'Invalid sha1 for package' if v != Bootstrap.sha1(target)
-        when :sha2
-          raise 'Invalid sha2 for package' if v != Bootstrap.sha2(target)
+        when :sha256
+          raise 'Invalid sha256 for package' if v != Bootstrap.sha256(target)
         else
           raise "Unknown signature: #{k}"
         end

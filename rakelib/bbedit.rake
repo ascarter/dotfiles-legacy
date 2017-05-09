@@ -3,7 +3,7 @@
 if Bootstrap.macosx?
   BBEDIT_APP_NAME = 'BBEdit'.freeze
   BBEDIT_SOURCE_URL = 'https://s3.amazonaws.com/BBSW-download/BBEdit_11.6.5.dmg'.freeze
-  # BBEDIT_SIGNATURE_SHA256 = { sha2: '5edd44a1f201f74a7630bdac1e5473027bd94300bbd15ee4471da3d24ba8b0a7' }.freeze
+  # BBEDIT_SIGNATURE_SHA256 = { sha256: '5edd44a1f201f74a7630bdac1e5473027bd94300bbd15ee4471da3d24ba8b0a7' }.freeze
 
   BBEDIT_AUTOMATOR_PKG_NAME = 'BBEditAutomatorActionsInstaller-11.5'.freeze
   BBEDIT_AUTOMATOR_PKG_ID = '.automatorActions'.freeze
