@@ -20,6 +20,8 @@ if [ -d ~/.bin ]; then
 	export PATH=~/.bin:${PATH}
 fi
 
+export PROJECTS_HOME=${PROJECTS_HOME:-${HOME}/Projects}
+
 # ========================================
 # Languages/frameworks
 # ========================================
@@ -33,9 +35,9 @@ fi
 
 # Go
 if [ -n "`which go`" ]; then
-	# Prefer ~/Projects, fall back to ~/workspace
-	if [ -d ~/Projects ]; then
-		export GOPATH=~/Projects
+	# Prefer ${PROJECTS_HOME}, fall back to ~/workspace
+	if [ -d ${PROJECTS_HOME} ]; then
+		export GOPATH=${PROJECTS_HOME}
 	elif [ -d ~/workspace ]; then
 		export GOPATH=~/workspace
 	fi
@@ -115,6 +117,12 @@ bbmake() { bbr make $* ; }
 
 # Run command and send results to new BBEdit window
 bbrun() { ($* 2>&1) | bbedit --new-window +1 -t "$*" ; }
+
+# Switch to a project
+scd() { cd ${PROJECTS_HOME}/src/${1} ; }
+
+# Switch to github project
+gcd() { cd ${PROJECTS_HOME}/src/github.com/${1} ; }
 
 # Open query in dash
 dashq() {
@@ -242,7 +250,7 @@ export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit
 case "${TERM}" in
 xterm-256color|xterm-color|xterm|dtterm|linux)
 	case $(uname) in
-	Darwin ) 
+	Darwin )
 		termtheme spartan
 		;;
 	esac
@@ -438,9 +446,9 @@ alias svnbbmerge='svn merge --diff3-cmd bbdiff'
 alias svnbbup='svn update --diff3-cmd bbdiff'
 
 # Shortcuts
-alias projects='cd ~/Projects'
-alias src='cd ~/Projects/src'
-alias mysrc='cd ~/Projects/src/github.com/ascarter'
+alias projects='cd ${PROJECTS_HOME}'
+alias src='cd ${PROJECTS_HOME}/src'
+alias mysrc='cd ${PROJECTS_HOME}/src/github.com/ascarter'
 
 # Ski
 alias whistlertom='curl -o ~/Documents/whistler_tom.pdf -L "http://online.whistlerblackcomb.com/TomPDF/Default.aspx?Season=1&Type=bg" && ql ~/Documents/whistler_tom.pdf'
