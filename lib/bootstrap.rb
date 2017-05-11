@@ -37,7 +37,7 @@ module Bootstrap
 
     # Link each file
     Dir.new(src).each do |file|
-      next if %w(. ..).include?(file)
+      next if %w(. .. .DS_Store).include?(file)
 
       source = File.join(src, file)
       target = File.expand_path(File.join(dest, file))
