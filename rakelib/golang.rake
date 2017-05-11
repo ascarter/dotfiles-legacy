@@ -6,7 +6,6 @@ GOLANG_SOURCE_URL = "https://storage.googleapis.com/golang/#{GOLANG_PKG_NAME}.pk
 GOTOOLS = [
   'github.com/golang/dep/...'.freeze,
   'github.com/golang/lint/golint'.freeze,
-  'golang.org/x/tools/cmd/callgraph'.freeze,
   'golang.org/x/tools/cmd/goimports'.freeze,
   'golang.org/x/tools/cmd/gorename'.freeze,
   'golang.org/x/tools/cmd/guru'.freeze,
