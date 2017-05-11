@@ -1,3 +1,5 @@
+#  -*- mode: unix-shell-script; -*-
+
 #!/bin/sh
 
 # Generate BBpackage
@@ -75,22 +77,22 @@ cat << EOF > "${PKG_DIR}/Contents/Language Modules/${PKG_NAME}.plist"
 
 <!--  The smallest CLM that will color keywords.
       Copyright (c) 2012 Bare Bones Software, Inc. -->
-		
+
 <dict>
 	<!-- You must identify the plist as a CLM: -->
 	<key>BBEditDocumentType</key>
 	<string>CodelessLanguageModule</string>
-	
+
 	<!-- You must identify your language: -->
 	<key>BBLMLanguageDisplayName</key>
 	<string>My Language</string>
 	<key>BBLMLanguageCode</key>
 	<string>MyL!</string>
-	
+
 	<!-- Not required, but there’s not much point to
 	     a language module if it doesn’t color syntax: -->
 	<key>BBLMColorsSyntax</key>         <true/>
-	
+
 	<!-- Specify some keywords. This isn’t required, either,
              but it provides something to color: -->
 	<key>BBLMKeywordList</key>
@@ -105,18 +107,18 @@ cat << EOF > "${PKG_DIR}/Contents/Language Modules/${PKG_NAME}.plist"
 		<string>for</string>
 		<string>return</string>
 	</array>
-	
+
 	<!-- Specify a comment-out string: -->
 	<key>BBLMCommentLineDefault</key>
 	<string>#</string>
-	
+
 	<!-- You must specify the character set for
              keywords and identifiers. Substitute your own:  -->
 	<key>Language Features</key>
 	<dict>
 		<key>Identifier and Keyword Character Class</key>
 		<string>A-Za-z0-9_\?!</string>
-	</dict> 
+	</dict>
 </dict>
 </plist>
 EOF

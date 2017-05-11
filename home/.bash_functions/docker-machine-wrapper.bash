@@ -1,3 +1,5 @@
+#  -*- mode: unix-shell-script; -*-
+
 #
 # Function wrapper to docker-machine that adds a use subcommand.
 #

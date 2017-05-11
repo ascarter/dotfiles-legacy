@@ -1,5 +1,18 @@
 #  -*- mode: unix-shell-script; -*-
 
+# Resize terminal
+alias rs='resize -s 40 120'
+alias rst='resize -s 0 120'
+
+# refresh shell
+alias reload='source ~/.profile'
+
+# Set tab name
+tabname() { printf "\e]1;${1}\a" ; }
+
+# Set window title
+winname() { printf "\e]2;${1}\a" ; }
+
 # Specify terminal themes for directory colors
 # man ls -> find LSCOLORS
 #     LSCOLORS        The value of this variable describes what color to use
@@ -7,9 +20,9 @@
 #                      CLICOLOR.  This string is a concatenation of pairs of the
 #                      format fb, where f is the foreground color and b is the
 #                      background color.
-# 
+#
 #                      The color designators are as follows:
-# 
+#
 #                            a     black
 #                            b     red
 #                            c     green
@@ -27,13 +40,13 @@
 #                            G     bold cyan
 #                            H     bold light grey; looks like bright white
 #                            x     default foreground or background
-# 
+#
 #                      Note that the above are standard ANSI colors.  The actual
 #                      display may differ depending on the color capabilities of
 #                      the terminal in use.
-# 
+#
 #                      The order of the attributes are as follows:
-# 
+#
 #                            1.   directory
 #                            2.   symbolic link
 #                            3.   socket
@@ -46,14 +59,14 @@
 #                            10.  directory writable to others, with sticky bit
 #                            11.  directory writable to others, without sticky
 #                                 bit
-# 
+#
 #                      The default is "exfxcxdxbxegedabagacad", i.e. blue fore-
 #                      ground and default background for regular directories,
 #                      black foreground and red background for setuid executa-
 #                      bles, etc.
 
 termtheme() {
-	case $(uname) in	
+	case $(uname) in
 	Darwin)
 		_macos_termtheme $1
 		;;

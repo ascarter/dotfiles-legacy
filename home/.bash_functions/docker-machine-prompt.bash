@@ -1,3 +1,5 @@
+#  -*- mode: unix-shell-script; -*-
+
 #
 # bash prompt support for docker-machine
 #
