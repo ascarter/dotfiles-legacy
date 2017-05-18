@@ -4,7 +4,7 @@ if Bootstrap.macosx?
 	THINGS_APP_NAME = 'Things'.freeze
 	THINGS_SOURCE_URL = 'https://culturedcode.com/things/download/'.freeze
 	THINGS_HELPER_APP_NAME = 'Things Helper'.freeze
-	THINGS_HELPER_SOURCE_URL = 'http://culturedcode.cachefly.net/things/thingssandboxhelper/1.3/ThingsHelper.zip'.freeze
+	THINGS_HELPER_SOURCE_URL = 'http://culturedcode.cachefly.net/things/thingssandboxhelper/3.4/ThingsHelper.zip'.freeze
 
 	namespace 'things' do
 		desc 'Install Things'
