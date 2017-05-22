@@ -3,13 +3,22 @@
 # Shortcuts
 alias projects='cd ${PROJECTS_HOME}'
 alias src='cd ${PROJECTS_HOME}/src'
-alias mysrc='cd ${PROJECTS_HOME}/src/github.com/ascarter'
+alias mysrc='cd ${PROJECTS_HOME}/src/github.com/${GITHUB_USER}'
 
 # Switch to a project
 scd() { cd ${PROJECTS_HOME}/src/${1} ; }
 
 # Switch to github project
 gcd() { cd ${PROJECTS_HOME}/src/github.com/${1} ; }
+
+# Clone GitHub project
+# Argument should be like `owner/project`
+gclone() {
+	local github_path=${PROJECTS_HOME}/src/github.com
+	mkdir -p ${github_path}
+	hub clone ${1} ${github_path}/${1}
+	gcd ${1}
+}
 
 # Find go workspace for the current directory
 gows() {
