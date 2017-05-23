@@ -22,8 +22,8 @@ namespace 'github' do
   end
 
   namespace 'desktop' do
-    GITHUB_DESKTOP_APP = 'Github Desktop'.freeze
-    GITHUB_DESKTOP_SRC_URL = 'https://central.github.com/mac/latest'.freeze
+    GITHUB_DESKTOP_APP = 'GitHub Desktop'.freeze
+    GITHUB_DESKTOP_SRC_URL = 'https://central.github.com/deployments/desktop/desktop/latest/darwin'.freeze
 
     desc 'Install GitHub Desktop'
     task :install do
