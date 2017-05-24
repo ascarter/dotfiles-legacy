@@ -1,10 +1,10 @@
 # Go language tasks
 
 GOLANG_PKG_ID = 'com.googlecode.go'.freeze
-GOLANG_PKG_NAME = 'go1.8.1.darwin-amd64'.freeze
+GOLANG_PKG_NAME = 'go1.8.2.darwin-amd64'.freeze
 GOLANG_SOURCE_URL = "https://storage.googleapis.com/golang/#{GOLANG_PKG_NAME}.pkg".freeze
 GOTOOLS = [
-  'github.com/golang/dep/...'.freeze,
+  'github.com/golang/dep/cmd/dep'.freeze,
   'github.com/golang/lint/golint'.freeze,
   'golang.org/x/tools/cmd/goimports'.freeze,
   'golang.org/x/tools/cmd/gorename'.freeze,
