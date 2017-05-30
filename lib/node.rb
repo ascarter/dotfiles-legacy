@@ -62,7 +62,7 @@ module Bootstrap
   module Yarn
     def install(pkg)
       if !installed?(pkg)
-        system "yarn global add #{pkg}"
+        Bootstrap.sudo "yarn global add #{pkg}"
       else
         warn "#{pkg} already installed"
       end
@@ -70,13 +70,13 @@ module Bootstrap
     module_function :install
 
     def update(pkg = '')
-      system "yarn global update #{pkg}"
+      Bootstrap.sudo "yarn global update #{pkg}"
     end
     module_function :update
 
     def uninstall(pkg)
       if installed?(pkg)
-        system "yarn global remove #{pkg}"
+        Bootstrap.sudo "yarn global remove #{pkg}"
       else
         warn "#{pkg} is not installed"
       end

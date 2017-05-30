@@ -1,8 +1,9 @@
 # Node.js tasks
 
 NODEJS_PKG_IDS = %w(org.nodejs.node.pkg).freeze
-NODEJS_PKG_NAME = 'node-v7.5.0'.freeze
-NODEJS_SOURCE_URL = 'https://nodejs.org/dist/v7.5.0/node-v7.5.0.pkg'.freeze
+NODEJS_VER='v8.0.0'.freeze
+NODEJS_PKG_NAME = "node-#{NODEJS_VER}".freeze
+NODEJS_SOURCE_URL = "https://nodejs.org/dist/#{NODEJS_VER}/#{NODEJS_PKG_NAME}.pkg".freeze
 
 NPM_PKGS = %w(eslint js-beautify).freeze
 
