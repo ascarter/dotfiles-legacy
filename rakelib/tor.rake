@@ -1,7 +1,7 @@
 # Tor tasks
 
 TOR_APP_NAME = 'TorBrowser'.freeze
-TOR_SOURCE_URL = 'https://www.torproject.org/dist/torbrowser/6.5.2/TorBrowser-6.5.2-osx64_en-US.dmg'.freeze
+TOR_SOURCE_URL = 'https://www.torproject.org/dist/torbrowser/7.0/TorBrowser-7.0-osx64_en-US.dmg'.freeze
 
 namespace 'tor' do
   desc 'Install Tor'
