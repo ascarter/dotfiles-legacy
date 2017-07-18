@@ -152,6 +152,7 @@ if has("gui_running")
 	
 	if has('gui_macvim')
 		" Mac OS X
+		set macthinstrokes
 		set guifont=SF\ Mono\ Regular:h12,Menlo:h12
 		let macvim_hig_shift_movement = 1
 		au FocusLost * set transp=5
