@@ -2,7 +2,6 @@
 --exclude=node_modules
 --exclude=vendor
 --excmd=number
---extras=+p+q+r
 --fields=+a+m+n+S
 --sort=no
 --tag-relative=no
