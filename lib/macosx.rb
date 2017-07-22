@@ -199,6 +199,27 @@ module Bootstrap
       module_function :exists?
     end
 
+    # Mac OS X script
+    module Script
+      # run downloads and executes script
+      def run(script, url, flags: [], headers: {}, sig: {}, wait: false)
+        Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+          script_path = File.join(d, script)
+          system %("#{script_path}" #{flags.join(" ")})
+        end
+      end
+      module_function :run
+
+      # sudo downloads and executes script via sudo
+      def sudo(script, url, flags: [], headers: {}, sig: {}, wait: false)
+        Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+          script_path = File.join(d, script)
+          Bootstrap.sudo %("#{script_path}" #{flags.join(" ")})
+        end
+      end
+      module_function :sudo
+    end
+
     # Mac OS X Safari Extension
     module SafariExtension
       def install(ext, url, headers: {})
