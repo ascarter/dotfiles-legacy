@@ -33,6 +33,9 @@ if Bootstrap.macosx?
       # Remove outdated update default setting
       Bootstrap::MacOSX::Defaults.delete 'com.barebones.bbedit', :key => 'SUFeedURL'
 
+      # Set preference to treat Open File by Name as modal
+      Bootstrap::MacOSX::Defaults.write 'com.barebones.bbedit', 'CloseOFBNWindowAfterOpeningSelection', 'YES', :options => '-bool'
+
       puts `bbedit --version`
     end
 
