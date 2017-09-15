@@ -56,7 +56,7 @@ namespace 'rbenv' do
   desc 'Uninstall rbenv'
   task :uninstall do
     puts 'Uninstalling rbenv...'
-    rbenv_root = File.expand_path(File.join(ENV['HOME'], '.rbenv'))
+    rbenv_root = File.expand_path(File.join(Bootstrap.home_dir, '.rbenv'))
     Bootstrap.file_remove(rbenv_root)
   end
 end
