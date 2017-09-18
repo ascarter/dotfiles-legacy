@@ -120,7 +120,7 @@ esac
 # Editor
 if [ -e /usr/local/bin/bbedit ]; then
 	# bbedit
-	export EDITOR="bbedit -w"
+	export EDITOR="bbedit --wait --resume"
 	export VISUAL="bbedit"
 	export LESSEDIT='bbedit -l %lm %f'
 	export TEXEDIT='bbedit -w -l %d "%s"'
