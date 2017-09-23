@@ -23,6 +23,10 @@ if Bootstrap.macosx?
 
       Bootstrap::MacOSX.path_helper('homebrew', [File.join(HOMEBREW_ROOT, 'bin')])
       Bootstrap::MacOSX.path_helper('homebrew', [File.join(HOMEBREW_ROOT, 'share', 'man')], 'manpaths')
+      
+      # Add homebrew to the path to finish update
+      ENV['PATH'] += ":#{File.join(HOMEBREW_ROOT, 'bin')}"
+      
       Bootstrap::Homebrew.update
     end
 
