@@ -2,7 +2,6 @@
 
 FONT_DIR = File.join(Bootstrap.home_dir, 'Library', 'Fonts')
 
-SFMONO_SOURCE_PATH = '/Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono*.otf'.freeze
 GOFONT_SOURCE_URL = 'https://go.googlesource.com/image/+archive/master/font/gofont/ttfs.tar.gz'.freeze
 FONT_AWESOME_SOURCE_URL = 'http://fontawesome.io/assets/font-awesome-4.7.0.zip'.freeze
 HACK_SOURCE_URL = 'https://github.com/chrissimpkins/Hack/releases/download/v2.020/Hack-v2_020-ttf.zip'.freeze
@@ -32,20 +31,6 @@ namespace 'fonts' do
   #   fc-cache -f -v
   #
   #   end
-
-  namespace 'sfmono' do
-    desc 'Install SF Mono (requires Xcode 8 or later)'
-    task :install do
-      Dir.glob(SFMONO_SOURCE_PATH).each do |f|
-        FileUtils.cp(f, File.join(FONT_DIR, File.basename(f)))
-      end
-    end
-
-    desc 'Uninstall SF mono'
-    task :uninstall do
-      Bootstrap::MacOSX::Font.uninstall('SFMono')
-    end
-  end
 
   namespace 'gofont' do
     desc 'Install Go font'
