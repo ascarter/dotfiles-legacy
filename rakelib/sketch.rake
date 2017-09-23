@@ -1,7 +1,7 @@
 # sketch tasks
 
 SKETCH_APP_NAME = 'Sketch'.freeze
-SKETCH_SOURCE_URL = 'https://www.sketchapp.com/static/download/sketch.zip'.freeze
+SKETCH_SOURCE_URL = 'https://download.sketchapp.com/sketch.zip'.freeze
 
 namespace 'sketch' do
   desc 'Install sketch'
