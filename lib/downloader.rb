@@ -6,9 +6,12 @@ module Bootstrap
     def download(src, dest, headers: {}, limit: 10, sig: {})
       raise 'Too many redirects' if limit.zero?
       uri = URI(src)
-      Net::HTTP.start(uri.host,
-                      uri.port,
-                      use_ssl: uri.scheme == 'https') do |http|
+      http = Net::HTTP.new(uri.host, uri.port)
+      if uri.scheme == 'https'
+        http.use_ssl = true
+      end
+      
+      http.start do
         request = Net::HTTP::Get.new(uri)
         headers.each { |k, v| request[k] = v }
         http.request request do |response|

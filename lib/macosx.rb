@@ -183,7 +183,7 @@ module Bootstrap
 
       def info(id)
         i = {}
-        o, _e, s = Open3.capture3("pkgutil --pkg-info #{id}")
+        o, _e, s = Open3.capture3("pkgutil --pkg-info '#{id}'")
         return nil unless s.success?
         o.each_line do |l|
           parts = l.split(':')
