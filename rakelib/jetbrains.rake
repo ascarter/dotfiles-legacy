@@ -1,8 +1,8 @@
 # JetBrains toolbox
 
 TOOLBOX_APP_NAME = 'JetBrains Toolbox'.freeze
-TOOLBOX_SOURCE_URL = 'https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.1.2143.dmg'.freeze
-TOOLBOX_SIGNATURE = { sha256: '2498a80625b858742a534d0e6b6ba2cea458bb1e7efe967f0e1b3721e11d5957' }.freeze
+TOOLBOX_SOURCE_URL = 'https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.4.2492.dmg'.freeze
+TOOLBOX_SIGNATURE = { sha256: 'd8426a5dc0c9c46773a8a41b72e71b8f80cdac0545e942d4fff3f2dabcbf3a68' }.freeze
 
 namespace 'jetbrains' do
   desc 'Install JetBrains Toolbox'
