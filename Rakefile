@@ -42,7 +42,12 @@ end
 
 # Work configuration
 desc 'Work development configuration'
-task :workdev => [ :macdev, 'zoom:install', 'viscosity:install' ]
+task :workdev => [
+  :macdev,
+  'nvm:install',
+  'zoom:install',
+  'viscosity:install'
+]
 
 case RUBY_PLATFORM
 when /darwin/
@@ -50,29 +55,31 @@ when /darwin/
   task :macdev => [
     :install,
     'icloud:install',
+    'gpg:install',
     '1password:install',
+    'keybase:install',
     'homebrew:install',
     'bbedit:install',
     'github:install',
     'coderunner:install',
-    'colorpicker:install',
-    'emacs:install',
     'golang:install',
     'paw:install',
     'postgres:install',
     'mysql:sequelpro:install',
-    'sketch:install',
     'xquartz:install',
-    'intellij:install',
+    'jetbrains:install',
     'android:install',
+    # 'sketch:install',
+    'sanfrancisco:install',
   ]
 when /linux/
   desc 'Install Linux development environment'
   task :linuxdev => [
     :install,
+    'gpg:install',
     'android:install',
     'github:install',
-    'intellij:install',
+    'jetbrains:install',
     'mysql:sequelpro:install',
     'postgres:install',
   ]
@@ -80,9 +87,10 @@ when /windows/
   desc 'Install Windows development environment'
   task :windev => [
     :install,
+    'gpg:install',
     'android:install',
     'github:install',
-    'intellij:install',
+    'jetbrains:install',
     'mysql:sequelpro:install',
     'postgres:install',
   ]
