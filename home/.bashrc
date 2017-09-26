@@ -90,11 +90,6 @@ if [ -n "`which hub`" ]; then
 	eval "$(hub alias -s)"
 fi
 
-# Vim
-if [ -d /Applications/MacVim.app ]; then
-	export PATH=/Applications/MacVim.app/Contents/bin:$PATH
-fi
-
 # ========================================
 # Shell functions
 # ========================================
@@ -126,18 +121,11 @@ if [ -e /usr/local/bin/bbedit ]; then
 	export TEXEDIT='bbedit -w -l %d "%s"'
 else
 	# vim
-	export EDITOR="mvim --nofork"
-	export VISUAL="mvim"
+	export EDITOR="vim"
+	export VISUAL=${EDITOR}
 	export LESSEDIT='vim ?lm+%lm. %f'
 	export TEXEDIT='vim +%d %s'
 fi
-
-# Other editors
-# if [ -e /usr/local/bin/atom ]; then
-# 	# Atom
-# 	export EDITOR="atom --wait"
-# 	export VISUAL="atom"
-# fi
 
 # less
 export PAGER=less
@@ -161,9 +149,6 @@ xterm-256color|xterm-color|xterm|dtterm|linux)
 	esac
 	;;
 esac
-
-# Docker
-# PS1='[\u@\h \W$(__docker_machine_ps1 " [%s]")]\$ '
 
 # Set Git PS conditions
 export GIT_PS1_SHOWDIRTYSTATE=1

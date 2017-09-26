@@ -7,7 +7,7 @@ require_relative 'lib/bootstrap'
 task :default => [ :install ]
 
 desc 'Install default configuration'
-task :install => [ :bootstrap, :configenv, 'git:config', 'rbenv:install', 'vim:install' ]
+task :install => [ :bootstrap, :configenv, 'git:config' ]
 
 desc 'Change default shell'
 task :chsh do
@@ -54,6 +54,7 @@ when /darwin/
   desc 'Install Mac development environment'
   task :macdev => [
     :install,
+    'rbenv:install'
     'icloud:install',
     'gpg:install',
     '1password:install',
@@ -69,13 +70,13 @@ when /darwin/
     'xquartz:install',
     'jetbrains:install',
     'android:install',
-    # 'sketch:install',
     'sanfrancisco:install',
   ]
 when /linux/
   desc 'Install Linux development environment'
   task :linuxdev => [
     :install,
+    'rbenv:install'
     'gpg:install',
     'android:install',
     'github:install',
