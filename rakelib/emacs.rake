@@ -11,12 +11,12 @@ namespace 'emacs' do
       Bootstrap::MacOSX::App.install(EMACS_APP_NAME, EMACS_SOURCE_URL)
 
       # Symlink emacs
-      memacs = File.expand_path(File.join(File.dirname(__FILE__), '../src/bin/memacs'))
-      Bootstrap.usr_bin_ln(memacs, 'emacs')
+      emacs = File.expand_path(File.join(File.dirname(__FILE__), '../src/bin/memacs'))
+      Bootstrap.usr_bin_ln(emacs, 'emacs')
 
       # Symlink emacsclient
-      emacasclient = '/Applications/Emacs.app/Contents/MacOS/bin/emacsclient'
-      Bootstrap.usr_bin_ln(emacasclient, 'emacsclient')
+      emacsclient = '/Applications/Emacs.app/Contents/MacOS/bin/emacsclient'
+      Bootstrap.usr_bin_ln(emacsclient, 'emacsclient')
     end
 
     puts `emacs --version`
@@ -27,7 +27,7 @@ namespace 'emacs' do
     case RUBY_PLATFORM
     when /darwin/
       # Remove symlinks
-      %w(emacs emacasclient).each { |c| Bootstrap.usr_bin_rm(c) }
+      %w(emacs emacsclient).each { |c| Bootstrap.usr_bin_rm(c) }
 
       # Remove application
       Bootstrap::MacOSX::App.uninstall(EMACS_APP_NAME)
