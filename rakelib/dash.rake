@@ -1,7 +1,7 @@
 # dash tasks
 
 DASH_APP_NAME = 'Dash'.freeze
-DASH_SOURCE_URL = 'https://sanfrancisco.kapeli.com/downloads/v3/Dash.zip'.freeze
+DASH_SOURCE_URL = 'https://sanfrancisco.kapeli.com/downloads/v4/Dash.zip'.freeze
 
 namespace 'dash' do
   desc 'Install dash'

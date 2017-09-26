@@ -62,6 +62,7 @@ when /darwin/
     'homebrew:install',
     'bbedit:install',
     'github:install',
+    'dash:install',
     'coderunner:install',
     'golang:install',
     'paw:install',
