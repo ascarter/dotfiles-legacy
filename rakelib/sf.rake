@@ -13,7 +13,7 @@ namespace 'sanfrancisco' do
   task install: ['pro:install', 'compact:install', 'mono:install']
 
   desc 'Uninstall San Francisco Fonts'
-  task uninstall: ['pro:uninstall', 'compact:uninstall']
+  task uninstall: ['mono:uninstall', 'pro:uninstall', 'compact:uninstall']
 
   namespace 'pro' do
     desc 'Install San Francisco Pro Fonts'

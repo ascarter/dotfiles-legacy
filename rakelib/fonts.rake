@@ -10,10 +10,10 @@ namespace 'fonts' do
   task default: [:all]
 
   desc 'Install all fonts'
-  task install: ['sfmono:install', 'gofont:install', 'hack:install']
+  task install: ['gofont:install', 'hack:install']
 
   desc 'Uninstall all fonts'
-  task uninstall: ['sfmono:uninstall', 'gofont:uninstall', 'hack:uninstall']
+  task uninstall: ['gofont:uninstall', 'hack:uninstall']
 
   #   desc "Adobe SourceCodePro"
   #   task :sourcecodepro do
