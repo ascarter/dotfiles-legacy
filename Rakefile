@@ -54,7 +54,7 @@ when /darwin/
   desc 'Install Mac development environment'
   task :macdev => [
     :install,
-    'rbenv:install'
+    'rbenv:install',
     'icloud:install',
     'gpg:install',
     '1password:install',
@@ -76,7 +76,7 @@ when /linux/
   desc 'Install Linux development environment'
   task :linuxdev => [
     :install,
-    'rbenv:install'
+    'rbenv:install',
     'gpg:install',
     'android:install',
     'github:install',
