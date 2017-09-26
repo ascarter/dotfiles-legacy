@@ -292,7 +292,7 @@ module Bootstrap
 
   def usr_bin_rm(cmd)
     cmd_file = usr_bin_cmd(cmd)
-    sudo_rm(cmd_file) if File.exist?(cmd_file)
+    sudo_rm(cmd_file)
   end
   module_function :usr_bin_rm
 
@@ -322,7 +322,7 @@ module Bootstrap
 
   def usr_man_rm(page)
     page_file = File.join('/usr/local/share/man', page)
-    sudo_rm(page_file) if File.exist?(page_file)
+    sudo_rm(page_file)
   end
   module_function :usr_man_rm
 
