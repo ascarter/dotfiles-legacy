@@ -1,7 +1,7 @@
 # transmit tasks
 
 TRANSMIT_APP_NAME = 'Transmit'.freeze
-TRANSMIT_SOURCE_URL = 'https://download.panic.com/transmit/Transmit%205.0.zip'.freeze
+TRANSMIT_SOURCE_URL = 'https://download.panic.com/transmit/Transmit%205.0.3.zip'.freeze
 
 namespace 'transmit' do
   desc 'Install transmit'
