@@ -1,7 +1,7 @@
 # coda tasks
 
 CODA_APP_NAME = 'Coda 2'.freeze
-CODA_SOURCE_URL = 'http://download.panic.com/coda/Coda%202.5.16.zip'.freeze
+CODA_SOURCE_URL = 'https://download.panic.com/coda/Coda%202.6.6.zip'.freeze
 
 namespace 'coda' do
   desc 'Install coda'
