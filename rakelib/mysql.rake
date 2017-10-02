@@ -1,9 +1,9 @@
 # MySQL
 
-MYSQL_PKG_NAME = 'mysql-5.7.18-macos10.12-x86_64'.freeze
+MYSQL_PKG_NAME = 'mysql-5.7.19-macos10.12-x86_64'.freeze
 MYSQL_PKG_IDS= %w(com.mysql.mysql com.mysql.launchd com.mysql.prefpane).freeze
 MYSQL_SOURCE_URL = "https://dev.mysql.com/get/Downloads/MySQL-5.7/#{MYSQL_PKG_NAME}.dmg".freeze
-MYSQL_SIGNATURE = { md5: '8e8e3dea84afdaa7995f39fb025c418e' }.freeze
+MYSQL_SIGNATURE = { md5: '999a9461663f3f873afe0c165316ef86' }.freeze
 MYSQL_ROOT = '/usr/local/mysql'.freeze
 
 namespace 'mysql' do
