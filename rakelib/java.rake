@@ -1,8 +1,13 @@
 # Java JDK
 
-JDK_PKG_NAME = 'JDK 8 Update 131'.freeze
-JDK_PKG_IDS = %w(com.oracle.jdk8u131 com.oracle.jre).freeze
-JDK_SOURCE_URL = 'http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-macosx-x64.dmg'.freeze
+JDK_PKG_NAME = 'JDK 9'.freeze
+JDK_PKG_IDS = %w(com.oracle.jdk-9 com.oracle.jre).freeze
+JDK_SOURCE_URL = 'http://download.oracle.com/otn-pub/java/jdk/9+181/jdk-9_osx-x64_bin.dmg'.freeze
+
+JDK_8_PKG_NAME = 'JDK 8 Update 144'.freeze
+JDK_8_SOURCE_URL = 'http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-macosx-x64.dmg'.freeze
+JDK_8_PKG_IDS = %w(com.oracle.jdk8u144).freeze
+
 JDK_DOWNLOAD_HEADERS = {
   'Cookie' => 'oraclelicense=accept-securebackup-cookie'
 }.freeze
@@ -18,27 +23,55 @@ namespace 'java' do
   desc 'Uninstall Java'
   task uninstall: ['jdk:uninstall']
 
-  if Bootstrap.macosx?
-    task install: ['apple:install']
-    task uninstall: ['apple:uninstall']
-  end
+#   if Bootstrap.macosx?
+#     task install: ['apple:install']
+#     task uninstall: ['apple:uninstall']
+#   end
 
   namespace 'jdk' do
-    desc 'Install Java JDK'
-    task :install do
-      case RUBY_PLATFORM
-      when /darwin/
-        Bootstrap::MacOSX::Pkg.install(JDK_PKG_NAME, JDK_PKG_IDS[0], JDK_SOURCE_URL, headers: JDK_DOWNLOAD_HEADERS)
+    desc 'Install all Java JDK'
+    task install: ['jdk:java9:install', 'jdk:java8:install']
+    
+    desc 'Uninstall all Java JDK'
+    task uninstall: ['jdk:java9:uninstall', 'jdk:java8:uninstall']
+  
+    namespace 'java9' do
+      desc 'Install Java JDK'
+      task :install do
+        case RUBY_PLATFORM
+        when /darwin/
+          Bootstrap::MacOSX::Pkg.install(JDK_PKG_NAME, JDK_PKG_IDS[0], JDK_SOURCE_URL, headers: JDK_DOWNLOAD_HEADERS)
+        end
+
+        puts `java -version`
       end
 
-      puts `java -version`
+      desc 'Uninstall Java JDK'
+      task :uninstall do
+        case RUBY_PLATFORM
+        when /darwin/
+          JDK_PKG_IDS.each { |p| Bootstrap::MacOSX::Pkg.uninstall(p) }
+        end
+      end
     end
 
-    desc 'Uninstall Java JDK'
-    task :uninstall do
-      case RUBY_PLATFORM
-      when /darwin/
-        JDK_PKG_IDS.each { |p| Bootstrap::MacOSX::Pkg.uninstall(p) }
+    namespace 'java8' do
+      desc 'Install Java JDK'
+      task :install do
+        case RUBY_PLATFORM
+        when /darwin/
+          Bootstrap::MacOSX::Pkg.install(JDK_8_PKG_NAME, JDK_8_PKG_IDS[0], JDK_8_SOURCE_URL, headers: JDK_DOWNLOAD_HEADERS)
+        end
+
+        puts `java -version`
+      end
+
+      desc 'Uninstall Java JDK'
+      task :uninstall do
+        case RUBY_PLATFORM
+        when /darwin/
+          JDK_8_PKG_IDS.each { |p| Bootstrap::MacOSX::Pkg.uninstall(p) }
+        end
       end
     end
   end
