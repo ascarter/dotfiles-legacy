@@ -4,8 +4,8 @@ DOCKER_APP_NAME = 'Docker'.freeze
 DOCKER_SOURCE_URL = 'https://download.docker.com/mac/stable/Docker.dmg'.freeze
 DOCKER_SHA256SUM = 'https://download.docker.com/mac/stable/Docker.dmg.sha256sum'.freeze
 
-DOCKER_BETA_SOURCE_URL = 'https://download.docker.com/mac/beta/Docker.dmg'.freeze
-DOCKER_BETA_SHA256SUM = 'https://download.docker.com/mac/beta/Docker.dmg.sha256sum'.freeze
+DOCKER_BETA_SOURCE_URL = 'https://download.docker.com/mac/edge/Docker.dmg'.freeze
+DOCKER_BETA_SHA256SUM = 'https://download.docker.com/mac/edge/Docker.dmg.sha256sum'.freeze
 
 KITEMATIC_APP_NAME = 'Kitematic (Beta)'.freeze
 KITEMATIC_SOURCE_URL = 'https://download.docker.com/kitematic/Kitematic-Mac.zip'.freeze
