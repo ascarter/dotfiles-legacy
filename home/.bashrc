@@ -7,7 +7,9 @@
 case $(uname) in
 Darwin )
 	ulimit -n 5000
-	# Add ssh keys added via ssh-add -K <key>
+	
+	# Initialize ssh agent and add keys
+	eval "$(ssh-agent -s)"
 	ssh-add -A
 esac
 
