@@ -1,7 +1,7 @@
 # Agile Bits 1Password tasks
 
 ONEPASSWORD_PKG_NAME = '1Password-6.8.2'.freeze
-ONEPASSWORD_PKG_ID = 'com.agilebits.pkg.onepassword'
+ONEPASSWORD_PKG_ID = 'com.agilebits.pkg.onepassword'.freeze
 ONEPASSWORD_SOURCE_URL= 'https://app-updates.agilebits.com/download/OPM4'.freeze
 ONEPASSWORD_SAFARI_EXTENSION = '1Password-4.6.11'.freeze
 ONEPASSWORD_SAFARI_SOURCE_URL = 'https://cache.agilebits.com/dist/1P/ext/#{ONEPASSWORD_SAFARI_EXTENSION}.safariextz'.freeze

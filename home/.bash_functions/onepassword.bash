@@ -2,5 +2,5 @@
 
 # Signin to 1Password
 opsignin() {
-	eval "$(op signin ${1})"
+	eval "$(op signin $*)"
 }
