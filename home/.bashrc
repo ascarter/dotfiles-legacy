@@ -1,19 +1,6 @@
 #  -*- mode: unix-shell-script; -*-
 
 # ========================================
-# Platform settings
-# ========================================
-
-case $(uname) in
-Darwin )
-	ulimit -n 5000
-	
-	# Initialize ssh agent and add keys
-	eval "$(ssh-agent -s)"
-	ssh-add -A
-esac
-
-# ========================================
 # Path settings
 # ========================================
 
