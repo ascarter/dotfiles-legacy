@@ -5,10 +5,6 @@ Darwin )
 	# ls
 	alias ls='ls -hFGH'
 
-	# SSH init
-	# Initialize ssh agent and add keys
-	alias sshi='eval "$(ssh-agent -s)" && ssh-add -A'
-
 	# System shortcuts
 	alias lockscreen='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
 
