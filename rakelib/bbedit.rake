@@ -22,8 +22,8 @@ if Bootstrap.macosx?
 
       # Install command line utils
       unless File.exist?('/usr/local/bin/bbedit')
-        helper = File.join(Boostrap::MacOSX::App.contents(BBEDIT_APP_NAME), BBEDIT_INSTALL_TOOLS_SCPT)
-        Bootstrap::MacOSX.run_applescript(helper, wait: true)
+        helper = File.join(Bootstrap::MacOSX::App.contents(BBEDIT_APP_NAME), BBEDIT_INSTALL_TOOLS_SCPT)
+        Bootstrap::MacOSX.run_applescript(helper)
       end
 
       # Install automator actions
