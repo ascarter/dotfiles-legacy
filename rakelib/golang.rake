@@ -14,6 +14,8 @@ GOTOOLS = [
   'golang.org/x/tools/cmd/present'.freeze
 ]
 
+DELVE_PKG = 'github.com/derekparker/delve/cmd/dlv'
+
 namespace 'golang' do
   desc 'Install Go language'
   task :install do
@@ -32,6 +34,7 @@ namespace 'golang' do
 
   Rake::Task[:install].enhance do
     Rake::Task['golang:workspace:install'].invoke
+    Rake::Task['golang:debugger:install'].invoke
   end
 
   desc 'Info on Go language'
@@ -131,6 +134,21 @@ EOF
     desc 'Uninstall Go tools'
     task :uninstall do
       GOTOOLS.each { |t| Bootstrap::Go.clean(t) }
+    end
+  end
+
+  namespace 'debugger' do
+    desc 'Install delve debugger'
+    task :install => ['golang:workspace:init'] do
+      delve_dir = File.join(Bootstrap.workspace_dir, 'src', 'github.com', 'derekparker', 'delve')
+      Bootstrap::Go.get(DELVE_PKG, noinstall: true)
+      Bootstrap::Go.sudo("make -C #{delve_dir} install")
+      system "dlv version"
+    end
+
+    desc 'Uninstall delve debugger'
+    task :uninstall do
+      Bootstrap::Go.clean(DELVE_PKG)
     end
   end
 end
