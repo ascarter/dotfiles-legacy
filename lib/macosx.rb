@@ -62,7 +62,7 @@ module Bootstrap
     module App
       def install(app, url, headers: {}, sig: {}, owner: Bootstrap.current_user, group: 'admin', cmdfiles: [], manfiles: [])
         app_name = "#{app}.app"
-        app_path = File.join('/Applications', app_name)
+        app_path = path(app)
 
         if File.exist?(app_path)
           warn "#{app} already installed"
@@ -81,8 +81,7 @@ module Bootstrap
       module_function :install
 
       def uninstall(app)
-        app_name = "#{app}.app"
-        app_path = File.join('/Applications', app_name)
+        app_path = path(app)
 
         if File.exist?(app_path)
           puts "Uninstalling #{app}"
@@ -113,11 +112,19 @@ module Bootstrap
         system "osascript -e '#{script}'"
       end
       module_function :hide
+      
+      def path(app)
+        File.join('/Applications', "#{app}.app")
+      end
+      module_function :path
+      
+      def contents(app)
+        File.join(path(app), 'Contents')
+      end
+      module_function :contents
 
       def exists?(app)
-        app_name = "#{app}.app"
-        app_path = File.join('/Applications', app_name)
-        File.exist?(app_path)
+        File.exist?(path(app))
       end
       module_function :exists?
     end
