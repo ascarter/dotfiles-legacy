@@ -206,6 +206,23 @@ module Bootstrap
       module_function :exists?
     end
 
+    # Mac app plugin
+    # Many apps have plugins that can be installed by opening the plugin and letting
+    # the app handle it.
+    #
+    # Examples:
+    #   sketchplugin
+    #   bbpackage
+    module Plugin
+      def install(plugin, url, headers: {}, sig: {})
+        Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+          target = File.join(d, plugin)
+          system %(open "#{target}")
+        end
+      end
+      module_function :install     
+    end
+
     # Mac OS X script
     module Script
       # run downloads and executes script
