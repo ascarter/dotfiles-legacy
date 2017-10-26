@@ -18,6 +18,7 @@ Darwin )
 	alias airport=/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport
 
 	# Power managment
+	alias keepawake='caffeinate -d -i -s'
 	alias sleepnow='pmset sleepnow'
 	alias batterycapacity='ioreg -w0 -c AppleSmartBattery -b -f | grep -i capacity'
 
