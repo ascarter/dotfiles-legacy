@@ -27,6 +27,12 @@ module Bootstrap
     end
     module_function :rm_path_helper
 
+    def run_app(app, wait: false)
+      flags = wait ? "--wait-apps" : ""
+      system %(open #{flags} "#{App.path(app)}")
+    end
+    module_function :run_app
+
     def run_applescript(script)
       system "osascript \"#{script}\""
     end
@@ -96,8 +102,7 @@ module Bootstrap
       def run(app, url, headers: {}, sig: {}, wait: false)
         open_flags = wait ? "--wait-apps" : ""
         Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
-          app_path = File.join(d, "#{app}.app")
-          system %(open #{open_flags} "#{app_path}")
+          run_app(File.join(d, "#{app}.app"), wait: wait)
         end
       end
       module_function :run
@@ -112,12 +117,12 @@ module Bootstrap
         system "osascript -e '#{script}'"
       end
       module_function :hide
-      
+
       def path(app)
         File.join('/Applications', "#{app}.app")
       end
       module_function :path
-      
+
       def contents(app)
         File.join(path(app), 'Contents')
       end
@@ -220,7 +225,7 @@ module Bootstrap
           system %(open "#{target}")
         end
       end
-      module_function :install     
+      module_function :install
     end
 
     # Mac OS X script
