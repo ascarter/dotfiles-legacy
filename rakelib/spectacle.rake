@@ -1,4 +1,5 @@
-# spectacle tasks
+# Spectacle tasks
+# https://www.spectacleapp.com
 
 SPECTACLE_APP_NAME = 'Spectacle'.freeze
 SPECTACLE_SOURCE_URL = 'https://s3.amazonaws.com/spectacle/downloads/Spectacle+1.2.zip'.freeze
