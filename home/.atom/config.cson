@@ -1,0 +1,12 @@
+"*":
+  core:
+    projectHome: "/Users/andrew/Projects/src"
+    telemetryConsent: "no"
+    themes: [
+      "one-light-ui"
+      "one-light-syntax"
+    ]
+  editor:
+    fontFamily: "SF Mono"
+  "exception-reporting":
+    userId: "1df1bdf4-0c22-4681-952c-9f9f56dd08f1"
