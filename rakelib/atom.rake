@@ -1,7 +1,7 @@
 # Atom tasks
 
-ATOM_APP_NAME = 'Atom Beta'.freeze
-ATOM_SRC_URL = 'https://atom.io/download/mac?channel=beta'.freeze
+ATOM_APP_NAME = 'Atom'.freeze
+ATOM_SRC_URL = 'https://atom.io/download/mac'.freeze
 # ATOM_PKGS = %w(dash go-plus go-debug native-ui nord-atom-syntax nord-atom-ui seti-syntax seti-ui sort-lines).freeze
 ATOM_PKGS = %w(dash editorconfig native-ui sort-lines).freeze
 
