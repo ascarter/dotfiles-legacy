@@ -8,8 +8,8 @@
     "shortcut_name" : "MakeSmaller"
   },
   {
-    "shortcut_key_binding" : "ctrl+alt+cmd+home",
-    "shortcut_name" : "MoveToUpperLeft"
+    "shortcut_key_binding" : "ctrl+cmd+home",
+    "shortcut_name" : "MoveToPreviousThird"
   },
   {
     "shortcut_key_binding" : "ctrl+alt+cmd+pageup",
@@ -36,12 +36,12 @@
     "shortcut_name" : "MakeLarger"
   },
   {
-    "shortcut_key_binding" : "ctrl+alt+pageup",
-    "shortcut_name" : "MoveToPreviousDisplay"
-  },
-  {
     "shortcut_key_binding" : "alt+cmd+z",
     "shortcut_name" : "UndoLastMove"
+  },
+  {
+    "shortcut_key_binding" : "ctrl+alt+pageup",
+    "shortcut_name" : "MoveToPreviousDisplay"
   },
   {
     "shortcut_key_binding" : "alt+cmd+f",
@@ -64,11 +64,11 @@
     "shortcut_name" : "MoveToRightHalf"
   },
   {
-    "shortcut_key_binding" : "ctrl+cmd+home",
-    "shortcut_name" : "MoveToPreviousThird"
-  },
-  {
     "shortcut_key_binding" : "ctrl+alt+cmd+pagedown",
     "shortcut_name" : "MoveToLowerRight"
+  },
+  {
+    "shortcut_key_binding" : "ctrl+alt+cmd+home",
+    "shortcut_name" : "MoveToUpperLeft"
   }
 ]
