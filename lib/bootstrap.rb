@@ -28,29 +28,34 @@ end
 
 # Bootstrap contains the support system for the dotfiles system
 module Bootstrap
-  # bootstrap links all the files in src to same file with '.' prepended at dest
-  def bootstrap(src, dest, dotfiles=true)
+  # bootstrap links all the files in src to same file at dest
+  # If sparse is set to true, recursively scan source directories and only link files
+  def bootstrap(src, dest, sparse = false)
     replace_all = false
 
+    src_dir = Pathname.new(src).expand_path
+    dest_dir = Pathname.new(dest).expand_path
+
     # Ensure that the target exists
-    FileUtils.mkdir_p(dest)
+    dest_dir.mkpath
 
-    # Link each file
-    Dir.new(src).each do |file|
-      next if %w(. .. .DS_Store).include?(file)
+    Dir.glob(src_dir.join(sparse ? "**/*" : "*"), File::FNM_DOTMATCH).each do |f|
+      source = Pathname.new(f)
+      target = dest_dir.join(source.relative_path_from(src_dir))
 
-      source = File.join(src, file)
-      target = File.expand_path(File.join(dest, file))
-      if File.exist?(target) or File.symlink?(target) or File.directory?(target)
+      next if %w(. .. .DS_Store).include?(source.basename.to_s)
+      next if source.directory? and sparse
+
+      if target.exist? or target.symlink? or target.directory?
         if File.identical?(source, target)
-          puts "Identical #{file}"
+          puts "Identical #{source}"
         else
           puts 'Diff:'
-          system "diff #{source} #{target}"
+          system %Q{diff "#{source}" "#{target}"}
           if replace_all
             Bootstrap.replace(source, target)
           else
-            print "Replace existing file #{file}? [ynaq] "
+            print "Replace existing file #{source}? [ynaq] "
             case $stdin.gets.chomp
             when 'a'
               replace_all = true
@@ -61,7 +66,7 @@ module Bootstrap
               warn 'Abort'
               exit
             else
-              puts "Skipping #{file}"
+              puts "Skipping #{source}"
             end
           end
         end
@@ -72,10 +77,17 @@ module Bootstrap
   end
   module_function :bootstrap
 
-  def unbootstrap(src, dest)
-    Dir.new(src).each do |file|
-      next if %w(. ..).include?(file)
-      target = File.join(dest, file)
+  def unbootstrap(src, dest, sparse = false)
+    src_dir = Pathname.new(src).expand_path
+    dest_dir = Pathname.new(dest).expand_path
+
+    Dir.glob(src_dir.join(sparse ? "**/*" : "*"), File::FNM_DOTMATCH).each do |f|
+      source = Pathname.new(f)
+      target = dest_dir.join(source.relative_path_from(src_dir))
+
+      next if %w(. ..).include?(source.basename.to_s)
+      next if source.directory? and sparse
+
       Bootstrap.file_remove(target)
     end
   end

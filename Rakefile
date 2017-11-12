@@ -22,8 +22,8 @@ end
 
 desc 'Bootstrap dotfiles to home directory using symlinks'
 task :bootstrap => [ :usrlocal ] do
-  Bootstrap.bootstrap(File.expand_path('home'), Bootstrap.home_dir())
-  Bootstrap.bootstrap(File.expand_path('config'), Bootstrap.config_dir())
+  Bootstrap.bootstrap('home', Bootstrap.home_dir())
+  Bootstrap.bootstrap('config', Bootstrap.config_dir())
 end
 
 desc 'Configure environment'
@@ -36,8 +36,8 @@ end
 
 desc 'Uninstall dotfiles from home directory'
 task :uninstall do
-  Bootstrap.unbootstrap(File.expand_path('home'), Bootstrap.home_dir())
-  Bootstrap.unbootstrap(File.expand_path('config'), Bootstrap.config_dir())
+  Bootstrap.unbootstrap('home', Bootstrap.home_dir())
+  Bootstrap.unbootstrap('config', Bootstrap.config_dir())
 end
 
 # Work configuration
