@@ -2,7 +2,7 @@
 # https://www.mozilla.org/en-US/firefox
 
 FIREFOX_APP_NAME = 'Firefox'.freeze
-FIREFOX_SOURCE_URL = 'https://download.mozilla.org/?product=firefox-50.1.0-SSL&os=osx&lang=en-US'.freeze
+FIREFOX_SOURCE_URL = 'https://download.mozilla.org/?product=firefox-latest-ssl&os=osx&lang=en-US'.freeze
 
 FIREFOX_DEV_APP_NAME = 'FirefoxDeveloperEdition'.freeze
 FIREFOX_DEV_SOURCE_URL = 'https://download.mozilla.org/?product=firefox-devedition-latest-ssl&os=osx&lang=en-US'.freeze
