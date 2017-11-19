@@ -103,8 +103,12 @@ namespace 'spectacle' do
   task :hotkeys do
     case RUBY_PLATFORM
     when /darwin/
+      support_dir = File.dirname(SPECTACLE_SHORTCUTS_FILE)
       Bootstrap.backup(SPECTACLE_SHORTCUTS_FILE)
-      File.open(SPECTACLE_SHORTCUTS_FILE, 'w') { |f| f.write(JSON.pretty_generate(SPECTACLE_SHORTCUTS)) }
+      FileUtils.mkdir_p(support_dir)
+      File.open(SPECTACLE_SHORTCUTS_FILE, 'w') do |f|
+        f.write(JSON.pretty_generate(SPECTACLE_SHORTCUTS))
+      end
     end
   end
 end
