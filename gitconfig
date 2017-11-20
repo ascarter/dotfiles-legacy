@@ -30,6 +30,7 @@
 	bbdiff = difftool --tool=bbdiff
 	br = branch
 	changes = diff --name-status -r
+	changelog = log --oneline --decorate --no-merges
 	ci = commit
 	co = checkout
 	ctags = '!${PWD}/.git/hooks/ctags'
