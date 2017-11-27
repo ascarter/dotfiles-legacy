@@ -51,6 +51,11 @@ if [ -n "`which yarn`" ]; then
 	export PATH=${PATH}:`yarn global bin`
 fi
 
+# Python
+if [ -d ~/Library/Python/2.7 ]; then
+	export PATH=~/Library/Python/2.7/bin:${PATH}
+fi
+
 # Java
 if [[ -e /usr/libexec/java_home ]]; then
 	# Verify that java is installed
