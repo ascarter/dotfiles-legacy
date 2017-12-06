@@ -1,5 +1,9 @@
 #  -*- mode: unix-shell-script; -*-
 
+# dotfiles home folder
+alias df='cd ~/.dotfiles'
+
+# ls
 alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
