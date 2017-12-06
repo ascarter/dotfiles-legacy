@@ -28,7 +28,7 @@
 	aliases = !git config -l | grep alias | cut -c 7-
 	amend = commit --amend
 	bbdiff = difftool --tool=bbdiff
-	begin = cob
+	begin = checkout -b
 	blocal = rev-parse --abbrev-ref HEAD
 	br = branch
 	bremote = rev-parse --abbrev-ref --symbolic-full-name @{u}
@@ -38,7 +38,7 @@
 	ciu = commitup
 	cleanup = !git checkout master && git branch --merged | grep -v " master" | xargs git branch -d
 	co = checkout
-	cob = checkout -b
+	cob = begin
 	commitup = "!f() { local msg=${1-'WIP'}; git commit -a -m \"${msg}\"; git up; git push origin; }; f"
 	cont = "!f() { git up; echo "Create new branch ${1}"; git begin ${1} origin/${1}; }; f"
 	ctags = '!${PWD}/.git/hooks/ctags'
