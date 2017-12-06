@@ -28,7 +28,7 @@
 	aliases = !git config -l | grep alias | cut -c 7-
 	amend = commit --amend
 	bbdiff = difftool --tool=bbdiff
-	begin = checkout -b
+	begin = cob
 	blocal = rev-parse --abbrev-ref HEAD
 	br = branch
 	bremote = rev-parse --abbrev-ref --symbolic-full-name @{u}
@@ -38,7 +38,7 @@
 	ciu = commitup
 	cleanup = !git checkout master && git branch --merged | grep -v " master" | xargs git branch -d
 	co = checkout
-	cob = begin
+	cob = checkout -b
 	commitup = "!f() { local msg=${1-'WIP'}; git commit -a -m \"${msg}\"; git up; git push origin; }; f"
 	cont = "!f() { git up; echo "Create new branch ${1}"; git begin ${1} origin/${1}; }; f"
 	ctags = '!${PWD}/.git/hooks/ctags'
@@ -46,6 +46,7 @@
 	difflast = diff HEAD^ HEAD
 	diffstat = diff --stat -r
 	dir = rev-parse --show-toplevel
+	dirty = status --untracked-files=no --porcelain
 	discard = checkout -- 
 	done = "!f() { local branch=${1-$(git blocal)}; git checkout master; git up; git cleanup; git branch -d ${branch}; }; f"
 	dump = cat-file -p
@@ -71,7 +72,9 @@
 	type = cat-file -t
 	unstage = reset HEAD --
 	untrack = rm --cache --
-	up = !git stash && git pull --rebase --prune && git stash pop
+	up = "!f() { if [ \"$(git dirty)\" != \"\" ]; then git upd; else git upc; fi; }; f"
+	upc = pull --rebase --prune
+	upd = !git stash && git upc && git stash pop
 	upstream = !git branch -vv --list $(git blocal)
 	visual = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
 	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
