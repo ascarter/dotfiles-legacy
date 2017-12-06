@@ -110,6 +110,13 @@ module Bootstrap
   end
   module_function :windows?
 
+  def about(title, description='', homepage='')
+    puts "#{title}"
+    puts "#{description}"
+    puts "#{homepage}"
+  end
+  module_function :about
+
   def prompt(message, default = nil)
     print "Enter #{message}#{" [#{default}]" unless default.nil?}: "
     response = $stdin.gets.chomp
