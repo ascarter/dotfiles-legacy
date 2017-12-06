@@ -39,7 +39,7 @@
 	cleanup = !git checkout master && git branch --merged | grep -v " master" | xargs git branch -d
 	co = checkout
 	cob = begin
-	commitup = "!f() { git commit -a -m ${1-"WIP"}; git push origin; } f"
+	commitup = "!f() { local msg=${1-'WIP'}; git commit -a -m \"${msg}\"; git push origin; }; f"
 	cont = "!f() { git up; echo "Create new branch ${1}"; git begin ${1} origin/${1}; }; f"
 	ctags = '!${PWD}/.git/hooks/ctags'
 	datetag = !git tag `date \"+%Y%m%d%H%M\"`
