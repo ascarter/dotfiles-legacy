@@ -12,12 +12,16 @@ scd() { cd ${PROJECTS_HOME}/src/${1} ; }
 gcd() { cd ${PROJECTS_HOME}/src/github.com/${1} ; }
 
 # Clone GitHub project
-# Argument should be like `owner/project`
+# Usage:
+#	gclone owner/repo [email]
+# 
+# If email provided, git config for the checkout will be set
 gclone() {
 	local github_path=${PROJECTS_HOME}/src/github.com
 	mkdir -p ${github_path}
 	hub clone ${1} ${github_path}/${1}
 	gcd ${1}
+	git setemail ${2}
 }
 
 # Find go workspace for the current directory

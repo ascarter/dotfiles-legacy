@@ -25,20 +25,29 @@
 [url "git@github.com:"]
     pushInsteadOf = https://github.com
 [alias]
-	aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
+	aliases = !git config -l | grep alias | cut -c 7-
 	amend = commit --amend
 	bbdiff = difftool --tool=bbdiff
+	begin = checkout -b
+	blocal = rev-parse --abbrev-ref HEAD
 	br = branch
-	changes = diff --name-status -r
+	bremote = rev-parse --abbrev-ref --symbolic-full-name @{u}
 	changelog = log --oneline --decorate --no-merges
+	changes = diff --name-status -r
 	ci = commit
+	ciu = commitup
+	cleanup = !git checkout master && git branch --merged | grep -v " master" | xargs git branch -d
 	co = checkout
+	cob = begin
+	commitup = "!f() { git commit -a -m ${1-"WIP"}; git push origin; } f"
+	cont = "!f() { git up; echo "Create new branch ${1}"; git begin ${1} origin/${1}; }; f"
 	ctags = '!${PWD}/.git/hooks/ctags'
 	datetag = !git tag `date \"+%Y%m%d%H%M\"`
 	difflast = diff HEAD^ HEAD
 	diffstat = diff --stat -r
 	dir = rev-parse --show-toplevel
 	discard = checkout -- 
+	done = "!f() { local branch=${1-$(git blocal)}; git checkout master; git up; git cleanup; git branch -d ${branch}; }; f"
 	dump = cat-file -p
 	gdiff = difftool --gui --no-prompt
 	gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
@@ -46,10 +55,12 @@
 	hub = !sh -c 'github'
 	k = !gitk
 	last = log -l HEAD -n 1
+	ll = log --pretty=format:\"%C(yellow)%h %C(green)%ad %cn %Cred%d %Creset%s\" --decorate --numstat --date=short
 	llog = log --date=local
 	logb = log master..HEAD --pretty=oneline 
 	logd = log -- .
 	logx = log --graph --decorate --all --oneline
+	ls = log --pretty=format:\"%C(yellow)%h %C(green)%ad%Cred%d %Creset%s\" --decorate --date=relative
 	pr = pull-request --browse
 	prep = rebase -i @{upstream}
 	setemail = !git config user.email
@@ -60,6 +71,8 @@
 	type = cat-file -t
 	unstage = reset HEAD --
 	untrack = rm --cache --
+	up = !git stash && git pull --rebase --prune && git stash pop
+	upstream = !git branch -vv --list $(git blocal)
 	visual = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
 	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
 	who = shortlog -s --
