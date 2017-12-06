@@ -9,8 +9,13 @@ ONEPASSWORD_CMDLINE_SOURCE_URL = 'https://cache.agilebits.com/dist/1P/op/pkg/v0.
 ONEPASSWORD_CMDLINE_APP = 'op'.freeze
 
 namespace '1password' do
+  desc 'About 1Password'
+  task :about do
+    Bootstrap.about('1Password', 'Password manager', 'https://1password.com')
+  end
+
   desc 'Install 1Password'
-  task :install do
+  task :install => [:about] do
     case RUBY_PLATFORM
     when /darwin/
       Bootstrap::MacOSX::Pkg.install(ONEPASSWORD_PKG_NAME, ONEPASSWORD_PKG_ID, ONEPASSWORD_SOURCE_URL)
