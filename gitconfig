@@ -45,7 +45,6 @@
 	datetag = !git tag `date \"+%Y%m%d%H%M\"`
 	difflast = diff HEAD^ HEAD
 	diffstat = diff --stat -r
-	dir = rev-parse --show-toplevel
 	dirty = status --untracked-files=no --porcelain
 	discard = checkout -- 
 	done = "!f() { local branch=${1-$(git blocal)}; git checkout master; git up; git cleanup; git branch -d ${branch}; }; f"
@@ -55,6 +54,8 @@
 	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 	hub = !sh -c 'github'
 	k = !gitk
+	ksdiff = difftool -y --tool=Kaleidoscope
+	ksmerge = mergetool -y --tool=Kaleidoscope
 	last = log -l HEAD -n 1
 	ll = log --pretty=format:\"%C(yellow)%h %C(green)%ad %cn %Cred%d %Creset%s\" --decorate --numstat --date=short
 	llog = log --date=local
@@ -64,11 +65,12 @@
 	ls = log --pretty=format:\"%C(yellow)%h %C(green)%ad%Cred%d %Creset%s\" --decorate --date=relative
 	pr = pull-request --browse
 	prep = rebase -i @{upstream}
+	root = rev-parse --show-toplevel
 	setemail = !git config user.email
 	sha = rev-parse --verify HEAD
 	ship = merge --no-ff
 	st = status
-	tower = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
+	tower = "!gittower $(git root)"
 	type = cat-file -t
 	unstage = reset HEAD --
 	untrack = rm --cache --
@@ -76,8 +78,7 @@
 	upc = pull --rebase --prune
 	upd = !git stash && git upc && git stash pop
 	upstream = !git branch -vv --list $(git blocal)
-	visual = "!gittower $(P=$(pwd); while [[ \"$P\" != \"\" && ! -e \"$P/.git\" ]]; do P=${P%/*}; done; echo \"$P\")"
+	visual = tower
 	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
 	who = shortlog -s --
 	whois = !sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -
-	x = !gitx
