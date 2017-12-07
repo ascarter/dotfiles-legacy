@@ -288,8 +288,13 @@ module Bootstrap
 
   # usr tools
 
+  def usr_bin
+    '/usr/local/bin'
+  end
+  module_function :usr_bin
+
   def usr_bin_cmd(cmd)
-    return File.join('/usr/local/bin', cmd)
+    return File.join(usr_bin, cmd)
   end
   module_function :usr_bin_cmd
 

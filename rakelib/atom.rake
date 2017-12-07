@@ -35,7 +35,7 @@ namespace 'atom' do
     case RUBY_PLATFORM
     when /darwin/
       # apm modules
-      if File.exist?('/usr/local/bin/apm')
+      if File.exist? Bootstrap.usr_bin_cmd('apm')
         Bootstrap::APM.list.each { |p| Bootstrap::APM.uninstall(p) }
       end
 

@@ -68,7 +68,7 @@ namespace 'python' do
     task :install do
       virtualenv_root = File.expand_path('~/.virtualenvs')
 
-      unless File.exist?('/usr/local/bin/pip')
+      unless File.exist? Bootstrap.usr_bin_cmd('pip')
         puts 'Pip not installed'
         exit
       end

@@ -2,7 +2,7 @@
 
 if Bootstrap.macosx?
   BBEDIT_APP_NAME = 'BBEdit'.freeze
-  BBEDIT_SOURCE_URL = 'https://s3.amazonaws.com/BBSW-download/BBEdit-12.0.1_400003.dmg'.freeze 
+  BBEDIT_SOURCE_URL = 'https://s3.amazonaws.com/BBSW-download/BBEdit-12.0.1_400003.dmg'.freeze
   # BBEDIT_SIGNATURE_SHA256 = { sha256: '5edd44a1f201f74a7630bdac1e5473027bd94300bbd15ee4471da3d24ba8b0a7' }.freeze
 
   BBEDIT_AUTOMATOR_PKG_NAME = 'BBEditAutomatorActionsInstaller-11.5'.freeze
@@ -21,7 +21,7 @@ if Bootstrap.macosx?
       # TODO: Set license key
 
       # Install command line utils
-      unless File.exist?('/usr/local/bin/bbedit')
+      unless File.exist? Bootstrap.usr_bin_cmd('bbedit')
         helper = File.join(Bootstrap::MacOSX::App.contents(BBEDIT_APP_NAME), BBEDIT_INSTALL_TOOLS_SCPT)
         Bootstrap::MacOSX.run_applescript(helper)
       end

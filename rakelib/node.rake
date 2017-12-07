@@ -41,7 +41,7 @@ namespace 'node' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      if File.exist?('/usr/local/bin/node') && File.exist?('/usr/local/bin/npm')
+      if File.exist?(Bootstrap.usr_bin_cmd('node')) && File.exist?(Bootstrap.usr_bin_cmd('npm'))
         Bootstrap::NPM.list.each { |p| Bootstrap::NPM.uninstall(p) }
         Bootstrap::NPM.uninstall('npm')
 

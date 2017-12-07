@@ -4,8 +4,8 @@ namespace 'typescript' do
   desc 'Install TypeScript'
   task :install do
     # Verify npm is installed
-    unless File.exist?('/usr/local/bin/tsc')
-      if File.exist?('/usr/local/bin/npm')
+    unless File.exist? Bootstrap.usr_bin_cmd('tsc')
+      if File.exist? Bootstrap.usr_bin_cmd('npm')
         # Install TypeScript via npm
         npm_install('typescript')
       else
@@ -18,6 +18,6 @@ namespace 'typescript' do
 
   desc 'Uninstall TypeScript'
   task :uninstall do
-    npm_uninstall('typescript') if File.exist?('/usr/local/bin/tsc')
+    npm_uninstall('typescript') if File.exist? Bootstrap.usr_bin_cmd('tsc')
   end
 end

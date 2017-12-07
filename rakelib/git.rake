@@ -53,7 +53,7 @@ namespace 'git' do
     end
 
     # Set git commit editor
-    if File.exist?(File.expand_path('/usr/local/bin/bbedit'))
+    if File.exist? Bootstrap.usr_bin_cmd('bbedit')
       # bbedit
       Bootstrap::Git::Config.set('core.editor', 'bbedit --wait')
     else
@@ -66,11 +66,11 @@ namespace 'git' do
       # Configure password caching
       Bootstrap::Git::Config.set('credential.helper', 'osxkeychain')
 
-      if File.exist?(File.expand_path('/usr/local/bin/bbdiff'))
+      if File.exist? Bootstrap.usr_bin_cmd('bbdiff')
         # bbedit
         Bootstrap::Git::Config.set('diff.tool', 'bbdiff')
         Bootstrap::Git::Config.set('merge.tool', 'opendiff')
-      elsif File.exist?(File.expand_path('/usr/local/bin/ksdiff'))
+      elsif File.exist? Bootstrap.usr_bin_cmd('ksdiff')
         # Configure Kaleidoscope
         Bootstrap::Git::Config.set('diff.tool', 'Kaleidoscope')
         Bootstrap::Git::Config.set('merge.tool', 'Kaleidoscope')
