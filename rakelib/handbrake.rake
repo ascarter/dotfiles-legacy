@@ -7,8 +7,13 @@ HANDBRAKE_CLI_APP_NAME = 'HandbrakeCLI'.freeze
 HANDBRAKE_CLI_SRC_URL = 'https://handbrake.fr/rotation.php?file=HandBrakeCLI-1.0.7.dmg'.freeze
 
 namespace 'handbrake' do
+  desc 'About HandBrake'
+  task :about do
+    Bootstrap.about('HandBrake', 'The open source video transcoder', 'https://handbrake.fr')
+  end
+
   desc 'Install HandBrake'
-  task :install do
+  task :install  => [:about] do
     case RUBY_PLATFORM
     when /darwin/
       Bootstrap::MacOSX::App.install(HANDBRAKE_APP_NAME, HANDBRAKE_SRC_URL)
