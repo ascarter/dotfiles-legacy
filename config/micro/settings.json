@@ -1,4 +1,11 @@
 {
+    "*.go": {
+        "tabsize": 8
+    },
+    "*.rb": {
+        "tabsize": 2,
+        "tabstospaces": true
+    },
     "autoclose": true,
     "autoindent": true,
     "autosave": false,
@@ -9,6 +16,8 @@
     "fastdirty": true,
     "fileformat": "unix",
     "ftoptions": true,
+    "gofmt": true,
+    "goimports": false,
     "ignorecase": false,
     "indentchar": " ",
     "infobar": true,
@@ -39,12 +48,6 @@
     "tabsize": 4,
     "tabstospaces": false,
     "termtitle": false,
-    "useprimary": true,
-    "*.go": {
-    	"tabsize": 8
-    },
-    "*.rb": {
-    	"tabsize": 2,
-    	"tabstospaces": true
-    }
+    "trimdiff": false,
+    "useprimary": true
 }
