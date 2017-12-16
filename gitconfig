@@ -79,6 +79,7 @@
 	upd = !git stash && git upc && git stash pop
 	upstream = !git branch -vv --list $(git blocal)
 	visual = tower
+	vtag = describe --tags --always --dirty
 	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
 	who = shortlog -s --
 	whois = !sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -
