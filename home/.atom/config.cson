@@ -3,8 +3,8 @@
     projectHome: "/Users/andrew/Projects/src"
     telemetryConsent: "no"
     themes: [
-      "native-ui"
-      "one-dark-syntax"
+      "atom-light-ui"
+      "atom-light-syntax"
     ]
   editor:
     fontFamily: "SF Mono"
