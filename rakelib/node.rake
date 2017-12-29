@@ -1,16 +1,18 @@
-# Node.js
-# https://nodejs.org
-
 NODEJS_PKG_IDS = %w(org.nodejs.node.pkg).freeze
-NODEJS_VER='v9.1.0'.freeze
+NODEJS_VER='v9.3.0'.freeze
 NODEJS_PKG_NAME = "node-#{NODEJS_VER}".freeze
 NODEJS_SOURCE_URL = "https://nodejs.org/dist/#{NODEJS_VER}/#{NODEJS_PKG_NAME}.pkg".freeze
 
 NPM_PKGS = %w(eslint js-beautify).freeze
 
 namespace 'node' do
+  desc 'About node.js'
+  task :about do
+    Bootstrap.about('node', "Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.", 'https://nodejs.org/')
+  end
+
   desc 'Install node.js'
-  task :install do
+  task :install => [:about] do
     case RUBY_PLATFORM
     when /darwin/
       Bootstrap::MacOSX::Pkg.install(NODEJS_PKG_NAME, NODEJS_PKG_IDS[0], NODEJS_SOURCE_URL)
