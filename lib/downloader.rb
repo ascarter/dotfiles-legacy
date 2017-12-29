@@ -161,13 +161,17 @@ module Bootstrap
       sig.each do |k, v|
         case k
         when :md5
-          raise 'Invalid md5 for package' if v != Bootstrap.md5(target)
+          hash = Bootstrap.md5(target)
         when :sha1
-          raise 'Invalid sha1 for package' if v != Bootstrap.sha1(target)
+          hash = Bootstrap.sha1(target)
         when :sha256
-          raise 'Invalid sha256 for package' if v != Bootstrap.sha256(target)
+          hash = Bootstrap.sha256(target)
         else
           raise "Unknown signature: #{k}"
+        end
+        
+        if v != hash
+          raise "Invalid #{k} for package: #{hash}"
         end
       end
     end
