@@ -1,8 +1,8 @@
 # Android SDK
 
 ANDROID_STUDIO_APP = 'Android Studio'.freeze
-ANDROID_SOURCE_URL = 'https://dl.google.com/dl/android/studio/install/2.3.1.0/android-studio-ide-162.3871768-mac.dmg'.freeze
-ANDROID_SIGNATURE = { sha256: 'f8a414f7f4111a9aba059c7b85a3f0aba6abc950552a270042daa488922db377' }.freeze
+ANDROID_SOURCE_URL = 'https://dl.google.com/dl/android/studio/install/3.0.1.0/android-studio-ide-171.4443003-mac.dmg'.freeze
+ANDROID_SIGNATURE = { sha256: 'c4e0e3da447f4517128ee1a767ed130721fd2c0e0a1b311ce7dbc05766dcd221' }.freeze
 
 namespace 'android' do
   desc 'Install Android SDK'
