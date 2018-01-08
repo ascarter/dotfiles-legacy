@@ -1,4 +1,5 @@
 require 'rake'
+require 'erb'
 require 'pathname'
 require 'yaml'
 
@@ -55,4 +56,27 @@ FileList['recipes/**/*.yml', 'recipes/**/*.yaml'].each do |src|
   when /windows/
     generate_windows_tasks(ns, cfg['windows']) if cfg.include?('windows')
   end
+end
+
+desc "Generator for new recipes"
+task :create do
+  ns = Bootstrap.prompt("task name (namespace using ':')")
+  parts = ns.split(':')
+  name = parts[-1]
+  target = File.join(RECIPES_DIR, parts[0..-2], name + '.yml')
+  
+  template = <<-EOB
+# #{name}
+
+macos:
+    app: #{name}
+    description: About #{name}
+    homepage: http://example.com/#{name}/
+    source_url: http://example.com/#{name}/download
+
+  EOB
+  
+  body = ERB.new(template).result(binding)
+  mkdir_p File.dirname(target)
+  File.open(target, 'w') { |f| f.write(body) }
 end
