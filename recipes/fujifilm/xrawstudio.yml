@@ -1,0 +1,5 @@
+macos:
+    app: FUJIFILM X Raw Studio
+    description: Fujifilm’s new RAW conversion software
+    homepage: http://www.fujifilm.com/support/digital_cameras/software/x_raw_studio/mac/
+    source_url: http://download.fujifilm.co.jp/pub/tools/x-raw-studio-mac10-9jczp9fe/XRawStudio10.dmg
