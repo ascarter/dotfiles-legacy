@@ -38,9 +38,10 @@ def generate_windows_tasks(ns, cfg)
   # TODO: Implement windows task generator
 end
 
+# namespace_for_config converts yaml file path to be a namespace relative to recipes directory
 def namespace_for_config(src)
-  p = Pathname.new(src).relative_path_from(RECIPES_DIR)
-  File.basename(p.to_s().sub(File::SEPARATOR, ':'), ".*")
+  p = Pathname.new(src).relative_path_from(RECIPES_DIR).to_s()
+  File.basename(p.sub(File::SEPARATOR, ':'), ".*")
 end
 
 # Generate tasks from recipes

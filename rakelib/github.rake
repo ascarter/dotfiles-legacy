@@ -2,6 +2,7 @@
 
 namespace 'github' do
   GITHUB_TOOLS = %w(gist hub).freeze
+  GITHUB_CONFIG_FILES = %w(~/.config/hub)
 
   desc 'Install GitHub tools and apps'
   task install: ['tools:install', 'desktop:install', 'tower:install']
@@ -18,6 +19,11 @@ namespace 'github' do
     desc 'Uninstall GitHub tools'
     task :uninstall_tools do
       GITHUB_TOOLS.each { |p| Bootstrap::Homebrew.uninstall(p) }
+    end
+    
+    desc 'Reset auth for GitHub tools'
+    task :reset do
+      GITHUB_CONFIG_FILES.each { |f| rm f }
     end
   end
 
