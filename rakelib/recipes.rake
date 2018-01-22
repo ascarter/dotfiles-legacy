@@ -5,36 +5,75 @@ require 'yaml'
 
 RECIPES_DIR = Pathname.new('recipes')
 
-def generate_mac_tasks(ns, cfg)
-  name = cfg['app']
+# Keep about tasks implicit
+def about_task(ns, name, description='', homepage='')
+  namespace "#{ns}" do
+    task :about do
+      puts "#{description}"
+      puts "#{homepage}"
+    end
+  end
+end
+
+def mac_tasks(ns, cfg)
+  name = ns.split(":")[-1]
   description = cfg['description']
   homepage = cfg['homepage']
   source_url = cfg['source_url']
-  appbundle = File.join("/Applications", name + ".app")
-  
-  file appbundle do |t|
-    Bootstrap::MacOSX::App.install(name, source_url)
+
+  # Add about task
+  about_task(ns, name, description, homepage)
+
+  # Add install task
+  if cfg.has_key?('install')
+    if cfg['install'].has_key?('pkg_id')
+      namespace "#{ns}" do
+        desc "Install #{name}"
+        task :install => [:about] do
+          Bootstrap::MacOSX::Pkg.install(cfg['install']['pkg'], cfg['install']['pkg_id'], source_url)
+        end
+      end
+    end
+  elsif cfg.has_key?('app')
+    # mac app install
+    appbundle = File.join("/Applications", cfg['app'] + ".app")
+
+    file appbundle do |t|
+      Bootstrap::MacOSX::App.install(name, source_url)
+    end
+
+    namespace "#{ns}" do
+      desc "Install #{name}"
+      task :install => [:about, appbundle]
+    end
   end
-  
-  desc "About #{name}"
-  task "#{ns}:about" do
-    Bootstrap.about(name, description, homepage)
-  end
-  
-  desc "Install #{name}"
-  task "#{ns}:install" => [:about, appbundle]
-  
-  desc "Uninstall #{name}"
-  task "#{ns}:uninstall" do
-    Bootstrap::MacOSX::App.uninstall(name)
+
+  # Add uninstall task
+  if cfg.has_key?('uninstall')
+    if cfg['uninstall'].has_key?('pkg_id')
+      namespace "#{ns}" do
+        desc "Uninstall #{name}"
+        task :uninstall do
+          Bootstrap::MacOSX::Pkg.uninstall(cfg['uninstall']['pkg_id'])
+        end
+      end
+    end
+  elsif cfg.has_key?('app')
+    # mac app uninstall
+    namespace "#{ns}" do
+      desc "Uninstall #{name}"
+      task :uninstall do
+        Bootstrap::MacOSX::App.uninstall(cfg['app'])
+      end
+    end
   end
 end
 
-def generate_linux_tasks(ns, cfg)
+def linux_tasks(ns, cfg)
   # TODO: Implement linux task generator
 end
 
-def generate_windows_tasks(ns, cfg)
+def windows_tasks(ns, cfg)
   # TODO: Implement windows task generator
 end
 
@@ -48,14 +87,14 @@ end
 FileList['recipes/**/*.yml', 'recipes/**/*.yaml'].each do |src|
   ns = namespace_for_config(src)
   cfg = YAML.load_file(src)
-  
+
   case RUBY_PLATFORM
   when /darwin/
-    generate_mac_tasks(ns, cfg['macos']) if cfg.include?('macos')
+    mac_tasks(ns, cfg['macos']) if cfg.include?('macos')
   when /linux/
-    generate_linux_tasks(ns, cfg['linux']) if cfg.include?('linux')
+    linux_tasks(ns, cfg['linux']) if cfg.include?('linux')
   when /windows/
-    generate_windows_tasks(ns, cfg['windows']) if cfg.include?('windows')
+    windows_tasks(ns, cfg['windows']) if cfg.include?('windows')
   end
 end
 
@@ -65,7 +104,7 @@ task :create do
   parts = ns.split(':')
   name = parts[-1]
   target = File.join(RECIPES_DIR, parts[0..-2], name + '.yml')
-  
+
   template = <<-EOB
 # #{name}
 
@@ -76,7 +115,7 @@ macos:
     source_url: http://example.com/#{name}/download
 
   EOB
-  
+
   body = ERB.new(template).result(binding)
   mkdir_p File.dirname(target)
   File.open(target, 'w') { |f| f.write(body) }
