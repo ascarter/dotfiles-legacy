@@ -1,0 +1,10 @@
+# zoom
+
+macos:
+    app: 'zoom.us'
+    description: Zoom is a video and web conferencing solution
+    homepage: https://www.zoom.us
+    source_url: https://www.zoom.us/client/latest/zoomusInstaller.pkg
+    install:
+        pkg_id: 'us.zoom'
+        pkg: zoomusInstaller
