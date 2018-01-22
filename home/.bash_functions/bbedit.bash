@@ -16,7 +16,7 @@ bb() {
 
 # Open URL source in BBEdit
 bbcurl() {
-	(curl $*) | bbedit --new-window +1 -t curl
+	(curl -L $*) | bbedit --new-window +1 -t curl
 }
 
 # Run make and send results to bbresults
