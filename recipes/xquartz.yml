@@ -1,0 +1,11 @@
+# xquartz
+
+macos:
+    description: The XQuartz project is an open-source effort to develop a version of the X.Org X Window System that runs on OS X
+    homepage: https://www.xquartz.org
+    source_url: https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.11.dmg
+    install:
+        pkg_id: org.macosforge.xquartz.pkg
+        pkg: XQuartz
+    uninstall:
+        pkg_id: org.macosforge.xquartz.pkg
