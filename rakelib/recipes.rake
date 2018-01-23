@@ -73,7 +73,7 @@ end
 
 def default_task(recipe, task)
   desc recipe.description || recipe.name
-  task "#{recipe.namespace}" => "#{recipe.namespace}:#{task}"
+  task "#{recipe.namespace}" => ["#{recipe.namespace}:about", "#{recipe.namespace}:#{task}"]
 end
 
 def about_task(recipe)
@@ -117,7 +117,7 @@ def mac_app_install_task(recipe)
     Bootstrap::MacOSX::App.install(recipe.platform['app'], recipe.source_url, sig: recipe.sig)
   end
   namespace "#{recipe.namespace}" do
-    task :install => [:about, app]
+    task :install => [app]
   end
 end
 
@@ -134,7 +134,7 @@ def mac_tasks(recipe)
 
   about_task recipe
   update_task recipe
-  default_task recipe, cfg['default'] || 'about'
+  default_task recipe, cfg['default'] || 'install'
 
   # Add install task
   if cfg.has_key?('install')
