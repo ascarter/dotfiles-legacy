@@ -1,0 +1,6 @@
+# evergreen
+description: Evergreen is a free and open source feed reader for macOS
+homepage:    https://ranchero.com/evergreen/
+macos:
+    app:    Evergreen
+    source: https://ranchero.com/downloads/Evergreen-latest.zip
