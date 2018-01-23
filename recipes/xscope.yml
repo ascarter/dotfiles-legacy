@@ -1,8 +1,6 @@
 # xscope
-
+description: xScope is a powerful set of tools that are ideal for measuring, inspecting & testing on-screen graphics and layouts
+homepage:    https://xscopeapp.com
 macos:
-    app: xScope
-    description: xScope is a powerful set of tools that are ideal for measuring, inspecting & testing on-screen graphics and layouts
-    homepage: https://xscopeapp.com
-    source_url: http://iconfactory.com/assets/software/xscope/xScope-4.3.zip
-
+    app:    xScope
+    source: http://iconfactory.com/assets/software/xscope/xScope-4.3.zip

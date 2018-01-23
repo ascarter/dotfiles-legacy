@@ -1,6 +1,6 @@
+# dash
+description: Dash is an API Documentation Browser and Code Snippet Manager
+homepage:    https://kapeli.com/dash
 macos:
-    app: Dash
-    description: Dash is an API Documentation Browser and Code Snippet Manager
-    homepage: https://kapeli.com/dash
-    source_url: https://sanfrancisco.kapeli.com/downloads/v4/Dash.zip
-
+    app:    Dash
+    source: https://sanfrancisco.kapeli.com/downloads/v4/Dash.zip
