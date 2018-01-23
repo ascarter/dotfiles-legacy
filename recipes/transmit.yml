@@ -1,0 +1,6 @@
+# transmit
+description: Transmit file transfer utility
+homepage:    https://panic.com/transmit/
+macos:
+    app:    Transmit
+    source: https://download.panic.com/transmit/Transmit%205.0.5.zip

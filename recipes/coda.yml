@@ -1,0 +1,6 @@
+# coda
+description: Coda web code editor
+homepage:    https://panic.com/coda/
+macos:
+    app:    Coda 2
+    source: https://download.panic.com/coda/Coda%202.6.9.zip
