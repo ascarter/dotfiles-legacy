@@ -1,0 +1,6 @@
+# bwcontrol
+description: Bowers & Wilkins Control
+homepage:    http://bowersandwilkinsus.custhelp.com/app/home/p/231
+macos:
+    app:    Bowers & Wilkins Control
+    source: http://www.bwfirmware.com/software/airplay_setup/mac/latest
