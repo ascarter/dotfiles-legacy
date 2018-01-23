@@ -1,0 +1,6 @@
+# dyn dns updater
+description: DynDNS Updater client
+homepage:    https://dyn.com/update-client-faqs/
+macos:
+    app:    Dyn Updater
+    source: http://cdn.dyn.com/dynupdater/DynUpdater.dmg
