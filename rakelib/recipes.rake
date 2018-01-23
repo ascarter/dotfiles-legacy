@@ -5,119 +5,6 @@ require 'yaml'
 
 RECIPES_DIR = Pathname.new('recipes')
 
-def default_task(ns, task, description=nil)
-  desc description || namespace_name(ns)
-  task "#{ns}" => "#{ns}:#{task}"
-end
-
-def about_task(ns, name, description='', homepage='')
-  namespace "#{ns}" do
-    task :about do
-      puts "#{description}"
-      puts "#{homepage}"
-    end
-  end
-end
-
-def update_task(ns, name)
-  namespace "#{ns}" do
-    task update: [:uninstall, :install]
-  end
-end
-
-def mac_tasks(ns, cfg)
-  name = namespace_name(ns)
-  description = cfg['description']
-  homepage = cfg['homepage']
-  source_url = cfg['source_url']
-
-  # Add about task
-  about_task(ns, name, description, homepage)
-
-  # Add install task
-  if cfg.has_key?('install')
-    if cfg['install'].has_key?('pkg_id')
-      namespace "#{ns}" do
-        #desc "Install #{name}"
-        task :install => [:about] do
-          Bootstrap::MacOSX::Pkg.install(cfg['install']['pkg'], cfg['install']['pkg_id'], source_url)
-        end
-      end
-    end
-  elsif cfg.has_key?('app')
-    # mac app install
-    appbundle = File.join("/Applications", cfg['app'] + ".app")
-
-    file appbundle do |t|
-      Bootstrap::MacOSX::App.install(name, source_url)
-    end
-
-    namespace "#{ns}" do
-      #desc "Install #{name}"
-      task :install => [:about, appbundle]
-    end
-  end
-
-  # Add uninstall task
-  if cfg.has_key?('uninstall')
-    if cfg['uninstall'].has_key?('pkg_id')
-      namespace "#{ns}" do
-        #desc "Uninstall #{name}"
-        task :uninstall do
-          Bootstrap::MacOSX::Pkg.uninstall(cfg['uninstall']['pkg_id'])
-        end
-      end
-    end
-  elsif cfg.has_key?('app')
-    # mac app uninstall
-    namespace "#{ns}" do
-      #desc "Uninstall #{name}"
-      task :uninstall do
-        Bootstrap::MacOSX::App.uninstall(cfg['app'])
-      end
-    end
-  end
-
-  # Add update task
-  update_task(ns, name)
-
-  # Set default task
-  default_task(ns, cfg['default'] || 'about', description)
-end
-
-def linux_tasks(ns, cfg)
-  # TODO: Implement linux task generator
-end
-
-def windows_tasks(ns, cfg)
-  # TODO: Implement windows task generator
-end
-
-# namespace_for_config converts yaml file path to be a namespace relative to recipes directory
-def namespace_for_config(src)
-  p = Pathname.new(src).relative_path_from(RECIPES_DIR).to_s()
-  File.basename(p.sub(File::SEPARATOR, ':'), ".*")
-end
-
-def namespace_name(ns)
-  ns.split(":")[-1]
-end
-
-# Generate tasks from recipes
-FileList['recipes/**/*.yml', 'recipes/**/*.yaml'].each do |src|
-  ns = namespace_for_config(src)
-  cfg = YAML.load_file(src)
-
-  case RUBY_PLATFORM
-  when /darwin/
-    mac_tasks(ns, cfg['macos']) if cfg.include?('macos')
-  when /linux/
-    linux_tasks(ns, cfg['linux']) if cfg.include?('linux')
-  when /windows/
-    windows_tasks(ns, cfg['windows']) if cfg.include?('windows')
-  end
-end
-
 desc "Generator for new recipes"
 task :create do
   ns = Bootstrap.prompt("task name (namespace using ':')")
@@ -127,16 +14,154 @@ task :create do
 
   template = <<-EOB
 # #{name}
-
+description: About #{name}
+homepage:    http://example.com/#{name}/
 macos:
-    app: #{name}
-    description: About #{name}
-    homepage: http://example.com/#{name}/
-    source_url: http://example.com/#{name}/download
-
+    app:    #{name}
+    source: http://example.com/#{name}/download
   EOB
 
   body = ERB.new(template).result(binding)
   mkdir_p File.dirname(target)
   File.open(target, 'w') { |f| f.write(body) }
+end
+
+class Recipe
+  attr_reader :name, :config, :platform
+
+	def initialize(src)
+    p = Pathname.new(src).relative_path_from(RECIPES_DIR).to_s()
+    @ns = File.basename(p.sub(File::SEPARATOR, ':'), ".*")
+    @config = YAML.load_file(src)
+    @name = @config['name'] || @ns.split(":")[-1]
+    @platform = case RUBY_PLATFORM
+      when /darwin/
+        @config['macos']
+      when /linux/
+        @config['linux']
+      when /windows/
+        @config['windows']
+    end
+	end
+
+	def namespace
+	  @ns
+	end
+
+	def description
+	  @config['description']
+	end
+
+	def homepage
+	  @config['homepage']
+	end
+
+	def source_url
+	  @platform['source']
+	end
+
+	def appbundle
+    File.join("/Applications", @platform['app'] + ".app") if @platform.has_key?('app')
+	end
+end
+
+# Task helpers
+
+def default_task(recipe, task)
+  desc recipe.description || recipe.name
+  task "#{recipe.namespace}" => "#{recipe.namespace}:#{task}"
+end
+
+def about_task(recipe)
+  namespace "#{recipe.namespace}" do
+    task :about do
+      puts "#{recipe.description}"
+      puts "#{recipe.homepage}"
+    end
+  end
+end
+
+def update_task(recipe)
+  namespace "#{recipe.namespace}" do
+    task update: [:uninstall, :install]
+  end
+end
+
+def mac_pkg_install_task(recipe)
+  cfg = recipe.platform['install']
+  namespace "#{recipe.namespace}" do
+    task :install => [:about] do
+      Bootstrap::MacOSX::Pkg.install(cfg['pkg'], cfg['pkg_id'], recipe.source_url)
+    end
+  end
+end
+
+def mac_pkg_uninstall_task(recipe)
+  cfg = recipe.platform['uninstall']
+  namespace "#{recipe.namespace}" do
+    task :uninstall do
+      Bootstrap::MacOSX::Pkg.uninstall(cfg['pkg_id'])
+    end
+  end
+end
+
+def mac_app_install_task(recipe)
+  app = recipe.appbundle
+  file app do |t|
+    Bootstrap::MacOSX::App.install(recipe.platform['app'], recipe.source_url)
+  end
+  namespace "#{recipe.namespace}" do
+    task :install => [:about, app]
+  end
+end
+
+def mac_app_uninstall_task(recipe)
+  namespace "#{recipe.namespace}" do
+    task :uninstall do
+      Bootstrap::MacOSX::App.uninstall(recipe.platform['app'])
+    end
+  end
+end
+
+def mac_tasks(recipe)
+  cfg = recipe.platform
+
+  about_task recipe
+  update_task recipe
+  default_task recipe, cfg['default'] || 'about'
+
+  # Add install task
+  if cfg.has_key?('install')
+    mac_pkg_install_task(recipe) if cfg['install'].has_key?('pkg_id')
+  elsif cfg.has_key?('app')
+    mac_app_install_task recipe
+  end
+
+  # Add uninstall task
+  if cfg.has_key?('uninstall')
+    mac_pkg_uninstall_task(recipe) if cfg['uninstall'].has_key?('pkg_id')
+  elsif cfg.has_key?('app')
+    mac_app_uninstall_task recipe
+  end
+end
+
+def linux_tasks(recipe)
+  # TODO: Implement linux task generator
+end
+
+def windows_tasks(recipe)
+  # TODO: Implement windows task generator
+end
+
+# Generate tasks from recipes
+FileList['recipes/**/*.yml', 'recipes/**/*.yaml'].each do |src|
+  recipe = Recipe.new(src)
+  case RUBY_PLATFORM
+  when /darwin/
+    mac_tasks(recipe) if recipe.config.include?('macos')
+  when /linux/
+    linux_tasks(recipe) if recipe.config.include?('linux')
+  when /windows/
+    windows_tasks(recipe) if recipe.config.include?('windows')
+  end
 end
