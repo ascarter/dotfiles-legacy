@@ -1,0 +1,6 @@
+# kaleidoscope
+description: Kaleidoscope is the world’s most powerful file comparison app
+homepage:    https://www.kaleidoscopeapp.com
+macos:
+    app:    Kaleidoscope
+    source: https://cdn.kaleidoscopeapp.com/releases/Kaleidoscope-2.2.2-1376.zip
