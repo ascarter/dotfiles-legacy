@@ -1,0 +1,6 @@
+# firefox developer
+description: Firefox developer edition
+homepage:    https://www.mozilla.org/en-US/firefox/developer/
+macos:
+    app:    Firefox Developer Edition
+    source: https://download.mozilla.org/?product=firefox-devedition-latest-ssl&os=osx&lang=en-US
