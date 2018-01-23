@@ -5,7 +5,11 @@ require 'yaml'
 
 RECIPES_DIR = Pathname.new('recipes')
 
-# Keep about tasks implicit
+def default_task(ns, task, description=nil)
+  desc description || namespace_name(ns)
+  task "#{ns}" => "#{ns}:#{task}"
+end
+
 def about_task(ns, name, description='', homepage='')
   namespace "#{ns}" do
     task :about do
@@ -15,8 +19,14 @@ def about_task(ns, name, description='', homepage='')
   end
 end
 
+def update_task(ns, name)
+  namespace "#{ns}" do
+    task update: [:uninstall, :install]
+  end
+end
+
 def mac_tasks(ns, cfg)
-  name = ns.split(":")[-1]
+  name = namespace_name(ns)
   description = cfg['description']
   homepage = cfg['homepage']
   source_url = cfg['source_url']
@@ -28,7 +38,7 @@ def mac_tasks(ns, cfg)
   if cfg.has_key?('install')
     if cfg['install'].has_key?('pkg_id')
       namespace "#{ns}" do
-        desc "Install #{name}"
+        #desc "Install #{name}"
         task :install => [:about] do
           Bootstrap::MacOSX::Pkg.install(cfg['install']['pkg'], cfg['install']['pkg_id'], source_url)
         end
@@ -43,7 +53,7 @@ def mac_tasks(ns, cfg)
     end
 
     namespace "#{ns}" do
-      desc "Install #{name}"
+      #desc "Install #{name}"
       task :install => [:about, appbundle]
     end
   end
@@ -52,7 +62,7 @@ def mac_tasks(ns, cfg)
   if cfg.has_key?('uninstall')
     if cfg['uninstall'].has_key?('pkg_id')
       namespace "#{ns}" do
-        desc "Uninstall #{name}"
+        #desc "Uninstall #{name}"
         task :uninstall do
           Bootstrap::MacOSX::Pkg.uninstall(cfg['uninstall']['pkg_id'])
         end
@@ -61,12 +71,18 @@ def mac_tasks(ns, cfg)
   elsif cfg.has_key?('app')
     # mac app uninstall
     namespace "#{ns}" do
-      desc "Uninstall #{name}"
+      #desc "Uninstall #{name}"
       task :uninstall do
         Bootstrap::MacOSX::App.uninstall(cfg['app'])
       end
     end
   end
+
+  # Add update task
+  update_task(ns, name)
+
+  # Set default task
+  default_task(ns, cfg['default'] || 'about', description)
 end
 
 def linux_tasks(ns, cfg)
@@ -81,6 +97,10 @@ end
 def namespace_for_config(src)
   p = Pathname.new(src).relative_path_from(RECIPES_DIR).to_s()
   File.basename(p.sub(File::SEPARATOR, ':'), ".*")
+end
+
+def namespace_name(ns)
+  ns.split(":")[-1]
 end
 
 # Generate tasks from recipes
