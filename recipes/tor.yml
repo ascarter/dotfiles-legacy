@@ -1,0 +1,6 @@
+# tor
+description: Tor anonymous web browser
+homepage:    https://www.torproject.org
+macos:
+    app:    TorBrowser
+    source: https://www.torproject.org/dist/torbrowser/7.0.11/TorBrowser-7.0.11-osx64_en-US.dmg
