@@ -1,0 +1,6 @@
+# viscosity
+description: Viscosity is an OpenVPN client 
+homepage:    https://www.sparklabs.com/viscosity/
+macos:
+    app:    Viscosity
+    source: https://www.sparklabs.com/downloads/Viscosity.dmg
