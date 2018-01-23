@@ -29,7 +29,7 @@ end
 class Recipe
   attr_reader :name, :config, :platform
 
-	def initialize(src)
+  def initialize(src)
     p = Pathname.new(src).relative_path_from(RECIPES_DIR).to_s()
     @ns = File.basename(p.sub(File::SEPARATOR, ':'), ".*")
     @config = YAML.load_file(src)
@@ -42,27 +42,31 @@ class Recipe
       when /windows/
         @config['windows']
     end
-	end
+  end
 
-	def namespace
-	  @ns
-	end
+  def namespace
+    @ns
+  end
 
-	def description
-	  @config['description']
-	end
+  def description
+    @config['description']
+  end
 
-	def homepage
-	  @config['homepage']
-	end
+  def homepage
+    @config['homepage']
+  end
 
-	def source_url
-	  @platform['source']
-	end
+  def source_url
+    @platform['source']
+  end
 
-	def appbundle
+  def appbundle
     File.join("/Applications", @platform['app'] + ".app") if @platform.has_key?('app')
-	end
+  end
+
+  def sig
+    @platform['sig'] || {}
+  end
 end
 
 # Task helpers
@@ -106,9 +110,11 @@ def mac_pkg_uninstall_task(recipe)
 end
 
 def mac_app_install_task(recipe)
+  cfg = recipe.platform
   app = recipe.appbundle
+
   file app do |t|
-    Bootstrap::MacOSX::App.install(recipe.platform['app'], recipe.source_url)
+    Bootstrap::MacOSX::App.install(recipe.platform['app'], recipe.source_url, sig: recipe.sig)
   end
   namespace "#{recipe.namespace}" do
     task :install => [:about, app]

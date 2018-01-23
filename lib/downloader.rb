@@ -10,7 +10,7 @@ module Bootstrap
       if uri.scheme == 'https'
         http.use_ssl = true
       end
-      
+
       http.start do
         request = Net::HTTP::Get.new(uri)
         headers.each { |k, v| request[k] = v }
@@ -159,7 +159,7 @@ module Bootstrap
 
     def verify_signature(sig, target)
       sig.each do |k, v|
-        case k
+        case k.to_sym
         when :md5
           hash = Bootstrap.md5(target)
         when :sha1
@@ -169,7 +169,7 @@ module Bootstrap
         else
           raise "Unknown signature: #{k}"
         end
-        
+
         if v != hash
           raise "Invalid #{k} for package: #{hash}"
         end
