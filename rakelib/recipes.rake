@@ -96,26 +96,34 @@ def update_task(recipe)
 end
 
 def exec_task(recipe, task)
-  run_command(recipe, task, 'before')
+  run_stage recipe, task, 'before'
   yield
-  run_command(recipe, task, 'after')
+  run_stage recipe, task, 'after'
 end
 
-# run_command finds command for stage on task and executes.
+# run_stage finds actions for stage on task and executes.
+#
 # Examples:
 #   uninstall:
 #     before: { sudo: rm -Rf }
 #     sh:     { echo 'Uninstalling...' }
-#     after:  { sh: echo 'Done' }
+#     after:
+#       sh:      echo 'Done'
+#       symlink:
+#         -
+#           src:    /Applications/Foo.app/Contents/bin/foo
+#           target: /usr/local/bin/foo
 #
-# command keys:
-#   sh   - run as shell of current user (Rake sh)
-#   sudo - run using sudo
+# action keys:
+#   sh      - run as shell of current user (Rake sh)
+#   sudo    - run using sudo
+#   symlink - symlink src to target
+#   rm      - remove target
 #
 # stage:
-#   nil     - look for sh/sudo on task
-#   <stage> - look for sh/sudo on stage
-def run_command(recipe, task, stage=nil)
+#   nil     - look for actions on task
+#   <stage> - look for actions on stage
+def run_stage(recipe, task, stage=nil)
   return unless recipe.platform.has_key?(task)
   cfg = recipe.platform[task]
   
@@ -124,20 +132,37 @@ def run_command(recipe, task, stage=nil)
     cfg = cfg[stage]
   end
   
-  # Look for commands (prefer sudo)
-  case
-  when cfg.has_key?('sudo')
-    Bootstrap.sudo cfg['sudo']
-  when cfg.has_key?('sh')
-    sh cfg['sh']
-  end
+  # Run actions in order
+  cfg.each do |action, args|
+    case action
+    when 'cp'
+      # List of hashes with src, target
+      args.each do |v|
+        Bootstrap.sudo_cp v['src'], v['target']
+      end
+    when 'rm'
+      # Remove list of files
+      args.each { |v| Bootstrap.sudo_rm v }
+    when 'sh'
+      # Execute shell script
+      sh args
+    when 'sudo'
+      # Execute shell script using sudo
+      Bootstrap.sudo args
+    when 'symlink'
+      # List of hashes with src, target
+      args.each do |v|
+        Bootstrap.sudo_ln v['src'], v['target']
+      end
+    end
+  end  
 end
 
 def command_install_task(recipe)
   namespace "#{recipe.namespace}" do
     task :install => [:about] do
       exec_task(recipe, 'install') do
-        run_command(recipe, 'install')
+        run_stage recipe, 'install'
       end
     end
   end
@@ -147,7 +172,7 @@ def command_uninstall_task(recipe)
   namespace "#{recipe.namespace}" do
     task :uninstall do
       exec_task(recipe, 'uninstall') do
-        run_command(recipe, 'uninstall')
+        run_stage recipe, 'uninstall'
       end
     end
   end

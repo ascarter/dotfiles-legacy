@@ -263,8 +263,12 @@ module Bootstrap
   module_function :sudo_cpr
 
   def sudo_ln(src, target)
-    if File.exist?(src)
-      sudo %(ln -s "#{src}" "#{target}")
+    src_file = File.expand_path(src)
+    target_file = File.expand_path(target)
+    if File.exist?(target_file)
+      warn "#{target} already exists"
+    elsif File.exist?(src_file)
+      sudo %(ln -s "#{src_file}" "#{target_file}")
     else
       warn "#{src} missing"
     end
