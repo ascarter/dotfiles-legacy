@@ -1,0 +1,16 @@
+# vscode
+description: Visual Studio Code editor
+homepage:    https://code.visualstudio.com
+macos:
+  app:    Visual Studio Code
+  source: https://go.microsoft.com/fwlink/?LinkID=620882
+  install:
+    after:
+      symlink:
+        -
+          src:    /Applications/Visual Studio Code.app/Contents/Resources/app/bin/code
+          target: /usr/local/bin/vscode
+  uninstall:
+    before:
+      rm:
+        - /usr/local/bin/vscode
