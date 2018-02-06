@@ -1,0 +1,6 @@
+# microblog
+description: Micro.blog client
+homepage:    http://help.micro.blog/2017/mac-version/
+macos:
+    app:    Micro.blog
+    source: https://s3.amazonaws.com/micro.blog/mac/Micro.blog_1.1.4.zip
