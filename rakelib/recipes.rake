@@ -17,9 +17,9 @@ task :create do
 description: About #{name}
 homepage:    http://example.com/#{name}/
 macos:
-    app:    #{name}
-    source: http://example.com/#{name}/download
-  EOB
+  app:    #{name}
+  source: http://example.com/#{name}/download
+EOB
 
   body = ERB.new(template).result(binding)
   mkdir_p File.dirname(target)
@@ -119,6 +119,8 @@ end
 #   sudo    - run using sudo
 #   symlink - symlink src to target
 #   rm      - remove target
+#   goclean - go clean packages in current go workspace
+#   goget   - go get packages to current go workspace
 #
 # stage:
 #   nil     - look for actions on task
@@ -139,6 +141,16 @@ def run_stage(recipe, task, stage=nil)
       # List of hashes with src, target
       args.each do |v|
         Bootstrap.sudo_cp v['src'], v['target']
+      end
+    when 'goclean'
+      # go clean packages
+      args.each do |pkg|
+        Bootstrap::Go.clean pkg
+      end
+    when 'goget'
+      # go get packages
+      args.each do |pkg|
+        Bootstrap::Go.get pkg
       end
     when 'rm'
       # Remove list of files
@@ -229,7 +241,7 @@ def mac_install_task(recipe)
   case
   when cfg.has_key?(key) && cfg[key].has_key?('pkg_id')
     mac_pkg_install_task recipe
-  when cfg.has_key?(key) && (cfg[key].has_key?('sh') || cfg[key].has_key?('sudo'))
+  when cfg.has_key?(key)
     command_install_task recipe
   when cfg.has_key?('app')
     mac_app_install_task recipe
@@ -242,7 +254,7 @@ def mac_uninstall_task(recipe)
   case
   when cfg.has_key?(key) && cfg[key].has_key?('pkg_id')
     mac_pkg_uninstall_task recipe
-  when cfg.has_key?(key) && (cfg[key].has_key?('sh') || cfg[key].has_key?('sudo'))
+  when cfg.has_key?(key)
     command_uninstall_task recipe
   when cfg.has_key?('app')
     mac_app_uninstall_task recipe
