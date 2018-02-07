@@ -1,0 +1,10 @@
+# micro
+description: micro is a modern and intuitive terminal-based text editor
+homepage:    https://micro-editor.github.io/
+macos:
+  install:
+    sudo: cd /usr/local/bin; curl https://getmic.ro | sh
+    sh:   /usr/local/bin/micro -version
+  uninstall:
+    rm:
+    - /usr/local/bin/micro
