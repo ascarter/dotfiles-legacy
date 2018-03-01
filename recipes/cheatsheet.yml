@@ -1,0 +1,6 @@
+# cheatsheet
+description: CheatSheet shows command shortcuts for apps
+homepage:    https://www.mediaatelier.com/CheatSheet/
+macos:
+  app:    CheatSheet
+  source: https://mediaatelier.com/CheatSheet/CheatSheet_1.2.9.zip
