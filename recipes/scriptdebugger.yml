@@ -1,0 +1,6 @@
+# scriptdebugger
+description: Script Debugger is integrated development environment for AppleScript.
+homepage:    https://latenightsw.com
+macos:
+  app:    Script Debugger
+  source: https://s3.amazonaws.com/latenightsw.com/ScriptDebugger7.0-7A40.dmg
