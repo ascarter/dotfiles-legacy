@@ -71,6 +71,10 @@ class Recipe
   def sig
     @platform['sig'] || {}
   end
+
+  def headers
+    @platform['headers'] || {}
+  end
 end
 
 # Task helpers
@@ -207,7 +211,11 @@ def mac_pkg_install_task(recipe)
   namespace "#{recipe.namespace}" do
     task :install => [:about] do
       exec_task(recipe, 'install') do
-        Bootstrap::MacOSX::Pkg.install cfg['pkg'], cfg['pkg_id'], recipe.source_url
+        options = {
+          sig:     recipe.sig,
+          headers: recipe.headers
+        }
+        Bootstrap::MacOSX::Pkg.install cfg['pkg'], cfg['pkg_id'], recipe.source_url, options
       end
     end
   end
@@ -228,7 +236,11 @@ def mac_app_install_task(recipe)
   app = recipe.appbundle
   file app do |t|
     exec_task(recipe, 'install') do
-      Bootstrap::MacOSX::App.install recipe.app, recipe.source_url, sig: recipe.sig
+      options = {
+        sig:     recipe.sig,
+        headers: recipe.headers
+      }
+      Bootstrap::MacOSX::App.install recipe.app, recipe.source_url, options
     end
   end
 
