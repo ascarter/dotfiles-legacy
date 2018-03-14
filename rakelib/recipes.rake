@@ -63,11 +63,11 @@ class Recipe
   def app
     @platform['app']
   end
-  
+
   def appbundle
     File.join("/Applications", app + ".app") if @platform.has_key?('app')
   end
-    
+
   def sig
     @platform['sig'] || {}
   end
@@ -115,12 +115,14 @@ end
 #           target: /usr/local/bin/foo
 #
 # action keys:
-#   sh      - run as shell of current user (Rake sh)
-#   sudo    - run using sudo
-#   symlink - symlink src to target
-#   rm      - remove target
-#   goclean - go clean packages in current go workspace
-#   goget   - go get packages to current go workspace
+#   sh           - run as shell of current user (Rake sh)
+#   sudo         - run using sudo
+#   symlink      - symlink src to target
+#   rm           - remove target
+#   goclean      - go clean packages in current go workspace
+#   goget        - go get packages to current go workspace
+#   npminstall   - npm install global packages
+#   npmuninstall - npm uninstall global packages
 #
 # stage:
 #   nil     - look for actions on task
@@ -128,12 +130,12 @@ end
 def run_stage(recipe, task, stage=nil)
   return unless recipe.platform.has_key?(task)
   cfg = recipe.platform[task]
-  
+
   unless stage.nil?
     return unless cfg.has_key?(stage)
     cfg = cfg[stage]
   end
-  
+
   # Run actions in order
   cfg.each do |action, args|
     case action
@@ -149,12 +151,22 @@ def run_stage(recipe, task, stage=nil)
       end
     when 'goget'
       # go get packages
-      args.each do |pkg|
-        Bootstrap::Go.get pkg
-      end
+      args.each { |pkg| Bootstrap::Go.get pkg }
+    when 'npminstall'
+      # npm install -g <pkgs>
+      args.each { |pkg| Bootstrap::NPM.install pkg }
+    when 'npmuninstall'
+      # npm uninstall -g <pkgs>
+      args.each { |pkg| Bootstrap::NPM.uninstall pkg }
     when 'rm'
       # Remove list of files
-      args.each { |v| Bootstrap.sudo_rm v }
+      args.each do |target|
+        if File.directory?(target)
+          Bootstrap.sudo_rmdir target
+        else
+          Bootstrap.sudo_rm target
+        end
+      end
     when 'sh'
       # Execute shell script
       sh args
@@ -167,7 +179,7 @@ def run_stage(recipe, task, stage=nil)
         Bootstrap.sudo_ln v['src'], v['target']
       end
     end
-  end  
+  end
 end
 
 def command_install_task(recipe)
@@ -219,7 +231,7 @@ def mac_app_install_task(recipe)
       Bootstrap::MacOSX::App.install recipe.app, recipe.source_url, sig: recipe.sig
     end
   end
-  
+
   namespace "#{recipe.namespace}" do
     task :install => [app]
   end
@@ -245,7 +257,7 @@ def mac_install_task(recipe)
     command_install_task recipe
   when cfg.has_key?('app')
     mac_app_install_task recipe
-  end  
+  end
 end
 
 def mac_uninstall_task(recipe)
