@@ -38,8 +38,14 @@ dk() {
 	
 	# Set docker run arguments
 	case "${app}" in
+		go)
+			drun+=" -it -v ${PWD}:/go/src/app -w /go/src/app go go"
+			;;
 		memcached)
 			drun+=" -d -p 11211:11211 memcached"
+			;;
+		node)
+			drun+=" -it -v ${PWD}:/usr/src/app -w /usr/src/app node node"
 			;;
 		redis)
 			drun+=" -d -p 6379:6379 redis"
@@ -52,9 +58,6 @@ dk() {
 			;;
 		psql)
 			drun+=" -it --link ${name_prefix}postgres:postgres postgres psql -h postgres -U postgres -W"
-			;;
-		node)
-			drun+=" -it -v ${PWD}:/usr/src/app -w /usr/src/app node node"
 			;;
 		*)
 			if [ -z "${cmd}" ] || [ "${cmd}" != "ps" ]; then
