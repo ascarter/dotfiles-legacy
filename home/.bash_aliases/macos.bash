@@ -9,8 +9,7 @@ Darwin )
 	alias lockscreen='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
 
 	# System information
-	alias about='system_profiler SPHardwareDataType SPStorageDataType'
-	alias aboutsys='system_profiler SPSoftwareDataType'
+	alias about='system_profiler SPHardwareDataType SPSoftwareDataType SPStorageDataType'
 	# Use sw_vers for version
 	alias sysver='sw_vers'
 
