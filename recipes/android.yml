@@ -3,5 +3,5 @@ description: Android Studio provides the fastest tools for building apps on ever
 homepage:    https://developer.android.com/studio/index.html
 macos:
   app:       Android Studio
-  source:    https://dl.google.com/dl/android/studio/install/3.0.1.0/android-studio-ide-171.4443003-mac.dmg
-  sig:       { sha256: 2c8a24ad2de21e8d1d77a748a35cc5ca47812d9f5e2a0865981e206073d1d981 }
+  source:    https://dl.google.com/dl/android/studio/install/3.1.2.0/android-studio-ide-173.4720617-mac.dmg
+  sig:       { sha256: 4665cb18c838a3695a417cebc7751cbe658a297a9d6c01cbd9e9a1979b8b167e }
