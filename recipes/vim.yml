@@ -3,4 +3,4 @@ description: Vim is a highly configurable text editor built to make creating and
 homepage:    http://vim.org
 macos:
   app:    MacVim
-  source: https://github.com/macvim-dev/macvim/releases/download/snapshot-145/MacVim.dmg
+  source: https://github.com/macvim-dev/macvim/releases/download/snapshot-146/MacVim.dmg

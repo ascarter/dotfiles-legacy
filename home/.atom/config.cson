@@ -1,10 +1,12 @@
 "*":
+  "atom-ide-ui":
+    use: {}
   core:
     projectHome: "/Users/andrew/Projects/src"
     telemetryConsent: "no"
     themes: [
-      "atom-light-ui"
-      "atom-light-syntax"
+      "native-ui"
+      "one-light-syntax"
     ]
   editor:
     fontFamily: "SF Mono"
