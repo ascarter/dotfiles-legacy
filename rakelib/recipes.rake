@@ -64,8 +64,8 @@ class Recipe
     @platform['app']
   end
 
-  def appbundle
-    File.join("/Applications", app + ".app") if @platform.has_key?('app')
+  def appbundle(appname)
+    File.join("/Applications", appname + ".app")
   end
 
   def sig
@@ -171,6 +171,9 @@ def run_stage(recipe, task, stage=nil)
           Bootstrap.sudo_rm target
         end
       end
+    when 'run'
+      # Run application
+      args.
     when 'sh'
       # Execute shell script
       sh args
@@ -233,7 +236,7 @@ def mac_pkg_uninstall_task(recipe)
 end
 
 def mac_app_install_task(recipe)
-  app = recipe.appbundle
+  app = recipe.appbundle(recipe.app)
   file app do |t|
     exec_task(recipe, 'install') do
       options = {
@@ -253,7 +256,22 @@ def mac_app_uninstall_task(recipe)
   namespace "#{recipe.namespace}" do
     task :uninstall do
       exec_task(recipe, 'uninstall') do
-        Bootstrap::MacOSX::App.uninstall recipe.platform['app']
+        Bootstrap::MacOSX::App.uninstall recipe.app
+      end
+    end
+  end
+end
+
+def mac_run_install_task(recipe)
+  app = recipe.platform['installer']
+  namespace "#{recipe.namespace}" do
+    task :install => [:about] do
+      exec_task(recipe, 'install') do
+        options = {
+          sig:     recipe.sig,
+          headers: recipe.headers
+        }
+        Bootstrap::MacOSX::App.installer app, recipe.source_url, options
       end
     end
   end
@@ -269,6 +287,8 @@ def mac_install_task(recipe)
     command_install_task recipe
   when cfg.has_key?('app')
     mac_app_install_task recipe
+  when cfg.has_key?('installer')
+    mac_run_install_task recipe
   end
 end
 

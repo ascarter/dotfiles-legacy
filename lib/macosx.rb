@@ -102,13 +102,22 @@ module Bootstrap
       def run(app, url, headers: {}, sig: {}, wait: false)
         open_flags = wait ? "--wait-apps" : ""
         Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
-          run_app(File.join(d, "#{app}.app"), wait: wait)
+          Bootstrap::MacOSX.run_app(app, wait: wait)
         end
       end
       module_function :run
 
-      def launch(app)
-        system %(open -a "#{app}")
+      # Mac OS X installer app
+      def installer(app, url, headers: {}, sig: {})
+        Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+          launch(File.join(d, "#{app}.app"), wait: true)
+        end
+      end
+      module_function :installer
+
+      def launch(app, wait: false)
+        flags = wait ? "--wait-apps" : ""
+        system %(open #{flags} -a "#{app}")
       end
       module_function :launch
 
