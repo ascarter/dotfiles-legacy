@@ -1,0 +1,6 @@
+# signal
+description: Signal is a secure encrypted messaging system
+homepage:    https://www.signal.org
+macos:
+  app:    Signal
+  source: https://updates.signal.org/desktop/signal-desktop-mac-1.11.0.zip
