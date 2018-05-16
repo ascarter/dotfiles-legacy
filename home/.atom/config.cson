@@ -6,7 +6,7 @@
     telemetryConsent: "no"
     themes: [
       "native-ui"
-      "one-light-syntax"
+      "xcode-low-key-syntax"
     ]
   editor:
     fontFamily: "SF Mono"
@@ -17,5 +17,10 @@
       coverageDisplayMode: "gutter"
       runTestsOnSave: false
       runTestsWithCoverage: false
+  "tone-syntax":
+    color:
+      bg: "#292b36"
+      syncUI: false
+      uno: "#d8d8dc"
   welcome:
     showOnStartup: false
