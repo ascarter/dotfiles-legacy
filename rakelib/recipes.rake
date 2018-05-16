@@ -75,6 +75,12 @@ class Recipe
   def headers
     @platform['headers'] || {}
   end
+
+  # config_commands returns all keys that are commands and excludes before/after
+  def self.has_commands?(config)
+    config.keys.any? { |k| !['before', 'after'].include? k }
+  end
+
 end
 
 # Task helpers
@@ -298,7 +304,7 @@ def mac_uninstall_task(recipe)
   case
   when cfg.has_key?(key) && cfg[key].has_key?('pkg_id')
     mac_pkg_uninstall_task recipe
-  when cfg.has_key?(key)
+  when cfg.has_key?(key) && Recipe.has_commands?(cfg[key])
     command_uninstall_task recipe
   when cfg.has_key?('app')
     mac_app_uninstall_task recipe
