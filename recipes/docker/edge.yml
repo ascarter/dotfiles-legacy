@@ -1,8 +1,0 @@
-# docker
-description: Docker Edge version offers cutting edge features with experimental features turned on.
-homepage:    https://www.docker.com
-macos:
-    app:    Docker
-    source: https://download.docker.com/mac/edge/Docker.dmg
-    uninstall:
-        before: { sudo: /Applications/Docker.app/Contents/MacOS/Docker --uninstall }
