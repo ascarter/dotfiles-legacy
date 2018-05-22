@@ -1,6 +1,0 @@
-# beardedspice
-description: BeardedSpice is a menubar application for Mac OSX that allows you to control media players.
-homepage:    http://beardedspice.github.io
-macos:
-  app:    BeardedSpice
-  source: https://raw.github.com/beardedspice/beardedspice/distr/publish/releases/BeardedSpice-latest.zip
