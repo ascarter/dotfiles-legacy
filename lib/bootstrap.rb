@@ -14,6 +14,7 @@ require 'tmpdir'
 require 'uri'
 
 require_relative 'apm'
+require_relative 'archive'
 require_relative 'downloader'
 require_relative 'git'
 require_relative 'golang'
@@ -292,6 +293,24 @@ module Bootstrap
 
   # usr tools
 
+  # usr_cp copies source to /usr/<dest>/<source>
+  def usr_cp(src, dest = 'bin')
+    target = File.join('/usr/local', dest, File.basename(src))
+    if File.exist?(target)
+      warn "#{target} already exists"
+    else
+      sudo_cp(src, target)
+    end
+  end
+  module_function :usr_cp
+
+  # usr_rm removes target file from /usr/<dir>/<target>/
+  def usr_rm(target, dir = 'bin')
+    targetPath = File.join('/usr/local', dir, target)
+    sudo_rm(targetPath)
+  end
+  module_function :usr_rm
+
   def usr_bin
     '/usr/local/bin'
   end
@@ -370,4 +389,10 @@ module Bootstrap
     end
   end
   module_function :sha256
+
+  # GPG
+  def gpg_sig(target, sig)
+    `gpg --verify #{sig} #{target}`\
+  end
+  module_function :gpg_sig
 end

@@ -125,6 +125,7 @@ end
 #           target: /usr/local/bin/foo
 #
 # action keys:
+#   cp           - copy list of sources to targets
 #   sh           - run as shell of current user (Rake sh)
 #   sudo         - run using sudo
 #   symlink      - symlink src to target
@@ -215,6 +216,32 @@ def command_uninstall_task(recipe)
   end
 end
 
+def manifest_install_task(recipe)
+  cfg = recipe.platform['install']
+  namespace "#{recipe.namespace}" do
+    task :install => [:about] do
+      exec_task(recipe, 'install') do
+        options = {
+          sig:     recipe.sig,
+          headers: recipe.headers
+        }
+        Bootstrap::Archive.install cfg['manifest'], recipe.source_url, options
+      end
+    end
+  end
+end
+
+def manifest_uninstall_task(recipe)
+  cfg = recipe.platform['uninstall']
+  namespace "#{recipe.namespace}" do
+    task :uninstall do
+      exec_task(recipe, 'uninstall') do
+        Bootstrap::Archive.uninstall cfg['manifest']
+      end
+    end
+  end
+end
+
 def mac_pkg_install_task(recipe)
   cfg = recipe.platform['install']
   namespace "#{recipe.namespace}" do
@@ -289,6 +316,8 @@ def mac_install_task(recipe)
   case
   when cfg.has_key?(key) && cfg[key].has_key?('pkg_id')
     mac_pkg_install_task recipe
+  when cfg.has_key?(key) && cfg[key].has_key?('manifest')
+    manifest_install_task recipe
   when cfg.has_key?(key)
     command_install_task recipe
   when cfg.has_key?('app')
@@ -304,6 +333,8 @@ def mac_uninstall_task(recipe)
   case
   when cfg.has_key?(key) && cfg[key].has_key?('pkg_id')
     mac_pkg_uninstall_task recipe
+  when cfg.has_key?(key) && cfg[key].has_key?('manifest')
+    manifest_uninstall_task recipe
   when cfg.has_key?(key) && Recipe.has_commands?(cfg[key])
     command_uninstall_task recipe
   when cfg.has_key?('app')
