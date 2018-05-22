@@ -1,0 +1,10 @@
+# 1Pasword cli
+description: 1Password Command Line Interface
+homepage:    https://app-updates.agilebits.com/product_history/CLI
+macos:
+  source: https://cache.agilebits.com/dist/1P/op/pkg/v0.4.1/op_darwin_amd64_v0.4.1.zip
+  install:
+    manifest: &1passwordCliManifest
+      bin: ['op']
+  uninstall:
+    manifest: *1passwordCliManifest
