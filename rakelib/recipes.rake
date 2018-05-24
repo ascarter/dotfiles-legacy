@@ -318,7 +318,7 @@ def mac_install_task(recipe)
     mac_pkg_install_task recipe
   when cfg.has_key?(key) && cfg[key].has_key?('manifest')
     manifest_install_task recipe
-  when cfg.has_key?(key)
+  when cfg.has_key?(key) && Recipe.has_commands?(cfg[key])
     command_install_task recipe
   when cfg.has_key?('app')
     mac_app_install_task recipe
