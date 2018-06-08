@@ -2,10 +2,10 @@
 description: Go is an open source programming language
 homepage:    https://golang.org
 macos:
-  source:    https://dl.google.com/go/go1.10.2.darwin-amd64.pkg
+  source:    https://dl.google.com/go/go1.10.3.darwin-amd64.pkg
   install:
     pkg_id: &pkgid com.googlecode.go
-    pkg:    go1.10.2.darwin-amd64
+    pkg:    go1.10.3.darwin-amd64
     after:
       sh: /usr/local/go/bin/go version
       goget: &tools
