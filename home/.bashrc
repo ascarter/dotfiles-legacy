@@ -228,6 +228,11 @@ if [ -d /Applications/Docker.app ]; then
 	done
 fi
 
+# Source Swift completion
+if [ -n "`which swift`" ]; then
+	eval "`swift package completion-tool generate-bash-script`"
+fi
+
 # Homebrew - will also call user's ~/.bash_completion too
 if [ -n "`which brew`" ]; then
 	if [ -f `brew --prefix`/etc/bash_completion ]; then
