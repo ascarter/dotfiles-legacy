@@ -1,0 +1,5 @@
+description: Authy is a Two Factor Authenticator application
+homepage:    http://example.com/authy/
+macos:
+  app:    Authy Desktop
+  source: https://s3.amazonaws.com/authy-electron-repository-production/authy/stable/1.6.0/darwin/x64/Authy%20Desktop-1.6.0.dmg
