@@ -1,0 +1,6 @@
+# personalization-cli
+description: About personalization-cli
+homepage:    http://example.com/personalization-cli/
+macos:
+  app:    personalization-cli
+  source: http://example.com/personalization-cli/download

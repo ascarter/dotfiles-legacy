@@ -1,0 +1,8 @@
+description: YubiKey personalization tool
+homepage:    https://www.yubico.com/products/services-software/download/yubikey-personalization-tools/
+macos:
+  source: https://developers.yubico.com/yubikey-personalization-gui/Releases/yubikey-personalization-gui-3.1.25.pkg
+  install:  &yubicoPersonalizationPkg
+    pkg_id: com.yubico.YKPersonalization
+    pkg:    yubikey-personalization-gui-3.1.25
+  uninstall:  *yubicoPersonalizationPkg

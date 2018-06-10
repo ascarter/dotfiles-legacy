@@ -1,0 +1,8 @@
+description: Yubikey PIV Manager
+homepage:    https://www.yubico.com/products/services-software/download/smart-card-drivers-tools/
+macos:
+  source: https://developers.yubico.com/yubikey-piv-manager/Releases/yubikey-piv-manager-1.4.2e-mac.pkg
+  install:  &yubicoManagerPkg
+    pkg_id: com.yubico.pkg.YubiKeyPIVManager
+    pkg:    yubikey-piv-manager-1.4.2e-mac
+  uninstall:  *yubicoManagerPkg
