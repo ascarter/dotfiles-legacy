@@ -6,20 +6,20 @@ module Bootstrap
     #
     # manifest:
     #   {
-    #     bin: ['cmd1', 'rel/path/cmd2']
-    #     lib: ['lib1', 'rel/path/lib2']
-    #     man: ['man1', 'rel/path/man2']
+    #     bin: ['cmd1', 'rel/path/cmd2', 'bin/*']
+    #     lib: ['lib1', 'rel/path/lib2', 'lib/*']
+    #     man: ['man1', 'rel/path/man2', 'man/*']
     #   }
     def install(manifest, url, headers: {}, sig: {})
       Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
-        manifest.each do |key, sources|
-          sources.each do |s|
-            source = File.join(d, s)
-            signature = File.join(d, "#{s}.sig")
-            if File.exist?(signature)
-              Bootstrap.gpg_sig(source, signature)
+        manifest.each do |key, patterns|
+          patterns.each do |pattern|
+            sources = Dir.glob(File.join(d, pattern))
+            sources.each do |source|
+              sig = File.join(d, "#{File.basename(source, ".*")}.sig")
+              Bootstrap.gpg_sig(source, sig) if File.exist?(sig)
+              Bootstrap.usr_cp(source, key)
             end
-            Bootstrap.usr_cp(source, key)
           end
         end
       end
@@ -29,8 +29,12 @@ module Bootstrap
     # uninstall removes sources from /usr/local/<key>
     # uses same manifest as install
     def uninstall(manifest)
-      manifest.each do |key, sources|
-        sources.each { |s| Bootstrap.usr_rm(s, key) }
+      manifest.each do |key, patterns|
+        patterns.each do |pattern|
+          targets = Bootstrap.usr_ls(pattern, key)
+          puts "targets=#{targets}"
+          targets.each { |t| Bootstrap.sudo_rm t }
+        end
       end
     end
     module_function :uninstall

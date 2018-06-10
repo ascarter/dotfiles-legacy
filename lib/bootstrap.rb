@@ -293,9 +293,21 @@ module Bootstrap
 
   # usr tools
 
+  # usr_dir returns directory for /usr/<dir>
+  def usr_dir(dir = 'bin')
+    File.join('/usr/local', dir)
+  end
+  module_function :usr_dir
+
+  # usr_ls lists matching files for /usr/<dest>/<glob>
+  def usr_ls(glob, dir = 'bin')
+    Dir.glob(File.join(usr_dir(dir), glob))
+  end
+  module_function :usr_ls
+
   # usr_cp copies source to /usr/<dest>/<source>
   def usr_cp(src, dest = 'bin')
-    target = File.join('/usr/local', dest, File.basename(src))
+    target = File.join(usr_dir(dest), File.basename(src))
     if File.exist?(target)
       warn "#{target} already exists"
     else
@@ -306,13 +318,13 @@ module Bootstrap
 
   # usr_rm removes target file from /usr/<dir>/<target>/
   def usr_rm(target, dir = 'bin')
-    targetPath = File.join('/usr/local', dir, target)
+    targetPath = File.join(usr_dir(dir), target)
     sudo_rm(targetPath)
   end
   module_function :usr_rm
 
   def usr_bin
-    '/usr/local/bin'
+    usr_dir('bin')
   end
   module_function :usr_bin
 
@@ -356,7 +368,7 @@ module Bootstrap
 
   def usr_man_cp(src, dest = nil)
     dest_filename = dest.nil? ? File.basename(src) : dest
-    target = File.join('/usr/local/share/man',
+    target = File.join(usr_dir('share/man'),
                        "man#{File.extname(dest_filename).split('.')[1]}",
                        dest_filename)
     if File.exist?(target)
@@ -368,7 +380,7 @@ module Bootstrap
   module_function :usr_man_cp
 
   def usr_man_rm(page)
-    page_file = File.join('/usr/local/share/man', page)
+    page_file = File.join(usr_dir('share/man'), page)
     sudo_rm(page_file)
   end
   module_function :usr_man_rm
