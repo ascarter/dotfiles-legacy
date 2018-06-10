@@ -32,7 +32,6 @@ module Bootstrap
       manifest.each do |key, patterns|
         patterns.each do |pattern|
           targets = Bootstrap.usr_ls(pattern, key)
-          puts "targets=#{targets}"
           targets.each { |t| Bootstrap.sudo_rm t }
         end
       end
