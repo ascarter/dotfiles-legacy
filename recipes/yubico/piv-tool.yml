@@ -1,5 +1,12 @@
-description: YubiKey personalization tool command line interface
-homepage:    https://www.yubico.com/products/services-software/download/yubikey-personalization-tools/
+description: YubiKey PIV command line interface
+homepage:    https://www.yubico.com/products/services-software/download/smart-card-drivers-tools/
 macos:
-  app:    tool
   source: https://developers.yubico.com/yubico-piv-tool/Releases/yubico-piv-tool-1.5.0-mac.zip
+  dest:   /opt/yubico
+  install:
+    manifest: &ypivManifest
+      bin:    ['bin/*']
+      share:  ['share/**/*']
+      lib:    ['lib/*']
+  uninstall:
+    manifest: *ypivManifest

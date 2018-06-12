@@ -1,6 +1,13 @@
-# personalization-cli
-description: About personalization-cli
-homepage:    http://example.com/personalization-cli/
+description: YubiKey personalization tool command line interface
+homepage:    https://www.yubico.com/products/services-software/download/yubikey-personalization-tools/
 macos:
-  app:    personalization-cli
-  source: http://example.com/personalization-cli/download
+  source: https://developers.yubico.com/yubikey-personalization/Releases/ykpers-1.19.0-mac.zip
+  dest:   /opt/yubico
+  install:
+    manifest: &ykpersManifest
+      bin:    ['bin/*']
+      share:  ['share/**/*']
+      lib:    ['lib/*']
+  uninstall:
+    manifest: *ykpersManifest
+
