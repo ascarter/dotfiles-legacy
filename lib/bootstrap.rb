@@ -207,6 +207,28 @@ module Bootstrap
   end
   module_function :font_dir
 
+  # dir_empty? returns if directory only contains `.` and `..`
+  def dir_empty?(target)
+    Dir.entries(target).size <= 2
+  end
+  module_function :dir_empty?
+
+  # dir_prune removes any empty subdirectories including the target if everything is empty
+  def dir_prune(target)
+    return unless File.directory?(target)
+
+    # Remove all empty subdirectories
+    (Dir.entries(target) - [".", ".."]).each do |f|
+      t = File.join(target, f)
+      puts "checking #{t}"
+      dir_prune(t) if Dir.exist?(t)
+    end
+
+    # Remove target if it is now empty
+    sudo_rmdir(target) if dir_empty?(target)
+  end
+  module_function :dir_prune
+
   # shell
 
   def system_echo(cmd)
@@ -252,8 +274,12 @@ module Bootstrap
   module_function :sudo_mkdir
 
   def sudo_cp(src, target)
-    puts "Copying #{src} to #{target}"
-    sudo %(cp "#{src}" "#{target}")
+    if File.exist?(target)
+      warn "#{target} already exists"
+    else
+      puts "Copying #{src} to #{target}"
+      sudo %(cp "#{src}" "#{target}")
+    end
   end
   module_function :sudo_cp
 
@@ -299,37 +325,8 @@ module Bootstrap
   end
   module_function :usr_dir
 
-  # usr_ls lists matching files for /usr/<dest>/<glob>
-  def usr_ls(glob, dir = 'bin')
-    Dir.glob(File.join(usr_dir(dir), glob))
-  end
-  module_function :usr_ls
-
-  # usr_cp copies source to /usr/<dest>/<source>
-  def usr_cp(src, dest = 'bin')
-    target = File.join(usr_dir(dest), File.basename(src))
-    if File.exist?(target)
-      warn "#{target} already exists"
-    else
-      sudo_cp(src, target)
-    end
-  end
-  module_function :usr_cp
-
-  # usr_rm removes target file from /usr/<dir>/<target>/
-  def usr_rm(target, dir = 'bin')
-    targetPath = File.join(usr_dir(dir), target)
-    sudo_rm(targetPath)
-  end
-  module_function :usr_rm
-
-  def usr_bin
-    usr_dir('bin')
-  end
-  module_function :usr_bin
-
   def usr_bin_cmd(cmd)
-    return File.join(usr_bin, cmd)
+    return File.join(usr_dir('bin'), cmd)
   end
   module_function :usr_bin_cmd
 

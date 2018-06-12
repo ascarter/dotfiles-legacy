@@ -2,7 +2,7 @@ module Bootstrap
   # General purpose archive helpers (zip or tarball installs)
   module Archive
     # install downloads specified archive and extracts it then uses manifest file to
-    # copy files to /usr/local/<key>
+    # copy files to <dest>/<key>. By default, `/usr/local` will be used.
     #
     # manifest:
     #   {
@@ -10,15 +10,20 @@ module Bootstrap
     #     lib: ['lib1', 'rel/path/lib2', 'lib/*']
     #     man: ['man1', 'rel/path/man2', 'man/*']
     #   }
-    def install(manifest, url, headers: {}, sig: {})
+    def install(manifest, url, dest: '/usr/local', headers: {}, sig: {})
       Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+        dirpath = Pathname.new(d)
         manifest.each do |key, patterns|
           patterns.each do |pattern|
             sources = Dir.glob(File.join(d, pattern))
             sources.each do |source|
-              sig = File.join(d, "#{File.basename(source, ".*")}.sig")
+              sourcepath = Pathname.new(source)
+              relsource = sourcepath.relative_path_from(dirpath)
+              target = File.join(dest, sourcepath.fnmatch?("#{key}/**") ? File.join(key, relsource) : relsource)
+              sig = sourcepath.sub_ext('.sig')
               Bootstrap.gpg_sig(source, sig) if File.exist?(sig)
-              Bootstrap.usr_cp(source, key)
+              Bootstrap.sudo_mkdir File.dirname(target)
+              Bootstrap.sudo_cp source, target
             end
           end
         end
@@ -26,15 +31,24 @@ module Bootstrap
     end
     module_function :install
 
-    # uninstall removes sources from /usr/local/<key>
+    # uninstall removes sources from <dest>/<key>
+    # By default, `/usr/local` is dest
     # uses same manifest as install
-    def uninstall(manifest)
+    def uninstall(manifest, dest: '/usr/local')
       manifest.each do |key, patterns|
         patterns.each do |pattern|
-          targets = Bootstrap.usr_ls(pattern, key)
-          targets.each { |t| Bootstrap.sudo_rm t }
+          glob = pattern.start_with?("#{key}/") ? pattern : File.join(key, pattern)
+          targets = Dir.glob(File.join(dest, glob))
+          targets.each do |t|
+            if Dir.exist?(t)
+              Bootstrap.sudo_rmdir(t) if Bootstrap.dir_empty?(t)
+            else
+              Bootstrap.sudo_rm t
+            end
+          end
         end
       end
+      Bootstrap.dir_prune(dest)
     end
     module_function :uninstall
   end

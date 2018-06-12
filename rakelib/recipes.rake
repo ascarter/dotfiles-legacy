@@ -60,6 +60,10 @@ class Recipe
     @platform['source']
   end
 
+  def dest
+    @platform['dest'] || '/usr/local'
+  end
+
   def app
     @platform['app']
   end
@@ -222,6 +226,7 @@ def manifest_install_task(recipe)
     task :install => [:about] do
       exec_task(recipe, 'install') do
         options = {
+          dest:    recipe.dest,
           sig:     recipe.sig,
           headers: recipe.headers
         }
@@ -236,7 +241,7 @@ def manifest_uninstall_task(recipe)
   namespace "#{recipe.namespace}" do
     task :uninstall do
       exec_task(recipe, 'uninstall') do
-        Bootstrap::Archive.uninstall cfg['manifest']
+        Bootstrap::Archive.uninstall cfg['manifest'], dest: recipe.dest
       end
     end
   end
