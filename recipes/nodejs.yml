@@ -2,12 +2,12 @@
 description: Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine.
 homepage:    https://nodejs.org/
 macos:
-  source:  https://nodejs.org/dist/v10.4.1/node-v10.4.1.pkg
+  source:  https://nodejs.org/dist/v10.5.0/node-v10.5.0.pkg
   install:
     pkg_id: &nodejsPkgID org.nodejs.node.pkg
-    pkg:    node-v10.4.1
+    pkg:    node-v10.5.0
     after:
-      npminstall: &npmPackages
+      npm_install: &npmPackages
       - npm@latest
       - eslint
       - js-beautify
@@ -15,7 +15,7 @@ macos:
   uninstall:
     pkg_id: *nodejsPkgID
     before:
-      npmuninstall: *npmPackages
+      npm_uninstall: *npmPackages
     after:
       rm:
       - /usr/local/lib/node
