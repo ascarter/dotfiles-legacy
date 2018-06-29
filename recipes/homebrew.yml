@@ -1,0 +1,51 @@
+description: Homebrew is a package manager for macOS
+homepage:    https://brew.sh
+macos:
+  config: &hbConfig
+    root: &hbRoot /opt/homebrew
+    bin:  &hbBin /opt/homebrew/bin
+    man:  &hbMan /opt/homebrew/share/man
+    brew: &hbBrew /opt/homebrew/bin/brew
+    env: &hbEnv
+      PATH: [ *hbBin ]
+    phelper: &hbPhelper
+      paths:    [ *hbBin ]
+      manpaths: [ *hbMan ]
+    formulas: &hbFormulas
+      tools:
+        - awscli
+        - bash-completion
+        - gist
+        - graphviz
+        - htop
+        - hub
+        - jq
+        - ranger
+        - sqlite3
+        - unar
+        - wget
+      taps:
+        - universal-ctags/universal-ctags
+      overrides:
+        - ctags
+  install:
+    before:
+      check: *hbBrew
+      mkdir: *hbRoot
+      chown: *hbRoot
+      chgrp: [ *hbRoot, admin ]
+      chmod: *hbRoot
+    sh: curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C /opt/homebrew
+    after:
+      env: *hbEnv
+      macos_pathhelper: *hbPhelper
+      brew_install: *hbFormulas
+  uninstall:
+    before:
+      env: *hbEnv
+      brew_uninstall: *hbFormulas
+    sudo: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
+    after:
+      rm: [ *hbRoot ]
+      macos_rmpathhelper: *hbPhelper
+  
