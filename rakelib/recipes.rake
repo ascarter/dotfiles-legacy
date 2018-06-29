@@ -3,6 +3,9 @@ require 'erb'
 require 'pathname'
 require 'yaml'
 
+# Import rake actions
+Dir.glob(File.join(File.dirname(__FILE__), 'actions/*.rake')).each { |r| import r }
+
 RECIPES_DIR = Pathname.new('recipes')
 
 desc "Generator for new recipes"
@@ -89,6 +92,16 @@ end
 
 # Task helpers
 
+# Return the best matching method for an action
+# Actions are expected to be either a string for a method in the provided module
+# or using syntax <submodule>_<method> for submodule matches
+def find_method(mod, action)
+  mod_name, meth_name = action.split('_')
+  matches = mod.constants.select { |c| mod_name.casecmp(c.to_s) == 0 }
+  m = matches.length > 0 ? mod.const_get(matches[0]) : mod
+  m.method(meth_name.to_sym)
+end
+
 def default_task(recipe, task)
   desc recipe.description || recipe.name
   task "#{recipe.namespace}" => ["#{recipe.namespace}:about", "#{recipe.namespace}:#{task}"]
@@ -110,34 +123,17 @@ def update_task(recipe)
 end
 
 def exec_task(recipe, task)
-  run_stage recipe, task, 'before'
-  yield
-  run_stage recipe, task, 'after'
+  begin
+    run_stage recipe, task, 'before'
+    yield
+    run_stage recipe, task, 'after'
+  rescue => ex
+    print ex
+  end
 end
 
 # run_stage finds actions for stage on task and executes.
-#
-# Examples:
-#   uninstall:
-#     before: { sudo: rm -Rf }
-#     sh:     { echo 'Uninstalling...' }
-#     after:
-#       sh:      echo 'Done'
-#       symlink:
-#         -
-#           src:    /Applications/Foo.app/Contents/bin/foo
-#           target: /usr/local/bin/foo
-#
-# action keys:
-#   cp           - copy list of sources to targets
-#   sh           - run as shell of current user (Rake sh)
-#   sudo         - run using sudo
-#   symlink      - symlink src to target
-#   rm           - remove target
-#   goclean      - go clean packages in current go workspace
-#   goget        - go get packages to current go workspace
-#   npminstall   - npm install global packages
-#   npmuninstall - npm uninstall global packages
+# Actions are implemented in the `actions` folder
 #
 # stage:
 #   nil     - look for actions on task
@@ -145,6 +141,7 @@ end
 def run_stage(recipe, task, stage=nil)
   return unless recipe.platform.has_key?(task)
   cfg = recipe.platform[task]
+  config = cfg['config'] || {}
 
   unless stage.nil?
     return unless cfg.has_key?(stage)
@@ -153,50 +150,9 @@ def run_stage(recipe, task, stage=nil)
 
   # Run actions in order
   cfg.each do |action, args|
-    case action
-    when 'cp'
-      # List of hashes with src, target
-      args.each do |v|
-        Bootstrap.sudo_cp v['src'], v['target']
-      end
-    when 'goclean'
-      # go clean packages
-      args.each do |pkg|
-        Bootstrap::Go.clean pkg
-      end
-    when 'goget'
-      # go get packages
-      args.each { |pkg| Bootstrap::Go.get pkg }
-    when 'npminstall'
-      # npm install -g <pkgs>
-      args.each { |pkg| Bootstrap::NPM.install pkg }
-    when 'npmuninstall'
-      # npm uninstall -g <pkgs>
-      args.each { |pkg| Bootstrap::NPM.uninstall pkg }
-    when 'rm'
-      # Remove list of files
-      args.each do |target|
-        if File.directory?(target)
-          Bootstrap.sudo_rmdir target
-        else
-          Bootstrap.sudo_rm target
-        end
-      end
-    when 'run'
-      # Run application
-      args.
-    when 'sh'
-      # Execute shell script
-      sh args
-    when 'sudo'
-      # Execute shell script using sudo
-      Bootstrap.sudo args
-    when 'symlink'
-      # List of hashes with src, target
-      args.each do |v|
-        Bootstrap.sudo_ln v['src'], v['target']
-      end
-    end
+    meth = find_method(Actions, action)
+    raise "Unable to execute action #{action}" if meth.nil?
+    meth.call(args)
   end
 end
 

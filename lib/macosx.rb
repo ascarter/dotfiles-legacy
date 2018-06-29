@@ -3,7 +3,7 @@ module Bootstrap
   module MacOSX
     def path_helper(path_file, paths, type = 'paths')
       unless %w(paths manpaths).include?(type)
-        raise ArgumentError, 'Invalid path type'
+        raise ArgumentError, "Invalid path type #{type}"
       end
 
       fullpath = File.join("/etc/#{type}.d", path_file)
