@@ -1,0 +1,5 @@
+description: Geekbench is a multi-platform benchmarking tool
+homepage:    http://www.geekbench.com
+macos:
+  app:    Geekbench 4
+  source: http://cdn.geekbench.com/Geekbench-4.2.3-Mac.dmg
