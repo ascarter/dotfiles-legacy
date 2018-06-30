@@ -1,0 +1,6 @@
+# Sample
+description: Sample recipe actions
+homepage:    http://example.com/sample/
+macos:
+  install:
+    sh: echo 'This is a sample'
