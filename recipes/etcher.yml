@@ -1,0 +1,5 @@
+description: Etcher is an SD card flashing utility
+homepage:    https://etcher.io
+macos:
+  app:    Etcher
+  source: https://github.com/resin-io/etcher/releases/download/v1.4.4/Etcher-1.4.4.dmg
