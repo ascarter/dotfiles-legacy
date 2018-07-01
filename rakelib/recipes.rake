@@ -29,6 +29,7 @@ EOB
   body = ERB.new(template).result(binding)
   mkdir_p File.dirname(target)
   File.open(target, 'w') { |f| f.write(body) }
+  open_file target
 end
 
 class Recipe
@@ -143,6 +144,10 @@ def exec_task(recipe, task)
   rescue => ex
     print ex
   end
+end
+
+def open_file(filepath)
+  system %Q{${VISUAL} "#{filepath}"}
 end
 
 # run_stage finds actions for stage on task and executes.
