@@ -5,6 +5,7 @@ require 'etc'
 GIT_LFS_APP_NAME = 'git-lfs'.freeze
 GIT_LFS_SOURCE_URL = 'https://github.com/git-lfs/git-lfs/releases/download/v2.2.1/git-lfs-darwin-amd64-2.2.1.tar.gz'.freeze
 GIT_LFS_SCRIPT = 'git-lfs-2.2.1/install.sh'.freeze
+GITHUB_CONFIG_FILES = %w(~/.config/hub)
 
 namespace 'git' do
   desc 'Update git config'
@@ -104,5 +105,10 @@ namespace 'git' do
     task :uninstall do
       Bootstrap.usr_bin_rm(GIT_LFS_APP_NAME)
     end
+  end
+
+  desc 'Reset config files for GitHub tools'
+  task :reset do
+    GITHUB_CONFIG_FILES.each { |f| rm f }
   end
 end

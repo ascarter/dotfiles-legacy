@@ -1,0 +1,5 @@
+description: GitHub Desktop is an application for working with GitHub outside the browser.
+homepage:    https://desktop.github.com
+macos:
+  app:    GitHub Desktop
+  source: https://central.github.com/deployments/desktop/desktop/latest/darwin
