@@ -16,26 +16,26 @@ if Bootstrap.macOS?
   namespace 'bbedit' do
     desc 'Install BBEdit'
     task :install do
-      Bootstrap::MacOS::App.install(BBEDIT_APP_NAME, BBEDIT_SOURCE_URL) #, sig: BBEDIT_SIGNATURE_SHA256)
+      MacOS::App.install(BBEDIT_APP_NAME, BBEDIT_SOURCE_URL) #, sig: BBEDIT_SIGNATURE_SHA256)
 
       # TODO: Set license key
 
       # Install command line utils
       unless File.exist? Bootstrap.usr_bin_cmd('bbedit')
-        helper = File.join(Bootstrap::MacOS::App.contents(BBEDIT_APP_NAME), BBEDIT_INSTALL_TOOLS_SCPT)
-        Bootstrap::MacOS.run_applescript(helper)
+        helper = File.join(MacOS::App.contents(BBEDIT_APP_NAME), BBEDIT_INSTALL_TOOLS_SCPT)
+        MacOS.run_applescript(helper)
       end
 
       # Install automator actions
-      Bootstrap::MacOS::Pkg.install(BBEDIT_AUTOMATOR_PKG_NAME,
+      MacOS::Pkg.install(BBEDIT_AUTOMATOR_PKG_NAME,
                                      BBEDIT_AUTOMATOR_PKG_ID,
                                      BBEDIT_AUTOMATOR_SOURCE_URL)
 
       # Remove outdated update default setting
-      Bootstrap::MacOS::Defaults.delete 'com.barebones.bbedit', :key => 'SUFeedURL'
+      MacOS::Defaults.delete 'com.barebones.bbedit', :key => 'SUFeedURL'
 
       # Set preference to treat Open File by Name as modal
-      # Bootstrap::MacOS::Defaults.write 'com.barebones.bbedit', 'CloseOFBNWindowAfterOpeningSelection', 'YES', '-bool'
+      # MacOS::Defaults.write 'com.barebones.bbedit', 'CloseOFBNWindowAfterOpeningSelection', 'YES', '-bool'
 
       puts `bbedit --version`
     end
@@ -51,10 +51,10 @@ if Bootstrap.macOS?
       end
 
       # Automator actions
-      Bootstrap::MacOS::Pkg.uninstall(BBEDIT_AUTOMATOR_PKG_ID)
+      MacOS::Pkg.uninstall(BBEDIT_AUTOMATOR_PKG_ID)
 
       # Remove application
-      Bootstrap::MacOS::App.uninstall('BBEdit')
+      MacOS::App.uninstall('BBEdit')
     end
   end
 end

@@ -9,19 +9,19 @@ if Bootstrap.macOS?
 	namespace 'things' do
 		desc 'Install Things'
 		task :install do
-			Bootstrap::MacOS::App.install(THINGS_APP_NAME, THINGS_SOURCE_URL)
-			Bootstrap::MacOS::App.launch(THINGS_APP_NAME)
+			MacOS::App.install(THINGS_APP_NAME, THINGS_SOURCE_URL)
+			MacOS::App.launch(THINGS_APP_NAME)
 		end
 
 		desc 'Uninstall Things'
 		task :uninstall do
-			Bootstrap::MacOS::App.uninstall(THINGS_APP_NAME)
+			MacOS::App.uninstall(THINGS_APP_NAME)
 		end
 
 		namespace 'helper' do
       desc 'Install Things Helper'
 		  task :install do
-        Bootstrap::MacOS::App.run(THINGS_HELPER_APP_NAME, THINGS_HELPER_SOURCE_URL)
+        MacOS::App.run(THINGS_HELPER_APP_NAME, THINGS_HELPER_SOURCE_URL)
 		  end
 
   		desc 'Uninstall Things Helper'

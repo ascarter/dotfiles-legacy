@@ -14,7 +14,7 @@ namespace 'tex' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::Pkg.install(TEX_PKG_NAME, TEX_PKG_IDS[0], TEX_SOURCE_URL)
+      MacOS::Pkg.install(TEX_PKG_NAME, TEX_PKG_IDS[0], TEX_SOURCE_URL)
     end
 
     puts `texdist --current`
@@ -24,7 +24,7 @@ namespace 'tex' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      TEX_PKG_IDS.each { |p| Bootstrap::MacOS::Pkg.uninstall(p) }
+      TEX_PKG_IDS.each { |p| MacOS::Pkg.uninstall(p) }
     end
   end
 end

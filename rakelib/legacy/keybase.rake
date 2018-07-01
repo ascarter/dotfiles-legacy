@@ -8,7 +8,7 @@ namespace 'keybase' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::App.install(KEYBASE_APP_NAME, KEYBASE_SOURCE_URL)
+      MacOS::App.install(KEYBASE_APP_NAME, KEYBASE_SOURCE_URL)
     end
   end
   
@@ -16,7 +16,7 @@ namespace 'keybase' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::App.uninstall(KEYBASE_APP_NAME)
+      MacOS::App.uninstall(KEYBASE_APP_NAME)
     end
   end 
 end

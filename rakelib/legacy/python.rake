@@ -26,13 +26,13 @@ namespace 'python' do
     task :install do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOS::Pkg.install(PYTHON_27_PKG_NAME, PYTHON_27_PKG_IDS[0], PYTHON_27_SRC_URL)
+        MacOS::Pkg.install(PYTHON_27_PKG_NAME, PYTHON_27_PKG_IDS[0], PYTHON_27_SRC_URL)
       end
     end
 
     desc 'Uninstall Python 2.7'
     task :uninstall do
-      PYTHON_27_PKG_IDS.each { |p| Bootstrap::MacOS::Pkg.uninstall(p) }
+      PYTHON_27_PKG_IDS.each { |p| MacOS::Pkg.uninstall(p) }
     end
   end
 
@@ -41,13 +41,13 @@ namespace 'python' do
     task :install do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOS::Pkg.install(PYTHON_35_PKG_NAME, PYTHON_35_PKG_IDS[0], PYTHON_35_SRC_URL)
+        MacOS::Pkg.install(PYTHON_35_PKG_NAME, PYTHON_35_PKG_IDS[0], PYTHON_35_SRC_URL)
       end
     end
 
     desc 'Uninstall Python 3.5'
     task :uninstall do
-      PYTHON_35_PKG_IDS.each { |p| Bootstrap::MacOS::Pkg.uninstall(p) }
+      PYTHON_35_PKG_IDS.each { |p| MacOS::Pkg.uninstall(p) }
     end
   end
 

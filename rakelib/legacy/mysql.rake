@@ -11,9 +11,9 @@ namespace 'mysql' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::Pkg.install(MYSQL_PKG_NAME, MYSQL_PKG_IDS[0], MYSQL_SOURCE_URL, sig: MYSQL_SIGNATURE)
-      Bootstrap::MacOS.path_helper('mysql', [File.join(MYSQL_ROOT, 'bin')])
-      Bootstrap::MacOS.path_helper('mysql', [File.join(MYSQL_ROOT, 'man')], 'manpaths')
+      MacOS::Pkg.install(MYSQL_PKG_NAME, MYSQL_PKG_IDS[0], MYSQL_SOURCE_URL, sig: MYSQL_SIGNATURE)
+      MacOS.path_helper('mysql', [File.join(MYSQL_ROOT, 'bin')])
+      MacOS.path_helper('mysql', [File.join(MYSQL_ROOT, 'man')], 'manpaths')
     end
   end
 
@@ -21,8 +21,8 @@ namespace 'mysql' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      MYSQL_PKG_IDS.each { |p| Bootstrap::MacOS::Pkg.uninstall(p) }
-      %w(paths manpaths).each { |t| Bootstrap::MacOS.rm_path_helper('mysql', t) }
+      MYSQL_PKG_IDS.each { |p| MacOS::Pkg.uninstall(p) }
+      %w(paths manpaths).each { |t| MacOS.rm_path_helper('mysql', t) }
     end
   end
 
@@ -33,12 +33,12 @@ namespace 'mysql' do
     namespace 'sequelpro' do
       desc 'Install Sequel Pro'
       task :install do
-        Bootstrap::MacOS::App.install(SEQUELPRO_APP_NAME, SEQUELPRO_SOURCE_URL)
+        MacOS::App.install(SEQUELPRO_APP_NAME, SEQUELPRO_SOURCE_URL)
       end
 
       desc 'Uninstall Sequel Pro'
       task :uninstall do
-        Bootstrap::MacOS::App.uninstall(SEQUELPRO_APP_NAME)
+        MacOS::App.uninstall(SEQUELPRO_APP_NAME)
       end
     end
   end

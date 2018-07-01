@@ -9,7 +9,7 @@ namespace 'jetbrains' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::App.install(TOOLBOX_APP_NAME, TOOLBOX_SOURCE_URL, sig: TOOLBOX_SIGNATURE)
+      MacOS::App.install(TOOLBOX_APP_NAME, TOOLBOX_SOURCE_URL, sig: TOOLBOX_SIGNATURE)
     end
   end
 
@@ -17,7 +17,7 @@ namespace 'jetbrains' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::App.uninstall(TOOLBOX_APP_NAME)
+      MacOS::App.uninstall(TOOLBOX_APP_NAME)
     end
   end
 end

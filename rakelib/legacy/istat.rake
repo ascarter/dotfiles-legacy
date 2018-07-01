@@ -11,7 +11,7 @@ namespace 'istat' do
     task :install do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOS::App.install(ISTAT_SERVER_APP_NAME, ISTAT_SERVER_SOURCE_URL)
+        MacOS::App.install(ISTAT_SERVER_APP_NAME, ISTAT_SERVER_SOURCE_URL)
       end
     end
   
@@ -19,7 +19,7 @@ namespace 'istat' do
     task :uninstall do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOS::App.uninstall(ISTAT_SERVER_APP_NAME)
+        MacOS::App.uninstall(ISTAT_SERVER_APP_NAME)
       end
     end 
   end
@@ -29,7 +29,7 @@ namespace 'istat' do
     task :install do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOS::App.install(ISTAT_MENUS_APP_NAME, ISTAT_MENUS_SOURCE_URL)
+        MacOS::App.install(ISTAT_MENUS_APP_NAME, ISTAT_MENUS_SOURCE_URL)
       end
     end
 
@@ -37,7 +37,7 @@ namespace 'istat' do
     task :uninstall do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOS::App.uninstall(ISTAT_MENUS_APP_NAME)
+        MacOS::App.uninstall(ISTAT_MENUS_APP_NAME)
       end
     end    
   end  

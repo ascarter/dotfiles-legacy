@@ -37,12 +37,12 @@ if Bootstrap.macOS?
         task :install do
           picker = 'Developer Color Picker/DeveloperColorPicker'
           src_url = 'http://download.panic.com/picker/developercolorpicker.zip'
-          Bootstrap::MacOS::ColorPicker.install(picker, src_url)
+          MacOS::ColorPicker.install(picker, src_url)
         end
 
         desc 'Uninstall Developer Color Picker by Panic'
         task :uninstall do
-          Bootstrap::MacOS::ColorPicker.uninstall('DeveloperColorPicker')
+          MacOS::ColorPicker.uninstall('DeveloperColorPicker')
         end
       end
 
@@ -51,12 +51,12 @@ if Bootstrap.macOS?
         task :install do
           picker = 'Skala Color Installer.app/Contents/Resources/SkalaColor'
           src_url = 'http://download.bjango.com/skalacolor/'
-          Bootstrap::MacOS::ColorPicker.install(picker, src_url)
+          MacOS::ColorPicker.install(picker, src_url)
         end
 
         desc 'Uninstall Skala'
         task :uninstall do
-          Bootstrap::MacOS::ColorPicker.uninstall('SkalaColor')
+          MacOS::ColorPicker.uninstall('SkalaColor')
         end
       end
     end

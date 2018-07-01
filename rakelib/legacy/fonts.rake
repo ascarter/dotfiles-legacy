@@ -36,12 +36,12 @@ namespace 'fonts' do
     desc 'Install Go font'
     task :install do
       fontPath = File.join(File.basename(GOFONT_SOURCE_URL, '.tar.gz'))
-      Bootstrap::MacOS::Font.install('Go-*', GOFONT_SOURCE_URL, font_type: 'ttf')
+      MacOS::Font.install('Go-*', GOFONT_SOURCE_URL, font_type: 'ttf')
     end
 
     desc 'Uninstall Go font'
     task :uninstall do
-      Bootstrap::MacOS::Font.uninstall('Go', font_type: 'ttf')
+      MacOS::Font.uninstall('Go', font_type: 'ttf')
     end
   end
 
@@ -49,24 +49,24 @@ namespace 'fonts' do
     desc 'Install FontAwesome'
     task :install do
       fontPath = File.join(File.basename(FONT_AWESOME_SOURCE_URL, '.zip'), 'fonts', 'FontAwesome')
-      Bootstrap::MacOS::Font.install(fontPath, FONT_AWESOME_SOURCE_URL)
+      MacOS::Font.install(fontPath, FONT_AWESOME_SOURCE_URL)
     end
 
     desc 'Uninstall FontAwesome'
     task :uninstall do
-      Bootstrap::MacOS::Font.uninstall('FontAwesome')
+      MacOS::Font.uninstall('FontAwesome')
     end
   end
 
   namespace 'hack' do
     desc 'Install Hack font'
     task :install do
-      Bootstrap::MacOS::Font.install('Hack-*', HACK_SOURCE_URL, font_type: 'ttf')
+      MacOS::Font.install('Hack-*', HACK_SOURCE_URL, font_type: 'ttf')
     end
 
     desc 'Uninstall Hack font'
     task :uninstall do
-      Bootstrap::MacOS::Font.uninstall('Hack', font_type: 'ttf')
+      MacOS::Font.uninstall('Hack', font_type: 'ttf')
     end
   end
 end

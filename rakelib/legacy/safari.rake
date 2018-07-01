@@ -9,16 +9,16 @@ if Bootstrap.macOS?
   namespace 'safari' do
     desc 'Install Safari Developer Preview'
     task :install do
-      if Bootstrap::MacOS::App.exists?(SAFARI_APP_NAME)
+      if MacOS::App.exists?(SAFARI_APP_NAME)
         warn "#{SAFARI_APP_NAME} already installed"
       else
-        Bootstrap::MacOS::Pkg.install(SAFARI_PKG_NAME, SAFARI_PKG_ID, SAFARI_SOURCE_URL)
+        MacOS::Pkg.install(SAFARI_PKG_NAME, SAFARI_PKG_ID, SAFARI_SOURCE_URL)
       end
     end
 
     desc 'Uninstall Safari Developer Preview'
     task :uninstall do
-      Bootstrap::MacOS::App.uninstall(SAFARI_APP_NAME)
+      MacOS::App.uninstall(SAFARI_APP_NAME)
     end
   end
 end

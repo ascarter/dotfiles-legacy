@@ -10,7 +10,7 @@ namespace 'apogee' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::Pkg.install(APOGEE_INSTALLER_PKG_NAME,
+      MacOS::Pkg.install(APOGEE_INSTALLER_PKG_NAME,
                                      APOGEE_PKG_ID,
                                      APOGEE_SOURCE_URL)
     end
@@ -20,7 +20,7 @@ namespace 'apogee' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS.run(APOGEE_UNINSTALLER_APP, APOGEE_SOURCE_URL, wait: true)
+      MacOS.run(APOGEE_UNINSTALLER_APP, APOGEE_SOURCE_URL, wait: true)
     end
   end
 end

@@ -23,13 +23,13 @@ namespace 'gpg' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::Pkg.install(GPG_PKG_NAME, GPG_PKG_IDS[0], GPG_SOURCE_URL, sig: GPG_SIGNATURE)
+      MacOS::Pkg.install(GPG_PKG_NAME, GPG_PKG_IDS[0], GPG_SOURCE_URL, sig: GPG_SIGNATURE)
     end
   end
 
   desc 'Uninstall gpg'
   task :uninstall do
-    Bootstrap::MacOS::App.run(GPG_UNINSTALL_APP_NAME, GPG_SOURCE_URL, sig: GPG_SIGNATURE)
+    MacOS::App.run(GPG_UNINSTALL_APP_NAME, GPG_SOURCE_URL, sig: GPG_SIGNATURE)
   end
 
   namespace 'sign' do
@@ -37,8 +37,8 @@ namespace 'gpg' do
     task :gpg do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOS::Defaults.write(GPG_DEFAULTS_DOMAIN, 'DefaultSecurityMethod', 1, '-int')
-        puts Bootstrap::MacOS::Defaults.read(GPG_DEFAULTS_DOMAIN)
+        MacOS::Defaults.write(GPG_DEFAULTS_DOMAIN, 'DefaultSecurityMethod', 1, '-int')
+        puts MacOS::Defaults.read(GPG_DEFAULTS_DOMAIN)
       end
     end
 
@@ -46,8 +46,8 @@ namespace 'gpg' do
     task :smime do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOS::Defaults.write(GPG_DEFAULTS_DOMAIN, 'DefaultSecurityMethod', 2, '-int')
-        puts Bootstrap::MacOS::Defaults.read(GPG_DEFAULTS_DOMAIN)
+        MacOS::Defaults.write(GPG_DEFAULTS_DOMAIN, 'DefaultSecurityMethod', 2, '-int')
+        puts MacOS::Defaults.read(GPG_DEFAULTS_DOMAIN)
       end
     end
   end

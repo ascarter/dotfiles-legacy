@@ -13,7 +13,7 @@ namespace 'sketch' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::App.install(SKETCH_APP_NAME, SKETCH_SOURCE_URL)
+      MacOS::App.install(SKETCH_APP_NAME, SKETCH_SOURCE_URL)
     end
   end
 
@@ -21,14 +21,14 @@ namespace 'sketch' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::App.uninstall(SKETCH_APP_NAME)
+      MacOS::App.uninstall(SKETCH_APP_NAME)
     end
   end
   
   desc 'Install Sketch plugins'
   task :plugins do
     SKETCH_PLUGINS.each do |name, url|
-      Bootstrap::MacOS::Plugin.install("#{name}.sketchplugin", url)
+      MacOS::Plugin.install("#{name}.sketchplugin", url)
     end
   end
 end

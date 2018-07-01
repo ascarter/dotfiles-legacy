@@ -11,8 +11,8 @@ namespace 'postgres' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::App.install(POSTGRES_APP_NAME, POSTGRES_SOURCE_URL)
-      Bootstrap::MacOS.path_helper('postgresapp', ['/Applications/Postgres.app/Contents/Versions/latest/bin'])
+      MacOS::App.install(POSTGRES_APP_NAME, POSTGRES_SOURCE_URL)
+      MacOS.path_helper('postgresapp', ['/Applications/Postgres.app/Contents/Versions/latest/bin'])
     end
   end
 
@@ -20,8 +20,8 @@ namespace 'postgres' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::App.uninstall(POSTGRES_APP_NAME)
-      Bootstrap::MacOS.rm_path_helper('postgresapp')
+      MacOS::App.uninstall(POSTGRES_APP_NAME)
+      MacOS.rm_path_helper('postgresapp')
     end
   end
 
@@ -33,7 +33,7 @@ namespace 'postgres' do
     task :install do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOS::App.install(PGADMIN_APP_NAME, PGADMIN_SOURCE_URL)
+        MacOS::App.install(PGADMIN_APP_NAME, PGADMIN_SOURCE_URL)
       end
     end
 
@@ -41,7 +41,7 @@ namespace 'postgres' do
     task :uninstall do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOS::App.uninstall(PGADMIN_APP_NAME)
+        MacOS::App.uninstall(PGADMIN_APP_NAME)
       end
     end
   end

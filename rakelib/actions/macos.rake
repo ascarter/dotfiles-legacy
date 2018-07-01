@@ -7,13 +7,13 @@ module Actions
       # Add path helper
       def pathhelper(args)
         label = args.delete('label')
-        args.each { |t, p| Bootstrap::MacOS.path_helper label, p, t }
+        args.each { |t, p| MacOS.path_helper label, p, t }
       end
 
       # Remove path helper
       def rmpathhelper(args)
         label = args.delete('label')
-        args.keys.each { |t| Bootstrap::MacOS.rm_path_helper label, t}
+        args.keys.each { |t| MacOS.rm_path_helper label, t}
       end
     end
   end

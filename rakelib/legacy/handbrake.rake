@@ -16,7 +16,7 @@ namespace 'handbrake' do
   task :install  => [:about] do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOS::App.install(HANDBRAKE_APP_NAME, HANDBRAKE_SRC_URL)
+      MacOS::App.install(HANDBRAKE_APP_NAME, HANDBRAKE_SRC_URL)
 
       # Install command line utility
       unless Bootstrap.usr_bin_exists?('HandbrakeCLI')
@@ -36,7 +36,7 @@ namespace 'handbrake' do
     case RUBY_PLATFORM
     when /darwin/
       Bootstrap::Homebrew.uninstall('libdvdcss')
-      Bootstrap::MacOS::App.uninstall(HANDBRAKE_APP_NAME)
+      MacOS::App.uninstall(HANDBRAKE_APP_NAME)
       Bootstrap.usr_bin_rm('handbrake')
       Bootstrap.usr_bin_rm(HANDBRAKE_CLI_APP_NAME)
     end
