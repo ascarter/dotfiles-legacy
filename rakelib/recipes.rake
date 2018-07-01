@@ -212,7 +212,7 @@ def manifest_install_task(recipe)
           sig:     recipe.sig,
           headers: recipe.headers
         }
-        Bootstrap::Archive.install cfg['manifest'], recipe.source_url, options
+        Archive.install cfg['manifest'], recipe.source_url, options
       end
     end
   end
@@ -223,7 +223,7 @@ def manifest_uninstall_task(recipe)
   namespace "#{recipe.namespace}" do
     task :uninstall do
       exec_task(recipe, 'uninstall') do
-        Bootstrap::Archive.uninstall cfg['manifest'], dest: recipe.dest
+        Archive.uninstall cfg['manifest'], dest: recipe.dest
       end
     end
   end
