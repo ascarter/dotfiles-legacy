@@ -9,7 +9,7 @@ def mac_pkg_install_task(recipe)
           sig:     recipe.sig,
           headers: recipe.headers
         }
-        Bootstrap::MacOSX::Pkg.install cfg['pkg'], cfg['pkg_id'], recipe.source_url, options
+        Bootstrap::MacOS::Pkg.install cfg['pkg'], cfg['pkg_id'], recipe.source_url, options
       end
     end
   end
@@ -20,7 +20,7 @@ def mac_pkg_uninstall_task(recipe)
   namespace "#{recipe.namespace}" do
     task :uninstall do
       exec_task(recipe, 'uninstall') do
-        Bootstrap::MacOSX::Pkg.uninstall cfg['pkg_id']
+        Bootstrap::MacOS::Pkg.uninstall cfg['pkg_id']
       end
     end
   end
@@ -34,7 +34,7 @@ def mac_app_install_task(recipe)
         sig:     recipe.sig,
         headers: recipe.headers
       }
-      Bootstrap::MacOSX::App.install recipe.app, recipe.source_url, options
+      Bootstrap::MacOS::App.install recipe.app, recipe.source_url, options
     end
   end
 
@@ -47,7 +47,7 @@ def mac_app_uninstall_task(recipe)
   namespace "#{recipe.namespace}" do
     task :uninstall do
       exec_task(recipe, 'uninstall') do
-        Bootstrap::MacOSX::App.uninstall recipe.app
+        Bootstrap::MacOS::App.uninstall recipe.app
       end
     end
   end
@@ -62,7 +62,7 @@ def mac_run_install_task(recipe)
           sig:     recipe.sig,
           headers: recipe.headers
         }
-        Bootstrap::MacOSX::App.installer app, recipe.source_url, options
+        Bootstrap::MacOS::App.installer app, recipe.source_url, options
       end
     end
   end

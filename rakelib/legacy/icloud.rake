@@ -1,6 +1,6 @@
 # iCloud tasks
 
-if Bootstrap.macosx?
+if Bootstrap.macOS?
   namespace 'icloud' do
     desc 'Install iCloud'
     task :install do

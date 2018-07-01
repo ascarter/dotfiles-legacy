@@ -20,7 +20,7 @@ namespace 'sanfrancisco' do
     task :install do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOSX::Pkg.install(SFPRO_PKG_NAME, SFPRO_PKG_ID, SFPRO_SOURCE_URL)
+        Bootstrap::MacOS::Pkg.install(SFPRO_PKG_NAME, SFPRO_PKG_ID, SFPRO_SOURCE_URL)
       end
     end
   
@@ -28,7 +28,7 @@ namespace 'sanfrancisco' do
     task :uninstall do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOSX::Pkg.uninstall(SFPRO_PKG_ID)
+        Bootstrap::MacOS::Pkg.uninstall(SFPRO_PKG_ID)
       end
     end 
   end
@@ -38,7 +38,7 @@ namespace 'sanfrancisco' do
     task :install do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOSX::Pkg.install(SFCOMPACT_PKG_NAME, SFCOMPACT_PKG_ID, SFCOMPACT_SOURCE_URL)
+        Bootstrap::MacOS::Pkg.install(SFCOMPACT_PKG_NAME, SFCOMPACT_PKG_ID, SFCOMPACT_SOURCE_URL)
       end
     end
   
@@ -46,7 +46,7 @@ namespace 'sanfrancisco' do
     task :uninstall do
       case RUBY_PLATFORM
       when /darwin/
-        Bootstrap::MacOSX::Pkg.uninstall(SFCOMPACT_PKG_ID)
+        Bootstrap::MacOS::Pkg.uninstall(SFCOMPACT_PKG_ID)
       end
     end 
   end
@@ -61,7 +61,7 @@ namespace 'sanfrancisco' do
 
     desc 'Uninstall San Francisco Mono'
     task :uninstall do
-      Bootstrap::MacOSX::Font.uninstall('SFMono')
+      Bootstrap::MacOS::Font.uninstall('SFMono')
     end
   end
 end

@@ -1,8 +1,8 @@
 module Bootstrap
   case RUBY_PLATFORM
   when /darwin/
-    # Mac OS X application helpers
-    module MacOSX
+    # macOS application helpers
+    module MacOS
       def path_helper(path_file, paths, type = 'paths')
         unless %w(paths manpaths).include?(type)
           raise ArgumentError, "Invalid path type #{type}"
@@ -104,7 +104,7 @@ module Bootstrap
         def run(app, url, headers: {}, sig: {}, wait: false)
           open_flags = wait ? "--wait-apps" : ""
           Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
-            Bootstrap::MacOSX.run_app(app, wait: wait)
+            Bootstrap::MacOS.run_app(app, wait: wait)
           end
         end
         module_function :run

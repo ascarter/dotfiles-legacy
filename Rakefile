@@ -29,7 +29,7 @@ desc 'Configure environment'
 task :configenv do
   case RUBY_PLATFORM
   when /darwin/
-    Bootstrap::MacOSX.build_locatedb
+    Bootstrap::MacOS.build_locatedb
   end
 end
 

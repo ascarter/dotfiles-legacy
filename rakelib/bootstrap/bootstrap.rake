@@ -15,6 +15,8 @@ require 'uri'
 
 # Bootstrap contains the support system for the dotfiles system
 module Bootstrap
+  module_function
+
   # bootstrap links all the files in src to same file at dest
   # If sparse is set to true, recursively scan source directories and only link files
   def bootstrap(src, dest, sparse = false)
@@ -62,7 +64,6 @@ module Bootstrap
       end
     end
   end
-  module_function :bootstrap
 
   def unbootstrap(src, dest, sparse = false)
     src_dir = Pathname.new(src).expand_path
@@ -78,68 +79,68 @@ module Bootstrap
       Bootstrap.file_remove(target)
     end
   end
-  module_function :unbootstrap
 
   # Helpers
 
-  def macosx?
+  def macOS?
     RUBY_PLATFORM =~ /darwin/
   end
-  module_function :macosx?
 
   def linux?
     RUBY_PLATFORM =~ /linux/
   end
-  module_function :linux?
 
   def windows?
     RUBY_PLATFORM =~ /windows/
   end
-  module_function :windows?
+
+  def require_macOS
+    raise 'macOS required' unless macOS?
+  end
+
+  def require_linux
+    raise 'Linux required' unless linux?
+  end
+
+  def require_windows
+    raise 'Windows required' unless windows?
+  end
 
   def about(title, description='', homepage='')
     puts "#{title}"
     puts "#{description}"
     puts "#{homepage}"
   end
-  module_function :about
 
   def prompt(message, default = nil)
     print "Enter #{message}#{" [#{default}]" unless default.nil?}: "
     response = $stdin.gets.chomp
     response.empty? ? default : response
   end
-  module_function :prompt
 
   def home_dir
     File.expand_path(ENV['HOME'])
   end
-  module_function :home_dir
 
   def config_dir
     File.expand_path(File.join(home_dir, '.config'))
   end
-  module_function :config_dir
 
   def library_dir
     File.expand_path(File.join(home_dir, 'Library'))
   end
-  module_function :library_dir
 
   def workspace_dir
     File.join(Bootstrap.home_dir, 'Projects')
   end
-  module_function :workspace_dir
 
   def current_user
     Etc.getlogin
   end
-  module_function :current_user
 
   def user_info(user = Etc.getlogin)
     Etc.getpwnam(user)
   end
-  module_function :user_info
 
   def link_file(source, target)
     if File.exist?(target)
@@ -149,7 +150,6 @@ module Bootstrap
       File.symlink(source, target)
     end
   end
-  module_function :link_file
 
   def backup(target)
     backup = "#{target}.orig"
@@ -158,19 +158,16 @@ module Bootstrap
       File.rename(target, backup)
     end
   end
-  module_function :backup
 
   def replace(source, target)
     backup(target)
     link_file(source, target)
   end
-  module_function :replace
 
   def copy_and_replace(source, target)
     backup(target)
     FileUtils.copy(source, target)
   end
-  module_function :copy_and_replace
 
   def file_remove(target)
     if File.exist?(target) && File.directory?(target)
@@ -183,7 +180,6 @@ module Bootstrap
       puts "File #{target} not found"
     end
   end
-  module_function :file_remove
 
   def font_dir
     case RUBY_PLATFORM
@@ -191,13 +187,11 @@ module Bootstrap
       return File.join(home_dir, 'Library', 'Fonts')
     end
   end
-  module_function :font_dir
 
   # dir_empty? returns if directory only contains `.` and `..`
   def dir_empty?(target)
     Dir.entries(target).size <= 2
   end
-  module_function :dir_empty?
 
   # dir_prune removes any empty subdirectories including the target if everything is empty
   def dir_prune(target)
@@ -213,7 +207,6 @@ module Bootstrap
     # Remove target if it is now empty
     sudo_rmdir(target) if dir_empty?(target)
   end
-  module_function :dir_prune
 
   # shell
 
@@ -226,14 +219,12 @@ module Bootstrap
       end
     end
   end
-  module_function :system_echo
 
   # sudo
 
   def sudo(cmd)
     system "sudo sh -c '#{cmd}'"
   end
-  module_function :sudo
 
   def sudo_rm(target)
     if File.exist?(target) || File.symlink?(target) || File.directory?(target)
@@ -241,7 +232,6 @@ module Bootstrap
       sudo "rm -f #{target}"
     end
   end
-  module_function :sudo_rm
 
   def sudo_rmdir(target)
     if File.directory?(target)
@@ -249,7 +239,6 @@ module Bootstrap
       sudo %(rm -Rf "#{target}")
     end
   end
-  module_function :sudo_rmdir
 
   def sudo_mkdir(path)
     unless File.exist?(path)
@@ -257,7 +246,6 @@ module Bootstrap
       sudo "mkdir -p #{path}"
     end
   end
-  module_function :sudo_mkdir
 
   def sudo_cp(src, target)
     if File.exist?(target)
@@ -267,13 +255,11 @@ module Bootstrap
       sudo %(cp "#{src}" "#{target}")
     end
   end
-  module_function :sudo_cp
 
   def sudo_cpr(src, target)
     puts "Copying #{src} to #{target}"
     sudo %(cp -R "#{src}" "#{target}")
   end
-  module_function :sudo_cpr
 
   def sudo_ln(src, target)
     src_file = File.expand_path(src)
@@ -286,22 +272,18 @@ module Bootstrap
       warn "#{src} missing"
     end
   end
-  module_function :sudo_ln
 
   def sudo_chgrp(path, group = 'admin')
     sudo %(chgrp -R #{group} "#{path}")
   end
-  module_function :sudo_chgrp
 
   def sudo_chmod(path, mode = 'g+w')
     sudo %(chmod #{mode} "#{path}")
   end
-  module_function :sudo_chmod
 
   def sudo_chown(path, owner = current_user)
     sudo %(chown -R #{owner} "#{path}")
   end
-  module_function :sudo_chown
 
   # usr tools
 
@@ -309,18 +291,15 @@ module Bootstrap
   def usr_dir(dir = 'bin')
     File.join('/usr/local', dir)
   end
-  module_function :usr_dir
 
   def usr_bin_cmd(cmd)
     return File.join(usr_dir('bin'), cmd)
   end
-  module_function :usr_bin_cmd
 
   def usr_bin_exists?(cmd)
     target = usr_bin_cmd(cmd)
     File.exist?(target)
   end
-  module_function :usr_bin_exists?
 
   def usr_bin_cp(src, dest = nil)
     target = usr_bin_cmd(dest.nil? ? File.basename(src) : dest)
@@ -330,13 +309,11 @@ module Bootstrap
       sudo_cp(src, target)
     end
   end
-  module_function :usr_bin_cp
 
   def usr_bin_rm(cmd)
     cmd_file = usr_bin_cmd(cmd)
     sudo_rm(cmd_file)
   end
-  module_function :usr_bin_rm
 
   def usr_bin_ln(src, target)
     src_file = File.expand_path(src)
@@ -347,7 +324,6 @@ module Bootstrap
       sudo_ln(src_file, target_file)
     end
   end
-  module_function :usr_bin_ln
 
   def usr_man_cp(src, dest = nil)
     dest_filename = dest.nil? ? File.basename(src) : dest
@@ -360,13 +336,11 @@ module Bootstrap
       sudo_cp(src, target)
     end
   end
-  module_function :usr_man_cp
 
   def usr_man_rm(page)
     page_file = File.join(usr_dir('share/man'), page)
     sudo_rm(page_file)
   end
-  module_function :usr_man_rm
 
   # Digest
   def sha1(path)
@@ -375,7 +349,6 @@ module Bootstrap
       return Digest::SHA1.hexdigest(contents)
     end
   end
-  module_function :sha1
 
   def sha256(path)
     if File.exist?(path)
@@ -383,11 +356,9 @@ module Bootstrap
       return Digest::SHA256.hexdigest(contents)
     end
   end
-  module_function :sha256
 
   # GPG
   def gpg_sig(target, sig)
     `gpg --verify #{sig} #{target}`\
   end
-  module_function :gpg_sig
 end

@@ -29,7 +29,7 @@ namespace 'vmware' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::App.run(VMWARE_APP_NAME, VMWARE_SOURCE_URL, sig: VMWARE_SIGNATURE)
+      Bootstrap::MacOS::App.run(VMWARE_APP_NAME, VMWARE_SOURCE_URL, sig: VMWARE_SIGNATURE)
     end
   end
 
@@ -37,7 +37,7 @@ namespace 'vmware' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::App.uninstall(VMWARE_APP_NAME)
+      Bootstrap::MacOS::App.uninstall(VMWARE_APP_NAME)
       VMWARE_APP_FILES.each { |f| Bootstrap.file_remove(File.expand_path(f)) }
     end
   end

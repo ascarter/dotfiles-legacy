@@ -1,6 +1,6 @@
 # BBEdit tasks
 
-if Bootstrap.macosx?
+if Bootstrap.macOS?
   BBEDIT_APP_NAME = 'BBEdit'.freeze
   BBEDIT_SOURCE_URL = 'https://s3.amazonaws.com/BBSW-download/BBEdit-12.0.1_400003.dmg'.freeze
   # BBEDIT_SIGNATURE_SHA256 = { sha256: '5edd44a1f201f74a7630bdac1e5473027bd94300bbd15ee4471da3d24ba8b0a7' }.freeze
@@ -16,26 +16,26 @@ if Bootstrap.macosx?
   namespace 'bbedit' do
     desc 'Install BBEdit'
     task :install do
-      Bootstrap::MacOSX::App.install(BBEDIT_APP_NAME, BBEDIT_SOURCE_URL) #, sig: BBEDIT_SIGNATURE_SHA256)
+      Bootstrap::MacOS::App.install(BBEDIT_APP_NAME, BBEDIT_SOURCE_URL) #, sig: BBEDIT_SIGNATURE_SHA256)
 
       # TODO: Set license key
 
       # Install command line utils
       unless File.exist? Bootstrap.usr_bin_cmd('bbedit')
-        helper = File.join(Bootstrap::MacOSX::App.contents(BBEDIT_APP_NAME), BBEDIT_INSTALL_TOOLS_SCPT)
-        Bootstrap::MacOSX.run_applescript(helper)
+        helper = File.join(Bootstrap::MacOS::App.contents(BBEDIT_APP_NAME), BBEDIT_INSTALL_TOOLS_SCPT)
+        Bootstrap::MacOS.run_applescript(helper)
       end
 
       # Install automator actions
-      Bootstrap::MacOSX::Pkg.install(BBEDIT_AUTOMATOR_PKG_NAME,
+      Bootstrap::MacOS::Pkg.install(BBEDIT_AUTOMATOR_PKG_NAME,
                                      BBEDIT_AUTOMATOR_PKG_ID,
                                      BBEDIT_AUTOMATOR_SOURCE_URL)
 
       # Remove outdated update default setting
-      Bootstrap::MacOSX::Defaults.delete 'com.barebones.bbedit', :key => 'SUFeedURL'
+      Bootstrap::MacOS::Defaults.delete 'com.barebones.bbedit', :key => 'SUFeedURL'
 
       # Set preference to treat Open File by Name as modal
-      # Bootstrap::MacOSX::Defaults.write 'com.barebones.bbedit', 'CloseOFBNWindowAfterOpeningSelection', 'YES', '-bool'
+      # Bootstrap::MacOS::Defaults.write 'com.barebones.bbedit', 'CloseOFBNWindowAfterOpeningSelection', 'YES', '-bool'
 
       puts `bbedit --version`
     end
@@ -51,10 +51,10 @@ if Bootstrap.macosx?
       end
 
       # Automator actions
-      Bootstrap::MacOSX::Pkg.uninstall(BBEDIT_AUTOMATOR_PKG_ID)
+      Bootstrap::MacOS::Pkg.uninstall(BBEDIT_AUTOMATOR_PKG_ID)
 
       # Remove application
-      Bootstrap::MacOSX::App.uninstall('BBEdit')
+      Bootstrap::MacOS::App.uninstall('BBEdit')
     end
   end
 end

@@ -10,7 +10,7 @@ namespace 'atom' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::App.install(ATOM_APP_NAME, ATOM_SRC_URL)
+      Bootstrap::MacOS::App.install(ATOM_APP_NAME, ATOM_SRC_URL)
 
       # Install command line tools
       sh "open -a '#{ATOM_APP_NAME}'"
@@ -43,7 +43,7 @@ namespace 'atom' do
       %w(atom apm).each { |c| Bootstrap.usr_bin_rm(c) }
 
       # Application
-      Bootstrap::MacOSX::App.uninstall(ATOM_APP_NAME)
+      Bootstrap::MacOS::App.uninstall(ATOM_APP_NAME)
     end
   end
 end

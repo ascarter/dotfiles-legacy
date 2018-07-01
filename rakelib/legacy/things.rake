@@ -1,6 +1,6 @@
 # Things tasks
 
-if Bootstrap.macosx?
+if Bootstrap.macOS?
 	THINGS_APP_NAME = 'Things'.freeze
 	THINGS_SOURCE_URL = 'https://culturedcode.com/things/download/'.freeze
 	THINGS_HELPER_APP_NAME = 'Things Helper'.freeze
@@ -9,19 +9,19 @@ if Bootstrap.macosx?
 	namespace 'things' do
 		desc 'Install Things'
 		task :install do
-			Bootstrap::MacOSX::App.install(THINGS_APP_NAME, THINGS_SOURCE_URL)
-			Bootstrap::MacOSX::App.launch(THINGS_APP_NAME)
+			Bootstrap::MacOS::App.install(THINGS_APP_NAME, THINGS_SOURCE_URL)
+			Bootstrap::MacOS::App.launch(THINGS_APP_NAME)
 		end
 
 		desc 'Uninstall Things'
 		task :uninstall do
-			Bootstrap::MacOSX::App.uninstall(THINGS_APP_NAME)
+			Bootstrap::MacOS::App.uninstall(THINGS_APP_NAME)
 		end
 
 		namespace 'helper' do
       desc 'Install Things Helper'
 		  task :install do
-        Bootstrap::MacOSX::App.run(THINGS_HELPER_APP_NAME, THINGS_HELPER_SOURCE_URL)
+        Bootstrap::MacOS::App.run(THINGS_HELPER_APP_NAME, THINGS_HELPER_SOURCE_URL)
 		  end
 
   		desc 'Uninstall Things Helper'

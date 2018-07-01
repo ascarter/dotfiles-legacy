@@ -10,7 +10,7 @@ namespace 'gog' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::Pkg.install(GOG_PKG_NAME, GOG_PKG_ID, GOG_SOURCE_URL)
+      Bootstrap::MacOS::Pkg.install(GOG_PKG_NAME, GOG_PKG_ID, GOG_SOURCE_URL)
     end
   end
 
@@ -18,7 +18,7 @@ namespace 'gog' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::App.uninstall(GOG_APP_NAME)
+      Bootstrap::MacOS::App.uninstall(GOG_APP_NAME)
     end
   end
 end

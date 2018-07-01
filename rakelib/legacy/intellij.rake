@@ -9,7 +9,7 @@ namespace 'intellij' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::App.install(INTELLIJ_APP_NAME, INTELLIJ_SOURCE_URL, sig: INTELLIJ_SIGNATURE)
+      Bootstrap::MacOS::App.install(INTELLIJ_APP_NAME, INTELLIJ_SOURCE_URL, sig: INTELLIJ_SIGNATURE)
     end
   end
 
@@ -17,7 +17,7 @@ namespace 'intellij' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::App.uninstall(INTELLIJ_APP_NAME)
+      Bootstrap::MacOS::App.uninstall(INTELLIJ_APP_NAME)
     end
   end
 

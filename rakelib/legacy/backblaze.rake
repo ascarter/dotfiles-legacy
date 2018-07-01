@@ -9,7 +9,7 @@ namespace 'backblaze' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::App.run(BACKBLAZE_INSTALLER_APP, BACKBLAZE_SOURCE_URL)
+      Bootstrap::MacOS::App.run(BACKBLAZE_INSTALLER_APP, BACKBLAZE_SOURCE_URL)
     end
   end
 
@@ -17,7 +17,7 @@ namespace 'backblaze' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX.run(BACKBLAZE_UNINSTALLER_APP, BACKBLAZE_SOURCE_URL, wait: true)
+      Bootstrap::MacOS.run(BACKBLAZE_UNINSTALLER_APP, BACKBLAZE_SOURCE_URL, wait: true)
     end
   end
 end

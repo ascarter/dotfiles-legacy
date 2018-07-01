@@ -27,7 +27,7 @@ namespace 'steam' do
   task :install do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::App.install(STEAM_APP_NAME, STEAM_SOURCE_URL, owner: Bootstrap.current_user)
+      Bootstrap::MacOS::App.install(STEAM_APP_NAME, STEAM_SOURCE_URL, owner: Bootstrap.current_user)
 
       # Warn to exclude SteamApps from TimeMachine
       puts STEAM_TIME_MACHINE_INFO
@@ -38,7 +38,7 @@ namespace 'steam' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::MacOSX::App.uninstall(STEAM_APP_NAME)
+      Bootstrap::MacOS::App.uninstall(STEAM_APP_NAME)
       Bootstrap.file_remove(File.join(Bootstrap.home_dir, 'Library', 'Application Support', 'Steam'))
     end
   end
