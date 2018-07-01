@@ -6,14 +6,10 @@ macos:
     bin:  &hbBin /opt/homebrew/bin
     man:  &hbMan /opt/homebrew/share/man
     brew: &hbBrew /opt/homebrew/bin/brew
-    env: &hbEnv
+    env:  &hbEnv
       PATH: [ *hbBin ]
-    phelper: &hbPhelper
-      paths:    [ *hbBin ]
-      manpaths: [ *hbMan ]
     formulas: &hbFormulas
       tools:
-        - awscli
         - bash-completion
         - gist
         - graphviz
@@ -28,6 +24,10 @@ macos:
         - universal-ctags/universal-ctags
       overrides:
         - ctags
+    phelper: &hbPhelper
+      label:    homebrew
+      paths:    [ *hbBin ]
+      manpaths: [ *hbMan ]
   install:
     before:
       check: *hbBrew
@@ -39,11 +39,11 @@ macos:
     after:
       env: *hbEnv
       macos_pathhelper: *hbPhelper
-      brew_install: *hbFormulas
+      homebrew_install: *hbFormulas
   uninstall:
     before:
       env: *hbEnv
-      brew_uninstall: *hbFormulas
+      homebrew_uninstall: *hbFormulas
     sudo: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
     after:
       rm: [ *hbRoot ]
