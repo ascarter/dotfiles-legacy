@@ -3,8 +3,8 @@ require 'erb'
 require 'pathname'
 require 'yaml'
 
-# Import rake actions
-Dir.glob(File.join(File.dirname(__FILE__), 'actions/*.rake')).each { |r| import r }
+# Import rake actions and legacy tasks
+Dir.glob(File.join(File.dirname(__FILE__), '*/*.rake')).each { |r| import r }
 
 RECIPES_DIR = Pathname.new('recipes')
 
@@ -19,7 +19,6 @@ task :create do
   target = File.join(RECIPES_DIR, parts[0..-2], name + '.yml')
 
   template = <<-EOB
-# #{name}
 description: About #{name}
 homepage:    http://example.com/#{name}/
 macos:
