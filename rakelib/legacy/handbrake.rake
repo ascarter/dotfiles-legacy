@@ -27,7 +27,7 @@ namespace 'handbrake' do
       end
 
       # Install libdvdcss
-      Bootstrap::Homebrew.install('libdvdcss')
+      Homebrew.install('libdvdcss')
     end
   end
 
@@ -35,7 +35,7 @@ namespace 'handbrake' do
   task :uninstall do
     case RUBY_PLATFORM
     when /darwin/
-      Bootstrap::Homebrew.uninstall('libdvdcss')
+      Homebrew.uninstall('libdvdcss')
       MacOS::App.uninstall(HANDBRAKE_APP_NAME)
       Bootstrap.usr_bin_rm('handbrake')
       Bootstrap.usr_bin_rm(HANDBRAKE_CLI_APP_NAME)
