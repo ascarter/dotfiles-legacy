@@ -1,5 +1,7 @@
 module Actions
   module Homebrew
+    module_function
+
     # Install homebrew formula/tap
     def install(args)
       Bootstrap::Homebrew.update
@@ -18,7 +20,6 @@ module Actions
         end
       end
     end
-    module_function :install
 
     # Uninstall homebrew formula/tap
     def uninstall(args)
@@ -33,6 +34,5 @@ module Actions
         end
       end
     end
-    module_function :uninstall
   end
 end

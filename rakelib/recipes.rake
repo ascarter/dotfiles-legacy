@@ -8,6 +8,9 @@ Dir.glob(File.join(File.dirname(__FILE__), 'actions/*.rake')).each { |r| import 
 
 RECIPES_DIR = Pathname.new('recipes')
 
+# Check for debug mode
+DEBUG = ENV.member?('DEBUG')
+
 desc "Generator for new recipes"
 task :create do
   ns = Bootstrap.prompt("task name (namespace using ':')")
@@ -95,11 +98,22 @@ end
 # Return the best matching method for an action
 # Actions are expected to be either a string for a method in the provided module
 # or using syntax <submodule>_<method> for submodule matches
+# If no match is found, nil is returned and nothing is run
 def find_method(mod, action)
-  mod_name, meth_name = action.split('_')
-  matches = mod.constants.select { |c| mod_name.casecmp(c.to_s) == 0 }
-  m = matches.length > 0 ? mod.const_get(matches[0]) : mod
-  m.method(meth_name.to_sym)
+  parts = action.split('_', 2)
+  case parts.length
+  when 1
+    # Method only
+    meth = parts[0]
+  when 2
+    # Sub-module and method
+    submod, meth = parts
+    matches = mod.constants.select { |c| submod.casecmp(c.to_s) == 0 }
+    raise "Actions module not found" unless matches.length > 0
+    mod = mod.const_get(matches[0])
+  end
+
+  mod.method(meth.to_sym)
 end
 
 def default_task(recipe, task)
@@ -141,17 +155,25 @@ end
 def run_stage(recipe, task, stage=nil)
   return unless recipe.platform.has_key?(task)
   cfg = recipe.platform[task]
-  config = cfg['config'] || {}
 
-  unless stage.nil?
+  if stage.nil?
+    # Ignore before/after blocks
+    cfg = cfg.reject { |k,v| %w(before after).include? k }
+  else
     return unless cfg.has_key?(stage)
     cfg = cfg[stage]
   end
 
+  puts "#{recipe.name}:#{task}#{":#{stage}" unless stage.nil?}" if DEBUG
+
   # Run actions in order
   cfg.each do |action, args|
+    puts "\t#{action}" if DEBUG
     meth = find_method(Actions, action)
-    raise "Unable to execute action #{action}" if meth.nil?
+    if meth.nil?
+      puts "\t ==> No action for #{action}" if DEBUG
+      next
+    end
     meth.call(args)
   end
 end
