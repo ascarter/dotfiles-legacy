@@ -2,8 +2,6 @@
 
 require 'rake'
 
-require_relative 'lib/bootstrap'
-
 task :default => [ :install ]
 
 desc 'Install default configuration'
@@ -46,7 +44,6 @@ end
 desc 'Work development configuration'
 task :workdev => [
   :macdev,
-  'nvm:install',
   'zoom:install',
   'viscosity:install'
 ]
@@ -68,12 +65,8 @@ when /darwin/
     'coderunner:install',
     'golang:install',
     'paw:install',
-    'postgres:install',
-    'mysql:sequelpro:install',
     'xquartz:install',
-    'jetbrains:install',
     'android:install',
-    'sanfrancisco:install',
   ]
 when /linux/
   desc 'Install Linux development environment'
@@ -83,9 +76,6 @@ when /linux/
     'gpg:install',
     'android:install',
     'github:install',
-    'jetbrains:install',
-    'mysql:sequelpro:install',
-    'postgres:install',
   ]
 when /windows/
   desc 'Install Windows development environment'
@@ -94,8 +84,5 @@ when /windows/
     'gpg:install',
     'android:install',
     'github:install',
-    'jetbrains:install',
-    'mysql:sequelpro:install',
-    'postgres:install',
   ]
 end

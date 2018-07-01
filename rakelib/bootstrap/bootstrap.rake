@@ -13,20 +13,6 @@ require 'tempfile'
 require 'tmpdir'
 require 'uri'
 
-require_relative 'apm'
-require_relative 'archive'
-require_relative 'downloader'
-require_relative 'git'
-require_relative 'golang'
-require_relative 'node'
-require_relative 'pip'
-
-case RUBY_PLATFORM
-when /darwin/
-  require_relative 'homebrew'
-  require_relative 'macosx'
-end
-
 # Bootstrap contains the support system for the dotfiles system
 module Bootstrap
   # bootstrap links all the files in src to same file at dest
