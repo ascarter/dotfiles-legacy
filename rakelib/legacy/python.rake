@@ -73,7 +73,7 @@ namespace 'python' do
         exit
       end
 
-      PYTHON_PIP_PACKAGES.each { |p| Bootstrap::Pip.install(p, true) }
+      PYTHON_PIP_PACKAGES.each { |p| Pip.install(p, true) }
 
       unless File.exist?(virtualenv_root)
         puts "Creating #{virtualenv_root}"
@@ -83,7 +83,7 @@ namespace 'python' do
 
     desc 'Uninstall virtualenv'
     task :uninstall do
-      PYTHON_PIP_PACKAGES.each { |p| Bootstrap::Pip.uninstall(p, true) }
+      PYTHON_PIP_PACKAGES.each { |p| Pip.uninstall(p, true) }
     end
   end
 end

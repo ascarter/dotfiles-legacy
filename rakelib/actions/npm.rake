@@ -14,7 +14,6 @@ module Actions
   end
 end
 
-
 # Node.js helpers
 
 module NodeJS

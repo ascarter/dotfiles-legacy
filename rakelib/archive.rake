@@ -12,7 +12,7 @@ module Archive
   #     man: ['man1', 'rel/path/man2', 'man/*']
   #   }
   def install(manifest, url, dest: '/usr/local', headers: {}, sig: {})
-    Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+    Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
       dirpath = Pathname.new(d)
       manifest.each do |key, patterns|
         patterns.each do |pattern|

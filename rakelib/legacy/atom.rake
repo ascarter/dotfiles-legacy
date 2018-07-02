@@ -27,7 +27,7 @@ namespace 'atom' do
 
   desc 'Install packages for atom'
   task :packages do
-    ATOM_PKGS.each { |p| Bootstrap::APM.install(p) }
+    ATOM_PKGS.each { |p| APM.install(p) }
   end
 
   desc 'Uninstall atom'
@@ -36,7 +36,7 @@ namespace 'atom' do
     when /darwin/
       # apm modules
       if File.exist? Bootstrap.usr_bin_cmd('apm')
-        Bootstrap::APM.list.each { |p| Bootstrap::APM.uninstall(p) }
+        APM.list.each { |p| APM.uninstall(p) }
       end
 
       # Command line tools

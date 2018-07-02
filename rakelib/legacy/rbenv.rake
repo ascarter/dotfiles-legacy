@@ -20,7 +20,7 @@ namespace 'rbenv' do
       warn 'rbenv already installed'
     else
       puts 'Installing rbenv...'
-      Bootstrap::Git.clone('rbenv/rbenv', rbenv_root)
+      Git.clone('rbenv/rbenv', rbenv_root)
       system("cd #{rbenv_root} && src/configure && make -C src")
     end
 
@@ -31,7 +31,7 @@ namespace 'rbenv' do
       if File.exist?(dest)
         warn "Plugin #{owner}/#{repo} already installed"
       else
-        Bootstrap::Git.clone("#{owner}/#{repo}", dest)
+        Git.clone("#{owner}/#{repo}", dest)
       end
     end
 

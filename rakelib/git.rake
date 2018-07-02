@@ -16,10 +16,10 @@ namespace 'git' do
 
     # Read current user and email if previously configured
     if File.exist?(target)
-      userName = Bootstrap::Git::Config.get('user.name')
-      userEmail = Bootstrap::Git::Config.get('user.email')
-      userGPGKey = Bootstrap::Git::Config.get('user.signingkey')
-      userDefaultSign = Bootstrap::Git::Config.get('commit.gpgsign')
+      userName = Git::Config.get('user.name')
+      userEmail = Git::Config.get('user.email')
+      userGPGKey = Git::Config.get('user.signingkey')
+      userDefaultSign = Git::Config.get('commit.gpgsign')
     end
 
     if userName.nil? || userName.empty?
@@ -39,59 +39,59 @@ namespace 'git' do
     signingKey = Bootstrap.prompt('user signingkey', userGPGKey)
     defaultSign = Bootstrap.prompt('gpgsign by default?', userDefaultSign == 'true' ? 'Y' : 'N')
 
-    Bootstrap::Git::Config.set('user.name', name)
-    Bootstrap::Git::Config.set('user.email', email)
+    Git::Config.set('user.name', name)
+    Git::Config.set('user.email', email)
     if signingKey.nil? || signingKey.empty?
-      Bootstrap::Git::Config.unset('user.signingkey')
-      Bootstrap::Git::Config.unset('commit.gpgsign')
+      Git::Config.unset('user.signingkey')
+      Git::Config.unset('commit.gpgsign')
     else
-      Bootstrap::Git::Config.set('user.signingkey', signingKey)
+      Git::Config.set('user.signingkey', signingKey)
       if defaultSign.upcase.start_with?('Y')
-        Bootstrap::Git::Config.set('commit.gpgsign', true)
+        Git::Config.set('commit.gpgsign', true)
       else
-        Bootstrap::Git::Config.unset('commit.gpgsign')
+        Git::Config.unset('commit.gpgsign')
       end
     end
 
     # Set git commit editor
     if File.exist? Bootstrap.usr_bin_cmd('bbedit')
       # bbedit
-      Bootstrap::Git::Config.set('core.editor', 'bbedit --wait')
+      Git::Config.set('core.editor', 'bbedit --wait')
     else
       # vim
-      Bootstrap::Git::Config.set('core.editor', 'vim')
+      Git::Config.set('core.editor', 'vim')
     end
 
     case RUBY_PLATFORM
     when /darwin/
       # Configure password caching
-      Bootstrap::Git::Config.set('credential.helper', 'osxkeychain')
+      Git::Config.set('credential.helper', 'osxkeychain')
 
       if File.exist? Bootstrap.usr_bin_cmd('bbdiff')
         # bbedit
-        Bootstrap::Git::Config.set('diff.tool', 'bbdiff')
-        Bootstrap::Git::Config.set('merge.tool', 'opendiff')
+        Git::Config.set('diff.tool', 'bbdiff')
+        Git::Config.set('merge.tool', 'opendiff')
       elsif File.exist? Bootstrap.usr_bin_cmd('ksdiff')
         # Configure Kaleidoscope
-        Bootstrap::Git::Config.set('diff.tool', 'Kaleidoscope')
-        Bootstrap::Git::Config.set('merge.tool', 'Kaleidoscope')
+        Git::Config.set('diff.tool', 'Kaleidoscope')
+        Git::Config.set('merge.tool', 'Kaleidoscope')
       else
-        Bootstrap::Git::Config.set('diff.tool', 'opendiff')
-        Bootstrap::Git::Config.set('merge.tool', 'opendiff')
+        Git::Config.set('diff.tool', 'opendiff')
+        Git::Config.set('merge.tool', 'opendiff')
       end
 
-      Bootstrap::Git::Config.set('gui.fontui', '-family \"SF UI Display Regular\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0')
-      Bootstrap::Git::Config.set('gui.fontdiff', '-family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0')
+      Git::Config.set('gui.fontui', '-family \"SF UI Display Regular\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0')
+      Git::Config.set('gui.fontdiff', '-family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0')
 
     when /linux/
       # Configure password caching
-      Bootstrap::Git::Config.set('credential.helper', 'cache')
+      Git::Config.set('credential.helper', 'cache')
 
-      Bootstrap::Git::Config.set('diff.tool', 'meld')
-      Bootstrap::Git::Config.set('merge.tool', 'meld')
+      Git::Config.set('diff.tool', 'meld')
+      Git::Config.set('merge.tool', 'meld')
 
-      Bootstrap::Git::Config.set('gui.fontui', '-family \"Source Sans Pro\" -size 12 -weight normal -slant roman -underline 0 -overstrike 0')
-      Bootstrap::Git::Config.set('gui.fontdiff', '-family \"Source Code Pro\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0')
+      Git::Config.set('gui.fontui', '-family \"Source Sans Pro\" -size 12 -weight normal -slant roman -underline 0 -overstrike 0')
+      Git::Config.set('gui.fontdiff', '-family \"Source Code Pro\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0')
     end
   end
 
@@ -110,5 +110,51 @@ namespace 'git' do
   desc 'Reset config files for GitHub tools'
   task :reset do
     GITHUB_CONFIG_FILES.each { |f| rm f }
+  end
+end
+
+# git helpers
+module Git
+  module_function
+
+  # git configuration
+  module Config
+    module_function
+
+    def get(key)
+      `git config --global --get #{key}`.strip
+    end
+
+    def set(key, value)
+      system %(git config --global #{key} "#{value}")
+    end
+
+    def unset(key)
+      system %(git config --global --unset #{key})
+    end
+  end
+
+  def clone(repo, dest = nil)
+    git_url = URI.join('https://github.com/', "#{repo}.git").to_s
+    system %(git clone #{git_url} #{dest ? dest.to_s : ''})
+  end
+
+  def fetch(path)
+    system "cd #{path} && git fetch origin"
+  end
+
+  def pull(path)
+    system "cd #{path} && git pull" if File.directory?(path)
+  end
+
+  def checkout(path, tag)
+    puts "checking out #{tag}"
+    system "cd #{path} && git checkout -q #{tag}" if File.directory?(path)
+  end
+
+  def latest_tag(path, filter = nil)
+    args = %w(--abbrev=0 --tags)
+    args << %(--match "#{filter}")
+    `cd #{path} && git describe #{args.join(" ")} origin`
   end
 end

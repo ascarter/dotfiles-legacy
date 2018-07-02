@@ -183,7 +183,7 @@ module MacOS
       if File.exist?(app_path)
         warn "#{app} already installed"
       else
-        Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+        Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
           src_path = File.join(d, app_name)
           puts "Installing #{app} to #{app_path}"
           Bootstrap.sudo_cpr(src_path, app_path)
@@ -211,7 +211,7 @@ module MacOS
     # Mac OS X Run helper
     def run(app, url, headers: {}, sig: {}, wait: false)
       open_flags = wait ? "--wait-apps" : ""
-      Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+      Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
         MacOS.run_app(app, wait: wait)
       end
     end
@@ -219,7 +219,7 @@ module MacOS
 
     # Mac OS X installer app
     def installer(app, url, headers: {}, sig: {})
-      Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+      Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
         launch(File.join(d, "#{app}.app"), wait: true)
       end
     end
@@ -260,7 +260,7 @@ module MacOS
       if exists?(id)
         warn "Package #{pkg} already installed"
       else
-        Bootstrap::Downloader.download_with_extract(src, headers: headers, sig: sig) do |d|
+        Downloader.download_with_extract(src, headers: headers, sig: sig) do |d|
           src_path = File.join(d, pkg_name)
           puts "Installing #{pkg}"
           cmd = %(installer -package "#{src_path}" -target /)
@@ -339,7 +339,7 @@ module MacOS
   #   bbpackage
   module Plugin
     def install(plugin, url, headers: {}, sig: {})
-      Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+      Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
         target = File.join(d, plugin)
         system %(open "#{target}")
       end
@@ -351,7 +351,7 @@ module MacOS
   module Script
     # run downloads and executes script
     def run(script, url, flags: [], headers: {}, sig: {}, wait: false)
-      Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+      Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
         script_path = File.join(d, script)
         system %("#{script_path}" #{flags.join(" ")})
       end
@@ -360,7 +360,7 @@ module MacOS
 
     # sudo downloads and executes script via sudo
     def sudo(script, url, flags: [], headers: {}, sig: {}, wait: false)
-      Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+      Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
         script_path = File.join(d, script)
         Bootstrap.sudo %("#{script_path}" #{flags.join(" ")})
       end
@@ -373,7 +373,7 @@ module MacOS
     def install(ext, url, headers: {})
       ext_name = "#{ext}.safariextz"
       downloads_file = File.join(Bootstrap.home_dir, 'Downloads', ext_name)
-      Bootstrap::Downloader.download_with_extract(url, headers: headers) do |d|
+      Downloader.download_with_extract(url, headers: headers) do |d|
         ext_path = File.join(d, ext_name)
         system %(ditto "#{ext_path}" "#{downloads_file}")
       end
@@ -385,7 +385,7 @@ module MacOS
   # Mac OS X Font
   module Font
     def install(font, url, font_type: 'otf', headers: {}, sig: {}, owner: Bootstrap.current_user, group: 'admin')
-      Bootstrap::Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+      Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
         src = File.join(d, "#{font}.#{font_type}")
         puts "Installing #{font} from #{src}"
         Dir.glob(src).each do |f|
@@ -416,7 +416,7 @@ module MacOS
       if File.exist?(dest)
         warn "#{picker} already installed"
       else
-        Bootstrap::Downloader.download_with_extract(url, headers: headers) do |d|
+        Downloader.download_with_extract(url, headers: headers) do |d|
           src = File.join(d, picker_path)
           puts "Installing #{picker}"
           FileUtils.cp_r(src, dest)
