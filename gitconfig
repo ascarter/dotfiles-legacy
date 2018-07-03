@@ -46,7 +46,7 @@
 	difflast = diff HEAD^ HEAD
 	diffstat = diff --stat -r
 	dirty = status --untracked-files=no --porcelain
-	discard = checkout -- 
+	discard = checkout --
 	done = "!f() { local branch=${1-$(git blocal)}; git checkout master; git up; git cleanup; git branch -d ${branch}; }; f"
 	dump = cat-file -p
 	gdiff = difftool --gui --no-prompt
@@ -59,11 +59,10 @@
 	last = log -l HEAD -n 1
 	ll = log --pretty=format:\"%C(yellow)%h %C(green)%ad %cn %Cred%d %Creset%s\" --decorate --numstat --date=short
 	llog = log --date=local
-	logb = log master..HEAD --pretty=oneline 
+	logb = log master..HEAD --pretty=oneline
 	logd = log -- .
 	logx = log --graph --decorate --all --oneline
 	ls = log --pretty=format:\"%C(yellow)%h %C(green)%ad%Cred%d %Creset%s\" --decorate --date=relative
-	pr = pull-request --browse
 	prep = rebase -i @{upstream}
 	root = rev-parse --show-toplevel
 	setemail = !git config user.email
