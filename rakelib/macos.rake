@@ -111,6 +111,8 @@ end
 # macOS application helpers
 
 module MacOS
+  module_function
+  
   def path_helper(path_file, paths, type = 'paths')
     unless %w(paths manpaths).include?(type)
       raise ArgumentError, "Invalid path type #{type}"
@@ -125,7 +127,6 @@ module MacOS
       paths.each { |p| Bootstrap.sudo "echo '#{p}' >> #{fullpath}" }
     end
   end
-  module_function :path_helper
 
   def rm_path_helper(path_file, type = 'paths')
     fullpath = File.join("/etc/#{type}.d", path_file)
@@ -135,23 +136,19 @@ module MacOS
       warn "#{fullpath} not found"
     end
   end
-  module_function :rm_path_helper
 
   def run_app(app, wait: false)
     flags = wait ? "--wait-apps" : ""
     system %(open #{flags} "#{App.path(app)}")
   end
-  module_function :run_app
 
   def run_applescript(script)
     system "osascript \"#{script}\""
   end
-  module_function :run_applescript
 
   def build_locatedb
     Bootstrap.sudo 'launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist'
   end
-  module_function :build_locatedb
 
   # Mac OS X defaults
   module Defaults

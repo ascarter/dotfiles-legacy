@@ -1,5 +1,5 @@
 module Actions
-  module Go
+  module GoActions
     module_function
 
     # go clean packages

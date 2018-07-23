@@ -1,5 +1,5 @@
 module Actions
-  module Homebrew
+  module HomebrewActions
     module_function
 
     # Install homebrew formula/tap

@@ -1,7 +1,7 @@
 module Actions
   case RUBY_PLATFORM
   when /darwin/
-    module MacOS
+    module MacOSActions
       module_function
 
       # Add path helper
@@ -14,6 +14,11 @@ module Actions
       def rmpathhelper(args)
         label = args.delete('label')
         args.keys.each { |t| MacOS.rm_path_helper label, t}
+      end
+
+      # Run AppleScript
+      def applescript(args)
+        MacOS.run_applescript args
       end
     end
   end

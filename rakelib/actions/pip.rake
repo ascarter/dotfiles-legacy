@@ -1,5 +1,5 @@
 module Actions
-  module Pip
+  module PipActions
     module_function
 
     # pip install

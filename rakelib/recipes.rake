@@ -108,8 +108,9 @@ def find_method(mod, action)
   when 2
     # Sub-module and method
     submod, meth = parts
-    matches = mod.constants.select { |c| submod.casecmp(c.to_s) == 0 }
-    raise "Actions module not found" unless matches.length > 0
+    action_mod = submod + 'Actions'
+    matches = mod.constants.select { |c| action_mod.casecmp(c.to_s) == 0 }
+    raise "Action module #{submod} not found" unless matches.length > 0
     mod = mod.const_get(matches[0])
   end
 

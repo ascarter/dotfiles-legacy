@@ -1,5 +1,5 @@
 module Actions
-  module NPM
+  module NPMActions
     module_function
 
     # npm install -g <pkgs>

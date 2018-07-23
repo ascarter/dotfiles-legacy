@@ -15,7 +15,7 @@ end
 
 desc 'Create /usr/local directory'
 task :usrlocal do
-	Bootstrap.sudo_mkdir('/usr/local')
+  %w(bin lib share/man).each { |d| Bootstrap.sudo_mkdir(File.join('/usr/local', d)) }
 end
 
 desc 'Bootstrap dotfiles to home directory using symlinks'
