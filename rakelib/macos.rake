@@ -68,6 +68,22 @@ def mac_run_install_task(recipe)
   end
 end
 
+def mac_run_uninstall_task(recipe)
+  app = recipe.platform['installer']
+  namespace "#{recipe.namespace}" do
+    task :uninstall do
+      exec_task(recipe, 'uninstall') do
+        MacOS.run
+        options = {
+          sig:     recipe.sig,
+          headers: recipe.headers
+        }
+        MacOS::App.installer app, recipe.source_url, options
+      end
+    end
+  end
+end
+
 def mac_install_task(recipe)
   cfg = recipe.platform
   key = 'install'
@@ -97,6 +113,8 @@ def mac_uninstall_task(recipe)
     command_uninstall_task recipe
   when cfg.has_key?('app')
     mac_app_uninstall_task recipe
+  when cfg.has_key?('installer')
+    mac_run_uninstall_task recipe
   end
 end
 
@@ -152,27 +170,28 @@ module MacOS
 
   # Mac OS X defaults
   module Defaults
+    module_function
+    
     def read(domain, key: nil, options: nil)
       value = `defaults read #{domain} #{options} #{"\"#{key}\"" unless key.nil?}`
       value
     end
-    module_function :read
 
     def write(domain, key, value, options = nil)
       `defaults write #{domain} "#{key}" #{options} "#{value}"`
     end
-    module_function :write
 
     def delete(domain, key: nil, options: {})
       `defaults delete #{domain} #{key.to_s unless key.nil?} #{options}`
     end
-    module_function :delete
   end
 
   # An App is a Mac OS X Application Bundle provied by a dmg, zip, or tar.gz
   # cmdfiles is an optional list of paths on the expanded source
   # to copy to /usr/local/bin
   module App
+    module_function
+
     def install(app, url, headers: {}, sig: {}, owner: Bootstrap.current_user, group: 'admin', cmdfiles: [], manfiles: [])
       app_name = "#{app}.app"
       app_path = path(app)
@@ -191,7 +210,6 @@ module MacOS
         end
       end
     end
-    module_function :install
 
     def uninstall(app)
       app_path = path(app)
@@ -203,7 +221,6 @@ module MacOS
         warn "#{app} is not installed"
       end
     end
-    module_function :uninstall
 
     # Mac OS X Run helper
     def run(app, url, headers: {}, sig: {}, wait: false)
@@ -212,7 +229,6 @@ module MacOS
         MacOS.run_app(app, wait: wait)
       end
     end
-    module_function :run
 
     # Mac OS X installer app
     def installer(app, url, headers: {}, sig: {})
@@ -220,38 +236,34 @@ module MacOS
         launch(File.join(d, "#{app}.app"), wait: true)
       end
     end
-    module_function :installer
 
     def launch(app, wait: false)
       flags = wait ? "--wait-apps" : ""
       system %(open #{flags} -a "#{app}")
     end
-    module_function :launch
 
     def hide(app)
       script = "tell application \"Finder\" to set visible process \"#{app}\" to false"
       system "osascript -e '#{script}'"
     end
-    module_function :hide
 
     def path(app)
       File.join('/Applications', "#{app}.app")
     end
-    module_function :path
 
     def contents(app)
       File.join(path(app), 'Contents')
     end
-    module_function :contents
 
     def exists?(app)
       File.exist?(path(app))
     end
-    module_function :exists?
   end
 
   # Mac OS X Installer Package
   module Pkg
+    module_function
+
     def install(pkg, id, src, sig: {}, choices: nil, headers: {})
       pkg_name = "#{pkg}.pkg"
       if exists?(id)
@@ -271,7 +283,6 @@ module MacOS
         end
       end
     end
-    module_function :install
 
     def uninstall(id, dryrun = false)
       i = info(id)
@@ -296,7 +307,6 @@ module MacOS
         puts "Package #{id} is not installed"
       end
     end
-    module_function :uninstall
 
     def ls(id)
       if system "pkgutil --pkgs=\"#{id.tr('.', "\.")}\""
@@ -307,7 +317,6 @@ module MacOS
         warn "Package #{id} not installed"
       end
     end
-    module_function :ls
 
     def info(id)
       i = {}
@@ -319,12 +328,10 @@ module MacOS
       end
       i
     end
-    module_function :info
 
     def exists?(id)
       !info(id).nil?
     end
-    module_function :exists?
   end
 
   # Mac app plugin
@@ -335,17 +342,20 @@ module MacOS
   #   sketchplugin
   #   bbpackage
   module Plugin
+    module_function
+
     def install(plugin, url, headers: {}, sig: {})
       Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
         target = File.join(d, plugin)
         system %(open "#{target}")
       end
     end
-    module_function :install
   end
 
   # Mac OS X script
   module Script
+    module_function
+
     # run downloads and executes script
     def run(script, url, flags: [], headers: {}, sig: {}, wait: false)
       Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
@@ -353,7 +363,6 @@ module MacOS
         system %("#{script_path}" #{flags.join(" ")})
       end
     end
-    module_function :run
 
     # sudo downloads and executes script via sudo
     def sudo(script, url, flags: [], headers: {}, sig: {}, wait: false)
@@ -362,11 +371,12 @@ module MacOS
         Bootstrap.sudo %("#{script_path}" #{flags.join(" ")})
       end
     end
-    module_function :sudo
   end
 
   # Mac OS X Safari Extension
   module SafariExtension
+    module_function
+
     def install(ext, url, headers: {})
       ext_name = "#{ext}.safariextz"
       downloads_file = File.join(Bootstrap.home_dir, 'Downloads', ext_name)
@@ -376,11 +386,12 @@ module MacOS
       end
       system %(open -a Safari --new --fresh "#{downloads_file}")
     end
-    module_function :install
   end
 
   # Mac OS X Font
   module Font
+    module_function
+
     def install(font, url, font_type: 'otf', headers: {}, sig: {}, owner: Bootstrap.current_user, group: 'admin')
       Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
         src = File.join(d, "#{font}.#{font_type}")
@@ -392,17 +403,17 @@ module MacOS
         end
       end
     end
-    module_function :install
 
     def uninstall(font, font_type: 'otf')
       src = File.join(Bootstrap.font_dir, "#{font}*.#{font_type}")
       Dir.glob(src).each { |f| FileUtils.rm(f) }
     end
-    module_function :uninstall
   end
 
   # Mac OS X color picker
   module ColorPicker
+    module_function
+
     def install(picker, url, headers: {})
       picker_name = "#{File.basename(picker)}.colorPicker"
       picker_path = File.join(File.dirname(picker), picker_name)
@@ -420,7 +431,6 @@ module MacOS
         end
       end
     end
-    module_function :install
 
     def uninstall(picker)
       picker_name = "#{picker}.colorPicker"
@@ -435,6 +445,5 @@ module MacOS
         warn "#{picker} is not installed"
       end
     end
-    module_function :uninstall
   end
 end
