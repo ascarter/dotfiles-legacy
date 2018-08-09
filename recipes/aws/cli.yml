@@ -1,0 +1,12 @@
+description: AWS CLI is a unified tool to manage your AWS services.
+homepage:    https://aws.amazon.com/cli/
+macos:
+  install:
+    run:
+      script: awscli-bundle/install
+      args:   [-i, /usr/local/aws, -b, /usr/local/bin/aws]
+      source: https://s3.amazonaws.com/aws-cli/awscli-bundle.zip
+  uninstall:
+    rm:
+      - /usr/local/bin/aws
+      - /usr/local/aws
