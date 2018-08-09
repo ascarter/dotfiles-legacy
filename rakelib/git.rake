@@ -98,7 +98,7 @@ namespace 'git' do
   namespace 'lfs' do
     desc 'Install git-lfs'
     task :install do
-      MacOS::Script::sudo(GIT_LFS_SCRIPT, GIT_LFS_SOURCE_URL)
+      Actions.run(source: GIT_LFS_SOURCE_URL, script: GIT_LFS_SCRIPT)
     end
 
     desc 'Uninstall git-lfs'

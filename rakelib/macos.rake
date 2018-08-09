@@ -130,7 +130,7 @@ end
 
 module MacOS
   module_function
-  
+
   def path_helper(path_file, paths, type = 'paths')
     unless %w(paths manpaths).include?(type)
       raise ArgumentError, "Invalid path type #{type}"
@@ -171,7 +171,7 @@ module MacOS
   # Mac OS X defaults
   module Defaults
     module_function
-    
+
     def read(domain, key: nil, options: nil)
       value = `defaults read #{domain} #{options} #{"\"#{key}\"" unless key.nil?}`
       value
@@ -348,27 +348,6 @@ module MacOS
       Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
         target = File.join(d, plugin)
         system %(open "#{target}")
-      end
-    end
-  end
-
-  # Mac OS X script
-  module Script
-    module_function
-
-    # run downloads and executes script
-    def run(script, url, flags: [], headers: {}, sig: {}, wait: false)
-      Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
-        script_path = File.join(d, script)
-        system %("#{script_path}" #{flags.join(" ")})
-      end
-    end
-
-    # sudo downloads and executes script via sudo
-    def sudo(script, url, flags: [], headers: {}, sig: {}, wait: false)
-      Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
-        script_path = File.join(d, script)
-        Bootstrap.sudo %("#{script_path}" #{flags.join(" ")})
       end
     end
   end

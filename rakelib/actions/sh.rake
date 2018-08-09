@@ -47,6 +47,23 @@ module Actions
     end
   end
 
+  # run downloads and executes script via sudo
+  def run(args)
+    # Check for required arguments
+    return unless args.has_key?('script') && args.has_key?('source')
+
+    script = args['script']
+    url = args['source']
+    script_args = args['args'] || []
+    headers = args['headers'] || {}
+    sig = args['sig'] || {}
+
+    Downloader.download_with_extract(url, headers: headers, sig: sig) do |d|
+      script_path = File.join(d, script)
+      sudo %(cd "#{d}" && "#{script_path}" #{script_args.join(" ")})
+    end
+  end
+
   # Execute shell script
   def sh(command)
     system command
