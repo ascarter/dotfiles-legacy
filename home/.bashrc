@@ -222,6 +222,11 @@ if [ -n "`which swift`" ]; then
 	eval "`swift package completion-tool generate-bash-script`"
 fi
 
+# Source AWS CLI completion
+if [ -f /usr/local/aws/bin/aws_bash_completer ]; then
+	source /usr/local/aws/bin/aws_bash_completer
+fi
+
 # Homebrew - will also call user's ~/.bash_completion too
 if [ -n "`which brew`" ]; then
 	if [ -f `brew --prefix`/etc/bash_completion ]; then
