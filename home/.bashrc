@@ -217,6 +217,11 @@ if [ -d /Applications/Docker.app ]; then
 	done
 fi
 
+# Source kubernetes completion
+if [ -n "`which kubectl`" ]; then
+	eval "`kubectl completion bash`"
+fi
+
 # Source Swift completion
 if [ -n "`which swift`" ]; then
 	eval "`swift package completion-tool generate-bash-script`"
