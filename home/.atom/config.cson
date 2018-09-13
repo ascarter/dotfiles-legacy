@@ -6,7 +6,7 @@
     telemetryConsent: "no"
     themes: [
       "native-ui"
-      "xcode-low-key-syntax"
+      "one-dark-syntax"
     ]
   editor:
     fontFamily: "SF Mono"
