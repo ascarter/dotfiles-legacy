@@ -1,0 +1,5 @@
+description: Brave is a new way of thinking about how the web works
+homepage:    https://brave.com
+macos:
+  app:    Brave
+  source: https://brave-download.global.ssl.fastly.net/multi-channel/releases/dev/0.23.107/osx/Brave-0.23.107.dmg
