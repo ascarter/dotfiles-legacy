@@ -69,11 +69,11 @@ def mac_run_install_task(recipe)
 end
 
 def mac_run_uninstall_task(recipe)
-  app = recipe.platform['installer']
+  cfg = recipe.platform['uninstall'] || {}
+  app = cfg['installer'] || recipe.platform['installer']
   namespace "#{recipe.namespace}" do
     task :uninstall do
       exec_task(recipe, 'uninstall') do
-        MacOS.run
         options = {
           sig:     recipe.sig,
           headers: recipe.headers
@@ -109,6 +109,8 @@ def mac_uninstall_task(recipe)
     mac_pkg_uninstall_task recipe
   when cfg.has_key?(key) && cfg[key].has_key?('manifest')
     manifest_uninstall_task recipe
+  when cfg.has_key?(key) && cfg[key].has_key?('installer')
+    mac_run_uninstall_task recipe
   when cfg.has_key?(key) && Recipe.has_commands?(cfg[key])
     command_uninstall_task recipe
   when cfg.has_key?('app')
