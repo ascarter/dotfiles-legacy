@@ -2,7 +2,7 @@
 description: 1Password Command Line Interface
 homepage:    https://support.1password.com/command-line/
 macos:
-  source: https://cache.agilebits.com/dist/1P/op/pkg/v0.4.1/op_darwin_amd64_v0.4.1.zip
+  source: https://cache.agilebits.com/dist/1P/op/pkg/v0.5.4/op_darwin_amd64_v0.5.4.zip
   install:
     manifest: &1passwordCliManifest
       bin: ['op']

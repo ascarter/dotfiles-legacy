@@ -20,7 +20,7 @@ module Archive
           sources.each do |source|
             sourcepath = Pathname.new(source)
             relsource = sourcepath.relative_path_from(dirpath)
-            target = File.join(dest, sourcepath.fnmatch?("#{key}/**") ? File.join(key, relsource) : relsource)
+            target = File.join(dest, sourcepath.fnmatch?("#{key}/**") ? relsource : File.join(key, relsource))
             sig = sourcepath.sub_ext('.sig')
             Bootstrap.gpg_sig(source, sig) if File.exist?(sig)
             Bootstrap.sudo_mkdir File.dirname(target)
