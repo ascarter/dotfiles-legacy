@@ -11,6 +11,7 @@ macos:
       - npm@latest
       - eslint
       - js-beautify
+      - jsonlint
       - "@vue/cli"
   uninstall:
     pkg_id: *nodejsPkgID
