@@ -1,0 +1,8 @@
+description: Mosh is a replacement for interactive SSH terminals
+homepage:    https://mosh.org/
+macos:
+  source: https://mosh.org/mosh-1.3.2.pkg
+  install:  &moshPkg
+    pkg_id: edu.mit.mosh.mosh.pkg
+    pkg:    mosh-1.3.2
+  uninstall: *moshPkg
