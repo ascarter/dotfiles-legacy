@@ -24,17 +24,6 @@ fi
 
 # Go
 if [ -n "`which go`" ]; then
-	# Prefer ${PROJECTS_HOME}, fall back to ~/workspace
-	if [ -d ${PROJECTS_HOME} ]; then
-		if [ -d ${PROJECTS_HOME}/workspace ]; then
-			export GOPATH=${PROJECTS_HOME}/workspace
-		else
-			export GOPATH=${PROJECTS_HOME}
-		fi
-	elif [ -d ~/workspace ]; then
-		export GOPATH=~/workspace
-	fi
-
 	export PATH=$PATH:$(go env GOPATH)/bin
 fi
 

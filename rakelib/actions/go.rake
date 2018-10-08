@@ -23,12 +23,13 @@ module Go
   module_function :get
 
   def clean(pkg)
-    Bootstrap.system_echo "go clean -i #{pkg}"
+    Bootstrap.system_echo "go clean -i #{pkg}" if Go.exists?(pkg)
   end
   module_function :clean
 
-  def sudo(cmd)
-    Bootstrap::sudo "GOPATH=#{Bootstrap.workspace_dir} #{cmd}"
+  def exists?(pkg)
+    gopath = `go env GOPATH`
+    File.exists? File.join(gopath, pkg)
   end
-  module_function :sudo
+  module_function :exists?
 end
