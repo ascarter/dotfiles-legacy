@@ -218,17 +218,13 @@ fi
 
 # Source AWS CLI completion
 if [ -f /usr/local/aws/bin/aws_bash_completer ]; then
-	source /usr/local/aws/bin/aws_bash_completer
+	complete -C aws_completer aws
 fi
 
 # Homebrew - will also call user's ~/.bash_completion too
 if [ -n "`which brew`" ]; then
 	if [ -f `brew --prefix`/etc/bash_completion ]; then
 		. `brew --prefix`/etc/bash_completion
-	fi
-
-	if [ -e `brew --prefix`/bin/aws_completer ]; then
-		complete -C aws_completer aws
 	fi
 fi
 

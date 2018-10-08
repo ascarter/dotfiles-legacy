@@ -130,7 +130,7 @@ module Bootstrap
     File.expand_path(File.join(home_dir, 'Library'))
   end
 
-  def workspace_dir
+  def projects_dir
     File.join(Bootstrap.home_dir, 'Projects')
   end
 
