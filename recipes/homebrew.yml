@@ -17,7 +17,6 @@ macos:
         - hub
         - jq
         - ranger
-        - sqlite3
         - unar
         - wget
       taps:
