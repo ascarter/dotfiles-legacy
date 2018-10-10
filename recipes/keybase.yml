@@ -1,0 +1,5 @@
+description: Keybase is a new and free security app for mobile phones and computers
+homepage:    https://keybase.io
+macos:
+  app:    Keybase
+  source: https://prerelease.keybase.io/Keybase.dmg
