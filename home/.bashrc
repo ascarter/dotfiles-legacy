@@ -27,12 +27,6 @@ if [ -n "`which go`" ]; then
 	export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
-# Ruby (rbenv)
-if [ -d ~/.rbenv ]; then
-	export PATH=~/.rbenv/bin:${PATH}
-	eval "$(rbenv init -)"
-fi
-
 # Python
 if [ -d ~/Library/Python/2.7 ]; then
 	export PATH=~/Library/Python/2.7/bin:${PATH}
