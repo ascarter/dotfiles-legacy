@@ -218,7 +218,7 @@ fi
 
 # Source AWS CLI completion
 if [ -f /usr/local/aws/bin/aws_bash_completer ]; then
-	complete -C aws_completer aws
+	complete -C /usr/local/aws/bin/aws_completer aws
 fi
 
 # Homebrew - will also call user's ~/.bash_completion too
