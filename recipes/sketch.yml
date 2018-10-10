@@ -1,0 +1,5 @@
+description: Sketch is the digital design toolkit.
+homepage:    https://www.sketchapp.com
+macos:
+  app:    Sketch
+  source: https://download.sketchapp.com/sketch.zip
