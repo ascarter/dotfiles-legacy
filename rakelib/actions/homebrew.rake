@@ -5,33 +5,48 @@ module Actions
     # Install homebrew formula/tap
     def install(args)
       Homebrew.update
-      args.each do |k, v|
-        case k
-        when 'tools'
-          v.each { |t| Homebrew.install t }
-        when 'taps'
-          v.each do |t|
-            parts = t.split('/')
-            Homebrew.tap(t)
-            Homebrew.install(parts[1], '--HEAD')
+      
+      case args
+      when Array
+        args.each { |t| Homebrew.install t }
+      when Hash
+        args.each do |k, v|
+          case k
+          when 'tools'
+            v.each { |t| Homebrew.install t }
+          when 'taps'
+            v.each do |t|
+              parts = t.split('/')
+              Homebrew.tap(t)
+              Homebrew.install(parts[1], '--HEAD')
+            end
+          when 'overrides'
+            v.each { |o| Bootstrap.usr_bin_ln(Homebrew.bin_path(o), o) }
           end
-        when 'overrides'
-          v.each { |o| Bootstrap.usr_bin_ln(Homebrew.bin_path(o), o) }
         end
+      else
+        Homebrew.install args
       end
     end
 
     # Uninstall homebrew formula/tap
     def uninstall(args)
-      args.each do |k, v|
-        case k
-        when 'tools'
-          v.each { |t| Homebrew.uninstall t }
-        when 'taps'
-          v.each { |t| Homebrew.untap t }
-        when 'overrides'
-          v.each { |o| Bootstrap.usr_bin_rm o }
+      case args
+      when Array
+        args.each { |t| Homebrew.uninstall t }
+      when Hash
+        args.each do |k, v|
+          case k
+          when 'tools'
+            v.each { |t| Homebrew.uninstall t }
+          when 'taps'
+            v.each { |t| Homebrew.untap t }
+          when 'overrides'
+            v.each { |o| Bootstrap.usr_bin_rm o }
+          end
         end
+      else
+        Homebrew.uninstall args
       end
     end
   end
