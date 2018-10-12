@@ -3,4 +3,5 @@ description: MakeMKV is a format converter (transcoder)
 homepage:    http://www.makemkv.com
 macos:
     app:    MakeMKV
-    source: http://www.makemkv.com/download/makemkv_v1.10.10_osx.dmg
+    source: http://www.makemkv.com/download/makemkv_v1.12.3_osx.dmg
+    sig:    { sha256: 682009477252bda4264f1216cf8d109e8abf1493a25431579c439fcc180ca3ae }
