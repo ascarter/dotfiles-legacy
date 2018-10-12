@@ -1,0 +1,17 @@
+description: HandBrake is a tool for converting video.
+homepage:    https://handbrake.fr
+macos:
+  app:    Handbrake
+  source: https://download.handbrake.fr/releases/1.1.2/HandBrake-1.1.2.dmg
+  sig:    { sha256: 181feb443687d84b15cc8da7cc43183fb1b88a62c8b4476cf77b948a6406b368 }
+  formulas: &hbFormulas
+    - libdvdcss
+    - mkvtoolnix
+    - ffmpeg
+    - mp4v2
+  install:
+    before:
+      homebrew_install: *hbFormulas
+  uninstall:
+    after:
+      homebrew_uninstall: *hbFormulas
