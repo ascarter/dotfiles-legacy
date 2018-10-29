@@ -29,7 +29,6 @@ fi
 
 # Ruby
 if [ -n "`which ruby`" ] && [ -n "`which gem`" ]; then
-	echo "Configuring Ruby"
 	export PATH=$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH
 fi
 
