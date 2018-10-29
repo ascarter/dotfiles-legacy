@@ -27,6 +27,12 @@ if [ -n "`which go`" ]; then
 	export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
+# Ruby
+if [ -n "`which ruby`" ] && [ -n "`which gem`" ]; then
+	echo "Configuring Ruby"
+	export PATH=$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH
+fi
+
 # Python
 if [ -d ~/Library/Python/2.7 ]; then
 	export PATH=~/Library/Python/2.7/bin:${PATH}
