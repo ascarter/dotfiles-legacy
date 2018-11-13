@@ -1,0 +1,8 @@
+description: Send to Kindle app
+homepage:    https://www.amazon.com/gp/sendtokindle/mac
+macos:
+  source: https://s3.amazonaws.com/sendtokindle/SendToKindleForMac-installer.pkg
+  install:  &sendToKindlePkg
+    pkg_id: com.amazon.SendToKindleMacInstaller.pkg
+    pkg:    SendToKindleForMac-installer
+  uninstall:  *sendToKindlePkg
