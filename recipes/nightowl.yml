@@ -1,0 +1,5 @@
+description: NightOwl easily toggles macOS Mojave's Dark Mode
+homepage:    https://nightowl.kramser.xyz/
+macos:
+  app:    NightOwl
+  source: https://nightowl.kramser.xyz/files/NightOwl.dmg
