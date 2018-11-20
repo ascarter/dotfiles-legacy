@@ -1,0 +1,8 @@
+description: Karabiner is a keyboard customizer for macOS.
+homepage: https://pqrs.org/osx/karabiner/
+macos:
+  source: https://pqrs.org/osx/karabiner/files/Karabiner-Elements-12.1.0.dmg
+  install: &karabinerPkg
+    pkg_id: org.pqrs.Karabiner-Elements
+    pkg: Karabiner-Elements.sparkle_guided
+  uninstall: *karabinerPkg
