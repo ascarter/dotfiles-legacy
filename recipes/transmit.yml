@@ -1,6 +1,22 @@
-# transmit
 description: Transmit file transfer utility
-homepage:    https://panic.com/transmit/
+homepage: https://panic.com/transmit/
 macos:
-    app:    Transmit
-    source: https://download.panic.com/transmit/Transmit%205.0.5.zip
+  app: Transmit
+  source: https://download.panic.com/transmit/Transmit%205.2.1.zip
+  sig:
+    sha256: 028a9d934288af9b196c3bf8a8b650c948ccbfa055d2b6d451730b8846c0c954
+    pgp: |
+      -----BEGIN PGP MESSAGE-----
+      Comment: https://keybase.io/download
+      Version: Keybase Go 2.7.3 (darwin)
+
+      xA0DAAoBq26O7ibMLj0By+F0AOIAAAAA5jAyOGE5ZDkzNDI4OGFmOWIxOTZjM2Jm
+      OGE4YjY1MGM5NDhjY2JmYTA1NWQyYjZkNDUxNzMwYjg4NDZjMGM5NTQAwsBcBAAB
+      CgAQBQJb0PV1CRCrbo7uJswuPQAAZjMIANL5sC9hHcLWbOgoO3phjNhgCvYZ1Xx2
+      ok186TWdHxDwxCEfAq8yxFNhpJBVNFrsogGmbnGeA/hCCPiAd8mJNf3pGvYQMezS
+      2MKY33TLBMgdex2LUlzF6aEhAPy6FgyeiRyMjj1jhDXloqn+DMAlPvT2CXgzBYU9
+      TG3QzhqI8LoJaTrTRvt2kCNxL4kDuCu9ThERwmWN74IrCM/x4pTXGuuzBuhCoQLy
+      kClHU5hgCQZ50MwnrNQ6mE2QdJ2ArsNY1+jqaE4aEk+Zhusx+M5uqFUzkBuY8NYQ
+      dc2wSHwuJeANCu2x77/GF8kjOqHCC6R1bjirKUPjeLseqv4VGT2tUtM=
+      =XUV7
+      -----END PGP MESSAGE-----
