@@ -154,17 +154,19 @@ module Downloader
     sig.each do |k, v|
       case k.to_sym
       when :md5
-        hash = Bootstrap.md5(target)
+        hash = Verification.md5(target)
+        raise "Invalid #{k} for package: #{hash}" if v != hash
       when :sha1
-        hash = Bootstrap.sha1(target)
+        hash = Verification.sha1(target)
+        raise "Invalid #{k} for package: #{hash}" if v != hash
       when :sha256
-        hash = Bootstrap.sha256(target)
+        hash = Verification.sha256(target)
+        raise "Invalid #{k} for package: #{hash}" if v != hash
+      when :pgp
+        status = Verification.pgp(v)
+        raise "Invalid #{k} for package" if !status.success?
       else
         raise "Unknown signature: #{k}"
-      end
-
-      if v != hash
-        raise "Invalid #{k} for package: #{hash}"
       end
     end
   end

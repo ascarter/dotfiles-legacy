@@ -22,7 +22,7 @@ module Archive
             relsource = sourcepath.relative_path_from(dirpath)
             target = File.join(dest, sourcepath.fnmatch?("#{key}/**") ? relsource : File.join(key, relsource))
             sig = sourcepath.sub_ext('.sig')
-            Bootstrap.gpg_sig(source, sig) if File.exist?(sig)
+            Verification.gpg(source, sig) if File.exist?(sig)
             Bootstrap.sudo_mkdir File.dirname(target)
             Bootstrap.sudo_cp source, target
           end

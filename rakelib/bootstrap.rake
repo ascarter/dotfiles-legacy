@@ -1,6 +1,5 @@
 # File and path helpers
 
-require 'digest'
 require 'erb'
 require 'etc'
 require 'fileutils'
@@ -340,25 +339,5 @@ module Bootstrap
   def usr_man_rm(page)
     page_file = File.join(usr_dir('share/man'), page)
     sudo_rm(page_file)
-  end
-
-  # Digest
-  def sha1(path)
-    if File.exist?(path)
-      contents = File.read(path)
-      return Digest::SHA1.hexdigest(contents)
-    end
-  end
-
-  def sha256(path)
-    if File.exist?(path)
-      contents = File.read(path)
-      return Digest::SHA256.hexdigest(contents)
-    end
-  end
-
-  # GPG
-  def gpg_sig(target, sig)
-    `gpg --verify #{sig} #{target}`\
   end
 end
