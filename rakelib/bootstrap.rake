@@ -183,7 +183,7 @@ module Bootstrap
   def font_dir
     case RUBY_PLATFORM
     when /darwin/
-      return File.join(home_dir, 'Library', 'Fonts')
+      return File.join(library_dir, 'Fonts')
     end
   end
 

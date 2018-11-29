@@ -22,7 +22,7 @@ desc 'Bootstrap dotfiles to home directory using symlinks'
 task :bootstrap => [ :usrlocal ] do
   Bootstrap.bootstrap('home', Bootstrap.home_dir())
   Bootstrap.bootstrap('config', Bootstrap.config_dir())
-  #Bootstrap.bootstrap('Library', Bootstrap.library_dir(), true)
+  Bootstrap.bootstrap('Library', Bootstrap.library_dir(), true)
 end
 
 desc 'Configure environment'
