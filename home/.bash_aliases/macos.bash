@@ -5,8 +5,14 @@ Darwin )
 	# ls
 	alias ls='ls -hFGH'
 
+	# macOS appearance
+	alias darkmode='osascript -e "tell application \"System Events\" to tell appearance preferences to set dark mode to true"'
+	alias lightmode='osascript -e "tell application \"System Events\" to tell appearance preferences to set dark mode to false"'
+	alias switchmode='osascript -e "tell application \"System Events\" to tell appearance preferences to set dark mode to not dark mode"'
+
 	# System shortcuts
 	alias lockscreen='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
+	alias ejectall='osascript -e "tell application \"Finder\" to eject (every disk whose ejectable is true)"'
 
 	# System information
 	alias about='system_profiler SPHardwareDataType SPSoftwareDataType SPStorageDataType'
