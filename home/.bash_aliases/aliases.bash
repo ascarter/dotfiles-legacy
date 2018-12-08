@@ -34,6 +34,3 @@ alias map="xargs -n1"
 
 # Canonical hex dump; some systems have this symlinked
 command -v hd > /dev/null || alias hd="hexdump -C"
-
-# 1Password signin
-alias opsignin='eval $(op signin carters)'
