@@ -1,21 +1,3 @@
-module Actions
-  module NPMActions
-    module_function
-
-    # npm install -g <pkgs>
-    def install(args)
-      args.each { |pkg| NPM.install pkg }
-    end
-
-    # npm uninstall -g <pkgs>
-    def uninstall(args)
-      args.each { |pkg| NPM.uninstall pkg }
-    end
-  end
-end
-
-# Node.js helpers
-
 module NodeJS
   def version
     puts "Node.js: #{`/usr/local/bin/node --version`}"

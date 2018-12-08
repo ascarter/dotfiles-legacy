@@ -1,21 +1,3 @@
-module Actions
-  module PipActions
-    module_function
-
-    # pip install
-    def install(args)
-      args.each { |p| Pip.install p }
-    end
-
-    # pip uninstall
-    def uninstall(args)
-      args.each { |p| Pip.uninstall p }
-    end
-  end
-end
-
-# pip helpers
-
 module Pip
   module_function
 
