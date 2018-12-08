@@ -1,5 +1,18 @@
 require 'digest'
 
+namespace 'ssh' do
+  desc 'Generate key'
+  task :keygen do
+    keyfile = Bootstrap.prompt('keyfile', File.join(Bootstrap.ssh_dir, 'id_rsa'))
+    if File.exist?(keyfile)
+      puts "SSH key exists"
+    else
+      email = Bootstrap.prompt('email', '')
+      system %Q(ssh-keygen -t rsa -b 4096 -C "#{email}" -f #{keyfile})
+    end
+  end
+end
+
 module Verification
   module_function
 

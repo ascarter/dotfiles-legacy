@@ -30,7 +30,6 @@ namespace 'homebrew' do
   end
 end
 
-
 module Homebrew
   module_function
 

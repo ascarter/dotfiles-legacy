@@ -22,4 +22,4 @@ fi
 
 # Run initial bootstrap
 cd ~/.dotfiles
-rake
+#rake

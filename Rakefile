@@ -14,7 +14,7 @@ task :chsh do
 end
 
 desc 'Bootstrap dotfiles to home directory using symlinks'
-task :bootstrap => [ :usrlocal ] do
+task :bootstrap => [ :usrlocal, 'ssh:keygen' ] do
   Bootstrap.bootstrap('home', Bootstrap.home_dir())
   Bootstrap.bootstrap('config', Bootstrap.config_dir())
   Bootstrap.bootstrap('Library', Bootstrap.library_dir(), true)

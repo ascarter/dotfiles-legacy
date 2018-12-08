@@ -129,6 +129,10 @@ module Bootstrap
     File.expand_path(File.join(home_dir, 'Library'))
   end
 
+  def ssh_dir
+    File.expand_path(File.join(home_dir, '.ssh'))
+  end
+
   def projects_dir
     File.join(Bootstrap.home_dir, 'Projects')
   end
