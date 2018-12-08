@@ -1,6 +1,0 @@
-# fission
-description: Fission is a fast & lossless audio editing tool
-homepage:    https://www.rogueamoeba.com/fission/
-macos:
-    app:    Fission
-    source: https://rogueamoeba.com/fission/download/Fission.zip

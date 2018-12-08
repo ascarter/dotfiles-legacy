@@ -1,6 +1,0 @@
-# gitfinder
-description: GitFinder is a fast and lightweight Git client for Mac with Finder integration.
-homepage:    https://gitfinder.com
-macos:
-  app:    GitFinder
-  source: https://zigz.ag/GitFinder/updates/GitFinder.dmg

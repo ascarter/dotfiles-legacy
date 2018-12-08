@@ -1,6 +1,0 @@
-description: Apogee Duet USB Audio Interface
-homepage: http://www.apogeedigital.com/products/duet
-macos:
-  source: http://www.apogeedigital.com/drivers/duet_2.5.dmg
-  install: { pkg_id: com.apogee, pkg: Duet Software Installer }
-  uninstall: { installer: Duet Uninstaller }

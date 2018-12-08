@@ -1,6 +1,0 @@
-# chrome
-description: Google Chrome web browser
-homepage:    https://www.google.com/chrome/
-macos:
-    app:    Google Chrome
-    source: https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg

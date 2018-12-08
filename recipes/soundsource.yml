@@ -1,5 +1,0 @@
-description: Soundsource is a control for audio input and output
-homepage:    https://www.rogueamoeba.com/soundsource/
-macos:
-  app:    SoundSource
-  source: https://rogueamoeba.com/soundsource/download/SoundSource.zip

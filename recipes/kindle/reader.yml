@@ -1,5 +1,0 @@
-description: Kindle Reader App
-homepage:    https://www.amazon.com/kindle-dbs/fd/kcp
-macos:
-  app:    Kindle
-  source: https://www.amazon.com/kindlemacdownload/ref=klp_hz_mac

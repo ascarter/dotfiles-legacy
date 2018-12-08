@@ -1,6 +1,0 @@
-# charles
-description: Charles is an HTTP proxy / HTTP monitor / Reverse Proxy
-homepage:    https://www.charlesproxy.com
-macos:
-    app:    Charles
-    source: https://www.charlesproxy.com/assets/release/4.2.1/charles-proxy-4.2.1.dmg

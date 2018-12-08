@@ -1,6 +1,0 @@
-# forecast
-description: Forecast is a podcast MP3 encoder with chapters
-homepage:    https://overcast.fm/forecast
-macos:
-    app:    Forecast
-    source: https://d2uzvmey2c90kn.cloudfront.net/appcast_download/Forecast_0.9_124.zip

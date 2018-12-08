@@ -1,6 +1,0 @@
-# basecamp
-description: Basecamp organizes your communication, projects, and client work together so you have a central source of truth
-homepage:    https://basecamp.com
-macos:
-    app:    Basecamp 3
-    source: https://bc3-desktop.s3.amazonaws.com/mac/basecamp3.dmg

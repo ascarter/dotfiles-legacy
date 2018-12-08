@@ -1,8 +1,0 @@
-description: YubiKey NEO manager
-homepage:    https://www.yubico.com/products/services-software/download/yubikey-neo-manager/
-macos:
-  source: https://developers.yubico.com/yubikey-neo-manager/Releases/yubikey-neo-manager-1.4.0-mac.pkg
-  install:  &yubicoNeoPkg
-    pkg_id: com.yubico.pkg.YubiKeyNEOManager
-    pkg:    yubikey-neo-manager-1.4.0-mac
-  uninstall:  *yubicoNeoPkg

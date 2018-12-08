@@ -1,6 +1,0 @@
-# audiohijack
-description: Audio Hijack can record any application's audio
-homepage:    https://www.rogueamoeba.com/audiohijack/
-macos:
-    app:    Audio Hijack
-    source: https://rogueamoeba.com/audiohijack/download/AudioHijack.zip

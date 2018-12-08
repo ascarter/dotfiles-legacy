@@ -1,6 +1,0 @@
-# kitematic
-description: Kitematic is a graphical UI for managing docker containers
-homepage:    https://kitematic.com
-macos:
-    app:    Kitematic (Beta)
-    source: https://download.docker.com/kitematic/Kitematic-Mac.zip
