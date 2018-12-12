@@ -22,8 +22,8 @@ fi
 
 # Check if ssh key present
 if [[ ! -f ~/.ssh/id_rsa ]]; then
-	echo "Generating SSH key"
-	read -p "Email: " email
+	#echo "Generating SSH key"
+	#read -p "Email: " email
 	ssh-keygen -t rsa -b 4096 -C "${email}"
 	pbcopy < ~/.ssh/id_rsa.pub
 	open "https://github.com/settings/ssh/new"
