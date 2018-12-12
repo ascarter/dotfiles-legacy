@@ -11,7 +11,7 @@ Most software is managed by [Homebrew](https://brew.sh).
 To bootstrap:
 
 ```
-$ curl https://raw.githubusercontent.com/ascarter/dotfiles/master/install.sh | sh
+$ curl https://raw.githubusercontent.com/ascarter/dotfiles/master/install | sh
 ```
 
 Alternatively:
