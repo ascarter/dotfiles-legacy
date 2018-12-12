@@ -27,7 +27,7 @@ if [[ ! -f ~/.ssh/id_rsa ]]; then
 	ssh-keygen -t rsa -b 4096 -C "${email}"
 	pbcopy < ~/.ssh/id_rsa.pub
 	open https://github.com/settings/ssh/new
-	pause()
+	pause
 fi
 
 # Check if dotfiles installed
