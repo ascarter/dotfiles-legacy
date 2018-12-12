@@ -34,7 +34,7 @@ fi
 
 # Check if dotfiles installed
 if [[ ! -d ~/.dotfiles ]]; then
-	git clone git@github.com:ascarter/dotfiles ~/.dotfiles
+	git clone https://github.com/ascarter/dotfiles ~/.dotfiles
 fi
 
 # Run initial bootstrap
