@@ -14,7 +14,7 @@ task :chsh do
 end
 
 desc 'Bootstrap dotfiles to home directory using symlinks'
-task :bootstrap => [ :usrlocal, 'ssh:install' ] do
+task :bootstrap => [ :usrlocal ] do
   Bootstrap.bootstrap('home', Bootstrap.home_dir())
   Bootstrap.bootstrap('config', Bootstrap.config_dir())
   Bootstrap.bootstrap('Library', Bootstrap.library_dir(), true)
@@ -57,7 +57,7 @@ task :usrlocal do
   %w(bin lib share/man).each { |d| Bootstrap.sudo_mkdir(File.join('/usr/local', d)) }
 end
 
-task :configenv do
+task :configenv => [ 'ssh:install', 'ssh:github' ] do
   case RUBY_PLATFORM
   when /darwin/
     MacOS.build_locatedb

@@ -1,6 +1,7 @@
 # Git tasks
 
 require 'etc'
+require 'uri'
 
 GITHUB_CONFIG_FILES = %w(~/.config/hub)
 
@@ -135,6 +136,21 @@ module Git
   def checkout(path, tag)
     puts "checking out #{tag}"
     system "cd #{path} && git checkout -q #{tag}" if File.directory?(path)
+  end
+
+  def set_remote_ssh(name = 'origin')
+    # Get current remote URL
+    old_url = `git remote get-url #{name}`.strip
+
+    # Check if HTTP uri
+    return unless URI.regexp(['http', 'https']).match(old_url)
+
+    # Convert http URL to ssh
+    old_uri = URI(old_url)
+    new_uri = "git@#{old_uri.host}:#{old_uri.path[1..-1]}"
+
+    puts "Switch git remote URL from #{old_uri} to #{new_uri}"
+    `git remote set-url #{name} #{new_uri}`
   end
 
   def latest_tag(path, filter = nil)

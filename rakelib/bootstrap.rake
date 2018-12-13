@@ -3,6 +3,7 @@
 require 'erb'
 require 'etc'
 require 'fileutils'
+require 'io/console'
 require 'net/http'
 require 'open-uri'
 require 'open3'
@@ -115,6 +116,12 @@ module Bootstrap
     print "Enter #{message}#{" [#{default}]" unless default.nil?}: "
     response = $stdin.gets.chomp
     response.empty? ? default : response
+  end
+
+  def prompt_to_continue
+    puts 'Press any key to continue'
+    STDIN.getch
+    puts "\n"
   end
 
   def home_dir
