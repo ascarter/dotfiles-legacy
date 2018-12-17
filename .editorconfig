@@ -1,0 +1,17 @@
+root = true
+
+[Makefile]
+indent_style = tab
+tab_width = 8
+
+[*.sh]
+indent_style = tab
+tab_width = 8
+
+[*.{rb,rake}]
+indent_style = space
+indent_size = 2
+
+[Rakefile]
+indent_style = space
+indent_size = 2
