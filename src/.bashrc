@@ -17,9 +17,9 @@ export PROJECTS_HOME=${PROJECTS_HOME:-${HOME}/Projects}
 
 # Homebrew
 if [ -n "`which brew`" ]; then
-	BREW_PREFIX=`brew --prefix`
 	export HOMEBREW_NO_EMOJI=1
 	export HOMEBREW_NO_ANALYTICS=1
+	eval $(brew shellenv)
 fi
 
 # Go
@@ -222,8 +222,8 @@ fi
 
 # Homebrew - will also call user's ~/.bash_completion too
 if [ -n "`which brew`" ]; then
-	if [ -f `brew --prefix`/etc/bash_completion ]; then
-		. `brew --prefix`/etc/bash_completion
+	if [ -f ${HOMEBREW_PREFIX}/etc/bash_completion ]; then
+		. ${HOMEBREW_PREFIX}/etc/bash_completion
 	fi
 fi
 

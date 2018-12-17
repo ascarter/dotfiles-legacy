@@ -1,5 +1,6 @@
 #!/bin/bash
 # Bash completion support for Rake
+# Requires homebrew bash-completions to be installed with helpers
 
 _rakecomplete() {
     local cur
