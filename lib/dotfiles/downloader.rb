@@ -1,3 +1,6 @@
+require 'net/http'
+require 'uri'
+
 # Downloader provides helpers for downloading resources
 module Downloader
   module_function

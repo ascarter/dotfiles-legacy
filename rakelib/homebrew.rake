@@ -1,93 +1,42 @@
 # Homebrew tasks
 
-BREW_ROOT = '/opt/homebrew'
-BREW_PATH_BIN = File.join(BREW_ROOT, 'bin')
-BREW_PATH_MAN = [
-      File.join(BREW_ROOT, 'share', 'man'),
-      File.join(BREW_ROOT, 'manpages')
-]
-
 namespace 'homebrew' do
-  desc 'Install Homebrew'
-  task :install do
-    raise('Homebrew already installed') if Dir.exist?(BREW_ROOT)
+  directory Homebrew::ROOT do
+    sudo_mkdir Homebrew::ROOT
+    sudo_chown Homebrew::ROOT
+    sudo_chgrp Homebrew::ROOT
+    sudo_chmod Homebrew::ROOT
 
-    Bootstrap.sudo_mkdir BREW_ROOT
-    Bootstrap.sudo_chown BREW_ROOT
-    Bootstrap.sudo_chgrp BREW_ROOT
-    Bootstrap.sudo_chmod BREW_ROOT
-    system "curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C #{BREW_ROOT}"
-    MacOS.path_helper 'homebrew', BREW_PATH_BIN, 'paths'
-    MacOS.path_helper 'homebrew', BREW_PATH_MAN, 'man'
+    bin_path = File.join(Homebrew::ROOT, 'bin')
+    MacOS.path_helper 'homebrew', [ bin_path ]
+    system "curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C #{Homebrew::ROOT}"
   end
+
+#   desc 'Install Homebrew'
+#   task :install do
+#     if Dir.exist?(Homebrew::ROOT)
+#       puts 'Homebrew already installed'
+#       return
+#     end
+#
+#     Bootstrap.sudo_mkdir Homebrew::ROOT
+#     Bootstrap.sudo_chown Homebrew::ROOT
+#     Bootstrap.sudo_chgrp Homebrew::ROOT
+#     Bootstrap.sudo_chmod Homebrew::ROOT
+#
+#     bin_path = File.join(Homebrew::ROOT, 'bin')
+#     MacOS.path_helper 'homebrew', [ bin_path ]
+#     system "curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C #{Homebrew::ROOT}"
+#
+#     # Add brew to active shell path
+#     ENV['PATH'] += ":#{bin_path}"
+#   end
 
   desc 'Uninstall Homebrew'
   task :uninstall do
-    raise('Homebrew not installed') unless Dir.exist?(BREW_ROOT)
+    raise('Homebrew not installed') unless Dir.exist?(Homebrew::ROOT)
     system 'ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"'
-    Bootstrap.sudo_rmdir BREW_ROOT
-    ['paths', 'man'].each { |t| MacOS.rm_path_helper 'homebrew', t }
-  end
-end
-
-module Homebrew
-  module_function
-
-  def prefix
-    `brew --prefix`.strip
-  end
-
-  def command
-    @cmd || File.join(prefix, 'bin', 'brew')
-    raise 'Missing homebrew' unless @cmd
-    @cmd
-  end
-
-  def install(formula)
-    system "#{command} install #{formula}"
-  end
-
-  def update
-    system "#{command} update"
-  end
-
-  def upgrade
-    system "#{command} upgrade #{formula}"
-  end
-
-  def uninstall(formula)
-    system "#{command} uninstall --force #{formula}"
-  end
-
-  def list
-    `#{command} list`.split
-  end
-
-  def tap(repo)
-    `#{command} tap #{repo}`
-  end
-
-  def untap(repo)
-    `#{command} tap #{repo}`
-  end
-
-  module Cask
-    module_function
-
-    def install(cask)
-      system "#{Homebrew.command} cask install #{cask}"
-    end
-
-    def upgrade(cask)
-      system "#{Homebrew.command} cask upgrade #{cask}"
-    end
-
-    def uninstall(cask)
-      system "#{Homebrew.command} cask uninstall #{cask}"
-    end
-
-    def list
-      `#{Homebrew.command} cask list`.split
-    end
+    sudo_rmdir Homebrew::ROOT
+    MacOS.rm_path_helper 'homebrew'
   end
 end

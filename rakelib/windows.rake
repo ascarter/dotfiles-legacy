@@ -1,6 +1,5 @@
 # Windows rake tasks
-
-def windows_tasks(recipe)
-  # TODO: Implement windows task generator
+if RUBY_PLATFORM =~ /windows/
+  task :osinstall do
+  end
 end
-

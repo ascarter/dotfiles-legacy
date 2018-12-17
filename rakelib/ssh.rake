@@ -1,24 +1,21 @@
+SSH_CONFIG = File.join(ssh_dir, 'config')
+SSH_KEYFILE = File.join(ssh_dir, 'id_rsa')
+
 namespace 'ssh' do
+  file SSH_KEYFILE do
+    email = Bootstrap.prompt('email', '')
+    system %Q(ssh-keygen -t rsa -b 4096 -C "#{email}" -f #{SSH_KEYFILE})
+
+    # Upload key to GitHub
+    Rake::Task['ssh:github'].invoke
+  end
+
+  file SSH_CONFIG => [ 'sshconfig' ] do |t|
+    cp t.source, t.name
+  end
+
   desc 'Install ssh client support'
-  task :install => [ 'ssh:keygen', 'ssh:config' ]
-
-  desc 'Configure ssh client'
-  task :config do
-    source = File.expand_path('sshconfig')
-    target = File.join(Bootstrap.home_dir, '.ssh', 'config')
-    Bootstrap.copy_and_replace source, target
-  end
-
-  desc 'Generate key'
-  task :keygen do
-    keyfile = Bootstrap.prompt('keyfile', File.join(Bootstrap.ssh_dir, 'id_rsa'))
-    if File.exist?(keyfile)
-      puts "SSH key exists"
-    else
-      email = Bootstrap.prompt('email', '')
-      system %Q(ssh-keygen -t rsa -b 4096 -C "#{email}" -f #{keyfile})
-    end
-  end
+  task :install => [ SSH_KEYFILE, SSH_CONFIG ]
 
   desc 'Add SSH key to GitHub and switch remote origin to SSH'
   task :github do

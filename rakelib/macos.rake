@@ -1,40 +1,47 @@
-module MacOS
-  module_function
+if RUBY_PLATFORM =~ /darwin/
+  ICLOUD_DIR = File.join(DEST_ROOT, 'Library', 'Mobile Documents', 'com~apple~CloudDocs')
+  ICLOUD_LINK = File.join(DEST_ROOT, 'iCloud')
 
-  def path_helper(path_file, paths, type = 'paths')
-    unless %w(paths manpaths).include?(type)
-      raise ArgumentError, "Invalid path type #{type}"
+	task :osinstall => [
+		Homebrew::ROOT,
+		ICLOUD_LINK
+	]
+
+	task :base_packages do
+    taps = [
+      'universal-ctags/universal-ctags'
+    ]
+
+    pkgs = [
+      'bash-completion',
+      'gist',
+      'htop',
+      'hub',
+      'jq',
+      'ranger',
+      'unar',
+      'wget',
+      'universal-ctags/universal-ctags --HEAD'
+    ]
+
+    casks = [
+      'android-file-transfer',
+      'android-studio',
+      'coderunner',
+      'nightowl'
+    ]
+
+    Homebrew.collection taps: taps, pkgs: pkgs, casks: casks
+  end
+
+  namespace 'icloud' do
+    file ICLOUD_LINK => ICLOUD_DIR do |t|
+      ln_s t.name, t.source
     end
 
-    fullpath = File.join("/etc/#{type}.d", path_file)
-    if File.exist?(fullpath)
-      warn "#{fullpath} already exists"
-    else
-      Bootstrap.sudo_mkdir File.dirname(fullpath)
-      Bootstrap.sudo "touch #{fullpath}"
-      paths.each { |p| Bootstrap.sudo "echo '#{p}' >> #{fullpath}" }
+    desc 'Uninstall iCloud'
+    task :uninstall do
+      rm ICLOUD_LINK
     end
-  end
-
-  def rm_path_helper(path_file, type = 'paths')
-    fullpath = File.join("/etc/#{type}.d", path_file)
-    if File.exist?(fullpath)
-      Bootstrap.sudo_rm(fullpath)
-    else
-      warn "#{fullpath} not found"
-    end
-  end
-
-  def run_app(app, wait: false)
-    flags = wait ? "--wait-apps" : ""
-    system %(open #{flags} "#{App.path(app)}")
-  end
-
-  def run_applescript(script)
-    system "osascript \"#{script}\""
-  end
-
-  def build_locatedb
-    Bootstrap.sudo 'launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist'
   end
 end

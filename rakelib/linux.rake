@@ -1,6 +1,5 @@
 # Linux rake tasks
-
-def linux_tasks(recipe)
-  # TODO: Implement linux task generator
+if RUBY_PLATFORM =~ /linuxx/
+  task :osinstall do
+  end
 end
-
