@@ -1,42 +1,31 @@
 # Homebrew tasks
 
-namespace 'homebrew' do
-  directory Homebrew::ROOT do
-    sudo_mkdir Homebrew::ROOT
-    sudo_chown Homebrew::ROOT
-    sudo_chgrp Homebrew::ROOT
-    sudo_chmod Homebrew::ROOT
+HOMEBREW_PATH_HELPER = File.join(VOLUME_ROOT, 'etc', 'paths.d', 'homebrew')
+HOMEBREW_PATHS = FileList[ File.join(HOMEBREW_PREFIX, 'bin') ]
 
-    bin_path = File.join(Homebrew::ROOT, 'bin')
-    MacOS.path_helper 'homebrew', [ bin_path ]
-    system "curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C #{Homebrew::ROOT}"
+namespace 'homebrew' do
+  directory HOMEBREW_PREFIX do
+    sudo <<-END
+      mkdir -p #{HOMEBREW_PREFIX}
+      chown -R #{current_user} #{HOMEBREW_PREFIX}
+      chgrp -R admin #{HOMEBREW_PREFIX}
+      chmod g+w #{HOMEBREW_PREFIX}
+    END
+    system "curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C #{HOMEBREW_PREFIX}"
   end
 
-#   desc 'Install Homebrew'
-#   task :install do
-#     if Dir.exist?(Homebrew::ROOT)
-#       puts 'Homebrew already installed'
-#       return
-#     end
-#
-#     Bootstrap.sudo_mkdir Homebrew::ROOT
-#     Bootstrap.sudo_chown Homebrew::ROOT
-#     Bootstrap.sudo_chgrp Homebrew::ROOT
-#     Bootstrap.sudo_chmod Homebrew::ROOT
-#
-#     bin_path = File.join(Homebrew::ROOT, 'bin')
-#     MacOS.path_helper 'homebrew', [ bin_path ]
-#     system "curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C #{Homebrew::ROOT}"
-#
-#     # Add brew to active shell path
-#     ENV['PATH'] += ":#{bin_path}"
-#   end
+  file HOMEBREW_PATH_HELPER => [HOMEBREW_PATHS] do |t|
+    MacOS.path_helper t.name, t.prerequisites
+  end
+
+  desc 'Install Homebrew'
+  task :install => [ HOMEBREW_PREFIX, HOMEBREW_PATH_HELPER ]
 
   desc 'Uninstall Homebrew'
   task :uninstall do
-    raise('Homebrew not installed') unless Dir.exist?(Homebrew::ROOT)
-    system 'ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"'
-    sudo_rmdir Homebrew::ROOT
-    MacOS.rm_path_helper 'homebrew'
+    raise('Homebrew not installed') unless Dir.exist?(HOMEBREW_PREFIX)
+    sudo "rm #{HOMEBREW_PATH_HELPER}"
+    system %(ruby -e 'puts ARGV' -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)" -- --path=#{HOMEBREW_PREFIX})
+    sudo "rm -Rf #{HOMEBREW_PREFIX}"
   end
 end

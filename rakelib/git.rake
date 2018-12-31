@@ -1,16 +1,19 @@
-# Git tasks
+require 'erb'
 
-GITHUB_CONFIG_FILES = %w(~/.config/hub)
+GIT_CONFIG_TEMPLATE = File.expand_path('templates/gitconfig')
+GIT_CONFIG = File.join(HOME_ROOT, '.gitconfig')
+GIT_IGNORE_TEMPLATE = File.expand_path('templates/gitignore')
+GIT_IGNORE = File.join(HOME_ROOT, '.gitignore')
+GITHUB_CONFIG = File.join(HOME_ROOT, '.config', 'hub')
 
 namespace 'git' do
   desc 'Update git config'
   task :config do
-    puts 'Setting git config'
-    source = File.expand_path('gitconfig')
-    target = File.join(Bootstrap.home_dir, '.gitconfig')
+    # Set config file
+    Git::Config.file(GIT_CONFIG)
 
     # Read current user and email if previously configured
-    if File.exist?(target)
+    if File.exist?(GIT_CONFIG)
       userName = Git::Config.get('user.name')
       userEmail = Git::Config.get('user.email')
       userGPGKey = Git::Config.get('user.signingkey')
@@ -26,16 +29,21 @@ namespace 'git' do
     # TODO: get email from the GitHub user that checked out the repo
     # userEmail = '...'
 
-    Bootstrap.copy_and_replace(source, target)
+    # Set binding variables
+
+    # Write template to gitconfig file
+    erb = ERB.new(File.read(GIT_CONFIG_TEMPLATE))
+    File.write(GIT_CONFIG, erb.result(binding))
 
     # Set user, email, and signing key
-    name = Bootstrap.prompt('user name', userName)
-    email = Bootstrap.prompt('user email', userEmail)
-    signingKey = Bootstrap.prompt('user signingkey', userGPGKey)
-    defaultSign = Bootstrap.prompt('gpgsign by default?', userDefaultSign == 'true' ? 'Y' : 'N')
-
+    name = prompt('user name', userName)
     Git::Config.set('user.name', name)
+
+    email = prompt('user email', userEmail)
     Git::Config.set('user.email', email)
+
+    signingKey = prompt('user signingkey', userGPGKey)
+    defaultSign = prompt('gpgsign by default?', userDefaultSign == 'true' ? 'Y' : 'N')
     if signingKey.nil? || signingKey.empty?
       Git::Config.unset('user.signingkey')
       Git::Config.unset('commit.gpgsign')
@@ -49,35 +57,19 @@ namespace 'git' do
     end
 
     # Set git commit editor
-    if File.exist? Bootstrap.usr_bin_cmd('bbedit')
-      # bbedit
-      Git::Config.set('core.editor', 'bbedit --wait')
-    else
-      # vim
-      Git::Config.set('core.editor', 'vim')
-    end
+    Git::Config.set('core.editor', File.exist?(File.join(USR_LOCAL_ROOT, 'bin', 'bbedit')) ? 'bbedit --wait' : 'vim')
+    Git::Config.set('core.editor', 'vim')
 
     case RUBY_PLATFORM
     when /darwin/
       # Configure password caching
       Git::Config.set('credential.helper', 'osxkeychain')
 
-      if File.exist? Bootstrap.usr_bin_cmd('bbdiff')
-        # bbedit
-        Git::Config.set('diff.tool', 'bbdiff')
-        Git::Config.set('merge.tool', 'opendiff')
-      elsif File.exist? Bootstrap.usr_bin_cmd('ksdiff')
-        # Configure Kaleidoscope
-        Git::Config.set('diff.tool', 'Kaleidoscope')
-        Git::Config.set('merge.tool', 'Kaleidoscope')
-      else
-        Git::Config.set('diff.tool', 'opendiff')
-        Git::Config.set('merge.tool', 'opendiff')
-      end
+      Git::Config.set('diff.tool', File.exist?(File.join(USR_LOCAL_ROOT, 'bin', 'bbdiff')) ? 'bbdiff' : 'opendiff')
+      Git::Config.set('merge.tool', 'opendiff')
 
       Git::Config.set('gui.fontui', '-family \"SF UI Display Regular\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0')
       Git::Config.set('gui.fontdiff', '-family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0')
-
     when /linux/
       # Configure password caching
       Git::Config.set('credential.helper', 'cache')
@@ -90,8 +82,14 @@ namespace 'git' do
     end
   end
 
+  desc 'Set global gitignore'
+  task :ignore do
+    erb = ERB.new(File.read(GIT_IGNORE_TEMPLATE))
+    File.write(GIT_IGNORE, erb.result(binding))
+  end
+
   desc 'Reset config files for GitHub tools'
   task :reset do
-    GITHUB_CONFIG_FILES.each { |f| rm f }
+    rm GITHUB_CONFIG
   end
 end

@@ -1,43 +1,51 @@
 if RUBY_PLATFORM =~ /darwin/
-  ICLOUD_DIR = File.join(DEST_ROOT, 'Library', 'Mobile Documents', 'com~apple~CloudDocs')
-  ICLOUD_LINK = File.join(DEST_ROOT, 'iCloud')
+  ICLOUD_DIR = File.join(home_dir, 'Library', 'Mobile Documents', 'com~apple~CloudDocs')
+  ICLOUD_LINK = File.join(HOME_ROOT, 'iCloud')
 
-	task :osinstall => [
-		Homebrew::ROOT,
-		ICLOUD_LINK
-	]
+  CLOBBER.include ICLOUD_LINK
+
+	task :osinstall => [ 'icloud:install', 'homebrew:install' ] do
+	  puts "Start locate database rebuild job..."
+    MacOS.build_locatedb
+	end
 
 	task :base_packages do
-    taps = [
-      'universal-ctags/universal-ctags'
-    ]
+	  # Set homebrew
+	  Homebrew.prefix HOMEBREW_PREFIX
 
-    pkgs = [
-      'bash-completion',
-      'gist',
-      'htop',
-      'hub',
-      'jq',
-      'ranger',
-      'unar',
-      'wget',
-      'universal-ctags/universal-ctags --HEAD'
-    ]
+	  packages = {
+      taps: [
+        'universal-ctags/universal-ctags'
+      ],
+      pkgs: [
+        'bash-completion',
+        'gist',
+        'htop',
+        'hub',
+        'jq',
+        'ranger',
+        'unar',
+        'wget',
+        'universal-ctags/universal-ctags --HEAD'
+      ],
+      casks: [
+        'android-file-transfer',
+        'android-studio',
+        'coderunner',
+        'nightowl'
+      ]
+	  }
 
-    casks = [
-      'android-file-transfer',
-      'android-studio',
-      'coderunner',
-      'nightowl'
-    ]
-
-    Homebrew.collection taps: taps, pkgs: pkgs, casks: casks
+    Homebrew.collection packages
   end
 
   namespace 'icloud' do
     file ICLOUD_LINK => ICLOUD_DIR do |t|
-      ln_s t.name, t.source
+      ln_s t.source, t.name
     end
+
+    desc 'Install iCloud'
+    task :install => [ ICLOUD_LINK ]
 
     desc 'Uninstall iCloud'
     task :uninstall do

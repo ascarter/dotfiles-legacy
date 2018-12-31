@@ -1,68 +1,72 @@
 #  -*- mode: ruby; -*-
 
 require 'rake'
+require 'rake/clean'
+require 'pathname'
 require_relative 'lib/dotfiles'
 
-DEST_ROOT = ENV['DEST'] || home_dir
-USR_LOCAL = File.join('/usr', 'local')
+# HARDCODE FOR TESTING!!
+ENV['DOTFILES_VOLUME'] = File.join(home_dir, 'dtest', 'volume')
 
-SOURCE_FILES = FileList['src/*']
-TARGET_FILES = SOURCE_FILES.map { |f| File.join(DEST_ROOT, f) }
+# Check for DOTFILES_VOLUME to override (useful for testing)
+VOLUME_ROOT = ENV['DOTFILES_VOLUME'] || '/'
+HOME_ROOT = ENV['DOTFILES_VOLUME'] ? File.join(VOLUME_ROOT, 'home') : home_dir
+USR_LOCAL_ROOT = File.join(VOLUME_ROOT, 'usr', 'local')
+HOMEBREW_PREFIX = File.join(VOLUME_ROOT, 'opt', 'homebrew')
+SOURCE_PATHMAP_SPEC = "%{^src/,#{HOME_ROOT}/}p"
+
+task :env do
+  puts "VOLUME_ROOT=#{VOLUME_ROOT}"
+  puts "HOME_ROOT=#{HOME_ROOT}"
+  puts "USR_LOCAL_ROOT=#{USR_LOCAL_ROOT}"
+  puts "HOMEBREW_PREFIX=#{HOMEBREW_PREFIX}"
+end
+
+SOURCES = FileList.new do |fl|
+  fl.include(`git ls-files src`.lines.map { |f| f.chomp })
+end
+
+TARGETS = SOURCES.pathmap(SOURCE_PATHMAP_SPEC)
+
+# CLEAN = FileList[]
+CLOBBER.include TARGETS
+
+task :nuke do
+  if ENV['DOTFILES_VOLUME']
+    sudo "rm -Rf #{VOLUME_ROOT}"
+  end
+end
+
+# Base tasks that are overriden per platform
+task :osinstall
+task :base_packages
 
 task :default => [ :install ]
 
 desc 'Install configuration'
-task :install => [ USR_LOCAL  ]  #, :configenv, 'git:config', :osinstall, :base_packages ]
+task :install => [
+    VOLUME_ROOT,
+    USR_LOCAL_ROOT,
+    :link_sources,
+    :osinstall,
+    'git:config',
+    'git:ignore',
+    :base_packages
+  ]
 
-directory USR_LOCAL do
-  %w(bin lib share/man).each { |d| sh "sudo mkdir -p #{File.join USR_LOCAL, d}" }
+task :link_sources => TARGETS
+
+directory VOLUME_ROOT
+
+directory USR_LOCAL_ROOT do
+  %w(bin lib share/man).each { |d| sh "sudo mkdir -p #{File.join(USR_LOCAL_ROOT, d)}" }
 end
 
-task :configenv => [ 'ssh:install' ] do
-  case RUBY_PLATFORM
-  when /darwin/
-    MacOS.build_locatedb
+# Symlinks for config files in src
+SOURCES.each do |src|
+  file src.pathmap(SOURCE_PATHMAP_SPEC) => [ src ] do |t|
+    d = t.name.pathmap('%d')
+    mkdir_p d unless Dir.exists?(d)
+    symlink File.expand_path(t.source), t.name
   end
 end
-
-desc 'Change default shell'
-task :chsh do
-  puts 'Setting shell to bash'
-  system 'chsh -s /bin/bash'
-end
-
-# Collections
-# 
-# case RUBY_PLATFORM
-# when /darwin/
-#   task :work do
-#     taps = []
-# 
-#     pkgs = []
-# 
-#     casks = [
-#       'firefox',
-#       'firefox-developer-edition',
-#       'google-chrome',
-#       'slack',
-#       'zoomus'
-#     ]
-# 
-#     Homebrew.collection taps: taps, pkgs: pkgs, casks: casks
-#   end
-# when /linux/
-# when /windows/
-# end
-
-# desc 'Install Homebrew'
-# directory Homebrew::Root do
-#   Bootstrap.sudo_mkdir Homebrew::ROOT
-#   Bootstrap.sudo_chown Homebrew::ROOT
-#   Bootstrap.sudo_chgrp Homebrew::ROOT
-#   Bootstrap.sudo_chmod Homebrew::ROOT
-#
-#   bin_path = File.join(Homebrew::ROOT, 'bin')
-#   MacOS.path_helper 'homebrew', [ bin_path ]
-#   system "curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C #{Homebrew::ROOT}"
-# end
-

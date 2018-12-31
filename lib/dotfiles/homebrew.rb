@@ -1,6 +1,4 @@
 module Homebrew
-  ROOT = File.join('/opt', 'homebrew')
-
   module_function
 
   def collection(taps: [], pkgs: [], casks: [])
@@ -9,14 +7,12 @@ module Homebrew
     casks.each { |c| Cask.install c }
   end
 
-  def prefix
-    Dir.exist?(ROOT) ? ROOT : `brew --prefix`.strip
+  def prefix(pre)
+    @prefix = pre
   end
 
   def command
-    @cmd || File.join(prefix, 'bin', 'brew')
-    puts "homebrew prefx = #{prefix}"
-    puts "@cmd = #{@cmd}"
+    @cmd ||= File.join(@prefix || `brew --prefix`.strip, 'bin', 'brew')
     raise 'Missing homebrew' unless @cmd
     @cmd
   end

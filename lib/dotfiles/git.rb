@@ -9,16 +9,24 @@ module Git
   module Config
     module_function
 
+    def command
+      @cmd || "git config #{@file.nil? ? '--global' : "--file #{@file}"}"
+    end
+
+    def file(fname)
+      @file = fname
+    end
+
     def get(key)
-      `git config --global --get #{key}`.strip
+      `#{command} --get #{key}`.strip
     end
 
     def set(key, value)
-      system %(git config --global #{key} "#{value}")
+      system %(#{command} #{key} "#{value}")
     end
 
     def unset(key)
-      system %(git config --global --unset #{key})
+      system %(#{command} --unset #{key})
     end
   end
 
