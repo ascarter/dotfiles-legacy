@@ -1,4 +1,4 @@
-if RUBY_PLATFORM =~ /darwin/
+if macOS?
   ICLOUD_DIR = File.join(home_dir, 'Library', 'Mobile Documents', 'com~apple~CloudDocs')
   ICLOUD_LINK = File.join(HOME_ROOT, 'iCloud')
 
