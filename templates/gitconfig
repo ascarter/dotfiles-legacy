@@ -49,6 +49,7 @@
 	discard = checkout --
 	done = "!f() { local branch=${1-$(git blocal)}; git checkout master; git up; git cleanup; git branch -d ${branch}; }; f"
 	dump = cat-file -p
+	fingerprint = !ssh-keygen -l -E md5 -f id_rsa
 	gdiff = difftool --gui --no-prompt
 	gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
 	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
