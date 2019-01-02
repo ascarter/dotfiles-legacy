@@ -52,7 +52,7 @@ task :install => [
     'git:config',
     'ssh:config',
     'ssh:github',
-    #:base_packages
+    :base_packages
   ]
 
 directory VOLUME_ROOT
