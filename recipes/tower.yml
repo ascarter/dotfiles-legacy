@@ -1,5 +1,0 @@
-description: Tower is a graphical Git client
-homepage:    https://www.git-tower.com/
-macos:
-  app:    Tower
-  source: https://www.git-tower.com/download/mac

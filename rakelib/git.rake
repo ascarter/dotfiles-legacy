@@ -1,43 +1,39 @@
-# Git tasks
+require 'erb'
 
-require 'etc'
-
-GITHUB_CONFIG_FILES = %w(~/.config/hub)
+GIT_CONFIG = File.join(HOME_ROOT, '.gitconfig')
+GIT_IGNORE = File.join(HOME_ROOT, '.gitignore')
+GITHUB_CONFIG = File.join(HOME_ROOT, '.config', 'hub')
 
 namespace 'git' do
   desc 'Update git config'
-  task :config do
-    puts 'Setting git config'
-    source = File.expand_path('gitconfig')
-    target = File.join(Bootstrap.home_dir, '.gitconfig')
+  task :config => [ GIT_CONFIG, GIT_IGNORE ]
 
-    # Read current user and email if previously configured
-    if File.exist?(target)
-      userName = Git::Config.get('user.name')
-      userEmail = Git::Config.get('user.email')
-      userGPGKey = Git::Config.get('user.signingkey')
-      userDefaultSign = Git::Config.get('commit.gpgsign')
-    end
+  file GIT_CONFIG => [ 'templates/gitconfig' ] do |t|
+    # Write template to gitconfig file
+    erb = ERB.new(File.read(t.source))
+    File.write(t.name, erb.result(binding))
 
-    if userName.nil? || userName.empty?
-      # Get user and email
-      uinfo = Etc.getpwnam(Etc.getlogin)
-      userName = uinfo.gecos
-    end
+    # Set config file
+    Git::Config.file(t.name)
 
-    # TODO: get email from the GitHub user that checked out the repo
-    # userEmail = '...'
+    # Get user and email
+    uinfo = Etc.getpwnam(Etc.getlogin)
+    userName = uinfo.gecos
+    userEmail = Git::Config.get('user.email')
 
-    Bootstrap.copy_and_replace(source, target)
+    # Get GPG key (if any)
+    userGPGKey = Git::Config.get('user.signingkey')
+    userDefaultSign = Git::Config.get('commit.gpgsign')
 
     # Set user, email, and signing key
-    name = Bootstrap.prompt('user name', userName)
-    email = Bootstrap.prompt('user email', userEmail)
-    signingKey = Bootstrap.prompt('user signingkey', userGPGKey)
-    defaultSign = Bootstrap.prompt('gpgsign by default?', userDefaultSign == 'true' ? 'Y' : 'N')
-
+    name = request_input('user name', userName)
     Git::Config.set('user.name', name)
+
+    email = request_input('user email', userEmail)
     Git::Config.set('user.email', email)
+
+    signingKey = request_input('user signingkey', userGPGKey)
+    defaultSign = request_input('gpgsign by default?', userDefaultSign == 'true' ? 'Y' : 'N')
     if signingKey.nil? || signingKey.empty?
       Git::Config.unset('user.signingkey')
       Git::Config.unset('commit.gpgsign')
@@ -51,35 +47,19 @@ namespace 'git' do
     end
 
     # Set git commit editor
-    if File.exist? Bootstrap.usr_bin_cmd('bbedit')
-      # bbedit
-      Git::Config.set('core.editor', 'bbedit --wait')
-    else
-      # vim
-      Git::Config.set('core.editor', 'vim')
-    end
+    Git::Config.set('core.editor', File.exist?(File.join(USR_LOCAL_ROOT, 'bin', 'bbedit')) ? 'bbedit --wait' : 'vim')
+    Git::Config.set('core.editor', 'vim')
 
     case RUBY_PLATFORM
     when /darwin/
       # Configure password caching
       Git::Config.set('credential.helper', 'osxkeychain')
 
-      if File.exist? Bootstrap.usr_bin_cmd('bbdiff')
-        # bbedit
-        Git::Config.set('diff.tool', 'bbdiff')
-        Git::Config.set('merge.tool', 'opendiff')
-      elsif File.exist? Bootstrap.usr_bin_cmd('ksdiff')
-        # Configure Kaleidoscope
-        Git::Config.set('diff.tool', 'Kaleidoscope')
-        Git::Config.set('merge.tool', 'Kaleidoscope')
-      else
-        Git::Config.set('diff.tool', 'opendiff')
-        Git::Config.set('merge.tool', 'opendiff')
-      end
+      Git::Config.set('diff.tool', File.exist?(File.join(USR_LOCAL_ROOT, 'bin', 'bbdiff')) ? 'bbdiff' : 'opendiff')
+      Git::Config.set('merge.tool', 'opendiff')
 
       Git::Config.set('gui.fontui', '-family \"SF UI Display Regular\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0')
       Git::Config.set('gui.fontdiff', '-family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0')
-
     when /linux/
       # Configure password caching
       Git::Config.set('credential.helper', 'cache')
@@ -92,54 +72,15 @@ namespace 'git' do
     end
   end
 
-  desc 'Reset config files for GitHub tools'
+  file GIT_IGNORE => [ 'templates/gitignore' ] do |t|
+    erb = ERB.new(File.read(t.source))
+    File.write(t.name, erb.result(binding))
+  end
+
+  desc 'Reset config files for git'
   task :reset do
-    GITHUB_CONFIG_FILES.each { |f| rm f }
-  end
-end
-
-# git helpers
-module Git
-  module_function
-
-  # git configuration
-  module Config
-    module_function
-
-    def get(key)
-      `git config --global --get #{key}`.strip
-    end
-
-    def set(key, value)
-      system %(git config --global #{key} "#{value}")
-    end
-
-    def unset(key)
-      system %(git config --global --unset #{key})
-    end
-  end
-
-  def clone(repo, dest = nil)
-    git_url = URI.join('https://github.com/', "#{repo}.git").to_s
-    system %(git clone #{git_url} #{dest ? dest.to_s : ''})
-  end
-
-  def fetch(path)
-    system "cd #{path} && git fetch origin"
-  end
-
-  def pull(path)
-    system "cd #{path} && git pull" if File.directory?(path)
-  end
-
-  def checkout(path, tag)
-    puts "checking out #{tag}"
-    system "cd #{path} && git checkout -q #{tag}" if File.directory?(path)
-  end
-
-  def latest_tag(path, filter = nil)
-    args = %w(--abbrev=0 --tags)
-    args << %(--match "#{filter}")
-    `cd #{path} && git describe #{args.join(" ")} origin`
+    rm GITHUB_CONFIG
+    rm GIT_IGNORE
+    rm GIT_CONFIG
   end
 end

@@ -1,6 +1,0 @@
-# vim
-description: Vim is a highly configurable text editor built to make creating and changing any kind of text very efficient.
-homepage:    http://vim.org
-macos:
-  app:    MacVim
-  source: https://github.com/macvim-dev/macvim/releases/download/snapshot-151/MacVim.dmg

@@ -1,8 +1,0 @@
-description: Yubico Authenticator
-homepage:    https://www.yubico.com/products/services-software/download/yubico-authenticator/
-macos:
-  source: https://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-4.3.4-mac.pkg
-  install:  &yubicoAuthPkg
-    pkg_id: com.yubico.yubioath
-    pkg:    yubioath-desktop-4.3.4-mac
-  uninstall:  *yubicoAuthPkg

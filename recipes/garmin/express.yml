@@ -1,8 +1,0 @@
-description: Garmin Express manages Garmin GPS devices
-homepage:    https://www.garmin.com/en-US/software/express/
-macos:
-  source:    http://download.garmin.com/omt/express/GarminExpress.dmg
-  install:   &garminPkg
-    pkg:     Install Garmin Express
-    pkg_id:  com.garmin.renu.client
-  uninstall: *garminPkg

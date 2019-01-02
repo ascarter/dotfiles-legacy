@@ -1,8 +1,0 @@
-description: BaseCamp lets you plan outdoor activities, organize, and share your data.
-homepage:    https://www.garmin.com/en-US/shop/downloads/basecamp
-macos:
-  source:    http://download.garmin.com/software/BaseCampforMac_470.dmg
-  install:   &basecampPkg
-    pkg:     Install Basecamp
-    pkg_id:  com.Garmin.pkg.BaseCamp
-  uninstall: *basecampPkg

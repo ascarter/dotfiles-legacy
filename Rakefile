@@ -1,88 +1,74 @@
 #  -*- mode: ruby; -*-
 
 require 'rake'
+require 'rake/clean'
+require 'pathname'
 
-task :default => [ :install ]
+require_relative 'lib/dotfiles'
 
-desc 'Install default configuration'
-task :install => [ :bootstrap, :configenv, 'git:config' ]
+# Uncomment to HARDCODE FOR TESTING!!
+# ENV['DOTFILES_VOLUME'] = File.join(home_dir, 'dtest', 'volume')
 
-desc 'Change default shell'
-task :chsh do
-  puts 'Setting shell to bash'
-  system 'chsh -s /bin/bash'
+# Check for DOTFILES_VOLUME override (useful for testing)
+VOLUME_ROOT = ENV['DOTFILES_VOLUME'] || '/'
+HOME_ROOT = ENV['DOTFILES_VOLUME'] ? File.join(VOLUME_ROOT, 'home') : home_dir
+USR_LOCAL_ROOT = File.join(VOLUME_ROOT, 'usr', 'local')
+SOURCE_PATHMAP_SPEC = "%{^src/,#{HOME_ROOT}/}p"
+
+task :env do
+  puts "VOLUME_ROOT=#{VOLUME_ROOT}"
+  puts "HOME_ROOT=#{HOME_ROOT}"
+  puts "USR_LOCAL_ROOT=#{USR_LOCAL_ROOT}"
 end
 
-desc 'Create /usr/local directory'
-task :usrlocal do
-  %w(bin lib share/man).each { |d| Bootstrap.sudo_mkdir(File.join('/usr/local', d)) }
+SOURCES = FileList.new do |fl|
+  fl.include(`git ls-files src`.lines.map { |f| f.chomp })
 end
+TARGETS = SOURCES.pathmap(SOURCE_PATHMAP_SPEC)
 
-desc 'Bootstrap dotfiles to home directory using symlinks'
-task :bootstrap => [ :usrlocal ] do
-  Bootstrap.bootstrap('home', Bootstrap.home_dir())
-  Bootstrap.bootstrap('config', Bootstrap.config_dir())
-  Bootstrap.bootstrap('Library', Bootstrap.library_dir(), true)
-end
+CLOBBER.include TARGETS
 
-desc 'Configure environment'
-task :configenv do
-  case RUBY_PLATFORM
-  when /darwin/
-    MacOS.build_locatedb
+task :nuke => [ :env ] do
+  if ENV['DOTFILES_VOLUME']
+    raise "Root volume '/' set!" if VOLUME_ROOT == '/'
+    confirm = prompt("Confirm remove volume root #{VOLUME_ROOT}? (Y/N)", "N")
+    raise "Cancel nuke" if confirm.upcase != 'Y'
+    sudo "rm -Rf #{VOLUME_ROOT}"
   end
 end
 
-desc 'Uninstall dotfiles from home directory'
-task :uninstall do
-  Bootstrap.unbootstrap('home', Bootstrap.home_dir())
-  Bootstrap.unbootstrap('config', Bootstrap.config_dir())
-  #Bootstrap.unbootstrap('Library', Bootstrap.library_dir(), true)
+# Base tasks that are overriden per platform
+task :osinstall
+task :base_packages
+
+task :default => [ :install ]
+
+desc 'Install configuration'
+task :install => [
+    VOLUME_ROOT,
+    USR_LOCAL_ROOT,
+    :link_sources,
+    :osinstall,
+    'git:config',
+    'ssh:config',
+    'ssh:github',
+    #:base_packages
+  ]
+
+directory VOLUME_ROOT
+
+directory USR_LOCAL_ROOT
+file USR_LOCAL_ROOT do |t|
+  %w(bin lib share/man).each { |d| sudo %(mkdir -p "#{File.join(t.name, d)}") }
 end
 
-# Work configuration
-desc 'Work development configuration'
-task :workdev => [
-  :macdev,
-  'zoom:install',
-  'viscosity:install'
-]
-
-case RUBY_PLATFORM
-when /darwin/
-  desc 'Install Mac development environment'
-  task :macdev => [
-    :install,
-    'rbenv:install',
-    'icloud:install',
-    'gpg:install',
-    '1password:install',
-    'keybase:install',
-    'homebrew:install',
-    'bbedit:install',
-    'github:install',
-    'dash:install',
-    'coderunner:install',
-    'golang:install',
-    'paw:install',
-    'xquartz:install',
-    'android:install',
-  ]
-when /linux/
-  desc 'Install Linux development environment'
-  task :linuxdev => [
-    :install,
-    'rbenv:install',
-    'gpg:install',
-    'android:install',
-    'github:install',
-  ]
-when /windows/
-  desc 'Install Windows development environment'
-  task :windev => [
-    :install,
-    'gpg:install',
-    'android:install',
-    'github:install',
-  ]
+# Generate tasks to create symlinks for config files in src
+SOURCES.each do |src|
+  file src.pathmap(SOURCE_PATHMAP_SPEC) => [ src ] do |t|
+    d = t.name.pathmap('%d')
+    mkdir_p d unless Dir.exists?(d)
+    symlink File.expand_path(t.source), t.name
+  end
 end
+
+task :link_sources => TARGETS

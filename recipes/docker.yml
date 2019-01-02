@@ -1,8 +1,0 @@
-# docker
-description: Docker is a software containerization platform
-homepage:    https://www.docker.com
-macos:
-    app:    Docker
-    source: https://download.docker.com/mac/stable/Docker.dmg
-    uninstall:
-        before: { sudo: /Applications/Docker.app/Contents/MacOS/Docker --uninstall }

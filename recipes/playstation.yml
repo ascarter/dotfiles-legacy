@@ -1,9 +1,0 @@
-# playstation
-description: PS4 Remote Play application controls your PlayStation®4 system from your computer
-homepage:    https://remoteplay.dl.playstation.net/remoteplay/lang/en/index.html
-macos:
-    source:  https://remoteplay.dl.playstation.net/remoteplay/module/mac/RemotePlayInstaller.pkg
-    install: &playstationPkg
-        pkg: RemotePlayInstaller
-        pkg_id: com.playstation.RemotePlay.pkg
-    uninstall: *playstationPkg

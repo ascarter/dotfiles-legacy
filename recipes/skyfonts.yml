@@ -1,6 +1,0 @@
-# skyfonts
-description: Sync Google Fonts to your Desktop with SkyFonts.
-homepage:    https://www.fonts.com/web-fonts/google
-macos:
-  installer: Install Skyfonts
-  source:    http://cdn1.skyfonts.com/client/Monotype_SkyFonts_Mac64_5.9.2.1.dmg

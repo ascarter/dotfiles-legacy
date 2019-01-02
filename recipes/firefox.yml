@@ -1,6 +1,0 @@
-# firefox
-description: Firefox web browser
-homepage:    https://www.mozilla.org/en-US/firefox/
-macos:
-    app:    Firefox
-    source: https://download.mozilla.org/?product=firefox-latest-ssl&os=osx&lang=en-US
