@@ -1,39 +1,29 @@
 require 'erb'
 
-GIT_CONFIG_TEMPLATE = File.expand_path('templates/gitconfig')
 GIT_CONFIG = File.join(HOME_ROOT, '.gitconfig')
-GIT_IGNORE_TEMPLATE = File.expand_path('templates/gitignore')
 GIT_IGNORE = File.join(HOME_ROOT, '.gitignore')
 GITHUB_CONFIG = File.join(HOME_ROOT, '.config', 'hub')
 
 namespace 'git' do
   desc 'Update git config'
-  task :config do
-    # Set config file
-    Git::Config.file(GIT_CONFIG)
+  task :config => [ GIT_CONFIG, GIT_IGNORE ]
 
-    # Read current user and email if previously configured
-    if File.exist?(GIT_CONFIG)
-      userName = Git::Config.get('user.name')
-      userEmail = Git::Config.get('user.email')
-      userGPGKey = Git::Config.get('user.signingkey')
-      userDefaultSign = Git::Config.get('commit.gpgsign')
-    end
-
-    if userName.nil? || userName.empty?
-      # Get user and email
-      uinfo = Etc.getpwnam(Etc.getlogin)
-      userName = uinfo.gecos
-    end
-
-    # TODO: get email from the GitHub user that checked out the repo
-    # userEmail = '...'
-
-    # Set binding variables
-
+  file GIT_CONFIG => [ 'templates/gitconfig' ] do |t|
     # Write template to gitconfig file
-    erb = ERB.new(File.read(GIT_CONFIG_TEMPLATE))
-    File.write(GIT_CONFIG, erb.result(binding))
+    erb = ERB.new(File.read(t.source))
+    File.write(t.name, erb.result(binding))
+
+    # Set config file
+    Git::Config.file(t.name)
+
+    # Get user and email
+    uinfo = Etc.getpwnam(Etc.getlogin)
+    userName = uinfo.gecos
+    userEmail = Git::Config.get('user.email')
+
+    # Get GPG key (if any)
+    userGPGKey = Git::Config.get('user.signingkey')
+    userDefaultSign = Git::Config.get('commit.gpgsign')
 
     # Set user, email, and signing key
     name = prompt('user name', userName)
@@ -82,14 +72,15 @@ namespace 'git' do
     end
   end
 
-  desc 'Set global gitignore'
-  task :ignore do
-    erb = ERB.new(File.read(GIT_IGNORE_TEMPLATE))
-    File.write(GIT_IGNORE, erb.result(binding))
+  file GIT_IGNORE => [ 'templates/gitignore' ] do |t|
+    erb = ERB.new(File.read(t.source))
+    File.write(t.name, erb.result(binding))
   end
 
-  desc 'Reset config files for GitHub tools'
+  desc 'Reset config files for git'
   task :reset do
     rm GITHUB_CONFIG
+    rm GIT_IGNORE
+    rm GIT_CONFIG
   end
 end
