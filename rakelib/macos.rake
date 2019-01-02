@@ -30,7 +30,7 @@ if macOS?
         'ranger',
         'unar',
         'wget',
-        'universal-ctags/universal-ctags --HEAD'
+        '--HEAD universal-ctags'
       ],
       casks: [
         'android-file-transfer',

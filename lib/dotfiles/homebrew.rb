@@ -16,7 +16,7 @@ module Homebrew
   end
 
   def install(formula)
-    system "#{command} install #{formula}"
+    system "#{command} install #{formula}" unless installed?(formula)
   end
 
   def update
@@ -35,19 +35,27 @@ module Homebrew
     `#{command} list`.split
   end
 
+  def installed?(formula)
+    system("#{command} list #{formula}", out: File::NULL, err: File::NULL)
+  end
+
   def tap(repo)
-    `#{command} tap #{repo}`
+    `#{command} tap #{repo}` unless tap_installed?(repo)
   end
 
   def untap(repo)
     `#{command} tap #{repo}`
   end
 
+  def tap_installed?(repo)
+    system("#{command} tap | grep #{repo}", out: File::NULL, err: File::NULL)
+  end
+
   module Cask
     module_function
 
     def install(cask)
-      system "#{Homebrew.command} cask install #{cask}"
+      system "#{Homebrew.command} cask install #{cask}" unless installed?(cask)
     end
 
     def upgrade(cask)
@@ -60,6 +68,10 @@ module Homebrew
 
     def list
       `#{Homebrew.command} cask list`.split
+    end
+
+    def installed?(cask)
+      system("#{Homebrew.command} cask list #{cask}", out: File::NULL, err: File::NULL)
     end
   end
 end
