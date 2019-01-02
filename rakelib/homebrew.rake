@@ -9,7 +9,6 @@ task :env do
 end
 
 namespace 'homebrew' do
-  directory HOMEBREW_PREFIX
   file HOMEBREW_PREFIX do |t|
     sudo <<-END
       mkdir -p #{t.name}
