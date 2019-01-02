@@ -43,13 +43,13 @@ end
 
 def prompt(message, default = nil)
   print "#{message}#{" [#{default}]" unless default.nil?}: "
-  response = $stdin.gets.chomp
+  response = gets.chomp
   response.empty? ? default : response
 end
 
 def prompt_to_continue
   puts 'Press any key to continue'
-  $stdin.getch
+  getch
   puts "\n"
 end
 
