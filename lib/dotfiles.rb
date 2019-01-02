@@ -50,7 +50,8 @@ end
 
 def prompt_to_continue
   puts 'Press any key to continue'
-  getch
+  $stdin = IO.new(2) if $stdin.nil?
+  $stdin.getch
   puts "\n"
 end
 

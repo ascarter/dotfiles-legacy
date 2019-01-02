@@ -51,7 +51,6 @@ task :install => [
     :osinstall,
     'git:config',
     'ssh:config',
-    'ssh:github',
     :base_packages
   ]
 
