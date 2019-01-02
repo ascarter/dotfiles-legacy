@@ -1,28 +1,31 @@
-SSH_CONFIG = File.join(ssh_dir, 'config')
-SSH_KEYFILE = File.join(ssh_dir, 'id_rsa')
+require 'erb'
+
+SSH_DIR = File.join(HOME_ROOT, '.ssh')
+SSH_CONFIG = File.join(SSH_DIR, 'config')
+SSH_KEYFILE = File.join(SSH_DIR, 'id_rsa')
 
 namespace 'ssh' do
-  file SSH_KEYFILE do
-    email = Bootstrap.prompt('email', '')
-    system %Q(ssh-keygen -t rsa -b 4096 -C "#{email}" -f #{SSH_KEYFILE})
+  desc 'Configure ssh client'
+  task :config => [ SSH_DIR, SSH_CONFIG, SSH_KEYFILE ]
 
-    # Upload key to GitHub
-    Rake::Task['ssh:github'].invoke
+  directory SSH_DIR do |t|
+    chmod 'go=-rwx', t.name
   end
 
-  file SSH_CONFIG => [ 'sshconfig' ] do |t|
-    cp t.source, t.name
+  file SSH_KEYFILE => [ SSH_DIR ] do
+    email = prompt('email', '')
+    system %(ssh-keygen -t rsa -b 4096 -C "#{email}" -f #{t.name})
   end
 
-  desc 'Install ssh client support'
-  task :install => [ SSH_KEYFILE, SSH_CONFIG ]
+  file SSH_CONFIG => [ SSH_DIR, 'templates/sshconfig' ] do |t|
+    erb = ERB.new(File.read(t.sources[1]))
+    File.write(t.name, erb.result(binding))
+  end
 
   desc 'Add SSH key to GitHub and switch remote origin to SSH'
-  task :github do
-    pub_key_file = File.join(Bootstrap.ssh_dir, 'id_rsa')
-    raise 'Key file missing' unless File.exist? pub_key_file
-    `pbcopy < #{pub_key_file} && open "https://github.com/settings/ssh/new"`
-    Bootstrap.prompt_to_continue
+  task :github => [ SSH_KEYFILE ] do
+    sh %(pbcopy < #{pub_key_file} && open "https://github.com/settings/ssh/new")
+    prompt_to_continue
 
     # Switch GitHub enlistment to ssh
     Git.set_remote_ssh
