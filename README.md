@@ -28,3 +28,9 @@ $ rake
 ```
 
 Re-run will check for identical files and prompt if a replace will occur. Replace preserves existing file in `file.orig`
+
+## Layout
+
+There are two major components to this system. First is to manage what are usually known as `dotfiles` in Git. These are typically in the user's home directory and are preceeded with a `.` to hide them. Examples include `.profile` or `.bashrc`. When it is installed, many of the `.` files are symlinked into a user's home directory allowing for them to be version controlled. A subset of files are managed as templates and instead generate the files. These are useful for more customized files like `.gitconfig`.
+
+The other component is to help manage installing software packages. On macOS, this is mostly handled by Homebrew.
