@@ -1,9 +1,10 @@
 module NodeJS
+  module_function
+
   def version
     puts "Node.js: #{`/usr/local/bin/node --version`}"
     puts "npm:     #{`/usr/local/bin/npm --version`}"
   end
-  module_function :version
 end
 
 # NPM helpers
@@ -13,17 +14,17 @@ module NPM
 
   def install(pkg)
     puts "Installing npm package #{pkg}..."
-    Bootstrap.sudo "npm install --global #{pkg}"
+    sudo "npm install --global #{pkg}"
   end
 
   def update(pkg = '')
     puts "Updating npm package #{pkg}..."
-    Bootstrap.sudo "npm update --global #{pkg}"
+    sudo "npm update --global #{pkg}"
   end
 
   def uninstall(pkg)
     puts "Uninstalling npm package #{pkg}..."
-    Bootstrap.sudo "npm uninstall --global #{pkg}"
+    sudo "npm uninstall --global #{pkg}"
   end
 
   def installed?(pkg)

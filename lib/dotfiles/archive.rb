@@ -23,8 +23,10 @@ module Archive
             target = File.join(dest, sourcepath.fnmatch?("#{key}/**") ? relsource : File.join(key, relsource))
             sig = sourcepath.sub_ext('.sig')
             Verification.gpg(source, sig) if File.exist?(sig)
-            Bootstrap.sudo_mkdir File.dirname(target)
-            Bootstrap.sudo_cp source, target
+            sudo <<-EOF
+              mkdir #{File.dirname(target)}
+              cp #{source} #{target}
+            EOF
           end
         end
       end
@@ -41,13 +43,12 @@ module Archive
         targets = Dir.glob(File.join(dest, glob))
         targets.each do |t|
           if Dir.exist?(t)
-            Bootstrap.sudo_rmdir(t) if Bootstrap.dir_empty?(t)
+            sudo "rmdir #{t}" if Bootstrap.dir_empty?(t)
           else
-            Bootstrap.sudo_rm t
+            sudo "rm #{t}"
           end
         end
       end
     end
-    Bootstrap.dir_prune(dest)
   end
 end

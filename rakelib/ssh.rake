@@ -8,13 +8,14 @@ namespace 'ssh' do
   desc 'Configure ssh client'
   task :config => [ SSH_DIR, SSH_CONFIG, SSH_KEYFILE ]
 
-  directory SSH_DIR do |t|
+  directory SSH_DIR
+  file SSH_DIR do |t|
     chmod 'go=-rwx', t.name
   end
 
-  file SSH_KEYFILE => [ SSH_DIR ] do
-    email = prompt('email', '')
-    system %(ssh-keygen -t rsa -b 4096 -C "#{email}" -f #{t.name})
+  file SSH_KEYFILE => [ SSH_DIR ] do |t|
+    email = request_input('email', '')
+    sh %(ssh-keygen -t rsa -b 4096 -C "#{email}" -f #{t.name})
   end
 
   file SSH_CONFIG => [ SSH_DIR, 'templates/sshconfig' ] do |t|
@@ -24,7 +25,7 @@ namespace 'ssh' do
 
   desc 'Add SSH key to GitHub and switch remote origin to SSH'
   task :github => [ SSH_KEYFILE ] do
-    sh %(pbcopy < #{pub_key_file} && open "https://github.com/settings/ssh/new")
+    sh %(pbcopy < #{SSH_KEYFILE} && open "https://github.com/settings/ssh/new")
     prompt_to_continue
 
     # Switch GitHub enlistment to ssh

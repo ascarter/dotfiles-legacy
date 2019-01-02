@@ -26,14 +26,14 @@ namespace 'git' do
     userDefaultSign = Git::Config.get('commit.gpgsign')
 
     # Set user, email, and signing key
-    name = prompt('user name', userName)
+    name = request_input('user name', userName)
     Git::Config.set('user.name', name)
 
-    email = prompt('user email', userEmail)
+    email = request_input('user email', userEmail)
     Git::Config.set('user.email', email)
 
-    signingKey = prompt('user signingkey', userGPGKey)
-    defaultSign = prompt('gpgsign by default?', userDefaultSign == 'true' ? 'Y' : 'N')
+    signingKey = request_input('user signingkey', userGPGKey)
+    defaultSign = request_input('gpgsign by default?', userDefaultSign == 'true' ? 'Y' : 'N')
     if signingKey.nil? || signingKey.empty?
       Git::Config.unset('user.signingkey')
       Git::Config.unset('commit.gpgsign')

@@ -15,7 +15,7 @@ module MacOS
   end
 
   def run_applescript(script)
-    system "osascript \"#{script}\""
+    system %(osascript "#{script}")
   end
 
   def build_locatedb

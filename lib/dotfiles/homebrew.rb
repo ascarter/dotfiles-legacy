@@ -13,8 +13,6 @@ module Homebrew
 
   def command
     @cmd ||= File.join(@prefix || `brew --prefix`.strip, 'bin', 'brew')
-    raise 'Missing homebrew' unless @cmd
-    @cmd
   end
 
   def install(formula)

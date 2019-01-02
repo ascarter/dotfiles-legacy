@@ -1,3 +1,5 @@
+require 'io/console'
+
 require_relative 'dotfiles/apm'
 require_relative 'dotfiles/archive'
 require_relative 'dotfiles/downloader'
@@ -35,15 +37,19 @@ def require_windows
   raise 'Windows required' unless windows?
 end
 
+def request_input(message, default = nil)
+  prompt "Enter #{message}", default
+end
+
 def prompt(message, default = nil)
-  print "Enter #{message}#{" [#{default}]" unless default.nil?}: "
+  print "#{message}#{" [#{default}]" unless default.nil?}: "
   response = $stdin.gets.chomp
   response.empty? ? default : response
 end
 
 def prompt_to_continue
   puts 'Press any key to continue'
-  STDIN.getch
+  $stdin.getch
   puts "\n"
 end
 
@@ -51,18 +57,6 @@ end
 
 def home_dir
   File.expand_path(ENV['HOME'])
-end
-
-def ssh_dir
-  File.expand_path(File.join(home_dir, '.ssh'))
-end
-
-def config_dir
-  File.expand_path(File.join(home_dir, '.config'))
-end
-
-def library_dir
-  File.expand_path(File.join(home_dir, 'Library'))
 end
 
 def current_user
