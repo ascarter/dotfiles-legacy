@@ -43,7 +43,8 @@ end
 
 def prompt(message, default = nil)
   print "#{message}#{" [#{default}]" unless default.nil?}: "
-  response = gets.chomp
+  $stdin = IO.new(2) if $stdin.nil?
+  response = $stdin.gets.chomp
   response.empty? ? default : response
 end
 
