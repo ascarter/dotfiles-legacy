@@ -23,14 +23,9 @@ when /darwin/
   unless Dir.exist?('/Library/Developer/CommandLineTools') do
     system "/usr/bin/xcode-select --install"
   end
-when /linux/
-  # Linux pre-reqs
-when /windows/
-  # Windows pre-reqs
 end
 
 # Check if dotfiles installed
-if [[ ! -d ~/.dotfiles ]]; then
 unless Dir.exist?(DOTFILES_ROOT)
 	system "git clone https://github.com/ascarter/dotfiles #{DOTFILES_ROOT}"
 end
