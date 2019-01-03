@@ -47,16 +47,19 @@ namespace 'git' do
     end
 
     # Set git commit editor
-    Git::Config.set('core.editor', File.exist?(File.join(USR_LOCAL_ROOT, 'bin', 'bbedit')) ? 'bbedit --wait' : 'vim')
-    Git::Config.set('core.editor', 'vim')
+    editor = File.exist?(File.join(USR_LOCAL_ROOT, 'bin', 'bbedit')) ? 'bbedit --wait' : 'vim'
+    Git::Config.set('core.editor', editor)
 
     case RUBY_PLATFORM
     when /darwin/
       # Configure password caching
       Git::Config.set('credential.helper', 'osxkeychain')
 
-      Git::Config.set('diff.tool', File.exist?(File.join(USR_LOCAL_ROOT, 'bin', 'bbdiff')) ? 'bbdiff' : 'opendiff')
-      Git::Config.set('merge.tool', 'opendiff')
+      diff = File.exist?(File.join(USR_LOCAL_ROOT, 'bin', 'bbdiff')) ? 'bbdiff' : 'opendiff'
+      Git::Config.set('diff.tool', diff)
+
+      merge = 'opendiff'
+      Git::Config.set('merge.tool', merge)
 
       Git::Config.set('gui.fontui', '-family \"SF UI Display Regular\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0')
       Git::Config.set('gui.fontdiff', '-family Menlo -size 12 -weight normal -slant roman -underline 0 -overstrike 0')
