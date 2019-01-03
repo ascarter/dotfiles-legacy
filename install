@@ -36,4 +36,5 @@ end
 
 # Run initial bootstrap
 FileUtils.cd DOTFILES_ROOT
-Rake::Application.run()
+app = Rake::Application.new()
+app.run()
