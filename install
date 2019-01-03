@@ -14,15 +14,19 @@ DOTFILES_ROOT = File.join(File.expand_path(ENV['HOME']), '.dotfiles')
 case RUBY_PLATFORM
 when /darwin/
   # macOS pre-reqs
-  unless File.exist?('/usr/bin/xcode-select') do
+  unless File.exist?('/usr/bin/xcode-select')
     puts "Xcode required. Install from macOS app store."
     system "open https://itunes.apple.com/us/app/xcode/id497799835?mt=12"
     exit(false)
   end
 
-  unless Dir.exist?('/Library/Developer/CommandLineTools') do
+  unless Dir.exist?('/Library/Developer/CommandLineTools')
     system "/usr/bin/xcode-select --install"
   end
+when /linux/
+  # Linux pre-reqs
+when /windows/
+  # Windows pre-reqs
 end
 
 # Check if dotfiles installed
