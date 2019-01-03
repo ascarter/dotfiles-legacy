@@ -13,6 +13,7 @@ require_relative 'lib/dotfiles'
 VOLUME_ROOT = ENV['DOTFILES_VOLUME'] || '/'
 HOME_ROOT = ENV['DOTFILES_VOLUME'] ? File.join(VOLUME_ROOT, 'home') : home_dir
 USR_LOCAL_ROOT = File.join(VOLUME_ROOT, 'usr', 'local')
+USR_LOCAL_SUBDIRS = %w(bin lib share/man).map { |d| File.join(USR_LOCAL_ROOT, d) }
 SOURCE_PATHMAP_SPEC = "%{^src/,#{HOME_ROOT}/}p"
 
 task :env do
@@ -46,7 +47,7 @@ task :default => [ :install ]
 desc 'Install dotfiles'
 task :install => [
     VOLUME_ROOT,
-    USR_LOCAL_ROOT,
+    :usr_local,
     :link_sources,
     :osinstall,
     'git:config',
@@ -59,9 +60,16 @@ task :uninstall => [ 'homebrew:uninstall', :clobber ]
 
 directory VOLUME_ROOT
 
-directory USR_LOCAL_ROOT
+task :usr_local => [ USR_LOCAL_ROOT ] + USR_LOCAL_SUBDIRS
+
 file USR_LOCAL_ROOT do |t|
-  %w(bin lib share/man).each { |d| sudo %(mkdir -p "#{File.join(t.name, d)}") }
+  sudo "mkdir -p #{USR_LOCAL_ROOT}"
+end
+
+USR_LOCAL_SUBDIRS.each do |d|
+  file d do |t|
+    sudo %(mkdir -p "#{t.name}")
+  end
 end
 
 # Generate tasks to create symlinks for config files in src
