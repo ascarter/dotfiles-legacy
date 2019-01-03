@@ -43,7 +43,7 @@ task :base_packages
 
 task :default => [ :install ]
 
-desc 'Install configuration'
+desc 'Install dotfiles'
 task :install => [
     VOLUME_ROOT,
     USR_LOCAL_ROOT,
@@ -53,6 +53,9 @@ task :install => [
     'ssh:config',
     :base_packages
   ]
+
+desc 'Uninstall dotfiles'
+task :uninstall => [ 'homebrew:uninstall', :clobber ]
 
 directory VOLUME_ROOT
 
