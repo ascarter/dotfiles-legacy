@@ -6,7 +6,6 @@
 # Install script for dotfiles
 #
 
-require 'fileutils'
 require 'rake'
 
 DOTFILES_ROOT = File.join(File.expand_path(ENV['HOME']), '.dotfiles')
@@ -16,12 +15,12 @@ when /darwin/
   # macOS pre-reqs
   unless File.exist?('/usr/bin/xcode-select')
     puts "Xcode required. Install from macOS app store."
-    system "open https://itunes.apple.com/us/app/xcode/id497799835?mt=12"
+    sh "open https://itunes.apple.com/us/app/xcode/id497799835?mt=12"
     exit(false)
   end
 
   unless Dir.exist?('/Library/Developer/CommandLineTools')
-    system "/usr/bin/xcode-select --install"
+    sh "/usr/bin/xcode-select --install"
   end
 when /linux/
   # Linux pre-reqs
@@ -31,11 +30,10 @@ end
 
 # Check if dotfiles installed
 unless Dir.exist?(DOTFILES_ROOT)
-	system "git clone https://github.com/ascarter/dotfiles #{DOTFILES_ROOT}"
+	sh "git clone https://github.com/ascarter/dotfiles #{DOTFILES_ROOT}"
 end
 
 # Run initial bootstrap
-
 cd DOTFILES_ROOT
 app = Rake::Application.new()
 app.init
