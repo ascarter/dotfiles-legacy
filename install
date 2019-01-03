@@ -35,7 +35,11 @@ unless Dir.exist?(DOTFILES_ROOT)
 end
 
 # Run initial bootstrap
-FileUtils.cd DOTFILES_ROOT
-puts FileUtils.pwd
+
+cd DOTFILES_ROOT
 app = Rake::Application.new()
-app.run()
+app.init
+app.load_rakefile
+
+task = Rake::Task['default']
+task.invoke
