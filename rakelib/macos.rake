@@ -35,8 +35,10 @@ if macOS?
       casks: [
         'android-file-transfer',
         'android-studio',
+        'bbedit',
         'coderunner',
-        'nightowl'
+        'nightowl',
+        'xquartz'
       ]
 	  }
 
