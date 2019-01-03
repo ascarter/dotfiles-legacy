@@ -1,32 +1,40 @@
-#  -*- mode: unix-shell-script; -*-
+#  -*- mode: ruby; -*-
 
-#!/bin/sh
+#!/usr/bin/env ruby
 
 #
 # Install script for dotfiles
-# Run this script on a new install of macOS
 #
 
-function pause() {
-	read -rsp $'Press any key to continue...\n' -n1 key
-}
+require 'fileutils'
+require 'rake'
 
-if [[ -z `which xcode-select` ]]; then
-	echo "Install Xcode from macOS app store."
-	open https://itunes.apple.com/us/app/xcode/id497799835?mt=12
-	exit 1
-fi
+DOTFILES_ROOT = File.join(File.expand_path(ENV['HOME']), '.dotfiles')
 
-# Check for Xcode command line tools
-if [[ ! -d /Library/Developer/CommandLineTools ]]; then
-	xcode-select --install
-fi
+case RUBY_PLATFORM
+when /darwin/
+  # macOS pre-reqs
+  unless File.exist?('/usr/bin/xcode-select') do
+    puts "Xcode required. Install from macOS app store."
+    system "open https://itunes.apple.com/us/app/xcode/id497799835?mt=12"
+    exit(false)
+  end
+
+  unless Dir.exist?('/Library/Developer/CommandLineTools') do
+    system "/usr/bin/xcode-select --install"
+  end
+when /linux/
+  # Linux pre-reqs
+when /windows/
+  # Windows pre-reqs
+end
 
 # Check if dotfiles installed
 if [[ ! -d ~/.dotfiles ]]; then
-	git clone https://github.com/ascarter/dotfiles ~/.dotfiles
-fi
+unless Dir.exist?(DOTFILES_ROOT)
+	system "git clone https://github.com/ascarter/dotfiles #{DOTFILES_ROOT}"
+end
 
 # Run initial bootstrap
-cd ~/.dotfiles
-rake
+FileUtils.cd DOTFILES_ROOT
+Rake::Application.run()

@@ -30,7 +30,7 @@ namespace 'homebrew' do
   task :uninstall do
     raise('Homebrew not installed') unless Dir.exist?(HOMEBREW_PREFIX)
     sudo "rm #{HOMEBREW_PATH_HELPER}" if File.exist?(HOMEBREW_PATH_HELPER)
-    sudo %(ruby -e 'puts ARGV' -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)" -- --path=#{HOMEBREW_PREFIX})
+    sudo %(ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)" -- --path=#{HOMEBREW_PREFIX})
     sudo "rm -Rf #{HOMEBREW_PREFIX}" if Dir.exist?(HOMEBREW_PREFIX)
   end
 end
