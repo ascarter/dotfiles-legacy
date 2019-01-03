@@ -30,7 +30,7 @@ end
 
 # Check if dotfiles installed
 unless Dir.exist?(DOTFILES_ROOT)
-	sh "git clone https://github.com/ascarter/dotfiles #{DOTFILES_ROOT}"
+  sh "git clone https://github.com/ascarter/dotfiles #{DOTFILES_ROOT}"
 end
 
 # Run initial bootstrap
