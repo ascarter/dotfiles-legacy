@@ -10,6 +10,6 @@ resetvideo() {
 }
 
 resetav() {
-	resetaudio()
-	resetvideo()
+	resetaudio
+	resetvideo
 }
