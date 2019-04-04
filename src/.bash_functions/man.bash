@@ -13,4 +13,3 @@ manx() {
 # Open man page as PDF
 # On Mac OS X, uses Preview.app
 pman() { man -t ${@} | open -f -a /Applications/Preview.app ; }
-

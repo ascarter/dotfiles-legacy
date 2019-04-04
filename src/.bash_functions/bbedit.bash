@@ -1,14 +1,15 @@
 #  -*- mode: unix-shell-script; -*-
 
-# If the bb command is called without an argument, launch BBEdit
-# If bb is passed a directory, cd to it and open it in BBEdit
-# If bb is passed a file, open it in BBEdit
+# Open BBEdit
 bb() {
+	# If the bb command is called without an argument, launch BBEdit
 	if [[ -z "$1" ]]; then
 		bbedit --launch
 	else
+		# If bb is passed a file, open it in BBEdit
 		bbedit "$1"
 		if [[ -d "$1" ]]; then
+			# If bb is passed a directory, cd to it
 			cd "$1"
 		fi
 	fi
@@ -17,6 +18,11 @@ bb() {
 # Open URL source in BBEdit
 bbcurl() {
 	(curl -L $*) | bbedit --new-window +1 -t curl
+}
+
+# Open manpage in BBEdit
+bbman() {
+	MANWIDTH=80 MANPAGER='col -bx' man ${@} | bbedit --clean --view-top --language Manpage -t "man ${@}"
 }
 
 # Run make and send results to bbresults
@@ -46,7 +52,7 @@ bbdebug() {
 		LogExceptions
 		IncludeBacktraceWhenLoggingExceptions
 	)
-	
+
 	case "$cmd" in
 	on)
 		for key in "${keys[@]}"; do
