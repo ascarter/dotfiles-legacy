@@ -220,6 +220,11 @@ if [ -n "`which swift`" ]; then
 	eval "`swift package completion-tool generate-bash-script`"
 fi
 
+# Source Rust completion
+if [ -n "`which rustup`" ]; then
+	eval "`rustup completions bash`"
+fi
+
 # Source AWS CLI completion
 if [ -f ${HOMEBREW_PREFIX}/Caskroom/awscli-bundled/lib/bin/aws_completer ]; then
 	complete -C ${HOMEBREW_PREFIX}/Caskroom/awscli-bundled/lib/bin/aws_completer aws
