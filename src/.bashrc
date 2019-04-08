@@ -55,6 +55,11 @@ if [ -d ~/Library/Android/sdk ]; then
 	export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 fi
 
+# Rust
+if [ -d ~/.cargo ]; then
+	export PATH="$HOME/.cargo/bin:$PATH"
+fi
+
 # ========================================
 # Applications/services
 # ========================================
@@ -216,8 +221,8 @@ if [ -n "`which swift`" ]; then
 fi
 
 # Source AWS CLI completion
-if [ -f /usr/local/aws/bin/aws_bash_completer ]; then
-	complete -C /usr/local/aws/bin/aws_completer aws
+if [ -f ${HOMEBREW_PREFIX}/Caskroom/awscli-bundled/lib/bin/aws_completer ]; then
+	complete -C ${HOMEBREW_PREFIX}/Caskroom/awscli-bundled/lib/bin/aws_completer aws
 fi
 
 # Homebrew - will also call user's ~/.bash_completion too
