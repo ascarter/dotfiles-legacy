@@ -17,7 +17,7 @@ bb() {
 
 # Open URL source in BBEdit
 bbcurl() {
-	(curl -L $*) | bbedit --new-window +1 -t curl
+	(curl "$@") | bbedit --new-window +1 -t curl
 }
 
 # Open manpage in BBEdit
