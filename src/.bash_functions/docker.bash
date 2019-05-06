@@ -1,5 +1,92 @@
 #  -*- mode: unix-shell-script; -*-
 
+# Run command in container with local directory mounted
+# Useful for scripting languages like Ruby, Python, and Node
+# Usage: docker_cmd <image> <bin> <cmd> [args]
+docker_cmd() {
+	local image=$1; shift
+	local bin=$1; shift
+	local cmd=$1; shift
+	local args=$*
+	docker run -it --rm -v "$PWD":/usr/src/app -w /usr/src/app ${image} ${bin} ${cmd} ${args}
+}
+
+# Override DOCKER_RUBY_VERSION for specific Ruby version (default to latest)
+DOCKER_RUBY_VERSION=${DOCKER_RUBY_VERSION:-latest}
+
+# Run script using Ruby version in docker
+# Usage: docker_ruby <bin> <cmd> [args]
+docker_ruby() {
+	docker_cmd ruby:${DOCKER_RUBY_VERSION} $*
+}
+
+drb() {
+	docker_ruby ruby $*
+}
+
+dgem() {
+	docker_ruby gem $*
+}
+
+dbundle() {
+	docker_ruby bundle $*
+}
+
+# Override DOCKER_NODE_VERSION for specific Node version (default to latest)
+DOCKER_NODE_VERSION=${DOCKER_RUBY_VERSION:-latest}
+
+# Run script using node version in docker
+# Usage: docker_node <bin> <cmd> [args]
+docker_node() {
+	docker_cmd node:${DOCKER_NODE_VERSION} $*
+}
+
+dnode() {
+	docker_node node $*
+}
+
+dnpm() {
+	docker_node npm $*
+}
+
+
+#  -*- mode: unix-shell-script; -*-
+
+# Override DOCKER_PYTHON_VERSION for specific Python version (default to latest)
+DOCKER_PYTHON_VERSION=${DOCKER_PYTHON_VERSION:-latest}
+
+# Run script using Python version in docker
+# Usage: docker_python <bin> <cmd> [args]
+docker_python() {
+	docker_cmd python:${DOCKER_PYTHON_VERSION} $*
+}
+
+dpy() {
+	docker_python python $*
+}
+
+dpip() {
+	docker_python pip $*
+}
+
+# Override DOCKER_GO_VERSION for specific Go version (default to latest)
+DOCKER_GO_VERSION=${DOCKER_GO_VERSION:-latest}
+
+# Run script using Go version in docker
+# Usage: docker_go <bin> <cmd> [args]
+docker_go() {
+	docker_cmd golang:${DOCKER_GO_VERSION} $*
+}
+
+dgo() {
+	docker_go go $*
+}
+
+dgomake() {
+	docker_go make $*
+}
+
+# Remove all matching images
 dockerrmi() {
 	if [[ -z "$1" ]]; then
 		local images=$(docker images --quiet --filter "dangling=true")
@@ -23,77 +110,4 @@ dockercleanup() {
 	if [[ -n "${images}" ]]; then
 		docker rmi --force ${images}
 	fi
-}
-
-# Run app via docker
-dk() {
-	# Usage: dk <cmd> <app> [args]
-	local cmd=$1; shift
-	local app=$1; shift
-	local args=$*
-	
-	local name_prefix="${USER}_"
-	local name="${name_prefix}${app}"
-	local drun="docker run --rm --name=${name}"
-	
-	# Set docker run arguments
-	case "${app}" in
-		go)
-			drun+=" -it -v ${PWD}:/go/src/app -w /go/src/app go go"
-			;;
-		memcached)
-			drun+=" -d -p 11211:11211 memcached"
-			;;
-		node)
-			drun+=" -it -v ${PWD}:/usr/src/app -w /usr/src/app node node"
-			;;
-		redis)
-			drun+=" -d -p 6379:6379 redis"
-			;;
-		redis-cli)
-			drun+=" -it --link ${name_prefix}redis:redis redis redis-cli -h redis -p 6379"
-			;;
-		postgres)
-			drun+=" -d -p 5432:5432 -e POSTGRES_PASSWORD=password postgres"
-			;;
-		psql)
-			drun+=" -it --link ${name_prefix}postgres:postgres postgres psql -h postgres -U postgres -W"
-			;;
-		*)
-			if [ -z "${cmd}" ] || [ "${cmd}" != "ps" ]; then
-				echo "Usage: dk <cmd> <app> [args]"
-				echo ""
-				echo "Commands:"
-				echo "    start -- start app"
-				echo "    stop  -- stop app"
-				echo "    bash  -- start bash shell in app container"
-				echo "    ps    -- show process status"
-				echo ""
-				echo "Apps:"
-				echo "    memcached"
-				echo "    redis"
-				echo "    redis-cli"
-				echo "    postgres"
-				echo "    psql"
-				echo "    node"
-				return 1
-			fi
-			;;
-	esac
-
-	# Handle command
-	case ${cmd} in
-		start)
-			${drun} ${args}
-			;;
-		stop)
-			docker stop $(docker ps -f name=${name} -q)
-			;;
-		shell)
-			docker exec -it $(docker ps -f name=${name} -q) bash
-			;;
-		ps)
-			docker ps -f name=${name}
-			;;
-	esac
 }
