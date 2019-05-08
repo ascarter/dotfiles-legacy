@@ -15,6 +15,11 @@ bb() {
 	fi
 }
 
+# Run rubocop and send results to bbresults
+bbcop() {
+	(rubocop --format emacs "$@") | bbresults -p "(?P<file>.+?):(?P<line>\d+):(?P<col>\d+):\s+(?P<type>[CWEF]):\s+(?P<msg>.*)$"
+}
+
 # Open URL source in BBEdit
 bbcurl() {
 	(curl "$@") | bbedit --new-window +1 -t curl
