@@ -12,8 +12,8 @@ module Pip
     cmd = "pip uninstall --yes #{package}"
     use_sudo ? sudo(cmd) : exec(cmd)
   end
-  
+
   def bootstrap
-    sh 'curl https://bootstrap.pypa.io/get-pip.py | python - --user'
+    system 'curl https://bootstrap.pypa.io/get-pip.py | python - --user'
   end
 end

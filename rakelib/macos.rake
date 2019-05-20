@@ -7,22 +7,21 @@ if macOS?
   file ICLOUD_LINK => ICLOUD_SOURCE do |t|
     ln_s t.source, t.name
   end
-  
+
   PIP = File.join(home_dir, 'Library', 'Python', '2.7', 'bin', 'pip')
-  file PIP
+  file PIP do
     Pip.bootstrap
   end
 
-	task :osinstall => [ ICLOUD_LINK, 'homebrew:install' ] do
-	  puts "Start locate database rebuild job..."
+  task :osinstall => [ICLOUD_LINK, PIP, 'homebrew:install'] do
     MacOS.build_locatedb
-	end
+  end
 
-	task :base_packages do
-	  # Set homebrew
-	  Homebrew.prefix HOMEBREW_PREFIX
+  task :base_packages do
+    # Set homebrew
+    Homebrew.prefix HOMEBREW_PREFIX
 
-	  packages = {
+    packages = {
       taps: [
         'universal-ctags/universal-ctags'
       ],
@@ -45,7 +44,7 @@ if macOS?
         'nightowl',
         'xquartz'
       ]
-	  }
+    }
 
     Homebrew.collection packages
   end

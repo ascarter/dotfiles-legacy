@@ -19,6 +19,8 @@ module MacOS
   end
 
   def build_locatedb
-    sudo 'launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist'
+    domain = 'com.apple.locate'
+    locate_plist = '/System/Library/LaunchDaemons/com.apple.locate.plist'
+    sudo "launchctl list #{domain} 2&>1 > /dev/null || launchctl load -w #{locate_plist}"
   end
 end
