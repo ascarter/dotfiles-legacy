@@ -7,6 +7,11 @@ if macOS?
   file ICLOUD_LINK => ICLOUD_SOURCE do |t|
     ln_s t.source, t.name
   end
+  
+  PIP = File.join(home_dir, 'Library', 'Python', '2.7', 'bin', 'pip')
+  file PIP
+    Pip.bootstrap
+  end
 
 	task :osinstall => [ ICLOUD_LINK, 'homebrew:install' ] do
 	  puts "Start locate database rebuild job..."
