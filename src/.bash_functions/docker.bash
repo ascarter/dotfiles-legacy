@@ -20,7 +20,7 @@ docker_ruby() {
 	docker_cmd ruby:${DOCKER_RUBY_VERSION} $*
 }
 
-drb() {
+druby() {
 	docker_ruby ruby $*
 }
 
