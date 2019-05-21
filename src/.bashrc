@@ -70,11 +70,6 @@ if [ -n "`which hub`" ]; then
 	eval "$(hub alias -s)"
 fi
 
-# MacVim
-if [ -d /Applications/MacVim.app ]; then
-	export PATH=/Applications/MacVim.app/Contents/bin:${PATH}
-fi
-
 # ========================================
 # Shell functions
 # ========================================
