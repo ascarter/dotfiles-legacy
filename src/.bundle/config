@@ -1,5 +1,0 @@
----
-BUNDLE_GEM__TEST: "minitest"
-BUNDLE_GEM__MIT: "true"
-BUNDLE_GEM__COC: "false"
-BUNDLE_DEFAULT_INSTALL_USES_PATH: "true"
