@@ -209,7 +209,7 @@ esac
 
 # Source docker completion
 if [ -d /Applications/Docker.app ]; then
-	for f in docker docker-compose; do
+	for f in docker docker-compose docker-machine; do
 		source /Applications/Docker.app/Contents/Resources/etc/${f}.bash-completion
 	done
 fi
