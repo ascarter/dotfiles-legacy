@@ -37,6 +37,9 @@ Darwin )
 	alias bbpb='pbpaste | bbedit --clean --view-top'
 	alias bbtags='bbedit --maketags'
 
+	# YubiKey
+	alias ykman='/Applications/YubiKey\ Manager.app/Contents/MacOS/ykman'
+
 	# Dev tools
 	alias gtower='gittower "$(P=$(pwd); while [[ "$P" != "" && ! -e "$P/.git" ]]; do P=${P%/*}; done; echo "$P")"'
 	alias extags='/opt/homebrew/bin/ctags'
