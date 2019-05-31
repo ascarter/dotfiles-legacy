@@ -251,6 +251,12 @@ if [ -n "`which pip`" ]; then
 	eval "`pip completion --bash`"
 fi
 
+# Enable GPG for SSH
+if [ -S $(gpgconf --list-dirs agent-ssh-socket) ]; then
+	export GPG_TTY=$(tty)
+	export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+fi
+
 # ========================================
 # Per-machine extras
 # ========================================
