@@ -16,10 +16,10 @@ export PROJECTS_HOME=${PROJECTS_HOME:-${HOME}/Projects}
 # ========================================
 
 # Enable GPG for SSH
-if [ -S $(gpgconf --list-dirs agent-ssh-socket) ]; then
-	export GPG_TTY=$(tty)
-	export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-fi
+# if [ -S $(gpgconf --list-dirs agent-ssh-socket) ]; then
+# 	export GPG_TTY=$(tty)
+# 	export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+# fi
 
 # ========================================
 # Languages/frameworks
