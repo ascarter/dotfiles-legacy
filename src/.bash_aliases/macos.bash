@@ -47,6 +47,7 @@ Darwin )
 	alias vmrun='/Applications/VMware\ Fusion.app/Contents/Library/vmrun'
 	alias terminal-notifier='/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier'
 	alias verifyxcode='spctl --assess --verbose /Applications/Xcode.app'
+	alias sketchtool="$(mdfind kMDItemCFBundleIdentifier == 'com.bohemiancoding.sketch3' | head -n 1)/Contents/Resources/sketchtool/bin/sketchtool"
 
 	# Java
 	alias java_home='/usr/libexec/java_home'
