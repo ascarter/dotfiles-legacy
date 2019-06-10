@@ -52,7 +52,7 @@ if [ -d ~/Library/Python/3.7 ]; then
 fi
 
 if [ -d ~/Library/Python/2.7 ]; then
-	export PATH=${PATH}:~/Library/Python/2.7/bin
+	export PATH=~/Library/Python/2.7/bin:${PATH}
 fi
 
 # Java
