@@ -47,12 +47,12 @@ if [ -d /Library/Frameworks/Python.framework/Versions/3.7 ]; then
 	export PATH=/Library/Frameworks/Python.framework/Versions/3.7/bin:${PATH}
 fi
 
-if [ -d ~/Library/Python/2.7 ]; then
-	export PATH=~/Library/Python/2.7/bin:${PATH}
-fi
-
 if [ -d ~/Library/Python/3.7 ]; then
 	export PATH=~/Library/Python/3.7/bin:${PATH}
+fi
+
+if [ -d ~/Library/Python/2.7 ]; then
+	export PATH=${PATH}:~/Library/Python/2.7/bin
 fi
 
 # Java
