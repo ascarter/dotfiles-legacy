@@ -48,6 +48,8 @@ if [ -d /Library/Frameworks/Python.framework/Versions/3.7 ]; then
 fi
 
 if [ -d ~/Library/Python/3.7 ]; then
+	export LC_ALL=en_US.UTF-8
+	export LANG=en_US.UTF-8
 	export PATH=~/Library/Python/3.7/bin:${PATH}
 fi
 
