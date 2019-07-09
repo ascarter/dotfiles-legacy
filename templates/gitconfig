@@ -57,7 +57,7 @@
 	k = !gitk
 	ksdiff = difftool -y --tool=Kaleidoscope
 	ksmerge = mergetool -y --tool=Kaleidoscope
-	last = log -l HEAD -n 1
+	last = log --show-signature -l HEAD -n 1
 	ll = log --pretty=format:\"%C(yellow)%h %C(green)%ad %cn %Cred%d %Creset%s\" --decorate --numstat --date=short
 	llog = log --date=local
 	logb = log master..HEAD --pretty=oneline
