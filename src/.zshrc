@@ -167,12 +167,12 @@ alias rst='resize -s 0 120'
 # BBEdit aliases
 
 # Docker aliases
-alias druby=docker_ruby ruby
-alias dgem=docker_ruby gem
-alias dbundle=docker_ruby bundle
-alias dnode=docker_node node
-alias dnpm-docker_node npm
-alias dgo=docker_go go
-alias dgomake=docker_go make
-alias dpy=docker_python python
-alias dpip=docker_python pip
+alias druby="docker_ruby ruby"
+alias dgem="docker_ruby gem"
+alias dbundle="docker_ruby bundle"
+alias dnode="docker_node node"
+alias dnpm="docker_node npm"
+alias dgo="docker_go go"
+alias dgomake="docker_go make"
+alias dpy="docker_python python"
+alias dpip="docker_python pip"
