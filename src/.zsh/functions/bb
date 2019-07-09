@@ -3,6 +3,8 @@
 # Open BBEdit
 # If the bb command is called without an argument, launch BBEdit
 
+emulate -L zsh
+
 if [[ -z "$1" ]]; then
 	bbedit --launch
 else

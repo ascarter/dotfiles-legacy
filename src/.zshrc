@@ -1,6 +1,6 @@
 #  -*- mode: unix-shell-script; -*-
 
-fpath=(~/.zsh_local/functions ~/.zsh/functions ~/.zsh/prompts /opt/homebrew/share/zsh/site-functions /opt/homebrew/share/zsh-completions $fpath)
+fpath=(${ZDOTDIR:-$HOME/.zsh}/functions ${ZDOTDIR:-$HOME/.zsh}/prompts /opt/homebrew/share/zsh/site-functions /opt/homebrew/share/zsh-completions $fpath)
 
 autoload -U compinit
 compinit -u
@@ -11,11 +11,7 @@ promptinit
 autoload -U colors
 colors
 
-autoload -U ~/.zsh/functions/[^_]*(:t)
-if [ -d ~/.zsh_local/functions ]; then
-    autoload -U ~/.zsh_local/functions/*(:t)
-fi
-
+autoload -U ${ZDOTDIR:-$HOME/.zsh}/functions/[^_]*(:t)
 autoload add-zsh-hook
 
 # Load git prompt
@@ -53,6 +49,21 @@ prompt ascarter
 # ========================================
 # Shell preferences
 # ========================================
+
+# Retain history across multiple zsh sessions
+HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+setopt SHARE_HISTORY
+setopt APPEND_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_REDUCE_BLANKS
+SAVEHIST=5000
+HISTSIZE=2000
+
+# Enable corrections
+setopt CORRECT
+setopt CORRECT_ALL
 
 # Editor
 if [ -e /usr/local/bin/bbedit ]; then
@@ -165,6 +176,7 @@ alias rs='resize -s 40 120'
 alias rst='resize -s 0 120'
 
 # BBEdit aliases
+alias bbmake="bbr make"
 
 # Docker aliases
 alias druby="docker_ruby ruby"
@@ -176,3 +188,15 @@ alias dgo="docker_go go"
 alias dgomake="docker_go make"
 alias dpy="docker_python python"
 alias dpip="docker_python pip"
+
+# Java aliases
+alias java6="set_jvm 1.6"
+alias java7="set_jvm 1.7"
+alias java8="set_jvm 1.8"
+alias java9="set_jvm 9"
+alias java10="set_jvm 10"
+alias java11="set_jvm 11"
+alias java12="set_jvm 12"
+
+# Shortcuts
+alias projects='cd ${PROJECTS_HOME}'

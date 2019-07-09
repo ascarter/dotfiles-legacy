@@ -1,6 +1,9 @@
 #  -*- mode: unix-shell-script; -*-
 
 # Set or turn off bbedit debug expert prefs
+
+emulate -L zsh
+
 local cmd=${1:-status}
 
 local keys=(

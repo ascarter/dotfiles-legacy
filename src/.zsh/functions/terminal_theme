@@ -1,5 +1,7 @@
 #  -*- mode: unix-shell-script; -*-
 
+emulate -L zsh
+
 # Specify terminal themes for directory colors
 # man ls -> find LSCOLORS
 #     LSCOLORS        The value of this variable describes what color to use

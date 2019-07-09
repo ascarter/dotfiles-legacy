@@ -1,15 +1,19 @@
 #  -*- mode: unix-shell-script; -*-
 
-resetaudio() {
+emulate -L zsh
+
+_resetaudio() {
 	sudo killall coreaudiod
 }
 
-resetvideo() {
+_resetvideo() {
 	sudo killall VDCAssistant
 	sudo killall AppleCameraAssistant
 }
 
-resetav() {
-	resetaudio
-	resetvideo
+_resetav() {
+	_resetaudio
+	_resetvideo
 }
+
+resetav "$@"

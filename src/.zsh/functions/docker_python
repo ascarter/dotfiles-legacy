@@ -5,4 +5,7 @@ DOCKER_PYTHON_VERSION=${DOCKER_PYTHON_VERSION:-latest}
 
 # Run script using Python version in docker
 # Usage: docker_python <bin> <cmd> [args]
+
+emulate -L zsh
+
 docker_cmd python:${DOCKER_PYTHON_VERSION} $*

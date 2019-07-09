@@ -1,6 +1,9 @@
 #  -*- mode: unix-shell-script; -*-
 
 # Remove all images including intermediate
+
+emulate -L zsh
+
 if [[ -z "$1" ]]; then
 	local images=$(docker images --quiet --all --filter "dangling=true")
 else
