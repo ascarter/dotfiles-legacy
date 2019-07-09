@@ -342,7 +342,7 @@ Darwin )
 	# Dev tools
 	alias extags='/opt/homebrew/bin/ctags'
 	alias verifyxcode='spctl --assess --verbose /Applications/Xcode.app'
-	alias sketchtool="$(mdfind kMDItemCFBundleIdentifier == 'com.bohemiancoding.sketch3' | head -n 1)/Contents/Resources/sketchtool/bin/sketchtool"
+	alias sketchtool="$(mdfind kMDItemCFBundleIdentifier = 'com.bohemiancoding.sketch3' | head -n 1)/Contents/Resources/sketchtool/bin/sketchtool"
 
 	# Java
 	alias java_home='/usr/libexec/java_home'
