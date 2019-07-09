@@ -363,3 +363,11 @@ Linux )
 	alias xlock='xscreensaver-command -lock'
 	;;
 esac
+
+
+# ========================================
+# Per-machine extras
+# ========================================
+if [ -e ~/.zsh_local ]; then
+	source ~/.zsh_local
+fi
