@@ -6,9 +6,21 @@
 
 emulate -L zsh
 
-local image=$1; shift
-local bin=$1; shift
-local cmd=$1; shift
+if [[ $# > 0 ]]; then
+	local image=$1
+	shift
+fi
+
+if [[ $# > 0 ]]; then
+	local bin=$1
+	shift
+fi
+
+if [[ $# > 0 ]]; then
+	local cmd=$1
+	shift
+fi
+
 local args=$*
 
 docker run -it --rm -v "$PWD":/usr/src/app -w /usr/src/app ${image} ${bin} ${cmd} ${args}
