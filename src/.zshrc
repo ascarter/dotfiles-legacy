@@ -65,6 +65,11 @@ HISTSIZE=2000
 setopt CORRECT
 setopt CORRECT_ALL
 
+# Key mappings
+
+# Forward delete
+bindkey "^[[3~" delete-char
+
 # Editor
 if [ -e /usr/local/bin/bbedit ]; then
 	# bbedit
