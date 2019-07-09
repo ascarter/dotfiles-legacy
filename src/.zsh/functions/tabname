@@ -1,0 +1,4 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Set tab name
+printf "\e]1;${1}\a"

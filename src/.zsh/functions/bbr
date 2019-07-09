@@ -1,0 +1,5 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Run command and send results to bbresults
+# filters any leading whitespace
+($* 2>&1) | sed -e 's/^[ \t]*//' | bbresults --errors-default

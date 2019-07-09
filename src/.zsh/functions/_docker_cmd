@@ -1,0 +1,10 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Run command in container with local directory mounted
+# Useful for scripting languages like Ruby, Python, and Node
+# Usage: docker_cmd <image> <bin> <cmd> [args]
+local image=$1; shift
+local bin=$1; shift
+local cmd=$1; shift
+local args=$*
+docker run -it --rm -v "$PWD":/usr/src/app -w /usr/src/app ${image} ${bin} ${cmd} ${args}

@@ -1,0 +1,8 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Override DOCKER_PYTHON_VERSION for specific Python version (default to latest)
+DOCKER_PYTHON_VERSION=${DOCKER_PYTHON_VERSION:-latest}
+
+# Run script using Python version in docker
+# Usage: docker_python <bin> <cmd> [args]
+_docker_cmd python:${DOCKER_PYTHON_VERSION} $*

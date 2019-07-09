@@ -1,0 +1,8 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Override DOCKER_GO_VERSION for specific Go version (default to latest)
+DOCKER_GO_VERSION=${DOCKER_GO_VERSION:-latest}
+
+# Run script using Go version in docker
+# Usage: docker_go <bin> <cmd> [args]
+_docker_cmd golang:${DOCKER_GO_VERSION} $*

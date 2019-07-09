@@ -1,0 +1,4 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Run rubocop and send results to bbresults
+(rubocop --format emacs "$@") | bbresults -p "(?P<file>.+?):(?P<line>\d+):(?P<col>\d+):\s+(?P<type>[CWEF]):\s+(?P<msg>.*)$"

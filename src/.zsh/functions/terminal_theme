@@ -1,18 +1,5 @@
 #  -*- mode: unix-shell-script; -*-
 
-# Resize terminal
-alias rs='resize -s 40 120'
-alias rst='resize -s 0 120'
-
-# refresh shell
-alias reload='source ~/.profile'
-
-# Set tab name
-tabname() { printf "\e]1;${1}\a" ; }
-
-# Set window title
-winname() { printf "\e]2;${1}\a" ; }
-
 # Specify terminal themes for directory colors
 # man ls -> find LSCOLORS
 #     LSCOLORS        The value of this variable describes what color to use
@@ -64,14 +51,6 @@ winname() { printf "\e]2;${1}\a" ; }
 #                      ground and default background for regular directories,
 #                      black foreground and red background for setuid executa-
 #                      bles, etc.
-
-termtheme() {
-	case $(uname) in
-	Darwin)
-		_macos_termtheme $1
-		;;
- 	esac
-}
 
 _macos_termtheme() {
 	export CLICOLOR=1
@@ -128,3 +107,9 @@ _macos_termtheme() {
 		;;
 	esac
 }
+
+case $(uname) in
+Darwin)
+	_macos_termtheme $1
+	;;
+esac

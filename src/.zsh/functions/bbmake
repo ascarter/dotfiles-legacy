@@ -1,0 +1,4 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Run make and send results to bbresults
+bbr make $*

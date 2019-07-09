@@ -1,0 +1,4 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Run command and send results to new BBEdit window
+($* 2>&1) | bbedit --new-window +1 -t "$*"

@@ -1,0 +1,4 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Set window title
+printf "\e]2;${1}\a"
