@@ -1,0 +1,12 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Identify the directory using a "file:" scheme URL,
+# including the host name to disambiguate local vs.
+# remote connections. Percent-escape spaces.
+
+emulate -L zsh
+
+local SEARCH=' '
+local REPLACE='%20'
+local PWD_URL="file://$HOST${PWD//$SEARCH/$REPLACE}"
+printf '\e]7;%s\a' "$PWD_URL"

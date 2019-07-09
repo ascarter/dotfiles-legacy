@@ -45,6 +45,10 @@ esac
 
 prompt ascarter
 
+if [ "$TERM_PROGRAM" = "Apple_Terminal" ] && [ -z "$INSIDE_EMACS" ]; then
+    add-zsh-hook chpwd update_terminal_cwd
+    update_terminal_cwd
+fi
 
 # ========================================
 # Shell preferences
