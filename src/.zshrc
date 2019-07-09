@@ -176,6 +176,10 @@ if [ -n "`which hub`" ]; then
 	eval "$(hub alias -s)"
 fi
 
+if [ -n "`which aws_zsh_completer.sh`" ]; then
+	source `which aws_zsh_completer.sh`
+fi
+
 # ========================================
 # Aliases
 # ========================================
@@ -321,7 +325,7 @@ Darwin )
 
 	# System information
 	alias about='system_profiler SPHardwareDataType SPSoftwareDataType SPStorageDataType'
-	
+
 	# Use sw_vers for version
 	alias sysver='sw_vers'
 
