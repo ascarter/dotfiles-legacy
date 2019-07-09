@@ -5,4 +5,4 @@ DOCKER_NODE_VERSION=${DOCKER_RUBY_VERSION:-latest}
 
 # Run script using node version in docker
 # Usage: docker_node <bin> <cmd> [args]
-_docker_cmd node:${DOCKER_NODE_VERSION} $*
+docker_cmd node:${DOCKER_NODE_VERSION} $*

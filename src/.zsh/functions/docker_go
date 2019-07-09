@@ -5,4 +5,4 @@ DOCKER_GO_VERSION=${DOCKER_GO_VERSION:-latest}
 
 # Run script using Go version in docker
 # Usage: docker_go <bin> <cmd> [args]
-_docker_cmd golang:${DOCKER_GO_VERSION} $*
+docker_cmd golang:${DOCKER_GO_VERSION} $*

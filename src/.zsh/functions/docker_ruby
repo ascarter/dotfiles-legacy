@@ -5,4 +5,4 @@ DOCKER_RUBY_VERSION=${DOCKER_RUBY_VERSION:-latest}
 
 # Run script using Ruby version in docker
 # Usage: docker_ruby <bin> <cmd> [args]
-_docker_cmd ruby:${DOCKER_RUBY_VERSION} $*
+docker_cmd ruby:${DOCKER_RUBY_VERSION} $*
