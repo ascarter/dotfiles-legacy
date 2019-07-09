@@ -14,21 +14,37 @@ let mapleader=","
 " Enable extend % matching
 runtime macros/matchit.vim
 
+" Setup vim plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/bundle')
+" Status line
+Plug 'itchyny/lightline.vim'
+
+" Color schemes
+Plug 'ajh17/Spacegray.vim'
+Plug 'altercation/vim-colors-solarized'
+Plug 'arcticicestudio/nord-vim'
+call plug#end()
+
 " =====================================
 " UI
 " =====================================
 
 " Color scheme
-if has('macunix')
-	colorscheme macvim
-endif
-set background=dark
+" colorscheme macvim
 
 " Turn off blinking cursor
 " set guicursor+=n:blinkon0
 
 " Flash screen only - no beep
 set visualbell
+
+" Show line numbers
+set number
 
 " Status line
 if has('statusline')
@@ -136,7 +152,7 @@ let g:go_fmt_command = "gofmt"
 
 if has("gui_running")
 	" GUI color scheme
-	set background=light
+	colorscheme nord
 
 	" Set standard starting window size
 	if &diff
@@ -153,7 +169,7 @@ if has("gui_running")
 	if has('gui_macvim')
 		" Mac OS X
 		" set macthinstrokes
-		set guifont=SF\ Mono\ Regular:h12,Menlo:h12
+		set guifont=SF\ Mono\ Regular:h13,Menlo:h13
 		let macvim_hig_shift_movement = 1
 		au FocusLost * set transp=5
 		au FocusGained * set transp=0
