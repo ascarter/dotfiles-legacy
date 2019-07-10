@@ -14,4 +14,12 @@ if installed swift; then
 	swift package completion-tool generate-zsh-script > ${COMPLETIONS_DIR}/_swift
 fi
 
+# Rust
+if installed rustup; then
+	for f in rustup cargo; do
+		printf "Generating ${f} completions...\n"
+		rustup completions zsh ${f} > ${COMPLETIONS_DIR}/_${f}
+	done
+fi
+
 printf "Reload shell to load completions.\n"
