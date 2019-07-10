@@ -10,5 +10,8 @@ mkdir -p ${COMPLETIONS_DIR}
 
 # Swift
 if installed swift; then
+	printf "Generating swift completions...\n"
 	swift package completion-tool generate-zsh-script > ${COMPLETIONS_DIR}/_swift
 fi
+
+printf "Reload shell to load completions.\n"

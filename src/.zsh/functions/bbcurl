@@ -4,4 +4,4 @@
 
 emulate -L zsh
 
-(curl "$@") | bbedit --new-window +1 -t curl
+(curl "$@") | bbedit --clean --view-top -t "curl ${@[$#]}"

@@ -1,6 +1,6 @@
 #  -*- mode: unix-shell-script; -*-
 
-fpath=(${ZDOTDIR:-$HOME/.zsh}/functions ${ZDOTDIR:-$HOME/.zsh}/prompts /opt/homebrew/share/zsh/site-functions /opt/homebrew/share/zsh-completions $fpath)
+fpath=(${ZDOTDIR:-$HOME/.zsh}/completions ${ZDOTDIR:-$HOME/.zsh}/functions ${ZDOTDIR:-$HOME/.zsh}/prompts /opt/homebrew/share/zsh/site-functions /opt/homebrew/share/zsh-completions $fpath)
 
 autoload -U compinit
 compinit -u
@@ -14,15 +14,26 @@ colors
 autoload -U ${ZDOTDIR:-$HOME/.zsh}/functions/[^_]*(:t)
 autoload add-zsh-hook
 
+# Support bash completions
+autoload bashcompinit
+bashcompinit
+
 # Load git prompt
 case $(uname) in
 Darwin )
-	if [ -d /Library/Developer/CommandLineTools ]; then
-		source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
-	fi
+	[[ -d /Library/Developer/CommandLineTools ]] && source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 	;;
 esac
 
+# ========================================
+# SSH Agent
+# ========================================
+
+# Enable GPG for SSH
+# if [ -S $(gpgconf --list-dirs agent-ssh-socket) ]; then
+# 	export GPG_TTY=$(tty)
+# 	export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+# fi
 
 # ===========
 # Prompt
@@ -45,7 +56,7 @@ esac
 
 prompt ascarter
 
-if [ "$TERM_PROGRAM" = "Apple_Terminal" ] && [ -z "$INSIDE_EMACS" ]; then
+if [[ ${TERM_PROGRAM} = "Apple_Terminal"  &&  -z ${INSIDE_EMACS} ]]; then
     add-zsh-hook chpwd update_terminal_cwd
     update_terminal_cwd
 fi
@@ -101,10 +112,8 @@ xterm-256color|xterm-color|xterm|dtterm|linux)
 		terminal_theme spartan
 		;;
 	Linux )
-		if which dircolors &>/dev/null; then
-			if [ -e ~/.dircolors ]; then
-					eval `dircolors ~/.dir_colors`
-			fi
+		if installed dircolors; then
+			[ -e ${HOME}/.dircolors ] && eval $(dircolors ${HOME}/.dir_colors)
 		fi
 		;;
 	esac
@@ -116,36 +125,40 @@ esac
 # ========================================
 
 # Homebrew
-if [ -n "`which brew`" ]; then
+HOMEBREW_PREFIX=/opt/homebrew
+if installed ${HOMEBREW_PREFIX}/bin/brew; then
 	export HOMEBREW_NO_EMOJI=1
 	export HOMEBREW_NO_ANALYTICS=1
-	eval $(brew shellenv)
+	eval $(${HOMEBREW_PREFIX}/bin/brew shellenv)
 fi
 
+# Swift
+# if installed swift; then
+# 	source <(swift package completion-tool generate-zsh-script)
+# 	compdef _swift swift
+# 	autoload -U _swift
+# fi
+
 # Go
-if [ -n "`which go`" ]; then
-	export PATH=$PATH:$(go env GOPATH)/bin
+if installed go; then
+	export PATH=$(go env GOPATH)/bin:${PATH}
 fi
 
 # Ruby
-if [ -n "`which ruby`" ] && [ -n "`which gem`" ]; then
+if installed ruby && installed gem; then
 	export PATH=$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH
 fi
 
 # Python
-if [ -d /Library/Frameworks/Python.framework/Versions/3.7 ]; then
-	export PATH=/Library/Frameworks/Python.framework/Versions/3.7/bin:${PATH}
-fi
+[[ -d ${HOME}/Library/Python/2.7 ]] && export PATH=${HOME}/Library/Python/2.7/bin:${PATH}
+[[ -d /Library/Frameworks/Python.framework/Versions/3.7 ]] && export PATH=/Library/Frameworks/Python.framework/Versions/3.7/bin:${PATH}
 
-if [ -d ~/Library/Python/3.7 ]; then
+if [[ -d ${HOME}/Library/Python/3.7 ]]; then
 	export LC_ALL=en_US.UTF-8
 	export LANG=en_US.UTF-8
-	export PATH=~/Library/Python/3.7/bin:${PATH}
+	export PATH=${HOME}/Library/Python/3.7/bin:${PATH}
 fi
 
-if [ -d ~/Library/Python/2.7 ]; then
-	export PATH=~/Library/Python/2.7/bin:${PATH}
-fi
 
 # Java
 if [[ -e /usr/libexec/java_home ]]; then
@@ -156,36 +169,57 @@ if [[ -e /usr/libexec/java_home ]]; then
 		export JAVA_HOME=`/usr/libexec/java_home`
 	fi
 else
-	export JAVA_HOME=$(readlink -f `which java` | sed "s:bin/java::")
+	export JAVA_HOME=$(readlink -f `whence -cp java` | sed "s:bin/java::")
 fi
 
 # Android
-if [ -d ~/Library/Android/sdk ]; then
-	export ANDROID_HOME=~/Library/Android/sdk
-	export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+if [[ -d ${HOME}/Library/Android/sdk ]]; then
+	export ANDROID_HOME=${HOME}/Library/Android/sdk
+	export PATH=${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${PATH}
 fi
 
 # Rust
-if [ -d ~/.cargo ]; then
-	export PATH="$HOME/.cargo/bin:$PATH"
+[[ -d ${HOME}/.cargo ]] && export PATH=${HOME}/.cargo/bin:$PATH
+
+# Node.JS
+if installed npm; then
+	source <(npm completion)
 fi
 
 # GitHub
-if [ -n "`which hub`" ]; then
+if installed hub; then
 	export GITHUB_USER=ascarter
-	eval "$(hub alias -s)"
+	eval $(`whence -cp hub` alias -s)
 fi
 
-if [ -n "`which aws_zsh_completer.sh`" ]; then
-	source `which aws_zsh_completer.sh`
+# Docker
+if [[ -d /Applications/Docker.app ]]; then
+	for f in docker docker-compose docker-machine; do
+		source /Applications/Docker.app/Contents/Resources/etc/${f}.zsh-completion
+		compdef _${f} ${f}
+		autoload -U _${f}
+	done
+fi
+
+# Kubernetes
+if installed kubectl; then
+	source <(kubectl completion zsh)
+fi
+
+# AWS
+if installed aws_zsh_completer.sh; then
+	source `whence -cp aws_zsh_completer.sh`
 fi
 
 # ========================================
 # Aliases
 # ========================================
 
+# zsh
+alias resetcomp='rm -f ${HOME}/.zcompdump && compinit'
+
 # dotfiles home folder
-alias dotf='cd ~/.dotfiles'
+alias dotf='cd ${HOME}/.dotfiles'
 
 # Projects
 alias projects='cd ${PROJECTS_HOME}'
@@ -217,7 +251,7 @@ alias rs='resize -s 40 120'
 alias rst='resize -s 0 120'
 
 # Ski
-alias whistlertom='curl -o ~/Documents/whistler_tom.pdf -L "http://online.whistlerblackcomb.com/TomPDF/Default.aspx?Season=1&Type=bg" && ql ~/Documents/whistler_tom.pdf'
+alias whistlertom='curl -o ${HOME}/Documents/whistler_tom.pdf -L "http://online.whistlerblackcomb.com/TomPDF/Default.aspx?Season=1&Type=bg" && ql ${HOME}/Documents/whistler_tom.pdf'
 
 # BBEdit aliases
 alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
@@ -307,7 +341,7 @@ alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
 # SSH
-alias sshagentstart='eval "$(ssh-agent -s)" && ssh-add -A'
+alias sshagentstart='eval $(ssh-agent -s) && ssh-add -A'
 
 case $(uname) in
 Darwin )
@@ -352,9 +386,7 @@ Darwin )
 	alias java_home='/usr/libexec/java_home'
 
 	# Use MacVim on Mac OS X if installed
-	if [ -e /usr/local/bin/vim ]; then
-			alias vim='/usr/local/bin/vim'
-	fi
+	[[ -e /usr/local/bin/vim ]] && alias vim='/usr/local/bin/vim'
 	;;
 Linux )
 	alias ls='ls -hFH --color=auto'
@@ -364,10 +396,14 @@ Linux )
 	;;
 esac
 
+# ========================================
+# Path settings
+# ========================================
+
+# Add home bin dir if it is there
+[[ -d ${HOME}/.bin ]] && export PATH=${HOME}/.bin:${PATH}
 
 # ========================================
 # Per-machine extras
 # ========================================
-if [ -e ~/.zsh_local ]; then
-	source ~/.zsh_local
-fi
+[[ -e ${HOME}/.zsh_local ]] && source ${HOME}/.zsh_local
