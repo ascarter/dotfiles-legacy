@@ -1,0 +1,9 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Helper to see if command installed
+
+emulate -L zsh
+
+if whence -cp "${1}" > /dev/null; then return 0 fi
+
+return 1
