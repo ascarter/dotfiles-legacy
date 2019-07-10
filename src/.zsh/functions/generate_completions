@@ -1,0 +1,14 @@
+#  -*- mode: unix-shell-script; -*-
+
+# Generate tab completions
+# This updates generated completions that cannot be directly loaded in zshrc
+
+emulate -L zsh
+
+COMPLETIONS_DIR=${ZDOTDIR:-$HOME/.zsh}/completions
+mkdir -p ${COMPLETIONS_DIR}
+
+# Swift
+if installed swift; then
+	swift package completion-tool generate-zsh-script > ${COMPLETIONS_DIR}/_swift
+fi
