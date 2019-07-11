@@ -133,11 +133,12 @@ if installed ${HOMEBREW_PREFIX}/bin/brew; then
 fi
 
 # Swift
-# if installed swift; then
-# 	source <(swift package completion-tool generate-zsh-script)
+#if installed swift; then
+#	source <(swift package completion-tool generate-zsh-script)
+#	compctl -K _swift swift
 # 	compdef _swift swift
 # 	autoload -U _swift
-# fi
+#fi
 
 # Go
 if installed go; then
@@ -159,6 +160,10 @@ if [[ -d ${HOME}/Library/Python/3.7 ]]; then
 	export PATH=${HOME}/Library/Python/3.7/bin:${PATH}
 fi
 
+if installed pip3; then
+	source <(pip completion --zsh)
+	compctl -K _pip_completion pip3
+fi
 
 # Java
 if [[ -e /usr/libexec/java_home ]]; then
@@ -180,6 +185,12 @@ fi
 
 # Rust
 [[ -d ${HOME}/.cargo ]] && export PATH=${HOME}/.cargo/bin:$PATH
+# if installed rustup; then
+# 	eval $(rustup completions zsh)
+# 	eval $(rustup completions zsh cargo)
+# 	compctl -K _rustup rustup
+# 	compctl -K _cargo cargo
+# fi
 
 # Node.JS
 if installed npm; then

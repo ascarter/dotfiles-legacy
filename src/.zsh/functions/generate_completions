@@ -22,4 +22,10 @@ if installed rustup; then
 	done
 fi
 
+# if [[ -f /Applications/YubiKey\ Manager.app/Contents/MacOS/ykman ]]; then
+# 	printf "Generating ykman completions...\n"
+# 	_YKMAN_COMPLETE=source /Applications/YubiKey\ Manager.app/Contents/MacOS/ykman > ${COMPLETIONS_DIR}/_ykman
+# fi
+
+
 printf "Reload shell to load completions.\n"
