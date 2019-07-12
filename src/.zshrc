@@ -1,6 +1,15 @@
 #  -*- mode: unix-shell-script; -*-
 
-fpath=(${ZDOTDIR:-$HOME/.zsh}/completions ${ZDOTDIR:-$HOME/.zsh}/functions ${ZDOTDIR:-$HOME/.zsh}/prompts /opt/homebrew/share/zsh/site-functions /opt/homebrew/share/zsh-completions $fpath)
+fpath=(${ZDOTDIR:-$HOME/.zsh}/completions ${ZDOTDIR:-$HOME/.zsh}/functions ${ZDOTDIR:-$HOME/.zsh}/prompts $fpath)
+
+# Homebrew
+HOMEBREW_PREFIX=/opt/homebrew
+if type ${HOMEBREW_PREFIX}/bin/brew &>/dev/null; then
+	export HOMEBREW_NO_EMOJI=1
+	export HOMEBREW_NO_ANALYTICS=1
+	eval $(${HOMEBREW_PREFIX}/bin/brew shellenv)
+	fpath+=($(brew --prefix)/share/zsh/site-functions $(brew --prefix)/share/zsh-completions)
+fi
 
 autoload -U compinit
 compinit -u
@@ -112,7 +121,7 @@ xterm-256color|xterm-color|xterm|dtterm|linux)
 		terminal_theme spartan
 		;;
 	Linux )
-		if installed dircolors; then
+		if type dircolors &>/dev/null; then
 			[ -e ${HOME}/.dircolors ] && eval $(dircolors ${HOME}/.dir_colors)
 		fi
 		;;
@@ -124,16 +133,8 @@ esac
 # Frameworks/Languages
 # ========================================
 
-# Homebrew
-HOMEBREW_PREFIX=/opt/homebrew
-if installed ${HOMEBREW_PREFIX}/bin/brew; then
-	export HOMEBREW_NO_EMOJI=1
-	export HOMEBREW_NO_ANALYTICS=1
-	eval $(${HOMEBREW_PREFIX}/bin/brew shellenv)
-fi
-
 # Swift
-#if installed swift; then
+#if type swift &>/dev/null; then
 #	source <(swift package completion-tool generate-zsh-script)
 #	compctl -K _swift swift
 # 	compdef _swift swift
@@ -141,29 +142,27 @@ fi
 #fi
 
 # Go
-if installed go; then
+if type go &>/dev/null; then
 	export PATH=$(go env GOPATH)/bin:${PATH}
 fi
 
 # Ruby
-if installed ruby && installed gem; then
+if type ruby &>/dev/null && type gem &>/dev/null; then
 	export PATH=$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH
 fi
 
 # Python
-[[ -d ${HOME}/Library/Python/2.7 ]] && export PATH=${HOME}/Library/Python/2.7/bin:${PATH}
 [[ -d /Library/Frameworks/Python.framework/Versions/3.7 ]] && export PATH=/Library/Frameworks/Python.framework/Versions/3.7/bin:${PATH}
-
 if [[ -d ${HOME}/Library/Python/3.7 ]]; then
 	export LC_ALL=en_US.UTF-8
 	export LANG=en_US.UTF-8
 	export PATH=${HOME}/Library/Python/3.7/bin:${PATH}
 fi
-
-if installed pip3; then
+if type pip3 &>/dev/null; then
 	source <(pip completion --zsh)
 	compctl -K _pip_completion pip3
 fi
+[[ -d ${HOME}/Library/Python/2.7 ]] && export PATH=${HOME}/Library/Python/2.7/bin:${PATH}
 
 # Java
 if [[ -e /usr/libexec/java_home ]]; then
@@ -185,7 +184,7 @@ fi
 
 # Rust
 [[ -d ${HOME}/.cargo ]] && export PATH=${HOME}/.cargo/bin:$PATH
-# if installed rustup; then
+# if type rustup &>/dev/null; then
 # 	eval $(rustup completions zsh)
 # 	eval $(rustup completions zsh cargo)
 # 	compctl -K _rustup rustup
@@ -193,12 +192,12 @@ fi
 # fi
 
 # Node.JS
-if installed npm; then
+if type npm &>/dev/null; then
 	source <(npm completion)
 fi
 
 # GitHub
-if installed hub; then
+if type hub &>/dev/null; then
 	export GITHUB_USER=ascarter
 	eval $(`whence -cp hub` alias -s)
 fi
@@ -213,12 +212,12 @@ if [[ -d /Applications/Docker.app ]]; then
 fi
 
 # Kubernetes
-if installed kubectl; then
+if type kubectl &>/dev/null; then
 	source <(kubectl completion zsh)
 fi
 
 # AWS
-if installed aws_zsh_completer.sh; then
+if type aws_zsh_completer.sh &>/dev/null; then
 	source `whence -cp aws_zsh_completer.sh`
 fi
 
