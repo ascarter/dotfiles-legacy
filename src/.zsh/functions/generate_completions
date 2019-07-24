@@ -9,17 +9,31 @@ COMPLETIONS_DIR=${ZDOTDIR:-$HOME/.zsh}/completions
 mkdir -p ${COMPLETIONS_DIR}
 
 # Swift
-if installed swift; then
+if type swift &>/dev/null; then
 	printf "Generating swift completions...\n"
 	swift package completion-tool generate-zsh-script > ${COMPLETIONS_DIR}/_swift
 fi
 
 # Rust
-if installed rustup; then
+if type rustup &>/dev/null; then
 	for f in rustup cargo; do
 		printf "Generating ${f} completions...\n"
 		rustup completions zsh ${f} > ${COMPLETIONS_DIR}/_${f}
 	done
+fi
+
+# Docker
+if [[ -d /Applications/Docker.app ]]; then
+	for f in docker docker-compose docker-machine; do
+		printf "Generating ${f} completions...\n"
+		ln -s /Applications/Docker.app/Contents/Resources/etc/${f}.zsh-completion ${COMPLETIONS_DIR}/_${f}
+	done
+fi
+
+# Kubernetes
+if type kubectl &>/dev/null; then
+	printf "Generating kubectl completions...\n"
+	kubectl completion zsh > ${COMPLETIONS_DIR}/_kubectl
 fi
 
 # if [[ -f /Applications/YubiKey\ Manager.app/Contents/MacOS/ykman ]]; then

@@ -133,14 +133,6 @@ esac
 # Frameworks/Languages
 # ========================================
 
-# Swift
-#if type swift &>/dev/null; then
-#	source <(swift package completion-tool generate-zsh-script)
-#	compctl -K _swift swift
-# 	compdef _swift swift
-# 	autoload -U _swift
-#fi
-
 # Go
 if type go &>/dev/null; then
 	export PATH=$(go env GOPATH)/bin:${PATH}
@@ -159,7 +151,7 @@ if [[ -d ${HOME}/Library/Python/3.7 ]]; then
 	export PATH=${HOME}/Library/Python/3.7/bin:${PATH}
 fi
 if type pip3 &>/dev/null; then
-	source <(pip completion --zsh)
+	source <(pip3 completion --zsh)
 	compctl -K _pip_completion pip3
 fi
 [[ -d ${HOME}/Library/Python/2.7 ]] && export PATH=${HOME}/Library/Python/2.7/bin:${PATH}
@@ -184,36 +176,16 @@ fi
 
 # Rust
 [[ -d ${HOME}/.cargo ]] && export PATH=${HOME}/.cargo/bin:$PATH
-# if type rustup &>/dev/null; then
-# 	eval $(rustup completions zsh)
-# 	eval $(rustup completions zsh cargo)
-# 	compctl -K _rustup rustup
-# 	compctl -K _cargo cargo
-# fi
 
 # Node.JS
-if type npm &>/dev/null; then
-	source <(npm completion)
-fi
+# if type npm &>/dev/null; then
+# 	source <(npm completion)
+# fi
 
 # GitHub
 if type hub &>/dev/null; then
 	export GITHUB_USER=ascarter
 	eval $(`whence -cp hub` alias -s)
-fi
-
-# Docker
-if [[ -d /Applications/Docker.app ]]; then
-	for f in docker docker-compose docker-machine; do
-		source /Applications/Docker.app/Contents/Resources/etc/${f}.zsh-completion
-		compdef _${f} ${f}
-		autoload -U _${f}
-	done
-fi
-
-# Kubernetes
-if type kubectl &>/dev/null; then
-	source <(kubectl completion zsh)
 fi
 
 # AWS
