@@ -30,7 +30,9 @@ bashcompinit
 # Load git prompt
 case $(uname) in
 Darwin )
-	[[ -d /Library/Developer/CommandLineTools ]] && source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
+	if [[ -d /Library/Developer/CommandLineTools ]]; then
+		source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
+	fi
 	;;
 esac
 
@@ -121,8 +123,8 @@ xterm-256color|xterm-color|xterm|dtterm|linux)
 		terminal_theme spartan
 		;;
 	Linux )
-		if type dircolors &>/dev/null; then
-			[ -e ${HOME}/.dircolors ] && eval $(dircolors ${HOME}/.dir_colors)
+		if type dircolors &>/dev/null && [ -e ${HOME}/.dircolors ]; then
+			eval $(dircolors ${HOME}/.dir_colors)
 		fi
 		;;
 	esac
@@ -144,7 +146,9 @@ if type ruby &>/dev/null && type gem &>/dev/null; then
 fi
 
 # Python
-[[ -d /Library/Frameworks/Python.framework/Versions/3.7 ]] && export PATH=/Library/Frameworks/Python.framework/Versions/3.7/bin:${PATH}
+if [[ -d /Library/Frameworks/Python.framework/Versions/3.7 ]]; then
+	export PATH=/Library/Frameworks/Python.framework/Versions/3.7/bin:${PATH}
+fi
 if [[ -d ${HOME}/Library/Python/3.7 ]]; then
 	export LC_ALL=en_US.UTF-8
 	export LANG=en_US.UTF-8
@@ -154,7 +158,9 @@ if type pip3 &>/dev/null; then
 	source <(pip3 completion --zsh)
 	compctl -K _pip_completion pip3
 fi
-[[ -d ${HOME}/Library/Python/2.7 ]] && export PATH=${HOME}/Library/Python/2.7/bin:${PATH}
+if [[ -d ${HOME}/Library/Python/2.7 ]]; then
+	export PATH=${HOME}/Library/Python/2.7/bin:${PATH}
+fi
 
 # Java
 if [[ -e /usr/libexec/java_home ]]; then
@@ -175,7 +181,9 @@ if [[ -d ${HOME}/Library/Android/sdk ]]; then
 fi
 
 # Rust
-[[ -d ${HOME}/.cargo ]] && export PATH=${HOME}/.cargo/bin:$PATH
+if [[ -d ${HOME}/.cargo ]]; then
+	export PATH=${HOME}/.cargo/bin:$PATH
+fi
 
 # Node.JS
 # if type npm &>/dev/null; then
@@ -383,9 +391,13 @@ esac
 # ========================================
 
 # Add home bin dir if it is there
-[[ -d ${HOME}/.bin ]] && export PATH=${HOME}/.bin:${PATH}
+if [[ -d ${HOME}/.bin ]]; then
+	export PATH=${HOME}/.bin:${PATH}
+fi
 
 # ========================================
 # Per-machine extras
 # ========================================
-[[ -e ${HOME}/.zsh_local ]] && source ${HOME}/.zsh_local
+if [[ -e ${HOME}/.zsh_local ]]; then
+	source ${HOME}/.zsh_local
+fi
