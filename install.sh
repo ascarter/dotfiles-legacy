@@ -69,7 +69,7 @@ DOTFILES=${DOTFILES}
 EOF
 
 # Generate zsh completions
-zsh -c "mkcompletions"
+zsh -c "${DOTFILES}/bin/mkcompletions"
 
 # Genearte gitconfig
-zsh -c "gitconfig"
+zsh -c "${DOTFILES}/bin/gitconfig"
