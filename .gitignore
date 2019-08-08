@@ -1,2 +1,4 @@
-.DS_Store
 tags
+zsh/.zsh_history
+zsh/.zcompdump
+zsh/completions

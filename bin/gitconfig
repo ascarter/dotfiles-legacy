@@ -1,0 +1,128 @@
+#!/bin/zsh
+
+#  -*- mode: unix-shell-script; -*-
+
+# Generate Git config
+
+_gc_set() {
+	git config --global ${1} ${2}
+}
+
+# Prompt for git config key
+_gc_prompt() {
+	input=$(git config --file ${git_config_file}.orig --get ${1})
+	vared -p "${1}: " input
+	_gc_set $1 $input
+}
+
+local git_config_file=${HOME}/.gitconfig
+
+# Backup existing .gitconfig and git ignore
+[ -e ${git_config_file} ] && mv ${git_config_file} ${git_config_file}.orig
+
+# User info
+_gc_prompt user.name "User name"
+_gc_prompt user.email "Email"
+_gc_prompt user.signingkey "GPG Key"
+_gc_prompt commit.gpgsign "GPG sign by default? (true/false)"
+
+_gc_set color.ui auto
+_gc_set core.autocrlf input
+_gc_set core.editor vim
+_gc_set core.excludesFile "${HOME}/.gitignore"
+_gc_set diff.guitool gvimdiff
+_gc_set diff.tool vimdiff
+_gc_set difftool.prompt false
+_gc_set instaweb.httpd webrick
+_gc_set merge.guitool gvimdiff
+_gc_set merge.prompt
+_gc_set merge.tool vimdiff
+#_gc_set url."git@github.com".pushInsteadOf "https://github.com"
+
+case $(uname) in
+Darwin )
+	_gc_set credential.helper osxkeychain
+# 	if [ -e /usr/local/bin/bbedit ]; then
+# 		_gc_set core.editor "bbedit --wait"
+# 	fi
+# 	
+# 	if [ -e /usr/local/bin/bbdiff ]; then
+# 		_gc_set diff.tool bbdiff
+# 	else
+# 		_gc_set diff.tool opendiff
+# 	fi
+# 	_gc_set merge.tool opendiff	
+	_gc_set gui.fontui "-family \"SF UI Display Regular\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
+	_gc_set gui.fontdiff "-family \"SF Mono\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
+	_gc_set difftool."bbdiff".cmd "/usr/local/bin/bbdiff --wait --resume \"$LOCAL\" \"$REMOTE\""
+	_gc_set difftool."Kaleidoscope".cmd "ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\""
+	_gc_set	mergetool."Kaleidoscope".cmd "ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot"
+	_gc_set mergetool."Kaleidoscope".trustExitCode true
+	;;
+Linux )
+	_gc_set credential.helper cache
+# 	_gc_set diff.tool meld
+# 	_gc_set merge.tool meld
+	_gc_set gui.fontui "-family \"Source Sans Pro\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
+	_gc_set gui.fontdiff "-family \"Source Code Pro\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
+	;;
+esac
+
+# Aliases
+_gc_set alias.aliases      "!git config -l | grep alias | cut -c 7-"
+_gc_set alias.amend        "commit --amend"
+_gc_set alias.bbdiff       "difftool --tool=bbdiff"
+_gc_set alias.begin        "checkout -b"
+_gc_set alias.blocal       "rev-parse --abbrev-ref HEAD"
+_gc_set alias.br           branch
+_gc_set alias.bremote      rev-parse --abbrev-ref --symbolic-full-name @{u}
+_gc_set alias.changelog    "log --oneline --decorate --no-merges"
+_gc_set alias.changes      "diff --name-status -r"
+_gc_set alias.ci           commit
+_gc_set alias.ciu          commitup
+_gc_set alias.cleanup      "!git checkout master && git branch --merged | grep -v " master" | xargs git branch -d"
+_gc_set alias.co           checkout
+_gc_set alias.commitup     "!f() { local msg=${1-'WIP'}; git commit -a -m \"${msg}\"; git up; git push origin; }; f"
+_gc_set alias.cont         "!f() { git up; echo "Create new branch ${1}"; git begin ${1} origin/${1}; }; f"
+_gc_set alias.ctags        "!${PWD}/.git/hooks/ctags"
+_gc_set alias.datetag      "!git tag `date \"+%Y%m%d%H%M\"`"
+_gc_set alias.difflast     "diff HEAD^ HEAD"
+_gc_set alias.diffstat     "diff --stat -r"
+_gc_set alias.dirty        "status --untracked-files=no --porcelain"
+_gc_set alias.discard      "checkout --"
+_gc_set alias.done         "!f() { local branch=${1-$(git blocal)}; git checkout master; git up; git cleanup; git branch -d ${branch}; }; f"
+_gc_set alias.dump         "cat-file -p"
+_gc_set alias.fingerprint  "!ssh-keygen -l -E md5 -f id_rsa"
+_gc_set alias.gdiff        "difftool --gui --no-prompt"
+_gc_set alias.gitkconflict "!gitk --left-right HEAD...MERGE_HEAD"
+_gc_set alias.hist         "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
+_gc_set alias.hub          "!sh -c 'github'"
+_gc_set alias.k            "!gitk"
+_gc_set alias.ksdiff       "difftool -y --tool=Kaleidoscope"
+_gc_set alias.ksmerge      "mergetool -y --tool=Kaleidoscope"
+_gc_set alias.last         "log -l HEAD -n 1"
+_gc_set alias.ll           "log --pretty=format:\"%C(yellow)%h %C(green)%ad %cn %Cred%d %Creset%s\" --decorate --numstat --date=short"
+_gc_set alias.llog         "log --date=local"
+_gc_set alias.logb         "log master..HEAD --pretty=oneline"
+_gc_set alias.logd         "log -- ."
+_gc_set alias.logx         "log --graph --decorate --all --oneline"
+_gc_set alias.ls           "log --pretty=format:\"%C(yellow)%h %C(green)%ad%Cred%d %Creset%s\" --decorate --date=relative"
+_gc_set alias.prep         "rebase -i @{upstream}"
+_gc_set alias.root         "rev-parse --show-toplevel"
+_gc_set alias.setemail     "!git config user.email"
+_gc_set alias.sha          "rev-parse --verify HEAD"
+_gc_set alias.ship         "merge --no-ff"
+_gc_set alias.st           "status"
+_gc_set alias.tower        "!gittower $(git root)"
+_gc_set alias.type         "cat-file -t"
+_gc_set alias.unstage      "reset HEAD --"
+_gc_set alias.untrack      "rm --cache --"
+_gc_set alias.up           "!f() { if [ \"$(git dirty)\" != \"\" ]; then git upd; else git upc; fi; }; f"
+_gc_set alias.upc          "pull --rebase --prune"
+_gc_set alias.upd          "!git stash && git upc && git stash pop"
+_gc_set alias.upstream     "!git branch -vv --list $(git blocal)"
+_gc_set alias.visual       fork
+_gc_set alias.vtag         "describe --tags --always --dirty"
+_gc_set alias.whatis       "show -s --pretty='tformat:%h (%s, %ad)' --date=short"
+_gc_set alias.who          "shortlog -s --"
+_gc_set alias.whois        "!sh -c 'git log -i -1 --pretty=\"format:%an ae>\n\" --author=\"$1\"' -"
