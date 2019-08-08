@@ -391,8 +391,8 @@ esac
 # ========================================
 
 # Add home bin dir if it is there
-if [[ -d ${HOME}/.bin ]]; then
-	export PATH=${HOME}/.bin:${PATH}
+if [[ -d ${DOTFILES}/bin ]]; then
+	export PATH=${DOTFILES}/bin:${PATH}
 fi
 
 # ========================================
