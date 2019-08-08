@@ -80,7 +80,7 @@ _gc_set alias.changelog    "log --oneline --decorate --no-merges"
 _gc_set alias.changes      "diff --name-status -r"
 _gc_set alias.ci           commit
 _gc_set alias.ciu          commitup
-_gc_set alias.cleanup      "!git checkout master && git branch --merged | grep -v " master" | xargs git branch -d"
+_gc_set alias.cleanup      "!git checkout master && git branch --merged | grep -v \" master\" | xargs git branch -d"
 _gc_set alias.co           checkout
 _gc_set alias.commitup     "!f() { local msg=${1-'WIP'}; git commit -a -m \"${msg}\"; git up; git push origin; }; f"
 _gc_set alias.cont         "!f() { git up; echo "Create new branch ${1}"; git begin ${1} origin/${1}; }; f"
