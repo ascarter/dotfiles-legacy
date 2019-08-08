@@ -1,36 +1,37 @@
 # Unix configuration
 
-This is my collection of configuration scripts for bash, git, etc.
+This is my collection of dotfiles
+
+## Layout
+
+* `bin` - useful scripts
+* `home` - files that are symlinked to `${HOME}`
+* `zsh` - `${ZDOTDIR}` with zsh configuration
 
 ## Install
 
-There is a 2-phase installer. The first part is to bootstrap a new system to have all the configuration files present and to configure important software like Git. The next phase is to automate installing software combinations.
-
-Most software is managed by [Homebrew](https://brew.sh).
-
-To bootstrap:
+Run the following shell script to link files in `home` and run configuration for git and zsh:
 
 ```
-$ ruby -e "$(curl https://raw.githubusercontent.com/ascarter/dotfiles/master/install)"
+% sh -c "$(curl https://raw.githubusercontent.com/ascarter/dotfiles/master/install.sh)"
 ```
 
 Alternatively:
 
-* Install Xcode from Mac App Store
-* Install Xcode command line tools with `xcode-select --install`
-* Clone into a location (recommend `~/.dotfiles`)
+* Clone into a location (recommend `~/.config/dotfiles`)
 
 After the enlistment is created:
 
 ```
-$ cd ~/.dotfiles
-$ rake
+% cd ~/.config/dotfiles
+% ./install.sh
 ```
 
-Re-run will check for identical files and prompt if a replace will occur. Replace preserves existing file in `file.orig`
+## Uninstall
 
-## Layout
+Run the uninstall script to remove the symlinks:
 
-There are two major components to this system. First is to manage what are usually known as `dotfiles` in Git. These are typically in the user's home directory and are preceeded with a `.` to hide them. Examples include `.profile` or `.bashrc`. When it is installed, many of the `.` files are symlinked into a user's home directory allowing for them to be version controlled. A subset of files are managed as templates and instead generate the files. These are useful for more customized files like `.gitconfig`.
-
-The other component is to help manage installing software packages. On macOS, this is mostly handled by Homebrew.
+```
+% cd ~/.config/dotfiles
+% ./uninstall.sh
+```
