@@ -16,17 +16,15 @@ fi
 
 # Rust
 if type rustup &>/dev/null; then
-	for f in rustup cargo; do
-		printf "Generating ${f} completions...\n"
-		rustup completions zsh ${f} > ${COMPLETIONS_DIR}/_${f}
-	done
+	printf "Generating rustup completions...\n"
+	rustup completions zsh > ${COMPLETIONS_DIR}/_${rustup}
 fi
 
 # Docker
 if [[ -d /Applications/Docker.app ]]; then
 	for f in docker docker-compose docker-machine; do
 		printf "Generating ${f} completions...\n"
-		ln -s /Applications/Docker.app/Contents/Resources/etc/${f}.zsh-completion ${COMPLETIONS_DIR}/_${f}
+		ln -fs /Applications/Docker.app/Contents/Resources/etc/${f}.zsh-completion ${COMPLETIONS_DIR}/_${f}
 	done
 fi
 
