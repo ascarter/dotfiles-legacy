@@ -10,7 +10,7 @@ _gc_set() {
 
 # Prompt for git config key
 _gc_prompt() {
-	input=$(git config --global --get ${1})
+	input=$(git config --file ${git_config_file}.orig --get ${1})
 	vared -p "${1}: " input
 	_gc_set $1 $input
 }
@@ -37,7 +37,7 @@ _gc_set instaweb.httpd webrick
 _gc_set merge.guitool gvimdiff
 _gc_set merge.prompt
 _gc_set merge.tool vimdiff
-_gc_set url."git@github.com".pushInsteadOf "https://github.com"
+#_gc_set url."git@github.com".pushInsteadOf "https://github.com"
 
 case $(uname) in
 Darwin )
