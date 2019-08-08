@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -xueo pipefail
+set -ueo pipefail
 
 #
 # Install script for dotfiles configuration
@@ -59,8 +59,6 @@ for source in ${DOTFILES}/home/*; do
 	fi
 done
 
-# Git config
-
 # Change shell to zsh
 [ ${SHELL} != "/bin/zsh" ] && chsh -s /bin/zsh
 
@@ -72,3 +70,6 @@ EOF
 
 # Generate zsh completions
 zsh -c "source ${DOTFILES}/zsh/functions/mkcompletions"
+
+# Genearte gitconfig
+zsh -c "gitconfig"
