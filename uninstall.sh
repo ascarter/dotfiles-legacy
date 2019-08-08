@@ -1,12 +1,16 @@
-#  -*- mode: unix-shell-script; -*-
+#!/bin/sh
+
+DOTFILES_ROOT="$(cd "$(dirname "$0")"; pwd -P)"
 
 # Remove home directory symlinks
-for f in home/*; do
-	local FILENAME=$(basename ${f})
-	local TARGET=${HOME}/.${FILENAME}
-	rm ${TARGET}
+for source in ${DOTFILES_ROOT}/home/*; do
+	filename=$(basename ${source})
+	target=${HOME}/.${filename}
+	if [ -e ${target} ]; then
+		printf "Remove ${target}\n"
+		rm ${target}
+	fi
 done
 
 # Uninstall homebrew
 
-# Git config
