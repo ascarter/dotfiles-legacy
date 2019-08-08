@@ -1,3 +1,0 @@
-#!/bin/sh
-
-open -b jp.informationarchitects.WriterForMacOSX $*
