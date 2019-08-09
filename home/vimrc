@@ -28,6 +28,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'ajh17/Spacegray.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'arcticicestudio/nord-vim'
+Plug 'dracula/vim'
 call plug#end()
 
 " =====================================
@@ -45,6 +46,9 @@ set visualbell
 
 " Show line numbers
 set number
+
+" Set fill characters
+set fillchars=vert:\ ,fold:-
 
 " Status line
 if has('statusline')
@@ -78,7 +82,7 @@ set foldlevel=10
 "set foldcolumn=1
 
 " netrw
-" let g:netrw_banner=0
+let g:netrw_banner=0
 let g:netrw_alto=&sb
 let g:netrw_altv=&spr
 let g:netrw_list_hide='.git,.DS_Store,.*\.swp$'
