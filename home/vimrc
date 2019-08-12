@@ -52,6 +52,9 @@ set fillchars=vert:\ ,fold:-
 
 " Status line
 if has('statusline')
+	" Mode is shown by lightline
+	set noshowmode
+
 	set laststatus=2
 	" set statusline=%<%f%{tagbar#currenttag('[%s]\ ','')}\ %w%h%m%r%=%-14.(%l,%c%V%)\ %P
 endif
@@ -156,7 +159,10 @@ let g:go_fmt_command = "gofmt"
 
 if has("gui_running")
 	" GUI color scheme
-	colorscheme nord
+	" colorscheme nord
+
+	" Set lightline colors
+	let g:lightline = { 'colorscheme': ( &background == "light" ? 'PaperColor' : 'dark' ) }
 
 	" Set standard starting window size
 	if &diff
