@@ -50,7 +50,7 @@ if ! [ -e ${DOTFILES} ]; then
 fi
 
 # Symlink home directory files
-for source in ${DOTFILES}/home/*; do
+for source in ${DOTFILES}/rc/*; do
 	filename=$(basename ${source})
 	target=${HOME}/.${filename}
 	if ! [ -e ${target} ]; then

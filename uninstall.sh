@@ -3,7 +3,7 @@
 DOTFILES_ROOT="$(cd "$(dirname "$0")"; pwd -P)"
 
 # Remove home directory symlinks
-for source in ${DOTFILES_ROOT}/home/*; do
+for source in ${DOTFILES_ROOT}/rc/*; do
 	filename=$(basename ${source})
 	target=${HOME}/.${filename}
 	if [ -e ${target} ]; then
