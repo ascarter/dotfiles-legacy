@@ -1,0 +1,53 @@
+#  -*- mode: unix-shell-script; -*-
+
+# git zsh prompt theme
+# Andrew Carter <ascarter@icloud.com>
+# 
+# Two-line git prompt
+#
+
+prompt_git_help () {
+	cat <<'EOH'
+
+Two-line prompt with git info using __git_ps1
+
+EOH
+}
+
+prompt_git_setup () {
+	# Load git prompt
+	case $(uname) in
+	Darwin )
+		if [[ -d /Library/Developer/CommandLineTools ]]; then
+			source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
+		fi
+		;;
+	esac
+	
+	# Set Git PS conditions
+	export GIT_PS1_SHOWDIRTYSTATE=1
+	export GIT_PS1_SHOWSTASHSTATE=1
+	export GIT_PS1_SHOWUNTRACKEDFILES=1
+	export GIT_PS1_SHOWUPSTREAM="auto"
+	case "${TERM}" in
+	xterm-256color|xterm-color|dtterm|linux)
+		export GIT_PS1_SHOWCOLORHINTS=1
+		;;
+	esac
+
+	PROMPT='
+%B%n@%m%b:%3~
+%# '
+	PROMPT4='+%N:%i:%_>'
+	prompt_opts=( cr percent subst )	
+
+	if [[ $(whence -w '__git_ps1' | cut -d ':' -f 2 | xargs) == function ]]; then
+		precmd() {
+			__git_ps1 "
+%B%n@%m%b:%3~% %B" "%b
+%# " " [%s]"
+		}
+	fi
+}
+
+prompt_git_setup "$@"
