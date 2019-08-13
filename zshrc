@@ -1,10 +1,5 @@
 #  -*- mode: unix-shell-script; -*-
 
-# Set dotfiles configuration directory
-if [ -d ${HOME}/.config/dotfiles ]; then
-	DOTFILES=${HOME}/.config/dotfiles
-fi
-
 fpath=(${ZDOTDIR:-$DOTFILES/zsh}/completions ${ZDOTDIR:-$DOTFILES/zsh}/functions ${ZDOTDIR:-$DOTFILES/zsh}/prompts $fpath)
 
 # Homebrew
@@ -32,14 +27,8 @@ autoload add-zsh-hook
 autoload bashcompinit
 bashcompinit
 
-# Load git prompt
-case $(uname) in
-Darwin )
-	if [[ -d /Library/Developer/CommandLineTools ]]; then
-		source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
-	fi
-	;;
-esac
+# Enable vcs info
+autoload -Uz vcs_info
 
 # ========================================
 # SSH Agent
@@ -55,22 +44,9 @@ esac
 # Prompt
 # ===========
 
-# Default
-# PS1="%m%# "
+# Default: PS1="%m%# "
 declare +x PS1
-
-# Set Git PS conditions
-export GIT_PS1_SHOWDIRTYSTATE=1
-export GIT_PS1_SHOWSTASHSTATE=1
-export GIT_PS1_SHOWUNTRACKEDFILES=1
-export GIT_PS1_SHOWUPSTREAM="auto"
-case "${TERM}" in
-xterm-256color|xterm-color|dtterm|linux)
-	export GIT_PS1_SHOWCOLORHINTS=1
-	;;
-esac
-
-prompt ascarter
+prompt vcs
 
 if [[ ${TERM_PROGRAM} = "Apple_Terminal"  &&  -z ${INSIDE_EMACS} ]]; then
     add-zsh-hook chpwd update_terminal_cwd
@@ -189,11 +165,6 @@ fi
 if [[ -d ${HOME}/.cargo ]]; then
 	export PATH=${HOME}/.cargo/bin:$PATH
 fi
-
-# Node.JS
-# if type npm &>/dev/null; then
-# 	source <(npm completion)
-# fi
 
 # GitHub
 if type hub &>/dev/null; then
