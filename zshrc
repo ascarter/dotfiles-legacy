@@ -1,6 +1,11 @@
 #  -*- mode: unix-shell-script; -*-
 
-fpath=(${ZDOTDIR:-$HOME/.zsh}/completions ${ZDOTDIR:-$HOME/.zsh}/functions ${ZDOTDIR:-$HOME/.zsh}/prompts $fpath)
+# Set dotfiles configuration directory
+if [ -d ${HOME}/.config/dotfiles ]; then
+	DOTFILES=${HOME}/.config/dotfiles
+fi
+
+fpath=(${ZDOTDIR:-$DOTFILES/zsh}/completions ${ZDOTDIR:-$DOTFILES/zsh}/functions ${ZDOTDIR:-$DOTFILES/zsh}/prompts $fpath)
 
 # Homebrew
 HOMEBREW_PREFIX=/opt/homebrew
@@ -20,7 +25,7 @@ promptinit
 autoload -U colors
 colors
 
-autoload -U ${ZDOTDIR:-$HOME/.zsh}/functions/[^_]*(:t)
+autoload -U ${ZDOTDIR:-$DOTFILES/zsh}/functions/[^_]*(:t)
 autoload add-zsh-hook
 
 # Support bash completions
@@ -194,6 +199,11 @@ fi
 if type hub &>/dev/null; then
 	export GITHUB_USER=ascarter
 	eval $(`whence -cp hub` alias -s)
+fi
+
+# Kubernetes
+if type kubectl &>/dev/null; then
+	source <(kubectl completion zsh)
 fi
 
 # AWS
