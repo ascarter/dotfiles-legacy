@@ -1,16 +1,25 @@
 #!/bin/sh
 
-DOTFILES_ROOT="$(cd "$(dirname "$0")"; pwd -P)"
+set -ueo pipefail
+
+#
+# Uninstall script for dotfiles configuration
+#
+# Usage:
+#	uninstall [dotfiles]
+#
+# Defaults:
+#	dotfiles = ~/.config/dotfiles
+#
+
+DOTFILES=${1:-${HOME}/.config/dotfiles}
 
 # Remove home directory symlinks
-for source in ${DOTFILES_ROOT}/rc/*; do
-	filename=$(basename ${source})
-	target=${HOME}/.${filename}
+for f in $(cat ${DOTFILES}/rc.conf); do
+	target=${HOME}/.${f}
 	if [ -e ${target} ]; then
-		printf "Remove ${target}\n"
+		echo "Remove ${target}"
 		rm ${target}
 	fi
 done
-
-# Uninstall homebrew
 

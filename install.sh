@@ -40,6 +40,7 @@ Darwin )
 	fi
 	;;
 Linux )
+	# TODO: Install build tools and git
 	;;
 esac
 
@@ -49,10 +50,10 @@ if ! [ -e ${DOTFILES} ]; then
 	git clone https://github.com/ascarter/dotfiles ${DOTFILES}
 fi
 
-# Symlink home directory files
-for source in ${DOTFILES}/rc/*; do
-	filename=$(basename ${source})
-	target=${HOME}/.${filename}
+# Symlink rc files
+for f in $(cat ${DOTFILES}/rc.conf); do
+	source=${DOTFILES}/${f}
+	target=${HOME}/.${f}
 	if ! [ -e ${target} ]; then
 		echo "Symlink ${source} -> ${target}"
 		ln -s ${source} ${target}
@@ -62,9 +63,8 @@ done
 # Change shell to zsh
 [ ${SHELL} != "/bin/zsh" ] && chsh -s /bin/zsh
 
-# Set zsh configuration
+# Set zsh environment
 cat <<EOF > ${HOME}/.zshenv
-ZDOTDIR=${DOTFILES}/zsh
 DOTFILES=${DOTFILES}
 EOF
 
