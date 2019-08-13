@@ -29,6 +29,7 @@ Plug 'ajh17/Spacegray.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'arcticicestudio/nord-vim'
 Plug 'dracula/vim'
+Plug 'kjssad/quantum.vim'
 call plug#end()
 
 " =====================================
@@ -36,7 +37,9 @@ call plug#end()
 " =====================================
 
 " Color scheme
-" colorscheme macvim
+set termguicolors
+colorscheme quantum
+let g:lightline = { 'colorscheme': 'quantum' }
 
 " Turn off blinking cursor
 " set guicursor+=n:blinkon0
@@ -54,7 +57,6 @@ set fillchars=vert:\ ,fold:-
 if has('statusline')
 	" Mode is shown by lightline
 	set noshowmode
-
 	set laststatus=2
 	" set statusline=%<%f%{tagbar#currenttag('[%s]\ ','')}\ %w%h%m%r%=%-14.(%l,%c%V%)\ %P
 endif
@@ -91,6 +93,7 @@ let g:netrw_altv=&spr
 let g:netrw_list_hide='.git,.DS_Store,.*\.swp$'
 let g:netrw_liststyle=3
 let g:netrw_preview = 1
+" let g:netrw_winsize=20
 
 " Window management
 
@@ -162,7 +165,7 @@ if has("gui_running")
 	" colorscheme nord
 
 	" Set lightline colors
-	let g:lightline = { 'colorscheme': ( &background == "light" ? 'PaperColor' : 'dark' ) }
+	" let g:lightline = { 'colorscheme': ( &background == "light" ? 'PaperColor' : 'dark' ) }
 
 	" Set standard starting window size
 	if &diff
