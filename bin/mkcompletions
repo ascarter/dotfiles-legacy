@@ -5,7 +5,7 @@
 
 emulate -L zsh
 
-COMPLETIONS_DIR=${ZDOTDIR:-$HOME/.zsh}/completions
+COMPLETIONS_DIR=${ZDOTDIR:-$DOTFILES/zsh}/completions
 mkdir -p ${COMPLETIONS_DIR}
 
 # Swift
@@ -17,21 +17,7 @@ fi
 # Rust
 if type rustup &>/dev/null; then
 	echo "Generating rustup completions..."
-	rustup completions zsh > ${COMPLETIONS_DIR}/_${rustup}
-fi
-
-# Docker
-if [[ -d /Applications/Docker.app ]]; then
-	for f in docker docker-compose docker-machine; do
-		echo "Generating ${f} completions..."
-		ln -fs /Applications/Docker.app/Contents/Resources/etc/${f}.zsh-completion ${COMPLETIONS_DIR}/_${f}
-	done
-fi
-
-# Kubernetes
-if type kubectl &>/dev/null; then
-	echo "Generating kubectl completions..."
-	kubectl completion zsh > ${COMPLETIONS_DIR}/_kubectl
+	rustup completions zsh > ${COMPLETIONS_DIR}/_rustup
 fi
 
 # if [[ -f /Applications/YubiKey\ Manager.app/Contents/MacOS/ykman ]]; then
@@ -39,5 +25,17 @@ fi
 # 	_YKMAN_COMPLETE=source /Applications/YubiKey\ Manager.app/Contents/MacOS/ykman > ${COMPLETIONS_DIR}/_ykman
 # fi
 
+# Docker
+if [[ -d /Applications/Docker.app ]]; then
+	for f in docker docker-compose docker-machine; do
+		echo "Generating ${f} completions..."
+		cp /Applications/Docker.app/Contents/Resources/etc/${f}.zsh-completion ${COMPLETIONS_DIR}/_${f}
+	done
+fi
 
-echo "Reload shell to load completions."
+# Clear cached completions
+rm -f ${ZDOTDIR:-$HOME}/.zcompdump
+zsh -ic "compinit"
+
+echo "Reload shell to enable completions"
+
