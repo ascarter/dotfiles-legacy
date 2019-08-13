@@ -20,6 +20,12 @@ if type rustup &>/dev/null; then
 	rustup completions zsh > ${COMPLETIONS_DIR}/_rustup
 fi
 
+# NPM
+# if type npm &>/dev/null; then
+#	echo "Generating npm completions..."
+#	npm completion > ${COMPLETIONS_DIR}/_npm
+# fi
+
 # if [[ -f /Applications/YubiKey\ Manager.app/Contents/MacOS/ykman ]]; then
 # 	echo "Generating ykman completions..."
 # 	_YKMAN_COMPLETE=source /Applications/YubiKey\ Manager.app/Contents/MacOS/ykman > ${COMPLETIONS_DIR}/_ykman
