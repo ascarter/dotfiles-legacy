@@ -193,7 +193,7 @@ alias resetcomp='rm -f ${HOME}/.zcompdump && compinit'
 alias dotf='cd ${DOTFILES}/'
 
 # Projects
-alias projects='cd ${PROJECTS_HOME}'
+alias projects='cd ${HOME}/Projects'
 
 # ls
 alias ll='ls -l'
