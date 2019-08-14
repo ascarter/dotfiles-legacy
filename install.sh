@@ -6,7 +6,7 @@ set -ueo pipefail
 # Install script for dotfiles configuration
 #
 # Usage:
-#	install [dotfiles] [homebrew]
+#	install.sh [dotfiles] [homebrew]
 #
 # Defaults:
 #	dotfiles == ~/.config/dotfiles
@@ -29,6 +29,9 @@ Darwin )
 	# Install Xcode command line tools
 	if ! [ -e /Library/Developer/CommandLineTools ]; then
 		xcode-select --install
+		read -p "Press any key to continue..." -nl -s
+		sudo xcodebuild -runFirstLaunch
+		read -p "Press any key to continue..." -nl -s
 	fi
 	
 	# Install Homebrew
@@ -71,5 +74,5 @@ EOF
 # Generate zsh completions
 zsh -c "${DOTFILES}/bin/mkcompletions"
 
-# Genearte gitconfig
+# Generate gitconfig
 zsh -c "${DOTFILES}/bin/gitconfig"
