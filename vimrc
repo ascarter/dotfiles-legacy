@@ -37,7 +37,7 @@ call plug#end()
 " =====================================
 
 " Color scheme
-set termguicolors
+"set termguicolors
 set background=dark
 colorscheme quantum
 let g:lightline = { 'colorscheme': 'quantum' }
