@@ -29,9 +29,9 @@ Darwin )
 	# Install Xcode command line tools
 	if ! [ -e /Library/Developer/CommandLineTools ]; then
 		xcode-select --install
-		read -p "Press any key to continue..." -nl -s
+		read -p "Press any key to continue..." -n1 -s
 		sudo xcodebuild -runFirstLaunch
-		read -p "Press any key to continue..." -nl -s
+		read -p "Press any key to continue..." -n1 -s
 	fi
 	
 	# Install Homebrew
