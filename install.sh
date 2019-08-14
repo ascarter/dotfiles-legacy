@@ -30,8 +30,10 @@ Darwin )
 	if ! [ -e /Library/Developer/CommandLineTools ]; then
 		xcode-select --install
 		read -p "Press any key to continue..." -n1 -s
+		echo
 		sudo xcodebuild -runFirstLaunch
 		read -p "Press any key to continue..." -n1 -s
+		echo
 	fi
 	
 	# Install Homebrew
