@@ -25,17 +25,15 @@ Darwin )
     		open https://itunes.apple.com/us/app/xcode/id497799835?mt=12
     		exit 1
 	fi
-	
+
 	# Install Xcode command line tools
 	if ! [ -e /Library/Developer/CommandLineTools ]; then
 		xcode-select --install
 		read -p "Press any key to continue..." -n1 -s
 		echo
 		sudo xcodebuild -runFirstLaunch
-		read -p "Press any key to continue..." -n1 -s
-		echo
 	fi
-	
+
 	# Install Homebrew
 	if ! [ -e ${HOMEBREW_ROOT} ]; then
 		echo "Install homebrew to ${HOMEBREW_ROOT}"
