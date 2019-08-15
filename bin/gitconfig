@@ -28,41 +28,42 @@ _gc_prompt commit.gpgsign "GPG sign by default? (true/false)"
 
 _gc_set color.ui auto
 _gc_set core.autocrlf input
-_gc_set core.editor vim
+_gc_set core.editor $EDITOR
 _gc_set core.excludesFile "${HOME}/.gitignore"
-_gc_set diff.guitool gvimdiff
-_gc_set diff.tool vimdiff
 _gc_set difftool.prompt false
 _gc_set instaweb.httpd webrick
-_gc_set merge.guitool gvimdiff
 _gc_set merge.prompt
-_gc_set merge.tool vimdiff
-#_gc_set url."git@github.com".pushInsteadOf "https://github.com"
+
+# Vim
+# _gc_set diff.tool vimdiff
+# _gc_set merge.tool vimdiff
+
+# Add vscode as a difftool and mergetool
+_gc_set difftool."vscode".cmd 'code --wait --new-window --diff $LOCAL $REMOTE'
+_gc_set diff.tool vscode
+_gc_set mergetool."vscode".cmd 'code --wait --new-window $MERGED'
+_gc_set merge.tool vscode
 
 case $(uname) in
 Darwin )
 	_gc_set credential.helper osxkeychain
-# 	if [ -e /usr/local/bin/bbedit ]; then
-# 		_gc_set core.editor "bbedit --wait"
-# 	fi
-# 	
-# 	if [ -e /usr/local/bin/bbdiff ]; then
-# 		_gc_set diff.tool bbdiff
-# 	else
-# 		_gc_set diff.tool opendiff
-# 	fi
-# 	_gc_set merge.tool opendiff	
 	_gc_set gui.fontui "-family \"SF UI Display Regular\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
 	_gc_set gui.fontdiff "-family \"SF Mono\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
-	_gc_set difftool."bbdiff".cmd "/usr/local/bin/bbdiff --wait --resume \"$LOCAL\" \"$REMOTE\""
-	_gc_set difftool."Kaleidoscope".cmd "ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\""
-	_gc_set	mergetool."Kaleidoscope".cmd "ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot"
-	_gc_set mergetool."Kaleidoscope".trustExitCode true
+
+	# BBEdit diff
+	if type bbdiff &>/dev/null; then
+		_gc_set difftool."bbdiff".cmd 'bbdiff --wait --resume $LOCAL $REMOTE'
+	fi
+
+	# Kaleidoscope
+	if type ksdiff &>/dev/null; then
+		_gc_set difftool."Kaleidoscope".cmd 'ksdiff --partial-changeset --relative-path $MERGED -- $LOCAL $REMOTE'
+		_gc_set	mergetool."Kaleidoscope".cmd 'ksdiff --merge --output $MERGED --base $BASE -- $LOCAL --snapshot $REMOTE --snapshot'
+		_gc_set mergetool."Kaleidoscope".trustExitCode true
+	fi
 	;;
 Linux )
 	_gc_set credential.helper cache
-# 	_gc_set diff.tool meld
-# 	_gc_set merge.tool meld
 	_gc_set gui.fontui "-family \"Source Sans Pro\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
 	_gc_set gui.fontdiff "-family \"Source Code Pro\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
 	;;
@@ -71,7 +72,6 @@ esac
 # Aliases
 _gc_set alias.aliases      "!git config -l | grep alias | cut -c 7-"
 _gc_set alias.amend        "commit --amend"
-_gc_set alias.bbdiff       "difftool --tool=bbdiff"
 _gc_set alias.begin        "checkout -b"
 _gc_set alias.blocal       "rev-parse --abbrev-ref HEAD"
 _gc_set alias.br           branch
@@ -98,8 +98,6 @@ _gc_set alias.gitkconflict "!gitk --left-right HEAD...MERGE_HEAD"
 _gc_set alias.hist         "log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short"
 _gc_set alias.hub          "!sh -c 'github'"
 _gc_set alias.k            "!gitk"
-_gc_set alias.ksdiff       "difftool -y --tool=Kaleidoscope"
-_gc_set alias.ksmerge      "mergetool -y --tool=Kaleidoscope"
 _gc_set alias.last         "log -l HEAD -n 1"
 _gc_set alias.ll           "log --pretty=format:\"%C(yellow)%h %C(green)%ad %cn %Cred%d %Creset%s\" --decorate --numstat --date=short"
 _gc_set alias.llog         "log --date=local"

@@ -78,12 +78,18 @@ setopt CORRECT_ALL
 bindkey "^[[3~" delete-char
 
 # Editor
-if [ -e /usr/local/bin/bbedit ]; then
-	# bbedit
-	export EDITOR="bbedit --wait --resume"
-	export VISUAL="bbedit"
-	export LESSEDIT='bbedit -l %lm %f'
-	export TEXEDIT='bbedit -w -l %d "%s"'
+if type code &>/dev/null; then
+	# vscode
+	export EDITOR="code --wait"
+	export VISUAL="code"
+	export LESSEDIT='code --goto %f:%lm'
+	export TEXEDIT='code --wait --goto %s:%d'
+# elif type bbedit &>/dev/null; then
+# 	# bbedit
+# 	export EDITOR="bbedit --wait --resume"
+# 	export VISUAL="bbedit"
+# 	export LESSEDIT='bbedit -l %lm %f'
+# 	export TEXEDIT='bbedit -w -l %d "%s"'
 else
 	# vim
 	export EDITOR="vim"
