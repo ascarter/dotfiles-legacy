@@ -63,6 +63,12 @@ for f in $(cat ${DOTFILES}/rc.conf); do
 	fi
 done
 
+# Setup applications
+case $(uname) in
+Darwin )
+	brew bundle install --global ;;
+esac
+
 # Change shell to zsh
 [ ${SHELL} != "/bin/zsh" ] && chsh -s /bin/zsh
 
