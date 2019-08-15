@@ -50,5 +50,5 @@
         "vs-kubernetes.minikube-path": "/Users/andrew/.vs-kubernetes/tools/minikube/darwin-amd64/minikube",
         "vs-kubernetes.draft-path": "/Users/andrew/.vs-kubernetes/tools/draft/darwin-amd64/draft"
     },
-    "diffEditor.renderSideBySide": false,
+    "diffEditor.renderSideBySide": true,
 }

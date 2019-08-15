@@ -69,31 +69,6 @@ Darwin )
 	brew bundle install --global ;;
 esac
 
-# Setup VSCode
-case $(uname) in
-Darwin )
-	SETTINGS_DIR=${HOME}/Library/Application\ Support ;;
-Linux )
-	SETTINGS_DIR=${HOME}/.config ;;
-esac
-
-if [ -n "${SETTINGS_DIR}" ]; then
-	mkdir -p ${SETTINGS_DIR}/Code/User
-	for f in ${DOTFILES}/vscode/*.json; do
-		target=${SETTINGS_DIR}/Code/User/$(basename $f)
-		if ! [ -e "${target}" ]; then
-			echo "Symlink ${f} ${target}"
-			ln -s ${f} "${target}"
-		fi
-	done
-fi
-
-if [ -e /usr/local/bin/code ]; then
-	for ext in $(cat ${DOTFILES}/vscode/extensions); do
-		code --install-extension ${ext}
-	done
-fi
-
 # Change shell to zsh
 [ ${SHELL} != "/bin/zsh" ] && chsh -s /bin/zsh
 
@@ -107,3 +82,6 @@ zsh -c "${DOTFILES}/bin/mkcompletions"
 
 # Generate gitconfig
 zsh -c "${DOTFILES}/bin/gitconfig"
+
+# Generate vscode config
+zsh -C "${DOTFILES}/bin/vscode_config"

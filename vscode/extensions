@@ -17,8 +17,4 @@ redhat.java
 redhat.vscode-yaml
 sdras.night-owl
 VisualStudioExptTeam.vscodeintellicode
-vscjava.vscode-java-debug
-vscjava.vscode-java-dependency
 vscjava.vscode-java-pack
-vscjava.vscode-java-test
-vscjava.vscode-maven
