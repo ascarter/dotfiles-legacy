@@ -52,4 +52,5 @@
     "workbench.editor.tabCloseButton": "left",
     "workbench.settings.useSplitJSON": true,
     "yaml.format.enable": true,
+    "go.formatTool": "goimports",
 }

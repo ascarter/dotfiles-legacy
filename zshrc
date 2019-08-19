@@ -68,10 +68,6 @@ setopt HIST_REDUCE_BLANKS
 SAVEHIST=5000
 HISTSIZE=2000
 
-# Enable corrections
-# setopt CORRECT
-# setopt CORRECT_ALL
-
 # Key mappings
 
 # Forward delete
