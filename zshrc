@@ -74,10 +74,19 @@ HISTSIZE=2000
 bindkey "^[[3~" delete-char
 
 # Editor
-export EDITOR="vim"
-export VISUAL="vim -g"
-export LESSEDIT='vim ?lm+%lm. %f'
-export TEXEDIT='vim +%d %s'
+if type bbedit &>/dev/null; then
+	# bbedit
+	export EDITOR="bbedit --wait --resume"
+	export VISUAL="bbedit"
+	export LESSEDIT='bbedit -l %lm %f'
+	export TEXEDIT='bbedit -w -l %d "%s"'
+else
+	# vim
+	export EDITOR="vim"
+	export VISUAL="vim -g"
+	export LESSEDIT='vim ?lm+%lm. %f'
+	export TEXEDIT='vim +%d %s'
+fi
 
 # less
 export PAGER=less
