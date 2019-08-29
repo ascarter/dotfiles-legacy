@@ -108,7 +108,6 @@ mas "Linea Link", id: 1233368267
 mas "Logic Pro X", id: 634148309
 mas "Magnet", id: 441258766
 mas "MainStage 3", id: 634159523
-mas "News Explorer", id: 1032670789
 mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Patterns", id: 429449079
