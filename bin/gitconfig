@@ -34,15 +34,13 @@ _gc_set difftool.prompt false
 _gc_set instaweb.httpd webrick
 _gc_set merge.prompt
 
-# Vim
-# _gc_set diff.tool vimdiff
-# _gc_set merge.tool vimdiff
-
 # Add vscode as a difftool and mergetool
-_gc_set difftool."vscode".cmd 'code --wait --new-window --diff $LOCAL $REMOTE'
-_gc_set diff.tool vscode
-_gc_set mergetool."vscode".cmd 'code --wait --new-window $MERGED'
-_gc_set merge.tool vscode
+if type code &>/dev/null; then
+	_gc_set difftool."vscode".cmd 'code --wait --new-window --diff $LOCAL $REMOTE'
+	_gc_set mergetool."vscode".cmd 'code --wait --new-window $MERGED'
+	#_gc_set diff.tool vscode
+	#_gc_set merge.tool vscode
+fi
 
 case $(uname) in
 Darwin )
@@ -61,11 +59,19 @@ Darwin )
 		_gc_set	mergetool."Kaleidoscope".cmd 'ksdiff --merge --output $MERGED --base $BASE -- $LOCAL --snapshot $REMOTE --snapshot'
 		_gc_set mergetool."Kaleidoscope".trustExitCode true
 	fi
+	
+	# Use opendiff as default diff/merge
+	_gc_set diff.tool opendiff
+	_gc_set merge.tool opendiff
 	;;
 Linux )
 	_gc_set credential.helper cache
 	_gc_set gui.fontui "-family \"Source Sans Pro\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
 	_gc_set gui.fontdiff "-family \"Source Code Pro\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
+
+	# Use Vim as default diff/merge
+	_gc_set diff.tool vimdiff
+	_gc_set merge.tool vimdiff
 	;;
 esac
 
