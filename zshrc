@@ -263,13 +263,13 @@ alias gopresent='present -play=true &; open -g http://127.0.0.1:3999; fg'
 alias godocw='godoc -http=:6060 -play -q'
 
 # Java
-alias java6="set_jvm 1.6"
-alias java7="set_jvm 1.7"
-alias java8="set_jvm 1.8"
-alias java9="set_jvm 9"
-alias java10="set_jvm 10"
-alias java11="set_jvm 11"
-alias java12="set_jvm 12"
+alias java6="jvm 1.6"
+alias java7="jvm 1.7"
+alias java8="jvm 1.8"
+alias java9="jvm 9"
+alias java10="jvm 10"
+alias java11="jvm 11"
+alias java12="jvm 12"
 
 # Node.js
 alias npmlist='npm list --depth=0'
@@ -348,9 +348,6 @@ Darwin )
 	alias extags='/opt/homebrew/bin/ctags'
 	alias verifyxcode='spctl --assess --verbose /Applications/Xcode.app'
 	alias sketchtool="$(mdfind kMDItemCFBundleIdentifier = 'com.bohemiancoding.sketch3' | head -n 1)/Contents/Resources/sketchtool/bin/sketchtool"
-
-	# Java
-	alias java_home='/usr/libexec/java_home'
 
 	# Use MacVim on Mac OS X if installed
 	[[ -e /usr/local/bin/vim ]] && alias vim='/usr/local/bin/vim'
