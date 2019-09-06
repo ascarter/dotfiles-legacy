@@ -83,5 +83,3 @@ zsh -c "${DOTFILES}/bin/mkcompletions"
 # Generate gitconfig
 zsh -c "${DOTFILES}/bin/gitconfig"
 
-# Generate vscode config
-zsh -C "${DOTFILES}/bin/vscode_config"
