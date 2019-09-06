@@ -262,15 +262,6 @@ alias gemuinstall="gem install --user-install"
 alias gopresent='present -play=true &; open -g http://127.0.0.1:3999; fg'
 alias godocw='godoc -http=:6060 -play -q'
 
-# Java
-alias java6="jvm 1.6"
-alias java7="jvm 1.7"
-alias java8="jvm 1.8"
-alias java9="jvm 9"
-alias java10="jvm 10"
-alias java11="jvm 11"
-alias java12="jvm 12"
-
 # Node.js
 alias npmlist='npm list --depth=0'
 
