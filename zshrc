@@ -92,22 +92,6 @@ fi
 export PAGER=less
 export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit-at-eof -R"
 
-# Colors
-case "${TERM}" in
-xterm-256color|xterm-color|xterm|dtterm|linux)
-	case $(uname) in
-	Darwin )
-		terminal_theme spartan
-		;;
-	Linux )
-		if type dircolors &>/dev/null && [ -e ${HOME}/.dircolors ]; then
-			eval $(dircolors ${HOME}/.dir_colors)
-		fi
-		;;
-	esac
-	;;
-esac
-
 # ========================================
 # Frameworks/Languages
 # ========================================
@@ -304,7 +288,7 @@ alias sshagentstart='eval $(ssh-agent -s) && ssh-add -A'
 case $(uname) in
 Darwin )
 	# ls
-	alias ls='ls -hFGH'
+	alias ls='ls -hFH'
 
 	# macOS appearance
 	alias darkmode='osascript -e "tell application \"System Events\" to tell appearance preferences to set dark mode to true"'
@@ -344,7 +328,7 @@ Darwin )
 	[[ -e /usr/local/bin/vim ]] && alias vim='/usr/local/bin/vim'
 	;;
 Linux )
-	alias ls='ls -hFH --color=auto'
+	alias ls='ls -hFH'
 
 	alias glock='gnome-screensaver-command --lock'
 	alias xlock='xscreensaver-command -lock'
