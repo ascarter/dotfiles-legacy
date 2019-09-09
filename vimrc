@@ -9,18 +9,62 @@ filetype off
 let mapleader=","
 
 " =====================================
+" Functions
+" =====================================
+
+function! SetBackgroundMode(...)
+	if $TERM_PROGRAM ==? "Apple_Terminal"
+		let s:mode=get(systemlist("defaults read -g AppleInterfaceStyle"), 0, "light")
+		if s:mode ==? "dark"
+			let s:new_bg="dark"
+		else
+			let s:new_bg="light"
+		endif
+	else
+		if $VIM_BACKGROUND ==? "dark"
+			let s:new_bg="dark"
+		else
+			let s:new_bg="light"
+		endif
+	endif
+	
+	if &background !=? s:new_bg
+		let &background=s:new_bg
+		colorscheme snow
+		let s:ll_colorscheme= "snow_" . s:new_bg
+		let g:lightline = {'colorscheme': s:ll_colorscheme}
+		" Reload lightline
+		call lightline#init()
+		execute 'source' $HOME . "/.vim/bundle/snow/autoload/lightline/colorscheme/" . s:ll_colorscheme . ".vim"
+		call lightline#colorscheme()
+		call lightline#update()
+	endif
+endfunction
+
+" =====================================
 " Plugins
 " =====================================
 " Enable extend % matching
 runtime macros/matchit.vim
 
-" Setup vim plug
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+" Install vim plug
+if has("win32")
+	if empty(glob('~\vimfiles\autoload\plug.vim'))
+		silent !(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("~\vimfiles\autoload\plug.vim"))
+		autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+	endif
+else
+	if empty(glob('~/.vim/autoload/plug.vim'))
+  		silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+		autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+	endif
 endif
 
-call plug#begin('~/.vim/bundle')
+if has("win32")
+	call plug#begin('~/vimfiles/bundle')
+else
+	call plug#begin('~/.vim/bundle')
+end
 " Status line
 Plug 'itchyny/lightline.vim'
 
@@ -28,19 +72,35 @@ Plug 'itchyny/lightline.vim'
 Plug 'ajh17/Spacegray.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'arcticicestudio/nord-vim'
+Plug 'ayu-theme/ayu-vim'
 Plug 'dracula/vim'
 Plug 'kjssad/quantum.vim'
+Plug 'nightsense/snow'
+Plug 'rakr/vim-one'
 call plug#end()
+
+" Install any missing plugins
+autocmd VimEnter *
+  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \|   PlugInstall --sync | q
+  \| endif
 
 " =====================================
 " UI
 " =====================================
 
 " Color scheme
-"set termguicolors
+if has("termguicolors")
+	" Windows 10 terminal
+	if has("vcon")
+		set termguicolors
+	endif
+endif
+
+"let g:solarized_termcolors=256
 set background=dark
-colorscheme quantum
-let g:lightline = { 'colorscheme': 'quantum' }
+colorscheme snow
+let g:lightline = { 'colorscheme': 'snow_dark' }
 
 " Turn off blinking cursor
 " set guicursor+=n:blinkon0
@@ -162,6 +222,14 @@ let g:go_fmt_command = "gofmt"
 " =====================================
 
 if has("gui_running")
+	if has("termguicolors")
+		set termguicolors
+	endif
+
+	" Check system dark/light mode
+	call SetBackgroundMode()
+	call timer_start(3000, "SetBackgroundMode", { "repeat": -1 })
+	
 	" GUI color scheme
 	" colorscheme nord
 
@@ -177,9 +245,10 @@ if has("gui_running")
 
 	" Turn off toolbar
 	set guioptions-=T
-	map <silent> <C-F1> :call ToggleGuiOption("T")<CR>
 
-	
+	" Turn on menus
+	set guioptions+=m
+
 	if has('gui_macvim')
 		" Mac OS X
 		" set macthinstrokes
@@ -222,21 +291,10 @@ if has("gui_running")
 		set guifont=Source\ Code\ Pro\ Medium\ 12,Monospace\ 12
 	elseif has('gui_win32')
 		" Windows
-		set guifont=Source\ Code\ Pro:h12,Consolas:h11,Lucida\ Console:h12
+		set guifont=Source\ Code\ Pro:h12,Consolas:h12
+		set renderoptions=type:directx
 	endif
 endif
 
 
-" =====================================
-" Functions
-" =====================================
-
-function ToggleGuiOption(option)
-    " If a:option is already set in guioptions, then we want to remove it
-    if match(&guioptions, "\\C" . a:option) > -1
-	exec "set guioptions-=" . a:option
-    else
-	exec "set guioptions+=" . a:option
-    endif
-endfunction
 
