@@ -9,39 +9,6 @@ filetype off
 let mapleader=","
 
 " =====================================
-" Functions
-" =====================================
-
-function! SetBackgroundMode(...)
-	if $TERM_PROGRAM ==? "Apple_Terminal"
-		let s:mode=get(systemlist("defaults read -g AppleInterfaceStyle"), 0, "light")
-		if s:mode ==? "dark"
-			let s:new_bg="dark"
-		else
-			let s:new_bg="light"
-		endif
-	else
-		if $VIM_BACKGROUND ==? "dark"
-			let s:new_bg="dark"
-		else
-			let s:new_bg="light"
-		endif
-	endif
-	
-	if &background !=? s:new_bg
-		let &background=s:new_bg
-		colorscheme snow
-		let s:ll_colorscheme= "snow_" . s:new_bg
-		let g:lightline = {'colorscheme': s:ll_colorscheme}
-		" Reload lightline
-		call lightline#init()
-		execute 'source' $HOME . "/.vim/bundle/snow/autoload/lightline/colorscheme/" . s:ll_colorscheme . ".vim"
-		call lightline#colorscheme()
-		call lightline#update()
-	endif
-endfunction
-
-" =====================================
 " Plugins
 " =====================================
 " Enable extend % matching
@@ -69,11 +36,8 @@ end
 Plug 'itchyny/lightline.vim'
 
 " Color schemes
-Plug 'ajh17/Spacegray.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'arcticicestudio/nord-vim'
-Plug 'ayu-theme/ayu-vim'
-Plug 'dracula/vim'
 Plug 'kjssad/quantum.vim'
 Plug 'nightsense/snow'
 Plug 'rakr/vim-one'
@@ -97,13 +61,18 @@ if has("termguicolors")
 	endif
 endif
 
+" solarized
 "let g:solarized_termcolors=256
-set background=dark
-colorscheme snow
-let g:lightline = { 'colorscheme': 'snow_dark' }
+"set background=dark
+"colorscheme solarized
 
-" Turn off blinking cursor
-" set guicursor+=n:blinkon0
+" nord
+"let g:lightline = { 'colorscheme': 'solarized' }
+"colorscheme nord
+"let g:lightline = { 'colorscheme': 'nord' }
+
+" snow
+colorscheme snow
 
 " Flash screen only - no beep
 set visualbell
@@ -226,16 +195,6 @@ if has("gui_running")
 		set termguicolors
 	endif
 
-	" Check system dark/light mode
-	call SetBackgroundMode()
-	call timer_start(3000, "SetBackgroundMode", { "repeat": -1 })
-	
-	" GUI color scheme
-	" colorscheme nord
-
-	" Set lightline colors
-	" let g:lightline = { 'colorscheme': ( &background == "light" ? 'PaperColor' : 'dark' ) }
-
 	" Set standard starting window size
 	if &diff
 		set lines=40 columns=160
@@ -249,6 +208,9 @@ if has("gui_running")
 	" Turn on menus
 	set guioptions+=m
 
+	" Turn off blinking cursor
+	" set guicursor+=n:blinkon0
+	
 	if has('gui_macvim')
 		" Mac OS X
 		" set macthinstrokes
@@ -296,5 +258,7 @@ if has("gui_running")
 	endif
 endif
 
-
+" Set lightline colors after other colors/background are set
+let g:lightline = { 'colorscheme': ( &background == "light" ? 'snow_light' : 'snow_dark' )}
+" let g:lightline = { 'colorscheme': ( &background == "light" ? 'PaperColor' : 'default' ) }
 
