@@ -40,6 +40,7 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'arcticicestudio/nord-vim'
 Plug 'kjssad/quantum.vim'
 Plug 'nightsense/snow'
+Plug 'NLKNguyen/papercolor-theme'
 Plug 'rakr/vim-one'
 call plug#end()
 
