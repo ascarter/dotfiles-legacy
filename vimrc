@@ -73,6 +73,7 @@ endif
 "let g:lightline = { 'colorscheme': 'nord' }
 
 " snow
+set background=dark
 colorscheme snow
 
 " Flash screen only - no beep
