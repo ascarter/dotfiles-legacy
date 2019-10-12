@@ -6,6 +6,17 @@ XTerm.*.faceSize: 8
 
 Xterm.*.geometry: 80x24
 
+XClock*foreground:        #FFFFFF
+XClock*background:        #000000
+XClock*highlight:         reverseVideo
+XClock*update:            1
+XClock.Clock.majorColor:  #C1C1C1
+XClock.Clock.minorColor:  #7B7B81
+XClock.Clock.hourColor:   #999999
+XClock.Clock.minuteColor: #999999
+XClock.Clock.secondColor: #FC2125
+!XClock*geometry:          210x210+1020+12
+
 *.foreground:   #EDEDEF
 *.background:   #262626
 *.cursorColor:  #7F7F7F
