@@ -48,10 +48,10 @@ autoload -Uz vcs_info
 declare +x PS1
 prompt vcs
 
-if [[ ${TERM_PROGRAM} = "Apple_Terminal"  &&  -z ${INSIDE_EMACS} ]]; then
-    add-zsh-hook chpwd update_terminal_cwd
-    update_terminal_cwd
-fi
+# if [[ ${TERM_PROGRAM} = "Apple_Terminal"  &&  -z ${INSIDE_EMACS} ]]; then
+#	add-zsh-hook chpwd update_terminal_cwd
+#	update_terminal_cwd
+# fi
 
 # ========================================
 # Shell preferences
