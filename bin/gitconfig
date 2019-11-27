@@ -11,7 +11,7 @@ _gc_set() {
 # Prompt for git config key
 _gc_prompt() {
 	input=$(git config --file ${git_config_file}.orig --get ${1})
-	vared -p "${1}: " input
+	vared -p "${1}: " -M emacs input
 	_gc_set $1 $input
 }
 
