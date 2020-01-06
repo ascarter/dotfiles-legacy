@@ -42,6 +42,7 @@ function Install-SSH() {
 	# Create SSH key if not present
 	$sshKeyfile = Join-Path -Path $env:USERPROFILE -ChildPath '.ssh\id_rsa'
 	if (!(Test-Path $sshKeyFile)) {
+		if (!(Test-Path $sshKeyfile.Directory.Exists)) { New-Item -Path ($sshKeyfile.Directory.FullName) }
 		Write-Host "Generating SSH user key"
 		$githubEmail = Read-Host -Prompt "Enter GitHub email address"
 		ssh-keygen -t rsa -b 4096 -C "$githubEmail" -f $sshKeyFile
