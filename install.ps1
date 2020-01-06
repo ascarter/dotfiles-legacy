@@ -32,12 +32,12 @@ function Install-SSH() {
 	Install-Module -Force OpenSSHUtils -Scope AllUsers
 
 	# Configure SSH Agent
-	Start-Service ssh-agent
 	Set-Service -Name ssh-agent -StartupType 'Automatic'
+	Start-Service ssh-agent
 
 	# Configure SSH server
-	Start-Service sshd	
 	Set-Service -Name sshd -StartupType 'Automatic'
+	Start-Service sshd
 	
 	# Create SSH key if not present
 	$sshKeyfile = Join-Path -Path $env:USERPROFILE -ChildPath '.ssh\id_rsa'
