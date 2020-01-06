@@ -30,7 +30,7 @@ function Enable-WindowsCapability([string]$Name) {
 function Enable-WindowsFeature([string]$Name) {
 	if ((Get-WindowsOptionalFeature -Online -FeatureName $Name).State -eq "Disabled") {
 		Write-Host "Enabling $Name"
-		Enable-WindowsOptionalFeature -Online -FeatureName $Name        
+		Enable-WindowsOptionalFeature -Online -FeatureName $Name -All     
 	}
  else {
 		Write-Host "$Name enabled"
