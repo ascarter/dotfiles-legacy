@@ -28,10 +28,9 @@ function Install-SSH() {
 	Set-Service -Name sshd -StartupType 'Automatic'
 	
 	# Add firewall rule
-	if (!((Get-NetFirewallRule -Name "sshd").Enabled -eq $true)) { Write-Host "sshd firewall rule missing" }
-	# 	Write-Host "Add sshd firewall rule"
-	# 	#New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
-	# }
+	if (!((Get-NetFirewallRule -Name "sshd").Enabled -eq $true)) { 
+		New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+	}
 
 	# Install OpenSSHUtils
 	# Install-Module -Force OpenSSHUtils -Scope AllUsers
