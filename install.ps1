@@ -19,6 +19,7 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 
 function Enable-WindowsCapability([string]$Name) {
 	if ((Get-WindowsCapability -Online -Name $Name).State -eq "Disabled") { 
+		Write-Host "Adding $Name"
 		Add-WindowsCapability -Online -Name $Name
 	}
  else {
@@ -28,6 +29,7 @@ function Enable-WindowsCapability([string]$Name) {
 
 function Enable-WindowsFeature([string]$Name) {
 	if ((Get-WindowsOptionalFeature -Online -FeatureName $Name).State -eq "Disabled") {
+		Write-Host "Enabling $Name"
 		Enable-WindowsOptionalFeature -Online -FeatureName $Name        
 	}
  else {
@@ -70,7 +72,6 @@ function Install-SSH() {
 	Start-Service ssh-agent
 	Set-Service -Name ssh-agent -StartupType 'Automatic'
 
-		
 	# Create SSH key if not present
 	$sshKeyfile = Join-Path -Path $env:USERPROFILE -ChildPath '.ssh\id_rsa'
 	if (!(Test-Path $sshKeyFile)) {
@@ -136,6 +137,7 @@ function Install-Dotfiles() {
 function Install-ConfigurationFiles() {
 	# Link profile
 	if (!(Test-Path -Path $PROFILE.CurrentUserAllHosts)) {
+		Write-Host "Linking profile"
 		$target = Join-Path -Path $dotfiles -ChildPath 'profile.ps1'
 		New-Item -ItemType SymbolicLink -Path $PROFILE.CurrentUserAllHosts -Target $target
 	}
@@ -154,7 +156,13 @@ function Install-DotnetCore() {
 }
 
 function Install-Modules() {
-	Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force		
+	if (!(Get-Module -Name posh-git)) {
+		Write-Host "Installing posh-git"
+		Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force			
+	}
+ else {
+		Write-Host "posh-git installed"
+	}
 }
 
 
