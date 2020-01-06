@@ -20,8 +20,8 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 function Install-SSH() {
 	# Install OpenSSH
 	# https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse
-	Add-WindowsCapability -Online -Name OpenSSH.Client
-	Add-WindowsCapability -Online -Name OpenSSH.Server
+	Add-WindowsCapability -Online -Name OpenSSH.Client | Out-Null
+	Add-WindowsCapability -Online -Name OpenSSH.Server | Out-Null
 
 	# Add firewall rule
 	if (!((Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP").Enabled -eq $true)) {
@@ -29,7 +29,7 @@ function Install-SSH() {
 	}
 
 	# Install OpenSSHUtils
-	Install-Module -Force OpenSSHUtils -Scope AllUsers
+	Install-Module -Force OpenSSHUtils -Scope AllUsers | Out-Null
 
 	# Configure SSH Agent
 	Set-Service -Name ssh-agent -StartupType 'Automatic'
@@ -67,11 +67,11 @@ if (!(Test-WSMan)) { Enable-PSRemoting }
 Install-SSH
 Install-Chocolatey
 
-if (!(Get-Module -Name PendingReboot)) { Install-Module -Name PendingReboot }
+if (!(Get-Module -Name PendingReboot)) { Install-Module -Name PendingReboot | Out-Null }
 
 # Install git if missing
 if (!(Get-Command -Verbe git.exe)) { choco install --confirm --limitoutput git --params "/SChannel" }
-if (!(Get-Module -Name posh-git)) {	Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force }
+if (!(Get-Module -Name posh-git)) {	Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force | Out-Null }
 
 # Create config directory
 $configPath = Join-Path -Path $env:USERPROFILE -ChildPath ".config"
@@ -102,9 +102,7 @@ Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRes
 
 
 # Check if pending reboot
-if ((Test-PendingReboot).IsRebootPending) {
-	Write-Warning "A reboot is required to enable Windows features"
-}
+if ((Test-PendingReboot).IsRebootPending) { Write-Warning "A reboot is required to enable Windows features" }
 
 Write-Host "Installation finished"
 exit 0
