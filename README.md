@@ -48,7 +48,7 @@ Powershell scripts provides support for Windows 10
 Run the following powershell script from elevated powershell:
 
 ```
-@powershell -NoProfile -Verb RunAs -ExecutionPolicy unrestricted -Command "Invoke-WebRequest https://raw.githubusercontent.com/ascarter/dotfiles/master/install.ps1 -UseBasicParsing | Invoke-Expression"
+PS[Admin]> Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://raw.githubusercontent.com/ascarter/dotfiles/master/install.ps1 -UseBasicParsing | Invoke-Expression
 ```
 
 #### Alternate Install
@@ -56,8 +56,8 @@ Run the following powershell script from elevated powershell:
 If directly executing powershell script is not desired, clone into a location (recommend `%USERPROFILE%\.config\dotfiles`). Using elevated powershell:
 
 ```
-PS[ADMIN]> git clone ascarter/dotfiles.git %USERPROFILE%\.config\dotfiles
-PS[ADMIN]> cd %USERPROFILE%\.config\dotfiles
+PS[ADMIN]> git clone ascarter/dotfiles.git $env:USERPROFILE\.config\dotfiles
+PS[ADMIN]> cd $env:USERPROFILE\.config\dotfiles
 PS[ADMIN]> .\install.ps1
 ```
 
@@ -66,5 +66,5 @@ PS[ADMIN]> .\install.ps1
 Run uninstall powershell script to remove links:
 
 ```
-PS[ADMIN]> cd %USERPROFILE%\.config\dotfiles
+PS[ADMIN]> cd $env:USERPROFILE\.config\dotfiles
 PS[ADMIN]> .\uninstall.ps1
