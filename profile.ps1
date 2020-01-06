@@ -21,9 +21,11 @@ function Start-Insomnia() {
 Set-Alias -Name fork -Value Start-Fork
 Set-Alias -Name insomnia -Value Start-Insomnia
 
+# Unix alias helpers
+Set-Alias -Name which -Value Get-Command
 # Helper functions
 
-function StartPro { code -n $PROFILE.CurrentUserAllHosts }
+function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
 
 # Enable Windows PowerShell modules
 # function Enable-Windows-PowerShell {
