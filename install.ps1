@@ -40,13 +40,11 @@ function Install-SSH() {
 	Start-Service sshd
 	
 	# Create SSH key if not present
-	$sshConfigPath = Join-Path -Path $env:USERPROFILE -ChildPath '.ssh'
-	if (!(Test-Path $sshConfigPath)) { New-Item -Path $sshConfigPath }
-	$sshKeyfile = Join-Path -Path $sshConfigPath -ChildPath 'id_rsa'
+	$sshKeyfile = Join-Path -Path $env:USERPROFILE -ChildPath '.ssh\id_rsa'
 	if (!(Test-Path $sshKeyFile)) {
 		Write-Host "Generating SSH user key"
 		$githubEmail = Read-Host -Prompt "Enter GitHub email address"
-		ssh-keygen -t rsa -b 4096 -C "$githubEmail" -f $sshKeyFile
+		ssh-keygen -t rsa -b 4096 -C "$githubEmail"
 		ssh-add $sshKeyFile
 	}
 }
