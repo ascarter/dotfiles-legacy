@@ -23,22 +23,22 @@ function Install-SSH() {
 	Add-WindowsCapability -Online -Name OpenSSH.Client
 	Add-WindowsCapability -Online -Name OpenSSH.Server
 
-	# Configure SSH server
-	Start-Service sshd	
-	Set-Service -Name sshd -StartupType 'Automatic'
-	
 	# Add firewall rule
 	if (!((Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP").Enabled -eq $true)) {
 		Write-Warning "Missing OpenSSH Server inbound firewall rule"
 	}
 
 	# Install OpenSSHUtils
-	# Install-Module -Force OpenSSHUtils -Scope AllUsers
+	Install-Module -Force OpenSSHUtils -Scope AllUsers
 
 	# Configure SSH Agent
 	Start-Service ssh-agent
 	Set-Service -Name ssh-agent -StartupType 'Automatic'
 
+	# Configure SSH server
+	Start-Service sshd	
+	Set-Service -Name sshd -StartupType 'Automatic'
+	
 	# Create SSH key if not present
 	$sshKeyfile = Join-Path -Path $env:USERPROFILE -ChildPath '.ssh\id_rsa'
 	if (!(Test-Path $sshKeyFile)) {
