@@ -85,7 +85,8 @@ if (!(Test-Path -Path $configPath)) {
 $dotfiles = Join-Path -Path $configPath -ChildPath "dotfiles"
 if (!(Test-Path -Path $dotfiles)) {
 	Write-Host "Clone dotfiles"
-	git clone https://github.com/ascarter/dotfiles $dotfiles
+	$gitCmd = Join-Path -Path $env:ProgramFiles -ChildPath "Git\cmd\git.exe"
+	$gitCmd clone https://github.com/ascarter/dotfiles $dotfiles
 }
 
 # Link profile
