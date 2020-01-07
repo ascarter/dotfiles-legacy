@@ -86,7 +86,7 @@ $dotfiles = Join-Path -Path $configPath -ChildPath "dotfiles"
 if (!(Test-Path -Path $dotfiles)) {
 	Write-Host "Clone dotfiles"
 	$gitCmd = Join-Path -Path $env:ProgramFiles -ChildPath "Git\cmd\git.exe"
-	$gitCmd clone https://github.com/ascarter/dotfiles $dotfiles
+	Invoke-Expression -Command "$gitCmd clone https://github.com/ascarter/dotfiles $dotfiles"
 }
 
 # Link profile
