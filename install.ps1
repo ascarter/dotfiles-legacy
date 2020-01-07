@@ -69,7 +69,12 @@ Install-SSH
 Install-Chocolatey
 
 # Install git if missing
-if (!(Get-Command -Verb git.exe)) { choco install --confirm --limitoutput git --params "/SChannel" }
+if (!(Get-Command -Verb git.exe)) {
+	choco install --confirm --limitoutput git --params "/SChannel"
+
+	# Add git to the path since the current shell won't see it
+	$env:Path += ";" + $(Join-Path -Path $env:ProgramFiles -ChildPath "Git\cmd")
+}
 
 # Setup PowerShellGet
 Install-Module -Name PowerShellGet -Force
@@ -85,8 +90,7 @@ if (!(Test-Path -Path $configPath)) {
 $dotfiles = Join-Path -Path $configPath -ChildPath "dotfiles"
 if (!(Test-Path -Path $dotfiles)) {
 	Write-Host "Clone dotfiles"
-	$gitCmd = Join-Path -Path $env:ProgramFiles -ChildPath "Git\cmd\git.exe"
-	Invoke-Expression -Command "$gitCmd clone https://github.com/ascarter/dotfiles $dotfiles"
+	git clone https://github.com/ascarter/dotfiles $dotfiles
 }
 
 # Link profile
