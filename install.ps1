@@ -98,7 +98,7 @@ function Install-WSLDistros() {
 
 Write-Host "Starting dotfiles install"
 
-if (!(Test-WSMan)) { Enable-PSRemoting }
+# if (!(Test-WSMan)) { Enable-PSRemoting }
 Enable-DeveloperMode
 Install-SSH
 Install-Chocolatey
