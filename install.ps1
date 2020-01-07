@@ -117,7 +117,7 @@ Write-Host "Starting dotfiles install"
 
 # Setup PowerShellGet
 if (!(Get-Module -Name PowerShellGet -All)) {
-	Install-Module -Name PowerShellGet -Force
+	Install-Module -Name PowerShellGet -Scope CurrentUser -Force -AllowClobber
 }
 
 # Enable Windows PowerShell compatibility if PowerShell 6
@@ -136,6 +136,11 @@ if (!(Get-Command -Verb git.exe)) {
 	$env:Path += ";" + $(Join-Path -Path $env:ProgramFiles -ChildPath "Git\cmd")
 }
 
+# Install posh-git
+if (!(Get-Module -Name posh-git -All)) {
+	Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force
+}
+
 # Create config directory
 $configPath = Join-Path -Path $env:USERPROFILE -ChildPath ".config"
 if (!(Test-Path -Path $configPath)) {
@@ -150,11 +155,16 @@ if (!(Test-Path -Path $dotfiles)) {
 	git clone git@github.com:ascarter/dotfiles.git $dotfiles
 }
 
-# Link profile
-if (!(Test-Path -Path $PROFILE.CurrentUserAllHosts)) {
+# Link profile for PowerShell Core
+if ($PSVersionTable.PSEdition -eq 'Core') {
+	$profilePath = $profile.CurrentUserAllHosts
+}
+else {
+	$profilePath = pwsh -Command { $profile.CurrentUserAllHosts }
+}
+if (!(Test-Path -Path $profilePath)) {
 	Write-Host "Linking profile"
-	$target = Join-Path -Path $dotfiles -ChildPath 'profile.ps1'
-	New-Item -ItemType SymbolicLink -Path $PROFILE.CurrentUserAllHosts -Target $target
+	New-Item -ItemType SymbolicLink -Path $profilePath -Target $target
 }
 
 # Configure Vim
