@@ -72,12 +72,7 @@ Install-Chocolatey
 if (!(Get-Command -Verbe git.exe)) { choco install --confirm --limitoutput git --params "/SChannel" }
 
 # Setup PowerShellGet
-if (!(Get-Module -Name PowerShellGet)) {
-	Install-Module -Name PowerShellGet -Force
-}
-else {
-	Update-Module -Name PowerShellGet 
-}
+Install-Module -Name PowerShellGet -Force
 
 if (!(Get-Module -Name posh-git)) {	
 	PowerShellGet\Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force 
