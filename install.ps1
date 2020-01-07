@@ -35,7 +35,7 @@ function Enable-WindowsFeature([string]$Name) {
 }
 
 function Enable-DeveloperMode() {
-	$regPath = 'HLKM:\Software\Microsoft\Windows\CurrentVersion\AppModelUnlock'
+	$regPath = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\AppModelUnlock'
 	if (!((Get-ItemProperty -Path $regPath).AllowDevelopmentWithoutDevLicense -eq 1)) {
 		Set-ItemProperty -Path $regPath -Name AllowDevelopmentWithoutDevLicense -Value 1 -PropertyType DWORD -Force
 	}
