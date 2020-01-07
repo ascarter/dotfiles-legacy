@@ -69,7 +69,19 @@ if (!(Get-Module -Name PendingReboot)) { Install-Module -Name PendingReboot | Ou
 
 # Install git if missing
 if (!(Get-Command -Verbe git.exe)) { choco install --confirm --limitoutput git --params "/SChannel" }
-if (!(Get-Module -Name posh-git)) {	Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force | Out-Null }
+
+# Setup PowerShellGet
+Install-PackageProvider -Name NuGet -Force | Out-Null
+if (!(Get-Module -Name PowerShellGet)) {
+	Install-Module -Name PowerShellGet -Force | Out-Null
+}
+else {
+	Update-Module -Name PowerShellGet | Out-Null
+}
+
+if (!(Get-Module -Name posh-git)) {	
+	PowerShellGet\Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force | Out-Null
+}
 
 # Create config directory
 $configPath = Join-Path -Path $env:USERPROFILE -ChildPath ".config"
