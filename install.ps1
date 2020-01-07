@@ -20,11 +20,25 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 	Write-Error "Insufficient privileges"
 }        
 
+function Enable-WindowsCapability([string]$Name) {
+	if ((Get-WindowsCapability -Online -Name $Name).State -eq "Disabled") { 
+		Write-Host "Adding Windows capability $Name"
+		Add-WindowsCapability -Online -Name $Name
+	}
+}
+
+function Enable-WindowsFeature([string]$Name) {
+	if ((Get-WindowsOptionalFeature -Online -FeatureName $Name).State -eq "Disabled") {
+		Write-Host "Enabling $Name"
+		Enable-WindowsOptionalFeature -Online -FeatureName $Name -All     
+	}
+}
+
 function Install-SSH() {
 	# Install OpenSSH
 	# https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse
-	Add-WindowsCapability -Online -Name OpenSSH.Client 
-	Add-WindowsCapability -Online -Name OpenSSH.Server 
+	Enable-WindowsCapability OpenSSH.Client
+	Enable-WindowsCapability OpenSSH.Server
 
 	# Add firewall rule
 	if (!((Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP").Enabled -eq $true)) {
@@ -57,6 +71,18 @@ function Install-Chocolatey() {
 		Write-Host "Installing Chocolatey"
 		Set-ExecutionPolicy AllSigned -Scope Process -Force
 		Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression       
+	}
+}
+
+function Install-WSLDistros() {
+	# Ubuntu 18.04
+	$ubuntuPath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "Microsoft\WindowsApps\ubuntu1804.exe"
+	if (!(Test-Path -Path $ubuntuPath)) {
+		Write-Host "Installing Ubuntu 18.04"
+		$ubuntuAppx = New-TemporaryFile
+		Invoke-WebRequest -Uri https://aka.ms/wsl-ubuntu-1804 -OutFile $ubuntuAppx -UseBasicParsing
+		Add-AppxPackage $ubuntuAppx
+		Remove-Item -Path $ubuntuAppx
 	}
 }
 
@@ -103,8 +129,11 @@ if (!(Test-Path -Path $PROFILE.CurrentUserAllHosts)) {
 # Install chocolatey software
 choco install --confirm --limitoutput --no-progress (Join-Path -Path $dotfiles -ChildPath "choco.config")
 
+# Install Linux distros
+Install-WSLDistros
+
 # Enable Hyper-V support
-Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All 
+Enable-WindowsFeature Microsoft-Hyper-V -All 
 
 Write-Host "Installation finished"
 exit 0
