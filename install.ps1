@@ -34,17 +34,6 @@ function Enable-WindowsFeature([string]$Name) {
 	}
 }
 
-function Enable-DeveloperMode() {
-	$regPath = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\AppModelUnlock'
-
-	if (!(Test-Path -Path $regPath)) {
-		New-Item -Path $regPath -Force
-	}
-
-	New-ItemProperty -Path $regPath -Name AllowDevelopmentWithoutDevLicense -Value 1 -PropertyType DWORD -Force
-	New-ItemProperty -Path $regPath -Name AllowAllTrustedApps -Value 1 -PropertyType DWORD -Force
-}
-
 function Install-SSH() {
 	# Install OpenSSH
 	# https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse
@@ -99,8 +88,6 @@ function Install-WSLDistros() {
 
 Write-Host "Starting dotfiles install"
 
-# if (!(Test-WSMan)) { Enable-PSRemoting }
-Enable-DeveloperMode
 Install-SSH
 Install-Chocolatey
 
