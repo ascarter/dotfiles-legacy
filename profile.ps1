@@ -18,8 +18,11 @@ function Start-Insomnia() {
   Start-Process -FilePath $exe -WindowStyle Minimized
 }
 
+function cddf { Set-Location -Path (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles") }
+
 Set-Alias -Name fork -Value Start-Fork
 Set-Alias -Name insomnia -Value Start-Insomnia
+Set-Alias -Name df -Value cddf
 
 # Unix alias helpers
 Set-Alias -Name which -Value Get-Command
