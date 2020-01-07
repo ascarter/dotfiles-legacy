@@ -25,12 +25,30 @@ function Enable-WindowsCapability([string]$Name) {
 		Write-Host "Adding Windows capability $Name"
 		Add-WindowsCapability -Online -Name $Name
 	}
+ else {
+		Write-Host "$Name enabled"
+	}
 }
 
 function Enable-WindowsFeature([string]$Name) {
 	if ((Get-WindowsOptionalFeature -Online -FeatureName $Name).State -eq "Disabled") {
 		Write-Host "Enabling $Name"
 		Enable-WindowsOptionalFeature -Online -FeatureName $Name -All
+	}
+ else {
+		Write-Host "$Name enabled"
+	}
+}
+
+function Enable-Service([string]$Name) {
+	if ((Get-Service -Name $Name).StartType -ne 'Automatic') {
+		Write-Host "Set $Name to startup automatic"
+		Set-Service -Name $Name -StartupType 'Automatic'
+	}
+
+	if ((Get-Service -Name $Name).Status -ne 'Running') {
+		Write-Host "Start $Name"
+		Start-Service $Name
 	}
 }
 
@@ -46,15 +64,10 @@ function Install-SSH() {
 	}
 
 	# Install OpenSSHUtils
-	Install-Module -Force OpenSSHUtils -Scope AllUsers
+	Install-Module -Name OpenSSHUtils -Scope AllUsers -Force
 
-	# Configure SSH Agent
-	Set-Service -Name ssh-agent -StartupType 'Automatic'
-	Start-Service ssh-agent
-
-	# Configure SSH server
-	Set-Service -Name sshd -StartupType 'Automatic'
-	Start-Service sshd
+	Enable-Service ssh-agent
+	Enable-Service sshd
 
 	# Create SSH key if not present
 	$sshKeyfile = Join-Path -Path $env:USERPROFILE -ChildPath '.ssh\id_rsa'
@@ -81,7 +94,7 @@ function Install-SSH() {
 }
 
 function Install-Chocolatey() {
-	if (($env:ChocolateyInstall -eq $null) -or !(Test-Path -Path $env:ChocolateyInstall)) {
+	if (($null -eq $env:ChocolateyInstall) -or !(Test-Path -Path $env:ChocolateyInstall)) {
 		Write-Host "Installing Chocolatey"
 		Set-ExecutionPolicy AllSigned -Scope Process -Force
 		Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression
@@ -103,7 +116,9 @@ function Install-WSLDistros() {
 Write-Host "Starting dotfiles install"
 
 # Setup PowerShellGet
-Install-Module -Name PowerShellGet -Force
+if (!(Get-Module -Name PowerShellGet -All)) {
+	Install-Module -Name PowerShellGet -Force
+}
 
 # Enable Windows PowerShell compatibility if PowerShell 6
 if ($PSVersionTable.PSVersion.Major -eq 6) {
@@ -140,6 +155,14 @@ if (!(Test-Path -Path $PROFILE.CurrentUserAllHosts)) {
 	Write-Host "Linking profile"
 	$target = Join-Path -Path $dotfiles -ChildPath 'profile.ps1'
 	New-Item -ItemType SymbolicLink -Path $PROFILE.CurrentUserAllHosts -Target $target
+}
+
+# Configure Vim
+$vimrc = Join-Path -Path $env:USERPROFILE -ChildPath "_vimrc"
+if (!(Test-Path -Path $vimrc)) {
+	Write-Host "Linking vimrc"
+	$target = Join-Path -Path $dotfiles -ChildPath 'vimrc'
+	New-Item -ItemType SymbolicLink -Path $vimrc -Target $target
 }
 
 # Install chocolatey software

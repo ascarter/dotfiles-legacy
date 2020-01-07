@@ -11,27 +11,25 @@ let mapleader=","
 " =====================================
 " Plugins
 " =====================================
+
 " Enable extend % matching
 runtime macros/matchit.vim
 
 " Install vim plug
 if has("win32")
 	if empty(glob('~\vimfiles\autoload\plug.vim'))
-		silent !(New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("~\vimfiles\autoload\plug.vim"))
+		silent !curl -fLo \%USERPROFILE\%\\vimfiles\\autoload\\plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 		autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 	endif
+	call plug#begin('~/vimfiles/bundle')
 else
 	if empty(glob('~/.vim/autoload/plug.vim'))
   		silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 		autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 	endif
+	call plug#begin('~/.vim/bundle')
 endif
 
-if has("win32")
-	call plug#begin('~/vimfiles/bundle')
-else
-	call plug#begin('~/.vim/bundle')
-end
 " Status line
 Plug 'itchyny/lightline.vim'
 
@@ -223,7 +221,7 @@ if has("gui_running")
 
 	" Turn off blinking cursor
 	" set guicursor+=n:blinkon0
-	
+
 	if has('gui_macvim')
 		" Mac OS X
 		" set macthinstrokes
@@ -260,13 +258,12 @@ if has("gui_running")
 		imap <D-8> <Esc>8gt
 		map  <D-9> 9gt
 		imap <D-9> <Esc>9gt
-
 	elseif has('gui_gtk2')
 		" Linux
 		set guifont=Source\ Code\ Pro\ Medium\ 12,Monospace\ 12
 	elseif has('gui_win32')
 		" Windows
-		set guifont=Source\ Code\ Pro:h12,Consolas:h12
+		set guifont=Cascadia\ Code:h10,Source\ Code\ Pro:h10,Consolas:h10
 		set renderoptions=type:directx
 	endif
 endif
@@ -274,4 +271,3 @@ endif
 " Set lightline colors after other colors/background are set
 let g:lightline = { 'colorscheme': ( &background == "light" ? 'snow_light' : 'snow_dark' )}
 " let g:lightline = { 'colorscheme': ( &background == "light" ? 'PaperColor' : 'default' ) }
-
