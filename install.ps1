@@ -155,4 +155,3 @@ Enable-WindowsFeature Containers-DisposableClientVM
 Enable-WindowsFeature Microsoft-Hyper-V -All
 
 Write-Host "Installation finished"
-exit 0
