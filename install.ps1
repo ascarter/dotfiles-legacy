@@ -36,10 +36,16 @@ function Enable-WindowsFeature([string]$Name) {
 
 function Enable-DeveloperMode() {
 	$regPath = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\AppModelUnlock'
+
 	if (!(Test-Path -Path $regPath)) {
-		# Create registry key and properties
 		New-Item -Path $regPath -Force
+	}
+
+	if ((Get-ItemProperty -Path $regPath).AllowDevelopmentWithoutDevLicense -ne 1) {
 		New-ItemProperty -Path $regPath -Name AllowDevelopmentWithoutDevLicense -Value 1 -PropertyType DWORD -Force
+	}
+
+	if ((Get-ItemProperty -Path $regPath).AllowAllTrustedApps -ne 1) {
 		New-ItemProperty -Path $regPath -Name AllowAllTrustedApps -Value 1 -PropertyType DWORD -Force
 	}
 }
