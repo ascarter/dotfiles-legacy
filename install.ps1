@@ -12,6 +12,9 @@ param()
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
+# Use TLS 1.2
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 # Require administrator
 if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
 	Write-Error "Insufficient privileges"
@@ -20,8 +23,8 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 function Install-SSH() {
 	# Install OpenSSH
 	# https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse
-	Add-WindowsCapability -Online -Name OpenSSH.Client | Out-Null
-	Add-WindowsCapability -Online -Name OpenSSH.Server | Out-Null
+	Add-WindowsCapability -Online -Name OpenSSH.Client 
+	Add-WindowsCapability -Online -Name OpenSSH.Server 
 
 	# Add firewall rule
 	if (!((Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP").Enabled -eq $true)) {
@@ -29,7 +32,7 @@ function Install-SSH() {
 	}
 
 	# Install OpenSSHUtils
-	Install-Module -Force OpenSSHUtils -Scope AllUsers | Out-Null
+	Install-Module -Force OpenSSHUtils -Scope AllUsers 
 
 	# Configure SSH Agent
 	Set-Service -Name ssh-agent -StartupType 'Automatic'
@@ -65,22 +68,19 @@ if (!(Test-WSMan)) { Enable-PSRemoting }
 Install-SSH
 Install-Chocolatey
 
-if (!(Get-Module -Name PendingReboot)) { Install-Module -Name PendingReboot | Out-Null }
-
 # Install git if missing
 if (!(Get-Command -Verbe git.exe)) { choco install --confirm --limitoutput git --params "/SChannel" }
 
 # Setup PowerShellGet
-Install-PackageProvider -Name NuGet -Force | Out-Null
 if (!(Get-Module -Name PowerShellGet)) {
-	Install-Module -Name PowerShellGet -Force | Out-Null
+	Install-Module -Name PowerShellGet -Force
 }
 else {
-	Update-Module -Name PowerShellGet | Out-Null
+	Update-Module -Name PowerShellGet 
 }
 
 if (!(Get-Module -Name posh-git)) {	
-	PowerShellGet\Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force | Out-Null
+	PowerShellGet\Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force 
 }
 
 # Create config directory
@@ -108,11 +108,7 @@ if (!(Test-Path -Path $PROFILE.CurrentUserAllHosts)) {
 choco install --confirm --limitoutput --no-progress (Join-Path -Path $dotfiles -ChildPath "choco.config")
 
 # Enable Hyper-V support
-Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart | Out-Null
-
-
-# Check if pending reboot
-if ((Test-PendingReboot).IsRebootPending) { Write-Warning "A reboot is required to enable Windows features" }
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All 
 
 Write-Host "Installation finished"
 exit 0
