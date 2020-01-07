@@ -63,6 +63,15 @@ function Install-SSH() {
 		$githubEmail = Read-Host -Prompt "Enter GitHub email address"
 		ssh-keygen -t rsa -b 4096 -C "$githubEmail"
 		ssh-add $sshKeyFile
+
+		# Copy SSH public key to clipboard
+		$sshPublicKeyFile = $sshKeyFile + '.pub'
+		Invoke-WinCommand -ScriptBlock { Get-Content -Path $sshPublicKeyFile | Set-Clipboard }
+		Write-Host "ssh public key copied to clipboard."
+		Write-Host "Add key to GitHub account"
+		Start-Process "https://github.com/settings/ssh/new"
+		Write-Host "After adding to GitHub, Press any key to continue..."
+		[void][System.Console]::ReadKey($true)
 	}
 }
 
@@ -88,6 +97,12 @@ function Install-WSLDistros() {
 
 Write-Host "Starting dotfiles install"
 
+# Setup PowerShellGet
+Install-Module -Name PowerShellGet -Force
+
+# Enable Windows PowerShell compatability
+Install-Module -Name WindowsCompatibility -Scope CurrentUser
+
 Install-SSH
 Install-Chocolatey
 
@@ -98,9 +113,6 @@ if (!(Get-Command -Verb git.exe)) {
 	# Add git to the path since the current shell won't see it
 	$env:Path += ";" + $(Join-Path -Path $env:ProgramFiles -ChildPath "Git\cmd")
 }
-
-# Setup PowerShellGet
-Install-Module -Name PowerShellGet -Force
 
 # Create config directory
 $configPath = Join-Path -Path $env:USERPROFILE -ChildPath ".config"
@@ -113,7 +125,7 @@ if (!(Test-Path -Path $configPath)) {
 $dotfiles = Join-Path -Path $configPath -ChildPath "dotfiles"
 if (!(Test-Path -Path $dotfiles)) {
 	Write-Host "Clone dotfiles"
-	git clone https://github.com/ascarter/dotfiles $dotfiles
+	git clone git@github.com:ascarter/dotfiles.git $dotfiles
 }
 
 # Link profile

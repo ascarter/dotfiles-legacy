@@ -43,6 +43,12 @@ Run the uninstall script to remove the symlinks:
 
 Powershell scripts provides support for Windows 10
 
+### Pre-requisites
+
+Enable [Developer mode](https://www.hanselman.com/blog/Windows10DeveloperMode.aspx):
+
+*Settings* -> *Update & Security* -> *For Developers*
+
 ### Install
 
 Run the following powershell script from elevated powershell:
