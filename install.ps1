@@ -50,7 +50,7 @@ function Install-SSH() {
 }
 
 function Install-Chocolatey() {
-	if (!(Test-Path -Path $env:ChocolateyInstall)) {
+	if (($env:ChocolateyInstall -eq $null) -or !(Test-Path -Path $env:ChocolateyInstall)) {
 		Write-Host "Installing Chocolatey"
 		Set-ExecutionPolicy AllSigned -Scope Process -Force
 		Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression       
