@@ -41,13 +41,8 @@ function Enable-DeveloperMode() {
 		New-Item -Path $regPath -Force
 	}
 
-	if ((Get-ItemProperty -Path $regPath).AllowDevelopmentWithoutDevLicense -ne 1) {
-		New-ItemProperty -Path $regPath -Name AllowDevelopmentWithoutDevLicense -Value 1 -PropertyType DWORD -Force
-	}
-
-	if ((Get-ItemProperty -Path $regPath).AllowAllTrustedApps -ne 1) {
-		New-ItemProperty -Path $regPath -Name AllowAllTrustedApps -Value 1 -PropertyType DWORD -Force
-	}
+	New-ItemProperty -Path $regPath -Name AllowDevelopmentWithoutDevLicense -Value 1 -PropertyType DWORD -Force
+	New-ItemProperty -Path $regPath -Name AllowAllTrustedApps -Value 1 -PropertyType DWORD -Force
 }
 
 function Install-SSH() {
