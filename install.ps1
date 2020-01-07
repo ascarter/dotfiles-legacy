@@ -69,14 +69,10 @@ Install-SSH
 Install-Chocolatey
 
 # Install git if missing
-if (!(Get-Command -Verbe git.exe)) { choco install --confirm --limitoutput git --params "/SChannel" }
+if (!(Get-Command -Verb git.exe)) { choco install --confirm --limitoutput git --params "/SChannel" }
 
 # Setup PowerShellGet
 Install-Module -Name PowerShellGet -Force
-
-if (!(Get-Module -Name posh-git)) {	
-	PowerShellGet\Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force 
-}
 
 # Create config directory
 $configPath = Join-Path -Path $env:USERPROFILE -ChildPath ".config"
