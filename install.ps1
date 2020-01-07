@@ -66,7 +66,12 @@ function Install-SSH() {
 
 		# Copy SSH public key to clipboard
 		$sshPublicKeyFile = $sshKeyFile + '.pub'
-		Invoke-WinCommand -ScriptBlock { Get-Content -Path $sshPublicKeyFile | Set-Clipboard }
+		if ($PSVersionTable.PSVersion.Major -lt 6) {
+			Get-Content -Path $sshPublicKeyFile | Set-Clipboard
+		}
+		else {
+			Invoke-WinCommand -ScriptBlock { Get-Content -Path $sshPublicKeyFile | Set-Clipboard }
+		}
 		Write-Host "ssh public key copied to clipboard."
 		Write-Host "Add key to GitHub account"
 		Start-Process "https://github.com/settings/ssh/new"
@@ -100,8 +105,10 @@ Write-Host "Starting dotfiles install"
 # Setup PowerShellGet
 Install-Module -Name PowerShellGet -Force
 
-# Enable Windows PowerShell compatability
-Install-Module -Name WindowsCompatibility -Scope CurrentUser
+# Enable Windows PowerShell compatibility if PowerShell 6
+if ($PSVersionTable.PSVersion.Major -eq 6) {
+	Install-Module -Name WindowsCompatibility -Scope CurrentUser
+}
 
 Install-SSH
 Install-Chocolatey

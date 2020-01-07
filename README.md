@@ -25,7 +25,7 @@ Run the following shell script:
 If directly executing script is not desired, clone into a location (recommend `~/.config/dotfiles`)
 
 ```
-% git clone ascarter/dotfiles.git ~/.config/dotfiles
+% git clone git@github.com:ascarter/dotfiles.git ~/.config/dotfiles
 % cd ~/.config/dotfiles
 % ./install.sh
 ```
