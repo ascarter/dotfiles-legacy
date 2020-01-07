@@ -18,10 +18,10 @@ $ErrorActionPreference = "Stop"
 # Require administrator
 if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
 	Write-Error "Insufficient privileges"
-}        
+}
 
 function Enable-WindowsCapability([string]$Name) {
-	if ((Get-WindowsCapability -Online -Name $Name).State -eq "Disabled") { 
+	if ((Get-WindowsCapability -Online -Name $Name).State -eq "Disabled") {
 		Write-Host "Adding Windows capability $Name"
 		Add-WindowsCapability -Online -Name $Name
 	}
@@ -30,7 +30,17 @@ function Enable-WindowsCapability([string]$Name) {
 function Enable-WindowsFeature([string]$Name) {
 	if ((Get-WindowsOptionalFeature -Online -FeatureName $Name).State -eq "Disabled") {
 		Write-Host "Enabling $Name"
-		Enable-WindowsOptionalFeature -Online -FeatureName $Name -All     
+		Enable-WindowsOptionalFeature -Online -FeatureName $Name -All
+	}
+}
+
+function Enable-DeveloperMode() {
+	$regPath = 'HLKM:\Software\Microsoft\Windows\CurrentVersion\AppModelUnlock'
+	if (!((Get-ItemProperty -Path $regPath).AllowDevelopmentWithoutDevLicense -eq 1)) {
+		Set-ItemProperty -Path $regPath -Name AllowDevelopmentWithoutDevLicense -Value 1 -PropertyType DWORD -Force
+	}
+	if (!((Get-ItemProperty -Path $regPath).AllowAllTrustedApps -eq 1)) {
+		Set-ItemProperty -Path $regPath -Name AllowAllTrustedApps -Value 1 -PropertyType DWORD -Force
 	}
 }
 
@@ -46,7 +56,7 @@ function Install-SSH() {
 	}
 
 	# Install OpenSSHUtils
-	Install-Module -Force OpenSSHUtils -Scope AllUsers 
+	Install-Module -Force OpenSSHUtils -Scope AllUsers
 
 	# Configure SSH Agent
 	Set-Service -Name ssh-agent -StartupType 'Automatic'
@@ -55,7 +65,7 @@ function Install-SSH() {
 	# Configure SSH server
 	Set-Service -Name sshd -StartupType 'Automatic'
 	Start-Service sshd
-	
+
 	# Create SSH key if not present
 	$sshKeyfile = Join-Path -Path $env:USERPROFILE -ChildPath '.ssh\id_rsa'
 	if (!(Test-Path $sshKeyFile)) {
@@ -70,7 +80,7 @@ function Install-Chocolatey() {
 	if (($env:ChocolateyInstall -eq $null) -or !(Test-Path -Path $env:ChocolateyInstall)) {
 		Write-Host "Installing Chocolatey"
 		Set-ExecutionPolicy AllSigned -Scope Process -Force
-		Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression       
+		Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression
 	}
 }
 
@@ -88,9 +98,8 @@ function Install-WSLDistros() {
 
 Write-Host "Starting dotfiles install"
 
-# Enable PSRemoting
 if (!(Test-WSMan)) { Enable-PSRemoting }
-
+Enable-DeveloperMode
 Install-SSH
 Install-Chocolatey
 
@@ -132,8 +141,11 @@ choco install --confirm --limitoutput --no-progress (Join-Path -Path $dotfiles -
 # Install Linux distros
 Install-WSLDistros
 
+# Enable Windows Sandbox
+Enable-WindowsFeature Containers-DisposableClientVM
+
 # Enable Hyper-V support
-Enable-WindowsFeature Microsoft-Hyper-V -All 
+Enable-WindowsFeature Microsoft-Hyper-V -All
 
 Write-Host "Installation finished"
 exit 0
