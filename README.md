@@ -41,7 +41,7 @@ Run the uninstall script to remove the symlinks:
 
 ## Windows
 
-Powershell scripts provides support for Windows 10
+A PowerShell install script supports Windows 10. It is meant to run on a fresh Windows 10 install with Windows PowerShell version 5. It should also work if run from PowerShell Core 6+.
 
 ### Pre-requisites
 
@@ -62,7 +62,7 @@ PS[Admin]> Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://
 If directly executing powershell script is not desired, clone into a location (recommend `%USERPROFILE%\.config\dotfiles`). Using elevated powershell:
 
 ```
-PS[ADMIN]> git clone ascarter/dotfiles.git $env:USERPROFILE\.config\dotfiles
+PS[ADMIN]> git clone git@github.com:ascarter/dotfiles.git $env:USERPROFILE\.config\dotfiles
 PS[ADMIN]> cd $env:USERPROFILE\.config\dotfiles
 PS[ADMIN]> .\install.ps1
 ```
