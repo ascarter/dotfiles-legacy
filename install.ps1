@@ -33,7 +33,7 @@ if (!(Test-Path -Path $pkgCache)) { New-Item -Path $pkgCache -ItemType Directory
 # Dotfiles enlistment
 $dotfiles = Join-Path -Path $configPath -ChildPath "dotfiles"
 
-$gitURI = 'https://github.com/git-for-windows/git/releases/download/v2.24.1.windows.2/Git-2.24.1.2-64-bit.exe'
+$gitUri = 'https://github.com/git-for-windows/git/releases/download/v2.24.1.windows.2/Git-2.24.1.2-64-bit.exe'
 
 #endregion
 
@@ -47,7 +47,7 @@ function Install-Git() {
 		Write-Host "Installing Git $target"
 		if (!(Test-Path $target)) {
 			$wc = New-Object System.Net.WebClient
-			$wc.DownloadFile($Uri, $target)
+			$wc.DownloadFile($gitUri, $target)
 		}
 		Start-Process -FilePath $target -Wait -NoNewWindow
 	}
