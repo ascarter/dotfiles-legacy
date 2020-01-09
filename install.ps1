@@ -46,8 +46,8 @@ function Install-Git() {
 		$target = Join-Path -Path $pkgCache -ChildPath (Split-Path $gitURI -Leaf)
 		Write-Host "Installing Git $target"
 		if (!(Test-Path $target)) {
-			Start-BitsTransfer $gitURI $target
-			#Invoke-RestMethod -Method Get -Uri $gitURI -OutFile $target
+			$wc = New-Object [System.Net.WebClient]
+			$wc.DownloadFile($Uri, $target)
 		}
 		Start-Process -FilePath $target -Wait -NoNewWindow
 	}

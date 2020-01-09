@@ -37,9 +37,8 @@ function Get-InternetPackage([string]$Uri) {
     $pkg = Split-Path -Path $Uri -Leaf
     $target = Join-Path -Path $pkgCache -ChildPath $pkg
     if (!(Test-Path -Path $target)) {
-        #Invoke-WebRequest -Uri $Uri -UseBasicParsing -OutFile $target
-        #(New-Object [System.Net.WebClient]).DownloadFile($Uri, $target)
-        Start-BitsTransfer -Source $Uri -Destination $target
+        $wc = New-Object [System.Net.WebClient]
+        $wc.DownloadFile($Uri, $target)
     }
     Get-Item -Path $target
 }
