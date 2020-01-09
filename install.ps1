@@ -50,6 +50,9 @@ function Install-Git() {
 			$wc.DownloadFile($gitUri, $target)
 		}
 		Start-Process -FilePath $target -Wait -NoNewWindow
+
+		# Add git to path since current shell won't see it
+		$env:Path = ($env:Path, $(Join-Path -Path $env:ProgramFiles -ChildPath "Git\cmd")) -join ";"
 	}
 }
 
