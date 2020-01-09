@@ -3,7 +3,7 @@
 Set-Item -Path Env:GIT_SSH -Value ((Get-Command ssh).Source)
 
 # Configure posh-git
-Import-Module posh-git
+if (!(Get-Module -Name posh-git -All)) { Import-Module posh-git }
 
 # Alias behavoirs
 
@@ -25,14 +25,16 @@ Set-Alias -Name insomnia -Value Start-Insomnia
 Set-Alias -Name df -Value cddf
 
 # Unix alias helpers
+Set-Alias -Name ll -Value Get-ChildItem
 Set-Alias -Name which -Value Get-Command
+
 # Helper functions
 
 function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
 
 # Enable Windows PowerShell modules
 # function Enable-Windows-PowerShell {
-#   Install-Module WindowsPSModulePath -Force -Scope CurrentUser 
+#   Install-Module WindowsPSModulePath -Force -Scope CurrentUser
 #   Add-WindowsPSModulePath
 # }
 
