@@ -40,7 +40,7 @@ $sshKeyfile = Join-Path -Path $env:USERPROFILE -ChildPath .ssh\id_rsa
 
 # Git
 $gitUri = 'https://github.com/git-for-windows/git/releases/download/v2.24.1.windows.2/Git-2.24.1.2-64-bit.exe'
-$gitCmd = Join-Path -Path $env:ProgramFiles -ChildPath "Git\cmd"
+$gitCmd = Join-Path -Path $env:ProgramFiles -ChildPath "Git\cmd\git.exe"
 
 #endregion
 
@@ -150,25 +150,17 @@ function Install-Virtualization() {
 
 #endregion
 
-try {
-	Write-Host "Bootstrap dotfiles"
+Write-Progress -Activity "Install Dotfiles" -Id 1 -CurrentOperation "Bootstrap dotfiles"
 
-	Install-Git
-	Install-SSHKeys
-	Install-Dotfiles
-	Install-Profiles
+Install-Git
+Install-SSHKeys
+Install-Dotfiles
+Install-Profiles
 
-	# Run system configuration
-	if (-not $NoSystem) {
-		Install-SSH
-		Install-Virtualization
-	}
-
-	Write-Host "dotfiles are ready"
+# Run system configuration
+if (-not $NoSystem) {
+	Install-SSH
+	Install-Virtualization
 }
-catch {
-	Write-Warning "Exception:"
-	Write-Warning "Exception Type:    $($_.Exception.GetType().FullName)"
-	Write-Warning "Exception Message: $($_.Exception.Message)"
-	Write-Warning "Exception Stack:   $($_.Exception.StackTrace)"
-}
+
+Write-Progress -Id 1 -Completed
