@@ -8,10 +8,7 @@
 param(
 	[Parameter(HelpMessage = "Skip system configuration")]
 	[switch]
-	$NoSystem = $false,
-	[Parameter(HelpMessage = "Skip user configuration")]
-	[switch]
-	$NoUser = $false
+	$NoSystem = $false
 )
 
 Set-StrictMode -Version Latest
@@ -95,26 +92,9 @@ function Install-Dotfiles() {
 	}
 }
 
-function Install-Profiles {
-	param([switch]$Force)
-
-	if (!(Test-Path $profile) -or $Force) {
-		New-Item -Path $profile -ItemType File -Force
-		Set-Content -Path $profile -Value ". Join-Path $env:USERPROFILE .config\dotfiles\profile.ps1"
-	}
-
-	$wintermSrc = Join-Path -Path $dotfiles -ChildPath windows_terminal_profiles.json
-	$wintermTarget = Join-Path -Path $env:LocalAppData -ChildPath Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\profiles.json
-	if (!(Test-Path -Path $wintermTarget) -or $Force) {
-		Copy-Item -Path $wintermSrc -Destination $wintermTarget -Force
-	}
-
-	$vimrc = Join-Path -Path $env:USERPROFILE -ChildPath _vimrc
-	if (!(Test-Path -Path $vimrc) -or $Force) {
-		New-Item -Path $vimrc -ItemType File -Force
-		Set-Content -Path $vimrc -Value "source $(Join-Path -Path $dotfiles -ChildPath vimrc)"
-	}
-
+function Install-Profiles() {
+	$setprofiles = Join-Path -Path $dotfiles -ChildPath setprofiles.ps1
+	if (Test-Path -Path $setprofiles) { Start-Process -FilePath $setprofiles -Wait -NoNewWindow }
 }
 
 #endregion

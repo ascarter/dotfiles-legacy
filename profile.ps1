@@ -32,6 +32,12 @@ Set-Alias -Name which -Value Get-Command
 
 function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
 
+function Update-Profiles() {
+  $setprofiles = Join-Path -Path $dotfiles -ChildPath setprofiles.ps1
+  if (Test-Path -Path $setprofiles) { Start-Process -FilePath $setprofiles -Wait -NoNewWindow }
+}
+
+
 # Enable Windows PowerShell modules
 # function Enable-Windows-PowerShell {
 #   Install-Module WindowsPSModulePath -Force -Scope CurrentUser
