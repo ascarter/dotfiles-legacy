@@ -150,8 +150,6 @@ function Install-Virtualization() {
 
 #endregion
 
-Write-Progress -Activity "Install Dotfiles" -Id 1 -CurrentOperation "Bootstrap dotfiles"
-
 Install-Git
 Install-SSHKeys
 Install-Dotfiles
@@ -163,4 +161,4 @@ if (-not $NoSystem) {
 	Install-Virtualization
 }
 
-Write-Progress -Id 1 -Completed
+Write-Output "Dotfiles install complete"
