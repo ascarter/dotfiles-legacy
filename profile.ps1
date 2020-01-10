@@ -3,7 +3,7 @@
 Set-Item -Path Env:GIT_SSH -Value ((Get-Command ssh).Source)
 
 # Configure posh-git
-if (!(Get-Module -Name posh-git -All)) { Import-Module posh-git }
+if (Get-Module -Name posh-git -All) { Import-Module posh-git }
 
 # Alias behavoirs
 
