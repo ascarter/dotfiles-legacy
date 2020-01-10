@@ -48,19 +48,6 @@ function Get-InstalledPackages() {
     # Invoke-WinCommand { Get-Package }
 }
 
-function Invoke-MSI {
-    Param(
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true)]
-        [Object]
-        $InputObject
-
-    )
-
-    $args = "/I $InputObject"
-    Start-Process -FilePath msiexec.exe -ArgumentList $args -Wait -NoNewWindow
-}
-
 function Invoke-Installer {
     Param(
         [Parameter(Mandatory = $true,
@@ -69,15 +56,29 @@ function Invoke-Installer {
         $InputObject,
 
         [Parameter()]
+        [string[]]
+        $Args = $null,
+
+        [Parameter()]
         [bool]
         $UseSudo = $false
     )
 
-    $exe = Split-Path -Path $InputObject -Leaf
+    $file = Split-Path -Path $InputObject -Leaf
     $verb = if ($UseSudo) { 'RunAs' } else { 'Open' }
+    $exe = switch ($InputObject.Extension) {
+        .exe {
+            $InputObject
+        }
+        .msi {
+            $Args += ('/I', $InputObject)
+            'msiexec.exe'
+        }
+        Default { throw "Unknown file type for $file" }
+    }
 
-    Write-Host "Installing $exe"
-    Start-Process -FilePath $InputObject -Wait -Verb $verb
+    Write-Host "Installing $file"
+    Start-Process -FilePath $exe -ArgumentList $Args -Wait -Verb $verb
 }
 
 #endregion
@@ -96,10 +97,12 @@ function Install-Packages() {
     foreach ($p in $packages) {
         $idx++
         $useSudo = if (Get-Member -Name sudo -InputObject $p) { $p.sudo } else { $false }
-        $completed = (($idx - 1) / $packages.Count) * 100
+        $args = if (Get-Member -Name args -InputObject $p) { $p.args } else { $null }
+        $completed = [math]::Round((($idx - 1) / $packages.Count) * 100)
 
         if ($installed | Where-Object { $_.CanonicalID -eq $p.id }) {
             Write-Progress -Activity $activity -CurrentOperation "$($p.id) installed" -Id 1 -Status "$completed% complete" -PercentComplete $completed
+            Write-Host "$($p.id) installed"
             continue
         }
 
@@ -113,11 +116,7 @@ function Install-Packages() {
             }
 
             Write-Progress -Activity $activity -CurrentOperation "Installing $file" -Id 1 -Status "$completed% complete" -PercentComplete $completed
-            switch ($file.Extension) {
-                .exe { Invoke-Installer $file $useSudo }
-                .msi { Invoke-MSI $file }
-                Default { Write-Warning "Unknown file type for $file" }
-            }
+            Invoke-Installer $file $args $useSudo
         }
         catch {
             Write-Warning "Unable to install $($p.url)"

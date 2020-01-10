@@ -5,7 +5,8 @@
     },
     {
         "id": "programs:Microsoft .NET Core SDK 3.1.100 (x64)/3.1.100.14727",
-        "url": "https://download.visualstudio.microsoft.com/download/pr/639f7cfa-84f8-48e8-b6c9-82634314e28f/8eb04e1b5f34df0c840c1bffa363c101/dotnet-sdk-3.1.100-win-x64.exe"
+        "url": "https://download.visualstudio.microsoft.com/download/pr/639f7cfa-84f8-48e8-b6c9-82634314e28f/8eb04e1b5f34df0c840c1bffa363c101/dotnet-sdk-3.1.100-win-x64.exe",
+        "args": "/install /quiet"
     },
     {
         "id": "programs:Microsoft Visual Studio Code (User)/1.41.1",
@@ -30,7 +31,8 @@
     },
     {
         "id": "programs:Docker Desktop/2.1.0.5",
-        "url": "https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe"
+        "url": "https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe",
+        "args": "install --quiet"
     },
     {
         "id": "programs:Beyond Compare 4.3.3/4.3.3.24545",
