@@ -14,9 +14,11 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-# Require administrator
-if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-	Write-Error "Insufficient privileges"
+# Run as administrator
+If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+	$relaunchArgs = "& '" + $MyInvocation.MyCommand.Definition + "'"
+	Start-Process powershell -Verb RunAs -ArgumentList $relaunchArgs
+	Break
 }
 
 #region Setup
@@ -57,6 +59,11 @@ function Install-Git() {
 			if (Test-Path $target) { Remove-Item -Path $target }
 		}
 	}
+
+	# Set Git SSH client
+	if ($null -eq [System.Environment]::GetEnvironmentVariable("GIT_SSH", "User")) {
+		[System.Environment]::SetEnvironmentVariable("GIT_SSH", (Get-Command ssh.exe).Path, [System.EnvironmentVariableTarget]::User)
+	}
 }
 
 function Install-SSHKeys() {
@@ -94,7 +101,7 @@ function Install-Dotfiles() {
 
 function Install-Profiles() {
 	$setprofiles = Join-Path -Path $dotfiles -ChildPath setprofiles.ps1
-	if (Test-Path -Path $setprofiles) { Start-Process -FilePath $setprofiles -Wait -NoNewWindow }
+	if (Test-Path -Path $setprofiles) { Start-Process -FilePath powershell -ArgumentList $setprofiles -Wait -NoNewWindow }
 }
 
 #endregion
@@ -129,6 +136,8 @@ function Install-Virtualization() {
 }
 
 #endregion
+
+Write-Output "Install dotfiles"
 
 Install-Git
 Install-SSHKeys
