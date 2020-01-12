@@ -30,6 +30,10 @@
         "url": "https://c.1password.com/dist/1P/win6/1PasswordSetup-7.3.712.exe"
     },
     {
+        "id": "programs:Fork - a fast and friendly git client/1.43.2",
+        "url": "https://git-fork.com/update/win/ForkInstaller.exe"
+    },
+    {
         "id": "programs:Docker Desktop/2.1.0.5",
         "url": "https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe",
         "args": "install --quiet"
