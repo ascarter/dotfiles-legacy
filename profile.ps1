@@ -1,9 +1,20 @@
+# Bootstrap modules
+
+if (!(Get-Module -Name PowerShellGet -ListAvailable)) {
+  Install-Module -Name PowerShellGet -Scope CurrentUser -Force -AllowClobber
+}
+
+if (!(Get-Module -Name Microsoft.PowerShell.GraphicalTools -ListAvailable)) {
+  Install-Module Microsoft.PowerShell.GraphicalTools -Scope CurrentUser -Force -AllowClobber
+}
+
+if (!(Get-Module -Name posh-git -ListAvailable)) {
+  Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force
+}
+
 # Enable Git to use Windows SSH
 # [Environment]::SetEnvironmentVariable("GIT_SSH", "$((Get-Command ssh).Source)", [System.EnvironmentVariableTarget]::User)
 Set-Item -Path Env:GIT_SSH -Value ((Get-Command ssh).Source)
-
-# Configure posh-git
-if (Get-Module -Name posh-git -All) { Import-Module posh-git }
 
 # Alias behavoirs
 
@@ -51,7 +62,7 @@ function Get-CmdletAlias ($cmdletname) {
 # function prompt {
 #   $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
 #   $principal = [Security.Principal.WindowsPrincipal] $identity
-
+#
 #   $(if (Test-Path variable:/PSDebugContext) { '[DBG]: ' }
 #     elseif($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { "[ADMIN]: " }
 #     else { '' }
@@ -59,18 +70,23 @@ function Get-CmdletAlias ($cmdletname) {
 #     $(if ($NestedPromptLevel -ge 1) { '>>' }) + '> '
 # }
 
-function prompt {
-  $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
-  $principal = [Security.Principal.WindowsPrincipal] $identity
+# Configure posh-git
+if (Get-Module -Name posh-git -ListAvailable) {
+  Import-Module posh-git
 
-  $GitPromptSettings.DefaultPromptPrefix = '`n'
-  $GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n'
-  $GitPromptSettings.WindowTitle = { param($GitStatus, [bool]$IsAdmin) "$(if ($IsAdmin) {'Admin: '})$(if ($GitStatus) {"$($GitStatus.RepoName) [$($GitStatus.Branch)]"} else {Get-PromptPath}) ~ PowerShell $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor)" }
+  function prompt {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = [Security.Principal.WindowsPrincipal] $identity
 
-  $prompt = $(
-    if (Test-Path variable:/PSDebugContext) { Write-Prompt '[DBG]: ' }
-    elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Write-Prompt '[ADMIN]: ' }
-  )
-  $prompt += & $GitPromptScriptBlock
-  if ($prompt) { $prompt } else { '' }
+    $GitPromptSettings.DefaultPromptPrefix = '`n'
+    $GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n'
+    $GitPromptSettings.WindowTitle = { param($GitStatus, [bool]$IsAdmin) "$(if ($IsAdmin) {'Admin: '})$(if ($GitStatus) {"$($GitStatus.RepoName) [$($GitStatus.Branch)]"} else {Get-PromptPath}) ~ PowerShell $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor)" }
+
+    $prompt = $(
+      if (Test-Path variable:/PSDebugContext) { Write-Prompt '[DBG]: ' }
+      elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Write-Prompt '[ADMIN]: ' }
+    )
+    $prompt += & $GitPromptScriptBlock
+    if ($prompt) { $prompt } else { '' }
+  }
 }
