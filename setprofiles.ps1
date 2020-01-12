@@ -19,7 +19,7 @@ $dotfiles = Join-Path -Path $env:USERPROFILE -ChildPath ".config\dotfiles"
 # Source dotfiles profile for active powershell profile
 if (!(Test-Path $profile) -or $Force) {
     New-Item -Path $profile -ItemType File -Force
-    Set-Content -Path $profile -Value ". Join-Path $env:USERPROFILE .config\dotfiles\profile.ps1"
+    Set-Content -Path $profile -Value ". $env:USERPROFILE\.config\dotfiles\profile.ps1"
 }
 
 # Windows terminal profile
