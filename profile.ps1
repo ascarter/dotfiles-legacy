@@ -29,11 +29,13 @@ function Start-Insomnia() {
   Start-Process -FilePath $exe -WindowStyle Minimized
 }
 
-function cddf { Set-Location -Path (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles") }
+function cdDotfiles() {
+  Set-Location -Path (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
+}
 
 Set-Alias -Name fork -Value Start-Fork
 Set-Alias -Name insomnia -Value Start-Insomnia
-Set-Alias -Name df -Value cddf
+Set-Alias -Name dotf -Value cdDotfiles
 
 # Unix alias helpers
 Set-Alias -Name ll -Value Get-ChildItem
@@ -48,17 +50,11 @@ function Update-Profiles() {
   if (Test-Path -Path $setprofiles) { Start-Process -FilePath $setprofiles -Wait -NoNewWindow }
 }
 
-
-# Enable Windows PowerShell modules
-# function Enable-Windows-PowerShell {
-#   Install-Module WindowsPSModulePath -Force -Scope CurrentUser
-#   Add-WindowsPSModulePath
-# }
-
 function Get-CmdletAlias ($cmdletname) {
   Get-Alias | Where-Object -FilterScript { $_.Definition -like "$cmdletname" } | Format-Table -Property Definition, Name -AutoSize
 }
 
+# Default prompt with ADMIN and DBG
 # function prompt {
 #   $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
 #   $principal = [Security.Principal.WindowsPrincipal] $identity
@@ -78,15 +74,13 @@ if (Get-Module -Name posh-git -ListAvailable) {
     $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
     $principal = [Security.Principal.WindowsPrincipal] $identity
 
-    $GitPromptSettings.DefaultPromptPrefix = '`n'
-    $GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n'
-    $GitPromptSettings.WindowTitle = { param($GitStatus, [bool]$IsAdmin) "$(if ($IsAdmin) {'Admin: '})$(if ($GitStatus) {"$($GitStatus.RepoName) [$($GitStatus.Branch)]"} else {Get-PromptPath}) ~ PowerShell $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion.Major).$($PSVersionTable.PSVersion.Minor)" }
-
-    $prompt = $(
-      if (Test-Path variable:/PSDebugContext) { Write-Prompt '[DBG]: ' }
-      elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Write-Prompt '[ADMIN]: ' }
+    $GitPromptSettings.DefaultPromptPrefix.Text = "`n[$env:COMPUTERNAME] "
+    $GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n' + $(
+      if (Test-Path variable:/PSDebugContext) { Write-Prompt '[DBG]: ' -ForegroundColor Red }
+      elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Write-Prompt '[ADMIN]: ' -ForegroundColor Magenta }
     )
-    $prompt += & $GitPromptScriptBlock
-    if ($prompt) { $prompt } else { '' }
+    $GitPromptSettings.DefaultPromptSuffix.Text = "PS > "
+    $prompt = & $GitPromptScriptBlock
+    if ($prompt) { $prompt } else { ' ' }
   }
 }
