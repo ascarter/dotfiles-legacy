@@ -35,7 +35,7 @@ $dotfilesRepo = 'ascarter/dotfiles.git'
 $dotfiles = Join-Path -Path $configPath -ChildPath "dotfiles"
 
 # SSH key file
-$sshKeyfile = Join-Path -Path $env:USERPROFILE -ChildPath .ssh\id_rsa
+$sshKeyfile = Join-Path -Path $env:USERPROFILE -ChildPath .ssh\id_ed25519
 
 # Git
 $gitUri = 'https://github.com/git-for-windows/git/releases/download/v2.24.1.windows.2/Git-2.24.1.2-64-bit.exe'
@@ -71,7 +71,7 @@ function Install-SSHKeys() {
 	if (!(Test-Path $sshKeyFile)) {
 		Write-Host "Generating SSH user key"
 		$githubEmail = Read-Host -Prompt "Enter GitHub email address"
-		ssh-keygen -t rsa -b 4096 -C "$githubEmail"
+		ssh-keygen -t ed25519 -C "$githubEmail"
 		ssh-add $sshKeyFile
 
 		# Copy SSH public key to clipboard
@@ -126,6 +126,9 @@ function Install-SSH() {
 	Start-Service ssh-agent
 	Set-Service -Name sshd -StartupType 'Automatic'
 	Start-Service sshd
+
+	# Configure default shell
+	New-ItemProperty -Path HKLM:\SOFTWARE\OpenSSH -Name DefaultShell -Value $env:ProgramFiles\PowerShell\6\pwsh.exe
 }
 
 function Install-Virtualization() {
