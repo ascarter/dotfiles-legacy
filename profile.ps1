@@ -41,6 +41,9 @@ Set-Alias -Name dotf -Value cdDotfiles
 Set-Alias -Name ll -Value Get-ChildItem
 Set-Alias -Name which -Value Get-Command
 
+# Set keybindings
+Set-PSReadLineOption -EditMode Emacs
+
 # Helper functions
 
 function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
