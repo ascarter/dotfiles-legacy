@@ -57,7 +57,7 @@ function Install-Packages() {
             $exe = switch ((Get-Item -Path $target).Extension) {
                 .exe { $target }
                 .msi { $args += ('/I', $target); 'msiexec.exe' }
-                Default { throw "Unknown file type for $file" }
+                Default { throw "Unknown file type for $target" }
             }
             Start-Process -FilePath $exe -ArgumentList $Args -Wait -Verb $verb
         }
