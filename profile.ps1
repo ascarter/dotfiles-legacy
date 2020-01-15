@@ -49,7 +49,7 @@ Set-PSReadLineOption -EditMode Emacs
 function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
 
 function Update-Profiles() {
-  $setprofiles = Join-Path -Path $dotfiles -ChildPath setprofiles.ps1
+  $setprofiles = Join-Path -Path $env:USERPROFILE -ChildPath .config\dotfiles\setprofiles.ps1
   if (Test-Path -Path $setprofiles) { Start-Process -FilePath $setprofiles -Wait -NoNewWindow }
 }
 
