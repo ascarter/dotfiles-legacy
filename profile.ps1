@@ -50,7 +50,9 @@ function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
 
 function Update-Profiles() {
   $setprofiles = Join-Path -Path $env:USERPROFILE -ChildPath .config\dotfiles\setprofiles.ps1
-  if (Test-Path -Path $setprofiles) { Start-Process -FilePath pwsh -ArgumentList "$setprofiles -Force"  -Wait -NoNewWindow }
+  if (Test-Path -Path $setprofiles) {
+    Start-Process -FilePath (Get-Process -Id $pid).ProcessName -ArgumentList "$setprofiles -Force"  -Wait -NoNewWindow
+  }
 }
 
 function Get-CmdletAlias ($cmdletname) {
