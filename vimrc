@@ -87,9 +87,11 @@ set number
 " 4 -> solid underscore
 " 5 -> blinking vertical bar
 " 6 -> solid vertical bar
-let &t_SI = "\e[5 q"  "SI=INSERT mode
-let &t_SR = "\e[4 q"  "SR=REPLACE mode
-let &t_EI = "\e[1 q"  "EI=NORMAL mode
+if &term !~ "^win32"
+	let &t_SI = "\e[5 q"  "SI=INSERT mode
+	let &t_SR = "\e[4 q"  "SR=REPLACE mode
+	let &t_EI = "\e[1 q"  "EI=NORMAL mode
+endif
 
 " Set fill characters
 set fillchars=vert:\ ,fold:-
@@ -144,36 +146,6 @@ imap <Leader>= <ESC> <C-w>=
 
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
-
-let g:tagbar_autoshowtag = 1
-let g:tagbar_autopreview = 1
-let g:tagbar_type_go = {
-    \ 'ctagstype' : 'go',
-    \ 'kinds'     : [
-        \ 'p:package',
-        \ 'i:imports:1',
-        \ 'c:constants',
-        \ 'v:variables',
-        \ 't:types',
-        \ 'n:interfaces',
-        \ 'w:fields',
-        \ 'e:embedded',
-        \ 'm:methods',
-        \ 'r:constructor',
-        \ 'f:functions'
-    \ ],
-    \ 'sro' : '.',
-    \ 'kind2scope' : {
-        \ 't' : 'ctype',
-        \ 'n' : 'ntype'
-    \ },
-    \ 'scope2kind' : {
-        \ 'ctype' : 't',
-        \ 'ntype' : 'n'
-    \ },
-    \ 'ctagsbin'  : 'gotags',
-    \ 'ctagsargs' : '-sort -silent -f "-"'
-\ }
 
 " Enable Dash search
 if has('macunix')
