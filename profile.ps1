@@ -16,6 +16,10 @@ if (!(Get-Module -Name posh-git -ListAvailable)) {
 # [Environment]::SetEnvironmentVariable("GIT_SSH", "$((Get-Command ssh).Source)", [System.EnvironmentVariableTarget]::User)
 Set-Item -Path Env:GIT_SSH -Value ((Get-Command ssh).Source)
 
+# Set EDITOR and VISUAL
+Set-Item -Path Env:EDITOR -Value ((Get-Command vim).Source)
+Set-Item -Path Env:VISUAL -Value ((Get-Command code).Source)
+
 # Alias behavoirs
 
 function Start-Fork([string]$MyRepo = $PWD) {
