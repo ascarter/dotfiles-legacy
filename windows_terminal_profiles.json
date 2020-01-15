@@ -47,6 +47,15 @@
         {
             "command": {
                 "action": "newTab",
+                "profile": "PowerShell Core"
+            },
+            "keys": [
+                "ctrl+shift+n"
+            ]
+        },
+        {
+            "command": {
+                "action": "newTab",
                 "profile": "Ubuntu-18.04"
             },
             "keys": [
