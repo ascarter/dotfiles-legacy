@@ -7,6 +7,7 @@
 set nocompatible
 filetype off
 let mapleader=","
+set backspace=indent,eol,start
 
 " =====================================
 " Plugins
