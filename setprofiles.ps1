@@ -33,5 +33,5 @@ if (!(Test-Path -Path $wintermTarget) -or $Force) {
 $vimrc = Join-Path -Path $env:USERPROFILE -ChildPath _vimrc
 if (!(Test-Path -Path $vimrc) -or $Force) {
     New-Item -Path $vimrc -ItemType File -Force
-    Set-Content -Path $vimrc -Value "source $(Join-Path -Path $dotfiles -ChildPath vimrc)"
+    Set-Content -Path $vimrc -Value "source ~/.config/dotfiles/vimrc"
 }
