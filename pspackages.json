@@ -49,5 +49,13 @@
     {
         "id": "programs:Wireshark 3.2.0 64-bit/3.2.0",
         "url": "https://2.na.dl.wireshark.org/win64/Wireshark-win64-3.2.0.exe"
+    },
+    {
+        "id": "msi:Go Programming Language amd64 go1.13.6/1.13.6",
+        "url": "https://dl.google.com/go/go1.13.6.windows-amd64.msi"
+    },
+    {
+        "id": "msi:Node.js/13.6.0",
+        "url": "https://nodejs.org/dist/v13.6.0/node-v13.6.0-x64.msi"
     }
 ]
