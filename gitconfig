@@ -1,0 +1,22 @@
+[color]
+	ui = auto
+[core]
+	autocrlf = input
+	editor = $EDITOR
+    excludesFile = ~/.gitignore
+[difftool]
+	prompt = false
+[instaweb]
+	httpd = webrick
+[difftool "vscode"]
+    cmd = code --wait --new-window --diff $LOCAL $REMOTE
+[mergetool "vscode"]
+    cmd = code --wait --new-window $MERGED
+[diff]
+    tool = vimdiff
+    guitool = vscode
+[merge]
+    tool = vimdiff
+    guitool = vscode
+[include]
+    path = ~/.config/dotfiles/gitconfig-aliases

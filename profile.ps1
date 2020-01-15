@@ -12,6 +12,9 @@ if (!(Get-Module -Name posh-git -ListAvailable)) {
   Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force
 }
 
+# Set DOTFILES environment varible
+Set-Item -Path Env:DOTFILES -Value (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
+
 # Enable Git to use Windows SSH
 # [Environment]::SetEnvironmentVariable("GIT_SSH", "$((Get-Command ssh).Source)", [System.EnvironmentVariableTarget]::User)
 Set-Item -Path Env:GIT_SSH -Value ((Get-Command ssh).Source)
@@ -34,7 +37,7 @@ function Start-Insomnia() {
 }
 
 function cdDotfiles() {
-  Set-Location -Path (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
+  Set-Location -Path $env:DOTFILES
 }
 
 Set-Alias -Name fork -Value Start-Fork
@@ -53,11 +56,47 @@ Set-PSReadLineOption -EditMode Emacs
 function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
 
 function Update-Profiles() {
-  $setprofiles = Join-Path -Path $env:USERPROFILE -ChildPath .config\dotfiles\setprofiles.ps1
+  $setprofiles = Join-Path -Path $env:DOTFILES -ChildPath setprofiles.ps1
   if (Test-Path -Path $setprofiles) {
     Start-Process -FilePath (Get-Process -Id $pid).ProcessName -ArgumentList "$setprofiles -Force"  -Wait -NoNewWindow
   }
 }
+
+# gitconfig
+
+function gc_set([string]$Key, [string]$Value) {
+  git config --global $Key $Value | Out-Null
+}
+
+function gc_update([string]$Key, [string]$Value) {
+  git config --global --unset $Key
+  gc_set $Key $Value
+}
+
+function gc_prompt([string]$Key, [string]$Prompt) {
+  $default = git config --global --get $Key
+  $msg = if ($null -eq $default) { $Prompt } else { "$Prompt (default $default)" }
+  $value = Read-Host -Prompt $msg
+  if ($null -eq $value) { $value = $default }
+  gc_set $Key $value
+}
+
+function Update-GitConfig() {
+  # Include defaults and aliases
+  gc_update 'include.path' (Join-Path -Path $env:DOTFILES -ChildPath gitconfig)
+
+  # User info
+  gc_prompt 'user.name' "User name"
+  gc_prompt 'user.email' "Email"
+
+  # Platform configuration
+  gc_set 'gui.fontui' '-family \"Segoe UI\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'
+  gc_set 'gui.fontdiff' '-family \"Cascadia Code\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'
+
+  # Show full gitconfig
+  Write-Output $(git config --global --list)
+}
+
 
 function Get-CmdletAlias ($cmdletname) {
   Get-Alias | Where-Object -FilterScript { $_.Definition -like "$cmdletname" } | Format-Table -Property Definition, Name -AutoSize
