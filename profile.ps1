@@ -62,6 +62,11 @@ function Update-Profiles() {
   }
 }
 
+function Update-VSCodeExtensions() {
+  $extensions = Get-Content -Path (Join-Path -Path $env:DOTFILES -ChildPath '.\vscode-extensions.txt')
+  foreach ($extension in $extensions) { code --install-extension $extension }
+}
+
 # gitconfig
 
 function gc_set([string]$Key, [string]$Value) {
