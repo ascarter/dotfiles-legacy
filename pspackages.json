@@ -57,5 +57,9 @@
     {
         "id": "msi:Node.js/13.6.0",
         "url": "https://nodejs.org/dist/v13.6.0/node-v13.6.0-x64.msi"
+    },
+    {
+        "id": "programs:Progress Telerik Fiddler/5.0.20194.41348",
+        "url": "https://telerik-fiddler.s3.amazonaws.com/fiddler/FiddlerSetup.exe"
     }
 ]
