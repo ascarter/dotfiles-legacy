@@ -36,6 +36,11 @@ function Start-Insomnia() {
   Start-Process -FilePath $exe -WindowStyle Minimized
 }
 
+function Start-1Password() {
+  $op = Join-Path -Path $env:USERPROFILE -ChildPath bin\op.exe
+  Invoke-Expression $(op signin carters)
+}
+
 function cdDotfiles() {
   Set-Location -Path $env:DOTFILES
 }
@@ -43,6 +48,7 @@ function cdDotfiles() {
 Set-Alias -Name fork -Value Start-Fork
 Set-Alias -Name insomnia -Value Start-Insomnia
 Set-Alias -Name dotf -Value cdDotfiles
+Set-Alias -Name opsignin -Value Start-1Password
 
 # Unix alias helpers
 Set-Alias -Name ll -Value Get-ChildItem
