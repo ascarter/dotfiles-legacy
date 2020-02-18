@@ -137,12 +137,6 @@ if [[ -d ${HOME}/.cargo ]]; then
 	export PATH=${HOME}/.cargo/bin:$PATH
 fi
 
-# GitHub
-if type hub &>/dev/null; then
-	export GITHUB_USER=ascarter
-	eval $(`whence -cp hub` alias -s)
-fi
-
 # Kubernetes
 if type kubectl &>/dev/null; then
 	source <(kubectl completion zsh)
