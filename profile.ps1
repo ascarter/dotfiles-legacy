@@ -45,19 +45,24 @@ function cdDotfiles() {
   Set-Location -Path $env:DOTFILES
 }
 
+Set-Alias -Name dev -Value Start-DevEnv
+Set-Alias -Name dotf -Value cdDotfiles
 Set-Alias -Name fork -Value Start-Fork
 Set-Alias -Name insomnia -Value Start-Insomnia
-Set-Alias -Name dotf -Value cdDotfiles
 Set-Alias -Name opsignin -Value Start-1Password
 
 # Unix alias helpers
 Set-Alias -Name ll -Value Get-ChildItem
 Set-Alias -Name which -Value Get-Command
-
+Set-Alias -Name uname -Value Get-Uname
 # Set keybindings
 Set-PSReadLineOption -EditMode Emacs
 
 # Helper functions
+
+function Start-DevEnv() {
+  & { Import-Module (Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\2019\Enterprise\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"); Enter-VsDevShell da341a44 }
+}
 
 function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
 
@@ -71,6 +76,10 @@ function Update-Profiles() {
 function Update-VSCodeExtensions() {
   $extensions = Get-Content -Path (Join-Path -Path $env:DOTFILES -ChildPath '.\vscode-extensions.txt')
   foreach ($extension in $extensions) { code --install-extension $extension }
+}
+
+function Get-Uname() {
+  Get-CimInstance Win32_OperatingSystem | Select-Object 'Caption', 'CSName', 'Version', 'BuildType', 'OSArchitecture' | Format-Table
 }
 
 # gitconfig
