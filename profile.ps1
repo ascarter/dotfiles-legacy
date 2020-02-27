@@ -12,6 +12,9 @@ if (!(Get-Module -Name posh-git -ListAvailable)) {
   Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force
 }
 
+# Extend PATH to include top level bin (like /usr/local/bin in Unix)
+$Env:Path += ";$Env:SystemDrive\bin"
+
 # Set DOTFILES environment varible
 Set-Item -Path Env:DOTFILES -Value (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
 
