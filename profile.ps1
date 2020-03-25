@@ -12,8 +12,11 @@ if (!(Get-Module -Name posh-git -ListAvailable)) {
   Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force
 }
 
-# Extend PATH to include top level bin (like /usr/local/bin in Unix)
-$Env:Path += ";$Env:SystemDrive\bin"
+# Define top level bin (like /usr/local/bin in Unix)
+$Env:LOCALBIN = Join-Path -Path $Env:SystemDrive -ChildPath bin
+
+# Extend PATH to include LOCALBIN
+$Env:Path = "$Env:LOCALBIN;$Env:Path"
 
 # Set DOTFILES environment varible
 Set-Item -Path Env:DOTFILES -Value (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
@@ -40,16 +43,15 @@ function Start-Insomnia() {
 }
 
 function Start-1Password() {
-  $op = Join-Path -Path $env:USERPROFILE -ChildPath bin\op.exe
   Invoke-Expression $(op signin carters)
 }
 
-function cdDotfiles() {
+function Set-LocationDotfiles() {
   Set-Location -Path $env:DOTFILES
 }
 
 Set-Alias -Name dev -Value Start-DevEnv
-Set-Alias -Name dotf -Value cdDotfiles
+Set-Alias -Name dotf -Value Set-LocationDotfiles
 Set-Alias -Name fork -Value Start-Fork
 Set-Alias -Name insomnia -Value Start-Insomnia
 Set-Alias -Name opsignin -Value Start-1Password
@@ -83,6 +85,10 @@ function Update-VSCodeExtensions() {
 
 function Get-Uname() {
   Get-CimInstance Win32_OperatingSystem | Select-Object 'Caption', 'CSName', 'Version', 'BuildType', 'OSArchitecture' | Format-Table
+}
+
+function Get-IsAdmin() {
+  ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
 # gitconfig
@@ -153,5 +159,130 @@ if (Get-Module -Name posh-git -ListAvailable) {
     $GitPromptSettings.DefaultPromptSuffix.Text = "PS > "
     $prompt = & $GitPromptScriptBlock
     if ($prompt) { $prompt } else { ' ' }
+  }
+}
+
+function Get-InstalledSoftware {
+  <#
+.SYNOPSIS
+  Retrieves a list of all software installed on a Windows computer.
+.EXAMPLE
+  PS> Get-InstalledSoftware
+
+  This example retrieves all software installed on the local computer.
+.PARAMETER ComputerName
+  If querying a remote computer, use the computer name here.
+
+.PARAMETER Name
+  The software title you'd like to limit the query to.
+
+.PARAMETER Guid
+  The software GUID you'e like to limit the query to
+#>
+  [CmdletBinding()]
+  param (
+
+    [Parameter()]
+    [ValidateNotNullOrEmpty()]
+    [string]$ComputerName = $env:COMPUTERNAME,
+
+    [Parameter()]
+    [ValidateNotNullOrEmpty()]
+    [string]$Name,
+
+    [Parameter()]
+    [guid]$Guid,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$Gui
+  )
+  process {
+    try {
+      $scriptBlock = {
+        $args[0].GetEnumerator() | ForEach-Object { New-Variable -Name $_.Key -Value $_.Value }
+
+        $UninstallKeys = @(
+          "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall",
+          "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+        )
+
+        if (Get-IsAdmin) {
+          New-PSDrive -Name HKU -PSProvider Registry -Root Registry::HKEY_USERS | Out-Null
+          $UninstallKeys += Get-ChildItem HKU: | Where-Object { $_.Name -match 'S-\d-\d+-(\d+-){1,14}\d+$' } | ForEach-Object {
+            "HKU:\$($_.PSChildName)\Software\Microsoft\Windows\CurrentVersion\Uninstall"
+          }
+        }
+
+        if (-not $UninstallKeys) {
+          Write-Warning -Message 'No software registry keys found'
+        }
+        else {
+          foreach ($UninstallKey in $UninstallKeys) {
+            $friendlyNames = @{
+              'DisplayName'    = 'Name'
+              'DisplayVersion' = 'Version'
+            }
+            Write-Verbose -Message "Checking uninstall key [$($UninstallKey)]"
+            if ($Name) {
+              $WhereBlock = { $_.GetValue('DisplayName') -like "$Name*" }
+            }
+            elseif ($GUID) {
+              $WhereBlock = { $_.PsChildName -eq $Guid.Guid }
+            }
+            else {
+              $WhereBlock = { $_.GetValue('DisplayName') }
+            }
+            $SwKeys = Get-ChildItem -Path $UninstallKey -ErrorAction SilentlyContinue | Where-Object $WhereBlock
+            if (-not $SwKeys) {
+              Write-Verbose -Message "No software keys in uninstall key $UninstallKey"
+            }
+            else {
+              foreach ($SwKey in $SwKeys) {
+                $output = @{ }
+                $output.Name = $SwKey
+                foreach ($ValName in $SwKey.GetValueNames()) {
+                  if ($ValName -ne 'Version') {
+                    $output.InstallLocation = ''
+                    if ($ValName -eq 'InstallLocation' -and
+                      ($SwKey.GetValue($ValName)) -and
+                      (@('C:', 'C:\Windows', 'C:\Windows\System32', 'C:\Windows\SysWOW64') -notcontains $SwKey.GetValue($ValName).TrimEnd('\'))) {
+                      $output.InstallLocation = $SwKey.GetValue($ValName).TrimEnd('\')
+                    }
+                    [string]$ValData = $SwKey.GetValue($ValName)
+                    if ($friendlyNames[$ValName]) {
+                      $output[$friendlyNames[$ValName]] = $ValData.Trim() ## Some registry values have trailing spaces.
+                    }
+                    else {
+                      $output[$ValName] = $ValData.Trim() ## Some registry values trailing spaces
+                    }
+                  }
+                }
+                $output.GUID = ''
+                if ($SwKey.PSChildName -match '\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b') {
+                  $output.GUID = $SwKey.PSChildName
+                }
+                New-Object -TypeName PSObject -Prop $output
+              }
+            }
+          }
+        }
+      }
+
+      if ($ComputerName -eq $env:COMPUTERNAME) {
+        $results = Invoke-Command -ScriptBlock $scriptBlock -ArgumentList $PSBoundParameters
+      }
+      else {
+        $results = Invoke-Command -ComputerName $ComputerName -ScriptBlock $scriptBlock -ArgumentList $PSBoundParameters
+      }
+      if ($Gui) {
+        $results | Out-GridView -Title "Installed Software"
+      }
+      else {
+        $results | Format-Table -AutoSize -Property Name, Publisher, Version, GUID
+      }
+    }
+    catch {
+      Write-Error -Message "Error: $($_.Exception.Message) - Line Number: $($_.InvocationInfo.ScriptLineNumber)"
+    }
   }
 }
