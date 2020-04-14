@@ -43,7 +43,9 @@ function Start-Insomnia() {
 }
 
 function Start-1Password() {
-  Invoke-Expression $(op signin carters)
+  if ($env:OP_SESSION_carters -eq $null) {
+    Invoke-Expression $(op signin carters)
+  }
 }
 
 function Set-LocationDotfiles() {
@@ -55,6 +57,7 @@ Set-Alias -Name dotf -Value Set-LocationDotfiles
 Set-Alias -Name fork -Value Start-Fork
 Set-Alias -Name insomnia -Value Start-Insomnia
 Set-Alias -Name opsignin -Value Start-1Password
+Set-Alias -Name opssh -Value Get-SSHPassphrase
 
 # Unix alias helpers
 Set-Alias -Name ll -Value Get-ChildItem
@@ -68,6 +71,13 @@ Set-Alias -Name pbcopy -Value Set-Clipboard
 Set-Alias -Name pbpaste -Value Get-Clipboard
 
 # Helper functions
+
+# Get-Password retrieves a password for a 1Password password item
+function Get-SSHPassphrase([string]$Key = $env:COMPUTERNAME.ToLower()) {
+  $sshKey = 'ssh ' + $Key
+  Start-1Password
+  op get item $sshKey | jq -r '.details.password' | Set-Clipboard
+}
 
 function Start-DevEnv() {
   & { Import-Module (Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\2019\Enterprise\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"); Enter-VsDevShell da341a44 }
