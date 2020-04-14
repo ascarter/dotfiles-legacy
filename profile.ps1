@@ -63,6 +63,10 @@ Set-Alias -Name uname -Value Get-Uname
 # Set keybindings
 Set-PSReadLineOption -EditMode Emacs
 
+# macOS alias helpers
+Set-Alias -Name pbcopy -Value Set-Clipboard
+Set-Alias -Name pbpaste -Value Get-Clipboard
+
 # Helper functions
 
 function Start-DevEnv() {
