@@ -1,4 +1,4 @@
-#  -*- mode: unix-shell-script; -*-
+#  -*- mode: shellscript; -*-
 
 fpath=(${ZDOTDIR:-$DOTFILES/zsh}/completions ${ZDOTDIR:-$DOTFILES/zsh}/functions ${ZDOTDIR:-$DOTFILES/zsh}/prompts $fpath)
 
@@ -98,13 +98,13 @@ if type ruby &>/dev/null && type gem &>/dev/null; then
 fi
 
 # Python
-if [[ -d /Library/Frameworks/Python.framework/Versions/3.7 ]]; then
-	export PATH=/Library/Frameworks/Python.framework/Versions/3.7/bin:${PATH}
+if [[ -d /Library/Frameworks/Python.framework/Versions/3.8 ]]; then
+	export PATH=/Library/Frameworks/Python.framework/Versions/3.8/bin:${PATH}
 fi
-if [[ -d ${HOME}/Library/Python/3.7 ]]; then
+if [[ -d ${HOME}/Library/Python/3.8 ]]; then
 	export LC_ALL=en_US.UTF-8
 	export LANG=en_US.UTF-8
-	export PATH=${HOME}/Library/Python/3.7/bin:${PATH}
+	export PATH=${HOME}/Library/Python/3.8/bin:${PATH}
 fi
 if type pip3 &>/dev/null; then
 	source <(pip3 completion --zsh)
