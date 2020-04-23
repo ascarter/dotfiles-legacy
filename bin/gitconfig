@@ -64,7 +64,7 @@ Darwin )
 	;;
 Linux )
 	# Use Windows credential manager if running in WSL
-	if [ -n "${WSL_DISTRO}" ]; then
+	if [ -n "${WSL_DISTRO_NAME}" ]; then
 		gc_set credential.helper "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
 	else
 		gc_set credential.helper cache
