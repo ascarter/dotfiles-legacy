@@ -45,16 +45,14 @@ gc_prompt commit.gpgsign "GPG sign by default? (true/false)"
 case $(uname) in
 Darwin )
 	gc_set credential.helper osxkeychain
-	gc_set gui.fontui "-family \"SF UI Display Regular\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
-	gc_set gui.fontdiff "-family \"SF Mono\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
 
 	# BBEdit diff
-	if type bbdiff &>/dev/null; then
+	if command -v bbdiff >/dev/null 2>&1; then
 		gc_set difftool."bbdiff".cmd 'bbdiff --wait --resume $LOCAL $REMOTE'
 	fi
 
 	# Kaleidoscope
-	if type ksdiff &>/dev/null; then
+	if command -v ksdiff >/dev/null 2>&1; then
 		gc_set difftool."Kaleidoscope".cmd 'ksdiff --partial-changeset --relative-path $MERGED -- $LOCAL $REMOTE'
 		gc_set mergetool."Kaleidoscope".cmd 'ksdiff --merge --output $MERGED --base $BASE -- $LOCAL --snapshot $REMOTE --snapshot'
 		gc_set mergetool."Kaleidoscope".trustExitCode true
@@ -65,9 +63,12 @@ Darwin )
 	gc_set merge.tool opendiff
 	;;
 Linux )
-	gc_set credential.helper cache
-	gc_set gui.fontui "-family \"Source Sans Pro\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
-	gc_set gui.fontdiff "-family \"Source Code Pro\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
+	# Use Windows credential manager if running in WSL
+	if [ -n "${WSL_DISTRO}" ]; then
+		gc_set credential.helper "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
+	else
+		gc_set credential.helper cache
+	fi
 
 	# Use Vim as default diff/merge
 	gc_set diff.tool vimdiff
