@@ -23,11 +23,12 @@ if (!(Test-Path $profile) -or $Force) {
 }
 
 # Windows terminal profile
-# $wintermSrc = Join-Path -Path $dotfiles -ChildPath windows_terminal_profiles.json
-# $wintermTarget = Join-Path -Path $env:LocalAppData -ChildPath Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\profiles.json
-# if (!(Test-Path -Path $wintermTarget) -or $Force) {
-#     Copy-Item -Path $wintermSrc -Destination $wintermTarget -Force
-# }
+$wintermSrc = Join-Path -Path $dotfiles -ChildPath windows_terminal_settings.json
+$wintermID = "Microsoft.WindowsTerminal_8wekyb3d8bbwe"
+$wintermTarget = Join-Path -Path $env:LocalAppData -ChildPath Packages\$wintermID\LocalState\profiles.json
+if (!(Test-Path -Path $wintermTarget) -or $Force) {
+    Copy-Item -Path $wintermSrc -Destination $wintermTarget -Force
+}
 
 # Vim profile
 $vimrc = Join-Path -Path $env:USERPROFILE -ChildPath _vimrc
