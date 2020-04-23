@@ -43,7 +43,7 @@ function Start-Insomnia() {
 }
 
 function Start-1Password() {
-  if ($env:OP_SESSION_carters -eq $null) {
+  if ($null -eq $env:OP_SESSION_carters) {
     Invoke-Expression $(op signin carters)
   }
 }
