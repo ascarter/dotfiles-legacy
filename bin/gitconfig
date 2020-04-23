@@ -1,67 +1,76 @@
-#!/bin/zsh
-
-#  -*- mode: unix-shell-script; -*-
+#!/bin/sh
+#
+# Generate Git config
+#
 
 DOTFILES=${1:-${HOME}/.config/dotfiles}
+GIT_CONFIG_FILE=${2:-${HOME}/.gitconfig}
+GIT_CONFIG_CMD="git config --file ${GIT_CONFIG_FILE}"
 
-# Generate Git config
-
-_gc_set() {
-	git config --global ${1} ${2}
+gc_set() {
+	${GIT_CONFIG_CMD} "${1}" "${2}"
 }
 
-_gc_update() {
-	# Remove existing key
-	git config --unset $1
-	_gc_set $1 $2
+gc_unset() {
+	${GIT_CONFIG_CMD} --unset "${1}"
+}
+
+gc_update() {
+	gc_unset "${1}"
+	if [ -n "${2}" ]; then
+		gc_set "${1}" "${2}"
+	fi
 }
 
 # Prompt for git config key
-_gc_prompt() {
-	input=$(git config --get ${1})
-	vared -p "${1}: " -M emacs input
-	_gc_set $1 $input
+gc_prompt() {
+	local current="$(${GIT_CONFIG_CMD} --get ${1})"
+	read -p "${1} (${current}): " input
+	gc_update ${1} "${input:-${current}}"
 }
 
+echo "Generating gitconfig..."
+touch ${GIT_CONFIG_FILE}
+
 # Include defaults and aliases
-_gc_update include.path ${DOTFILES}/gitconfig
+gc_set include.path ${DOTFILES}/gitconfig
 
 # User info
-_gc_prompt user.name "User name"
-_gc_prompt user.email "Email"
-_gc_prompt user.signingkey "GPG Key"
-_gc_prompt commit.gpgsign "GPG sign by default? (true/false)"
+gc_prompt user.name "User name"
+gc_prompt user.email "Email"
+gc_prompt user.signingkey "GPG Key"
+gc_prompt commit.gpgsign "GPG sign by default? (true/false)"
 
 # Set configuration by platform
 case $(uname) in
 Darwin )
-	_gc_set credential.helper osxkeychain
-	_gc_set gui.fontui "-family \"SF UI Display Regular\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
-	_gc_set gui.fontdiff "-family \"SF Mono\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
+	gc_set credential.helper osxkeychain
+	gc_set gui.fontui "-family \"SF UI Display Regular\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
+	gc_set gui.fontdiff "-family \"SF Mono\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
 
 	# BBEdit diff
 	if type bbdiff &>/dev/null; then
-		_gc_set difftool."bbdiff".cmd 'bbdiff --wait --resume $LOCAL $REMOTE'
+		gc_set difftool."bbdiff".cmd 'bbdiff --wait --resume $LOCAL $REMOTE'
 	fi
 
 	# Kaleidoscope
 	if type ksdiff &>/dev/null; then
-		_gc_set difftool."Kaleidoscope".cmd 'ksdiff --partial-changeset --relative-path $MERGED -- $LOCAL $REMOTE'
-		_gc_set	mergetool."Kaleidoscope".cmd 'ksdiff --merge --output $MERGED --base $BASE -- $LOCAL --snapshot $REMOTE --snapshot'
-		_gc_set mergetool."Kaleidoscope".trustExitCode true
+		gc_set difftool."Kaleidoscope".cmd 'ksdiff --partial-changeset --relative-path $MERGED -- $LOCAL $REMOTE'
+		gc_set mergetool."Kaleidoscope".cmd 'ksdiff --merge --output $MERGED --base $BASE -- $LOCAL --snapshot $REMOTE --snapshot'
+		gc_set mergetool."Kaleidoscope".trustExitCode true
 	fi
 
 	# Use opendiff as default diff/merge
-	_gc_set diff.tool opendiff
-	_gc_set merge.tool opendiff
+	gc_set diff.tool opendiff
+	gc_set merge.tool opendiff
 	;;
 Linux )
-	_gc_set credential.helper cache
-	_gc_set gui.fontui "-family \"Source Sans Pro\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
-	_gc_set gui.fontdiff "-family \"Source Code Pro\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
+	gc_set credential.helper cache
+	gc_set gui.fontui "-family \"Source Sans Pro\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
+	gc_set gui.fontdiff "-family \"Source Code Pro\" -size 13 -weight normal -slant roman -underline 0 -overstrike 0"
 
 	# Use Vim as default diff/merge
-	_gc_set diff.tool vimdiff
-	_gc_set merge.tool vimdiff
+	gc_set diff.tool vimdiff
+	gc_set merge.tool vimdiff
 	;;
 esac
