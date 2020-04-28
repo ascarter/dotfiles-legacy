@@ -38,8 +38,6 @@ gc_set include.path ${DOTFILES}/gitconfig
 # User info
 gc_prompt user.name "User name"
 gc_prompt user.email "Email"
-gc_prompt user.signingkey "GPG Key"
-gc_prompt commit.gpgsign "GPG sign by default? (true/false)"
 
 # Set configuration by platform
 case $(uname) in
