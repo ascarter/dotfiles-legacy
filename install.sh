@@ -94,6 +94,9 @@ enabled = true
 options = "metadata"
 EOF
 		fi
+
+		# Symlink Windows tools
+		[ -e /mnt/c/Users/${USER}/AppData/Local/Fork/Fork.exe] && sudo ln -s /mnt/c/Users/$USER/AppData/Local/Fork/Fork.exe /usr/local/bin/fork
 	fi
 	;;
 esac

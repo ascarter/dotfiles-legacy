@@ -40,7 +40,6 @@
     sha = rev-parse --verify HEAD
     ship = merge --no-ff
     st = status
-    tower = !gittower $(git root)
     type = cat-file -t
     unstage = reset HEAD --
     untrack = rm --cache --
