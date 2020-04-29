@@ -1,24 +1,26 @@
 #!/bin/sh
-
-set -ueo pipefail
-
 #
 # Install script for dotfiles configuration
 #
 # Usage:
-#	install.sh [dotfiles] [homebrew]
+#	install.sh [target] [homedir] [homebrew]
 #
-# Defaults:
-#	dotfiles == ~/.config/dotfiles
-#	homebrew == /opt/homebrew
+# 	target   == destination for enlistment (default ~/.config/dotfiles)
+#	homedir  == home directory (default ${HOME})
+#	homebrew == destination for homebrew enlistment (default /opt/homebrew)
 #
 
-DOTFILES=${1:-${HOME}/.config/dotfiles}
-HOMEBREW_ROOT=${2:-/opt/homebrew}
+set -ue
+
+DOTFILES="${1:-${HOME}/.config/dotfiles}"
+HOMEDIR="${2:-${HOME}}"
+RC_FILES=""
 
 # Install platform requirements
-case $(uname) in
+case "$(uname)" in
 Darwin )
+	echo "Installing on $(sw_vers -productName) $(sw_vers -productVersion) ..."
+
 	# Verify Xcode installed
 	if ! [ -e /usr/bin/xcode-select ]; then
 		echo "Xcode required. Install from macOS app store."
@@ -35,15 +37,24 @@ Darwin )
 	fi
 
 	# Install Homebrew
-	if ! [ -e ${HOMEBREW_ROOT} ]; then
-		echo "Install homebrew to ${HOMEBREW_ROOT}"
-		sudo mkdir -p ${HOMEBREW_ROOT}
-		sudo chown -R ${USER}:admin ${HOMEBREW_ROOT}
-		curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ${HOMEBREW_ROOT}
+	HOMEBREW="${3:-/opt/homebrew}"
+	if ! [ -e ${HOMEBREW} ]; then
+		echo "Install homebrew to ${HOMEBREW}"
+		sudo mkdir -p ${HOMEBREW}
+		sudo chown -R ${USER}:admin ${HOMEBREW}
+		curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ${HOMEBREW}
 	fi
+
+	# Add Brewfile to RC files
+	RC_FILES=${RC_FILES}" Brewfile"
 	;;
 Linux )
-	# TODO: Install build tools and git
+	case $(lsb_release -i -s) in
+	Ubuntu )
+		echo "Installing on $(lsb_release -d -s)"
+		${DOTFILES}/wsl_init.sh
+		;;
+	esac
 	;;
 esac
 
@@ -54,26 +65,33 @@ if ! [ -e ${DOTFILES} ]; then
 fi
 
 # Symlink rc files
-for f in $(cat ${DOTFILES}/rc.conf); do
+mkdir -p ${HOMEDIR}
+RC_FILES="$(cat ${DOTFILES}/rc.conf) "${RC_FILES}
+for f in ${RC_FILES}; do
 	source=${DOTFILES}/${f}
-	target=${HOME}/.${f}
+	target=${HOMEDIR}/.${f}
 	if ! [ -e ${target} ]; then
 		echo "Symlink ${source} -> ${target}"
 		ln -s ${source} ${target}
 	fi
 done
 
-# Change shell to zsh
-[ ${SHELL} != "/bin/zsh" ] && chsh -s /bin/zsh
+# Configure zsh if installed
+if command -v zsh >/dev/null 2>&1; then
+	[ ${SHELL} != "/bin/zsh" ] && chsh -s /bin/zsh
 
-# Set zsh environment
-cat <<EOF > ${HOME}/.zshenv
+	# Set zsh environment
+	cat <<EOF > ${HOMEDIR}/.zshenv
 DOTFILES=${DOTFILES}
 EOF
 
-# Generate zsh completions
-zsh -c "${DOTFILES}/bin/mkcompletions"
+	# Generate zsh completions
+	zsh -c "${DOTFILES}/bin/mkcompletions"
+else
+	echo "zsh shell not installed"
+fi
 
-# Generate gitconfig
-zsh -c "${DOTFILES}/bin/gitconfig"
+# Generates user's global gitconfig
+${DOTFILES}/bin/gitconfig ${DOTFILES} ${HOMEDIR}/.gitconfig
 
+echo "dotfiles installed."
