@@ -11,7 +11,7 @@ if type ${HOMEBREW_PREFIX}/bin/brew &>/dev/null; then
 	fpath+=($(brew --prefix)/share/zsh/site-functions $(brew --prefix)/share/zsh-completions)
 fi
 
-autoload -U compinit
+autoload -Uz compinit
 compinit -u
 
 autoload -U promptinit
@@ -30,16 +30,6 @@ bashcompinit
 # Enable vcs info
 autoload -Uz vcs_info
 
-# ========================================
-# SSH Agent
-# ========================================
-
-# Enable GPG for SSH
-# if [ -S $(gpgconf --list-dirs agent-ssh-socket) ]; then
-# 	export GPG_TTY=$(tty)
-# 	export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-# fi
-
 # ===========
 # Prompt
 # ===========
@@ -47,11 +37,6 @@ autoload -Uz vcs_info
 # Default: PS1="%m%# "
 declare +x PS1
 prompt vcs
-
-# if [[ ${TERM_PROGRAM} = "Apple_Terminal"  &&  -z ${INSIDE_EMACS} ]]; then
-#	add-zsh-hook chpwd update_terminal_cwd
-#	update_terminal_cwd
-# fi
 
 # ========================================
 # Shell preferences
@@ -69,6 +54,9 @@ SAVEHIST=5000
 HISTSIZE=2000
 
 # Key mappings
+
+# Emacs key mappings
+bindkey -e
 
 # Forward delete
 bindkey "^[[3~" delete-char
@@ -328,6 +316,26 @@ esac
 if [[ -d ${DOTFILES}/bin ]]; then
 	export PATH=${DOTFILES}/bin:${PATH}
 fi
+
+# ========================================
+# SSH
+# ========================================
+
+case $(uname) in
+Linux )
+	# Use keychain if installed
+	if type keychain &>/dev/null; then
+		if [ -z "${WSL_DISTRO_NAME}" ] && [ -d /mnt/c/Users/${USER}/.ssh ]; then
+			# Use Windows SSH keys
+			keys=$(ls /mnt/c/Users/${USER}/.ssh/{id_ed25519,id_rsa})
+		else
+			# Use user ssh keys
+			keys="id_rsa id_ed25519"
+		fi
+		eval `keychain --eval --agents ssh ${keys}`
+	fi
+	;;
+esac
 
 # ========================================
 # Per-machine extras
