@@ -75,6 +75,11 @@ export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit
 # Frameworks/Languages
 # ========================================
 
+# GitHub
+if type gh &>/dev/null; then
+	eval "$(gh completion -s zsh)"
+fi
+
 # Go
 if type go &>/dev/null; then
 	export PATH=$(go env GOPATH)/bin:${PATH}
