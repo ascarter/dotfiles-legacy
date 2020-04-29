@@ -325,7 +325,7 @@ case $(uname) in
 Linux )
 	# Use keychain if installed
 	if type keychain &>/dev/null; then
-		if [ -z "${WSL_DISTRO_NAME}" ] && [ -d /mnt/c/Users/${USER}/.ssh ]; then
+		if [ -n "${WSL_DISTRO_NAME}" ] && [ -d /mnt/c/Users/${USER}/.ssh ]; then
 			# Use Windows SSH keys
 			keys=$(ls /mnt/c/Users/${USER}/.ssh/{id_ed25519,id_rsa})
 		else
