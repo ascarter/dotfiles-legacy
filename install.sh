@@ -90,7 +90,6 @@ enabled = true
 options = "metadata"
 EOF
 		fi
-		;;
 	else
 		case $(lsb_release -i -s) in
 		Ubuntu )
