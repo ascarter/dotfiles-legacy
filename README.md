@@ -10,7 +10,7 @@ This is my collection of dotfiles for macOS, Linux, and Windows
 
 ## Unix
 
-The dotfiles configuration works for macOS and Ubuntu Linux (possibly other Linux distros)
+The dotfiles configuration works for macOS and Ubuntu Linux including WSL
 
 ### Install
 
