@@ -59,11 +59,18 @@ Darwin )
 	# Use opendiff as default diff/merge
 	gc_set diff.tool opendiff
 	gc_set merge.tool opendiff
+
+	# Use fork for visual
+	gc_set alias.visual '!fork $(git root)'
 	;;
 Linux )
-	# Use Windows credential manager if running in WSL
+	# Check for WSL
 	if [ -n "${WSL_DISTRO_NAME}" ]; then
+		# Use Windows credential manager if running in WSL
 		gc_set credential.helper "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
+
+		# Use Fork for visual
+		gc_set alias.visual '!fork $(wslpath -w $(git root))'
 	else
 		gc_set credential.helper cache
 	fi

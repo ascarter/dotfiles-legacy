@@ -47,7 +47,6 @@
     upc = pull --rebase --prune
     upd = !git stash && git upc && git stash pop
     upstream = !git branch -vv --list $(git blocal)
-    visual = fork
     vtag = describe --tags --always --dirty
     whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
     who = shortlog -s --
