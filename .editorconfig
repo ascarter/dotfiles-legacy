@@ -10,5 +10,4 @@ tab_width = 8
 
 [*.sh]
 indent_style = tab
-tab_width = 8
-
+tab_width = 4

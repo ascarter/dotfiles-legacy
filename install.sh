@@ -49,21 +49,17 @@ Darwin )
 	RC_FILES=${RC_FILES}" Brewfile"
 	;;
 Linux )
-	if [ -n "${WSL_DISTRO_NAME}" ]; then
-		echo "WSL environment"
-		DISTRO_DESCRIPTION=$(lsb_release -d -s)
-		case $(lsb_release -i -s) in
-		Ubuntu )
-			echo "Initializing WSL on ${DISTRO_DESCRIPTION}"
-			# Update distro
-			sudo apt update
-			sudo apt upgrade -y
+	DISTRO_DESCRIPTION=$(lsb_release -d -s)
+	echo "Installing requirements for ${DISTRO_DESCRIPTION}"
 
-			# Install packages
-			sudo apt install build-essential zsh keychain
-			;;
-		*) echo "Unknown Linux disto ${DISTRO_DESCRIPTION}" ;;
-		esac
+	case $(lsb_release -i -s) in
+	Ubuntu )
+		# Update distro
+		sudo apt update
+		sudo apt upgrade -y
+
+		# Install packages
+		sudo apt install build-essential zsh keychain
 
 		# Install latest Go
 		if ! command -v go >/dev/null 2>&1; then
@@ -73,6 +69,14 @@ Linux )
 			sudo ln -s /usr/local/go/bin/gofmt /usr/local/bin/gofmt
 		fi
 		go version
+		;;
+	*)
+		echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"
+		;;
+	esac
+
+	if [ -n "${WSL_DISTRO_NAME}" ]; then
+		echo "Initializing WSL environment"
 
 		# Configure SSH
 		for pubkey in /mnt/c/Users/${USER}/.ssh/id_*.pub; do
@@ -90,12 +94,6 @@ enabled = true
 options = "metadata"
 EOF
 		fi
-	else
-		case $(lsb_release -i -s) in
-		Ubuntu )
-			echo "Installing on $(lsb_release -d -s)"
-			;;
-		esac
 	fi
 	;;
 esac
