@@ -78,11 +78,16 @@ Linux )
 	if [ -n "${WSL_DISTRO_NAME}" ]; then
 		echo "Initializing WSL environment"
 
-		# Configure SSH
+		# Link Windows SSH keys
 		for pubkey in /mnt/c/Users/${USER}/.ssh/id_*.pub; do
 			privkey=$(dirname ${pubkey})/$(basename -s .pub ${pubkey})
-			echo "chmod ${privkey}"
 			chmod 0600 ${privkey}
+			for key in "${pubkey} ${privkey}"; do
+				target=${HOMEDIR}/.ssh/$(basename ${key})
+				if ! [ -e ${target} ]; then
+					ln -s ${key} ${target}
+				fi
+			done
 		done
 
 		# Configure WSL
@@ -96,7 +101,9 @@ EOF
 		fi
 
 		# Symlink Windows tools
-		[ -e /mnt/c/Users/${USER}/AppData/Local/Fork/Fork.exe] && sudo ln -s /mnt/c/Users/$USER/AppData/Local/Fork/Fork.exe /usr/local/bin/fork
+		if [ -e /mnt/c/Users/${USER}/AppData/Local/Fork/Fork.exe ] && ! [ -e /usr/local/bin/fork ]; then
+			sudo ln -s /mnt/c/Users/$USER/AppData/Local/Fork/Fork.exe /usr/local/bin/fork
+		fi
 	fi
 	;;
 esac
