@@ -69,6 +69,16 @@ Linux )
 	if [ -n "${WSL_DISTRO_NAME}" ]; then
 		echo "Initializing WSL environment"
 
+		# Configure WSL
+		if ! [ -e /etc/wsl.conf ]; then
+			echo "Generate WSL conf"
+			sudo tee /etc/wsl.conf > /dev/null <<EOF
+[automount]
+enabled = true
+options = "metadata"
+EOF
+		fi
+
 		# Link Windows SSH keys
 		for pubkey in /mnt/c/Users/${USER}/.ssh/id_*.pub; do
 			privkey=$(dirname ${pubkey})/$(basename -s .pub ${pubkey})
@@ -80,16 +90,6 @@ Linux )
 				fi
 			done
 		done
-
-		# Configure WSL
-		if ! [ -e /etc/wsl.conf ]; then
-			echo "Generate WSL conf"
-			sudo tee /etc/wsl.conf > /dev/null <<EOF
-[automount]
-enabled = true
-options = "metadata"
-EOF
-		fi
 
 		# Symlink Windows tools
 		if [ -e /mnt/c/Users/${USER}/AppData/Local/Fork/Fork.exe ] && ! [ -e /usr/local/bin/fork ]; then
