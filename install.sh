@@ -60,15 +60,6 @@ Linux )
 
 		# Install packages
 		sudo apt install build-essential zsh keychain
-
-		# Install latest Go
-		if ! command -v go >/dev/null 2>&1; then
-			GO_PKG=https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz
-			curl -L ${GO_PKG} | sudo tar -C /usr/local -xz
-			sudo ln -s /usr/local/go/bin/go /usr/local/bin/go
-			sudo ln -s /usr/local/go/bin/gofmt /usr/local/bin/gofmt
-		fi
-		go version
 		;;
 	*)
 		echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"
