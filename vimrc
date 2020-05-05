@@ -31,6 +31,9 @@ else
 	call plug#begin('~/.vim/bundle')
 endif
 
+" EditorConfig
+Plug 'editorconfig/editorconfig-vim'
+
 " Status line
 Plug 'itchyny/lightline.vim'
 
