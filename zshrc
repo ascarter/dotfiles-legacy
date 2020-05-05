@@ -163,9 +163,19 @@ fi
 
 case $(uname) in
 Linux )
-	# Use keychain if installed
-	if type keychain &>/dev/null; then
-		eval `keychain --eval --agents ssh id_rsa id_ed25519`
+	if [ -n "${WSL_DISTRO_NAME}" ]; then
+		# Used named pipe to Windows host ssh-agent
+		export SSH_AUTH_SOCK=${HOME}/.ssh/agent.sock
+		ss -a | grep -q $SSH_AUTH_SOCK
+		if [ $? -ne 0   ]; then
+			rm -f ${SSH_AUTH_SOCK}
+			( setsid socat UNIX-LISTEN:${SSH_AUTH_SOCK},fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork & ) >/dev/null 2>&1
+		fi
+	else
+		# Use keychain if installed
+		if type keychain &>/dev/null; then
+			eval `keychain --eval --agents ssh id_rsa id_ed25519`
+		fi
 	fi
 	;;
 esac
