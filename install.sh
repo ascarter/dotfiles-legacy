@@ -118,7 +118,7 @@ for f in ${RC_FILES}; do
 done
 
 # Configure zsh if installed
-if command -v zsh >/dev/null 2>&1; then
+if command -v zsh &>/dev/null; then
 	[ ${SHELL} != "/bin/zsh" ] && chsh -s /bin/zsh
 
 	# Set zsh environment

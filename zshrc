@@ -163,7 +163,7 @@ fi
 
 case $(uname) in
 Linux )
-	if [ -n "${WSL_DISTRO_NAME}" ]; then
+	if [ -n "${WSL_DISTRO_NAME}" ] && type npiperelay.exe &>/dev/null; then
 		# Used named pipe to Windows host ssh-agent
 		export SSH_AUTH_SOCK=${HOME}/.ssh/agent.sock
 		ss -a | grep -q $SSH_AUTH_SOCK
