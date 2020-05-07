@@ -102,7 +102,6 @@ function Install-SSHKeys() {
         $keyFile = Join-Path -Path $sshDir -ChildPath "id_$key"
         if (-not (Test-Path $keyFile)) {
             Write-Host "Generating SSH key $key"
-            $comment = "$env:USERNAME@$env:COMPUTERNAME"
             ssh-keygen -t $key -C "$env:USERNAME@$env:COMPUTERNAME"
             ssh-add $key
         }
