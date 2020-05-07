@@ -23,10 +23,11 @@ fi
 # Symlink rc files
 mkdir -p ${HOMEDIR}
 for f in $(ls ${DOTFILES}/conf); do
-	t=${HOMEDIR}/.$(basename ${f})
-	if ! [ -e ${t} ]; then
-		echo "Symlink ${f} -> ${t}"
-		ln -s ${f} ${t}
+	source=${DOTFILES}/conf/${f}
+	target=${HOMEDIR}/.${f}
+	if ! [ -e ${target} ]; then
+		echo "Symlink ${source} -> ${target}"
+		ln -s ${source} ${target}
 	fi
 done
 
