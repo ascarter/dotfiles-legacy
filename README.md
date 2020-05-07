@@ -28,7 +28,7 @@ On macOS, [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) is ex
 To run the provided init script:
 
 ```sh
-sh -c "$(curl https://raw.githubusercontent.com/ascarter/dotfiles/master/init.sh)
+sh -c "$(curl https://raw.githubusercontent.com/ascarter/dotfiles/master/init.sh)"
 ```
 
 ### Install
