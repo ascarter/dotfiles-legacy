@@ -60,7 +60,7 @@ function Install-Dotfiles() {
 
     # Set DOTFILES environment variable
     if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", [System.EnvironmentVariableTarget]::User)) {
-        Write-Host "Set DOTFILES enviornment variable"
+        Write-Host "Set DOTFILES environment variable"
         [System.Environment]::SetEnvironmentVariable("DOTFILES", $DotfileDest, [System.EnvironmentVariableTarget]::User)
     }
 }
@@ -118,6 +118,7 @@ function Update-UserPath() {
     $parts = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User) -Split ";"
     foreach ($p in $locations) {
         if ((Test-Path -Path $p) -and ($parts -NotContains $p)) {
+            Write-Host "Add $p to path"
             $parts += $p
         }
     }
