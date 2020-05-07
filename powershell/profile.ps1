@@ -1,4 +1,4 @@
-# Bootstrap modules
+#region Bootstrap modules
 
 if (!(Get-Module -Name PowerShellGet -ListAvailable)) {
     Install-Module -Name PowerShellGet -Scope CurrentUser -Force -AllowClobber
@@ -12,6 +12,10 @@ if (!(Get-Module -Name posh-git -ListAvailable)) {
     Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force
 }
 
+#endregion
+
+#region Environment
+
 # Set DOTFILES environment varible if not already set
 if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", "User")) {
     Set-Item -Path Env:DOTFILES -Value (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
@@ -21,22 +25,9 @@ if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", "User")) 
 Set-Item -Path Env:EDITOR -Value ((Get-Command vim).Source)
 Set-Item -Path Env:VISUAL -Value ((Get-Command code).Source)
 
-# Alias behavoirs
+#endregion
 
-function Start-Fork([string]$MyRepo = $PWD) {
-    $target = Convert-Path -Path $MyRepo
-    & Fork.exe $target
-}
-
-function Start-1Password() {
-    if ($null -eq $env:OP_SESSION_carters) {
-        Invoke-Expression $(op signin carters)
-    }
-}
-
-function Set-LocationDotfiles() {
-    Set-Location -Path $env:DOTFILES
-}
+#region Alias behavoirs
 
 Set-Alias -Name dev -Value Start-DevEnv
 Set-Alias -Name dotfiles -Value Set-LocationDotfiles
@@ -56,7 +47,24 @@ Set-PSReadLineOption -EditMode Emacs
 Set-Alias -Name pbcopy -Value Set-Clipboard
 Set-Alias -Name pbpaste -Value Get-Clipboard
 
-# Helper functions
+#endregion
+
+#region Helpers
+
+function Start-Fork([string]$MyRepo = $PWD) {
+    $target = Convert-Path -Path $MyRepo
+    & Fork.exe $target
+}
+
+function Start-1Password() {
+    if ($null -eq $env:OP_SESSION_carters) {
+        Invoke-Expression $(op signin carters)
+    }
+}
+
+function Set-LocationDotfiles() {
+    Set-Location -Path $env:DOTFILES
+}
 
 # Get-Password retrieves a password for a 1Password password item
 function Get-SSHPassphrase([string]$Key = $env:COMPUTERNAME.ToLower()) {
@@ -84,7 +92,13 @@ function Get-IsAdmin() {
     ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
-# gitconfig
+function Get-CmdletAlias ($cmdletname) {
+    Get-Alias | Where-Object -FilterScript { $_.Definition -like "$cmdletname" } | Format-Table -Property Definition, Name -AutoSize
+}
+
+#endregion
+
+#region gitconfig
 
 function gc_set([string]$Key, [string]$Value) {
     git config --global $Key $Value | Out-Null
@@ -107,6 +121,9 @@ function Update-GitConfig() {
     # Include defaults and aliases
     gc_update 'include.path' (Join-Path -Path $env:DOTFILES -ChildPath gitconfig)
 
+    # Set editor
+    gc_set 'core.editor' '\"C:\\Users\\acarter\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --wait'
+
     # No line ending conversion
     gc_set 'core.autocrlf' 'input'
 
@@ -114,28 +131,19 @@ function Update-GitConfig() {
     gc_prompt 'user.name' "User name"
     gc_prompt 'user.email' "Email"
 
+    # GUI
+    gc_set 'gui.fontui' '-family \"Segoe UI\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'
+    gc_set 'gui.fontdiff' '-family \"Cascadia Code\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'
+
     # Show full gitconfig
     Write-Output $(git config --global --list)
 }
 
+#endregion
 
-function Get-CmdletAlias ($cmdletname) {
-    Get-Alias | Where-Object -FilterScript { $_.Definition -like "$cmdletname" } | Format-Table -Property Definition, Name -AutoSize
-}
+#region Prompt
 
-# Default prompt with ADMIN and DBG
-# function prompt {
-#   $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
-#   $principal = [Security.Principal.WindowsPrincipal] $identity
-#
-#   $(if (Test-Path variable:/PSDebugContext) { '[DBG]: ' }
-#     elseif($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { "[ADMIN]: " }
-#     else { '' }
-#   ) + 'PS ' + $(Get-Location) +
-#     $(if ($NestedPromptLevel -ge 1) { '>>' }) + '> '
-# }
-
-# Configure posh-git
+# Configure prompt
 if (Get-Module -Name posh-git -ListAvailable) {
     Import-Module posh-git
 
@@ -153,6 +161,21 @@ if (Get-Module -Name posh-git -ListAvailable) {
         if ($prompt) { $prompt } else { ' ' }
     }
 }
+else {
+    # Default prompt with ADMIN and DBG
+    function prompt {
+        $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+        $principal = [Security.Principal.WindowsPrincipal] $identity
+
+        $(if (Test-Path variable:/PSDebugContext) { '[DBG]: ' }
+            elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { "[ADMIN]: " }
+            else { '' }
+        ) + 'PS ' + $(Get-Location) +
+        $(if ($NestedPromptLevel -ge 1) { '>>' }) + '> '
+    }
+}
+
+#endregion
 
 function Get-InstalledSoftware {
     <#
