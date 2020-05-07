@@ -186,3 +186,9 @@ esac
 if [[ -e ${HOME}/.zsh_local ]]; then
 	source ${HOME}/.zsh_local
 fi
+
+# ========================================
+# Banners and messages
+# ========================================
+
+show-motd login
