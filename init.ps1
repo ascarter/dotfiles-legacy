@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Windows software install
+    Windows system configuration
 .DESCRIPTION
-    Install windows software packages
+    Configure Windows features and install windows software packages
 #>
 [cmdletbinding()]
 param()
