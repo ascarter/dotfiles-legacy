@@ -13,11 +13,6 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 
-# Require administrator
-if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Error "Insufficient privileges"
-}
-
 # Remove user profile
-if (!(Test-Path -Path $PROFILE.CurrentUserAllHosts)) { Remove-Item -Path $PROFILE.CurrentUserAllHosts }
+if (Test-Path -Path $PROFILE) { Remove-Item -Path $PROFILE }
 

@@ -8,9 +8,9 @@
 #
 
 TESTDIR=${1:-/tmp/dotfiles}
-DOTFILES=${TESTDIR}/config/dotfiles
 HOMEDIR=${TESTDIR}/home
+DOTFILES=${TESTDIR}/config/dotfiles
 
 # Remove previous test run
 rm -Rf ${DOTFILES} ${HOMEDIR}
-sh install.sh ${DOTFILES} ${HOMEDIR}
+sh install.sh ${HOMEDIR} ${DOTFILES}

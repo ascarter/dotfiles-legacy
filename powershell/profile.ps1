@@ -18,16 +18,20 @@ $Env:LOCALBIN = Join-Path -Path $Env:SystemDrive -ChildPath bin
 # Extend PATH to include LOCALBIN
 $Env:Path = "$Env:LOCALBIN;$Env:Path"
 
+# Add Fork.exe to the path
 if (Test-Path -Path (Join-Path $Env:LOCALAPPDATA "Fork")) {
     $Env:Path = "$Env:Path;" + (Join-Path $Env:LOCALAPPDATA "Fork")
 }
 
-# Set DOTFILES environment varible
-Set-Item -Path Env:DOTFILES -Value (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
+# Set DOTFILES environment varible if not already set
+if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", "User")) {
+    Set-Item -Path Env:DOTFILES -Value (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
+}
 
 # Enable Git to use Windows SSH
-# [Environment]::SetEnvironmentVariable("GIT_SSH", "$((Get-Command ssh).Source)", [System.EnvironmentVariableTarget]::User)
-Set-Item -Path Env:GIT_SSH -Value ((Get-Command ssh).Source)
+if ($null -eq [System.Environment]::GetEnvironmentVariable("GIT_SSH", "User")) {
+    Set-Item -Path Env:GIT_SSH -Value ((Get-Command ssh).Source)
+}
 
 # Set EDITOR and VISUAL
 Set-Item -Path Env:EDITOR -Value ((Get-Command vim).Source)
@@ -60,6 +64,7 @@ Set-Alias -Name opssh -Value Get-SSHPassphrase
 Set-Alias -Name ll -Value Get-ChildItem
 Set-Alias -Name which -Value Get-Command
 Set-Alias -Name uname -Value Get-Uname
+
 # Set keybindings
 Set-PSReadLineOption -EditMode Emacs
 
@@ -81,13 +86,6 @@ function Start-DevEnv() {
 }
 
 function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
-
-function Update-Profiles() {
-    $setprofiles = Join-Path -Path $env:DOTFILES -ChildPath setprofiles.ps1
-    if (Test-Path -Path $setprofiles) {
-        Start-Process -FilePath (Get-Process -Id $pid).ProcessName -ArgumentList "$setprofiles -Force"  -Wait -NoNewWindow
-    }
-}
 
 function Update-VSCodeExtensions() {
     $extensions = Get-Content -Path (Join-Path -Path $env:DOTFILES -ChildPath '.\vscode-extensions.txt')
@@ -128,10 +126,6 @@ function Update-GitConfig() {
     # User info
     gc_prompt 'user.name' "User name"
     gc_prompt 'user.email' "Email"
-
-    # Platform configuration
-    gc_set 'gui.fontui' '-family \"Segoe UI\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'
-    gc_set 'gui.fontdiff' '-family \"Cascadia Code\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'
 
     # Show full gitconfig
     Write-Output $(git config --global --list)
