@@ -68,7 +68,7 @@ prompt_vcs_setup () {
 %B%n@%m%b:%3~% %B${vcs_info_msg_0_}%b
 %# '
 			# print -Pn "\e]0;%n@%m: %~\a"
-			print -Pn "\e]0;%n@%m: %1~ - $(lsb_release -d -s)\a"
+			case $(uname) in (Linux) print -Pn "\e]0;%n@%m: %1~ - $(lsb_release -d -s)\a"; esac
 		}
 	fi
 }

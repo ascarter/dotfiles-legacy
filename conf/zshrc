@@ -191,4 +191,4 @@ fi
 # Banners and messages
 # ========================================
 
-show-motd login
+case $(uname) in (Linux) show-motd login; esac
