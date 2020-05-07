@@ -18,16 +18,20 @@ $Env:LOCALBIN = Join-Path -Path $Env:SystemDrive -ChildPath bin
 # Extend PATH to include LOCALBIN
 $Env:Path = "$Env:LOCALBIN;$Env:Path"
 
+# Add Fork.exe to the path
 if (Test-Path -Path (Join-Path $Env:LOCALAPPDATA "Fork")) {
     $Env:Path = "$Env:Path;" + (Join-Path $Env:LOCALAPPDATA "Fork")
 }
 
-# Set DOTFILES environment varible
-Set-Item -Path Env:DOTFILES -Value (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
+# Set DOTFILES environment varible if not already set
+if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", "User")) {
+    Set-Item -Path Env:DOTFILES -Value (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
+}
 
 # Enable Git to use Windows SSH
-# [Environment]::SetEnvironmentVariable("GIT_SSH", "$((Get-Command ssh).Source)", [System.EnvironmentVariableTarget]::User)
-Set-Item -Path Env:GIT_SSH -Value ((Get-Command ssh).Source)
+if ($null -eq [System.Environment]::GetEnvironmentVariable("GIT_SSH", "User")) {
+    Set-Item -Path Env:GIT_SSH -Value ((Get-Command ssh).Source)
+}
 
 # Set EDITOR and VISUAL
 Set-Item -Path Env:EDITOR -Value ((Get-Command vim).Source)

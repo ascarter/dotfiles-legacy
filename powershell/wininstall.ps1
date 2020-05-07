@@ -17,11 +17,50 @@ if ($PSVersionTable.PSEdition -ne "Desktop") {
     Break
 }
 
+# Run as administrator
+If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    $relaunchArgs = "& '" + $MyInvocation.MyCommand.Definition + "'"
+    Start-Process powershell -Verb RunAs -ArgumentList $relaunchArgs
+    Break
+}
+
 # Use TLS 1.2
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 # Dotfiles enlistment
 $dotfiles = Join-Path -Path $env:USERPROFILE -ChildPath .config\dotfiles
+
+#region System Configuration
+
+function Install-SSH() {
+    # Install OpenSSH
+    # https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse
+    Add-WindowsCapability -Online -Name OpenSSH.Client
+    Add-WindowsCapability -Online -Name OpenSSH.Server
+
+    # Add firewall rule
+    if (!((Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP").Enabled -eq $true)) {
+        Write-Warning "Missing OpenSSH Server inbound firewall rule"
+    }
+
+    # Install OpenSSHUtils
+    Install-Module -Name OpenSSHUtils -Scope AllUsers -Force
+
+    Set-Service -Name ssh-agent -StartupType 'Automatic'
+    Start-Service ssh-agent
+    Set-Service -Name sshd -StartupType 'Automatic'
+    Start-Service sshd
+
+    # Configure default shell
+    New-ItemProperty -Path HKLM:\SOFTWARE\OpenSSH -Name DefaultShell -Value $env:ProgramFiles\PowerShell\7\pwsh.exe
+}
+
+function Install-Virtualization() {
+    Enable-WindowsOptionalFeature -Online -FeatureName Containers-DisposableClientVM -All
+    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+    Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All
+    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -All
+}
 
 function Install-Packages() {
     # Read package catalog
@@ -71,4 +110,6 @@ function Install-Packages() {
     }
 }
 
+Install-SSH
+Install-Virtualization
 Install-Packages
