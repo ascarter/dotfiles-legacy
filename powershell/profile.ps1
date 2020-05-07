@@ -122,6 +122,9 @@ function gc_prompt([string]$Key, [string]$Prompt) {
 function Update-GitConfig() {
     # Include defaults and aliases
     gc_update 'include.path' (Join-Path -Path $env:DOTFILES -ChildPath gitconfig)
+    
+    # No line ending conversion
+    gc_set 'core.autocrlf' 'input'
 
     # User info
     gc_prompt 'user.name' "User name"
