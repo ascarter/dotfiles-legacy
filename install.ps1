@@ -37,6 +37,8 @@ function Install-Git() {
         finally {
             if (Test-Path $target) { Remove-Item -Path $target }
         }
+
+        Update-EnvPath
     }
 
     # Set Git SSH client
@@ -124,6 +126,11 @@ function Update-UserPath() {
     [System.Environment]::SetEnvironmentVariable("PATH", $parts -Join ";", [System.EnvironmentVariableTarget]::User)
 }
 
+function Update-EnvPath() {
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::Machine) + ";" +
+    [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
+}
+
 #endregion
 
 Write-Output "Install dotfiles"
@@ -135,5 +142,5 @@ Install-Vimrc
 Install-SSHKeys
 Update-UserPath
 
-Write-Output "Dotfiles install complete"
+Write-Output "dotfiles install complete"
 Write-Output "Reload session to apply configuration"

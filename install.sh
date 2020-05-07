@@ -53,3 +53,4 @@ if ! [ -d ${HOMEDIR}/.ssh ]; then
 fi
 
 echo "dotfiles installed"
+echo "Reload session to apply configuration"
