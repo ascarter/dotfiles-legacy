@@ -1,10 +1,8 @@
 <#
 .SYNOPSIS
-    Uninstall script for Windows 10
+    Uninstall script for Windows
 .DESCRIPTION
     Remove dotfiles configuration for current Windows user
-.PARAMETER Verbose
-	Display diagnostic information
 #>
 [cmdletbinding()]
 param()
@@ -16,3 +14,10 @@ $ProgressPreference = "SilentlyContinue"
 # Remove user profile
 if (Test-Path -Path $PROFILE) { Remove-Item -Path $PROFILE }
 
+# Remove vimrc
+$vimrc = Join-Path -Path $env:USERPROFILE -ChildPath _vimrc
+if (Test-Path -Path $vimrc) { Remove-Item -Path $vimrc }
+
+# Remove gitconfig
+$gitconfig = Join-Path -Path $env:USERPROFILE -ChildPath .gitconfig
+if (Test-Path -Path $gitconfig) { Remove-Item -Path $gitconifg }
