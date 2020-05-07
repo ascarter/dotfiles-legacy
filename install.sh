@@ -46,4 +46,10 @@ fi
 # Generate user's global gitconfig
 ${DOTFILES}/bin/gitconfig ${DOTFILES} ${HOMEDIR}/.gitconfig
 
+# Ensure ssh directory exists
+if ! [ -d ${HOMEDIR}/.ssh ]; then
+	mkdir -p ${HOMEDIR}/.ssh
+	chmod 0700 ${HOMEDIR}/.ssh
+fi
+
 echo "dotfiles installed."
