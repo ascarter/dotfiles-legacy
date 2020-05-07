@@ -53,7 +53,7 @@ function Install-Dotfiles() {
     # Clone dotfiles
     if (!(Test-Path -Path $DotfileDest)) {
         Write-Host "Clone dotfiles"
-        $dotfileParent = (Get-Item $DotfileDest).Parent
+        $dotfileParent = Split-Path -Path $DotfileDest
         if (!(Test-Path -Path $dotfileParent)) { New-Item -Path $dotfileParent -ItemType Directory -Force }
         Start-Process -FilePath $gitCmd -ArgumentList "clone https://github.com/ascarter/dotfiles.git $DotfileDest" -Wait -NoNewWindow
     }
