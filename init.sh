@@ -58,4 +58,5 @@ Linux )
 *)
   echo "Unsupported platform"
   exit 1
+  ;;
  esac
