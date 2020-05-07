@@ -65,7 +65,7 @@ function Install-Virtualization() {
 function Install-Packages() {
     # Read package catalog
     $activity = "Install packages"
-    $pspackages = Join-Path -Path $dotfiles -ChildPath pspackages.json
+    $pspackages = Join-Path -Path $dotfiles -ChildPath win10_packages.json
     Write-Progress -Activity $activity -CurrentOperation "Reading $pspackages" -Id 1
     $packages = Get-Content -Path $pspackages | ConvertFrom-Json
     $installed = Get-Package -ProviderName msi, programs

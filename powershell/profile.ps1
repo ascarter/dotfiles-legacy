@@ -64,6 +64,7 @@ Set-Alias -Name opssh -Value Get-SSHPassphrase
 Set-Alias -Name ll -Value Get-ChildItem
 Set-Alias -Name which -Value Get-Command
 Set-Alias -Name uname -Value Get-Uname
+
 # Set keybindings
 Set-PSReadLineOption -EditMode Emacs
 
@@ -85,13 +86,6 @@ function Start-DevEnv() {
 }
 
 function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
-
-function Update-Profiles() {
-    $setprofiles = Join-Path -Path $env:DOTFILES -ChildPath setprofiles.ps1
-    if (Test-Path -Path $setprofiles) {
-        Start-Process -FilePath (Get-Process -Id $pid).ProcessName -ArgumentList "$setprofiles -Force"  -Wait -NoNewWindow
-    }
-}
 
 function Update-VSCodeExtensions() {
     $extensions = Get-Content -Path (Join-Path -Path $env:DOTFILES -ChildPath '.\vscode-extensions.txt')
@@ -132,10 +126,6 @@ function Update-GitConfig() {
     # User info
     gc_prompt 'user.name' "User name"
     gc_prompt 'user.email' "Email"
-
-    # Platform configuration
-    gc_set 'gui.fontui' '-family \"Segoe UI\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'
-    gc_set 'gui.fontdiff' '-family \"Cascadia Code\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'
 
     # Show full gitconfig
     Write-Output $(git config --global --list)

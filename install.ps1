@@ -2,43 +2,24 @@
 .SYNOPSIS
     Dotfiles Install script for Windows 10
 .DESCRIPTION
-	Enable system services and set user profiles and configuration
+	Install user profile and configuration
 #>
 [cmdletbinding()]
 param(
-    [Parameter(HelpMessage = "Skip system configuration")]
-    [switch]
-    $NoSystem = $false
+    [Parameter(HelpMessage = "Dotfiles destination")]
+    [string]
+    $DotfileDest = (Join-Path -Path $env:USERPROFILE -ChildPath ".config\dotfiles")
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
-
-# Run as administrator
-If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    $relaunchArgs = "& '" + $MyInvocation.MyCommand.Definition + "'"
-    Start-Process powershell -Verb RunAs -ArgumentList $relaunchArgs
-    Break
-}
 
 #region Setup
 
 # Use TLS 1.2
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-# Create config directory
-$configPath = Join-Path -Path $env:USERPROFILE -ChildPath ".config"
-if (!(Test-Path -Path $configPath)) { New-Item -Path $configPath -ItemType Directory -Force }
-
-# Dotfiles enlistment
-$dotfilesRepo = 'ascarter/dotfiles.git'
-$dotfiles = Join-Path -Path $configPath -ChildPath "dotfiles"
-
-# SSH key file
-$sshKeyfile = Join-Path -Path $env:USERPROFILE -ChildPath .ssh\id_ed25519
-
 # Git
-$gitUri = 'https://github.com/git-for-windows/git/releases/download/v2.24.1.windows.2/Git-2.24.1.2-64-bit.exe'
 $gitCmd = Join-Path -Path $env:ProgramFiles -ChildPath "Git\cmd\git.exe"
 
 #endregion
@@ -48,6 +29,7 @@ $gitCmd = Join-Path -Path $env:ProgramFiles -ChildPath "Git\cmd\git.exe"
 function Install-Git() {
     if (!(Test-Path -Path $gitCmd)) {
         try {
+            $gitUri = 'https://github.com/git-for-windows/git/releases/download/v2.26.2.windows.1/Git-2.26.2-64-bit.exe'
             $gitInstaller = Split-Path $gitURI -Leaf
             $target = Join-Path -Path $env:TEMP -ChildPath $gitInstaller
             Write-Host "Installing Git $gitInstaller"
@@ -62,80 +44,69 @@ function Install-Git() {
 
     # Set Git SSH client
     if ($null -eq [System.Environment]::GetEnvironmentVariable("GIT_SSH", "User")) {
+        Write-Host "Set GIT_SSH environment variable"
         [System.Environment]::SetEnvironmentVariable("GIT_SSH", (Get-Command ssh.exe).Path, [System.EnvironmentVariableTarget]::User)
-    }
-}
-
-function Install-SSHKeys() {
-    # Create SSH key if not present
-    if (!(Test-Path $sshKeyFile)) {
-        Write-Host "Generating SSH user key"
-        $githubEmail = Read-Host -Prompt "Enter GitHub email address"
-        ssh-keygen -t ed25519 -C "$githubEmail"
-        ssh-add $sshKeyFile
-
-        # Copy SSH public key to clipboard
-        $sshPublicKeyFile = $sshKeyFile + '.pub'
-        if ($PSVersionTable.PSVersion.Major -lt 6) {
-            Get-Content -Path $sshPublicKeyFile | Set-Clipboard
-        }
-        else {
-            Invoke-WinCommand -ScriptBlock { Get-Content -Path $sshPublicKeyFile | Set-Clipboard }
-        }
-        Write-Host "ssh public key copied to clipboard."
-        Write-Host "Add key to GitHub account"
-        Start-Process "https://github.com/settings/ssh/new"
-        Write-Host "After adding to GitHub, Press any key to continue..."
-        [void][System.Console]::ReadKey($true)
     }
 }
 
 function Install-Dotfiles() {
     # Clone dotfiles
-    if (!(Test-Path -Path $dotfiles)) {
+    if (!(Test-Path -Path $DotfileDest)) {
         Write-Host "Clone dotfiles"
-        $repo = if (Test-Path -Path $sshKeyfile) { "git@github.com:$dotfilesRepo" } else { "https://github.com/$dotfilesRepo" }
-        Start-Process -FilePath $gitCmd -ArgumentList "clone $repo $dotfiles" -Wait -NoNewWindow
+        $dotfileParent = (Get-Item $DotfileDest).Parent
+        if (!(Test-Path -Path $dotfileParent)) { New-Item -Path $dotfileParent -ItemType Directory -Force }
+        Start-Process -FilePath $gitCmd -ArgumentList "clone https://github.com/ascarter/dotfiles.git $DotfileDest" -Wait -NoNewWindow
+    }
+
+    # Set DOTFILES environment variable
+    if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", "User")) {
+        Write-Host "Set DOTFILES enviornment variable"
+        [System.Environment]::SetEnvironmentVariable("DOTFILES", $DotfileDest, [System.EnvironmentVariableTarget]::User)
     }
 }
 
-function Install-Profiles() {
-    $setprofiles = Join-Path -Path $dotfiles -ChildPath setprofiles.ps1
-    if (Test-Path -Path $setprofiles) { Start-Process -FilePath powershell -ArgumentList $setprofiles -Wait -NoNewWindow }
-}
-
-#endregion
-
-#region System Configuration
-
-function Install-SSH() {
-    # Install OpenSSH
-    # https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse
-    Add-WindowsCapability -Online -Name OpenSSH.Client
-    Add-WindowsCapability -Online -Name OpenSSH.Server
-
-    # Add firewall rule
-    if (!((Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP").Enabled -eq $true)) {
-        Write-Warning "Missing OpenSSH Server inbound firewall rule"
+function Install-Profile() {
+    # PowerShell profile
+    if (!(Test-Path $PROFILE)) {
+        Write-Host "Install PowerShell profile"
+        New-Item -Path $PROFILE -ItemType File -Force
+        Set-Content -Path $PROFILE -Value ". $DotfileDest\powershell\profile.ps1"
     }
-
-    # Install OpenSSHUtils
-    Install-Module -Name OpenSSHUtils -Scope AllUsers -Force
-
-    Set-Service -Name ssh-agent -StartupType 'Automatic'
-    Start-Service ssh-agent
-    Set-Service -Name sshd -StartupType 'Automatic'
-    Start-Service sshd
-
-    # Configure default shell
-    New-ItemProperty -Path HKLM:\SOFTWARE\OpenSSH -Name DefaultShell -Value $env:ProgramFiles\PowerShell\6\pwsh.exe
 }
 
-function Install-Virtualization() {
-    Enable-WindowsOptionalFeature -Online -FeatureName Containers-DisposableClientVM -All
-    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
-    Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All
-    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -All
+function Install_WindowsTerminalProfile() {
+    # Windows terminal profile
+    $wintermSrc = Join-Path -Path $DotfileDest -ChildPath windows_terminal_settings.json
+    $wintermID = "Microsoft.WindowsTerminal_8wekyb3d8bbwe"
+    $wintermTarget = Join-Path -Path $env:LocalAppData -ChildPath Packages\$wintermID\LocalState\settings.json
+    if (!(Test-Path -Path $wintermTarget)) {
+        Write-Host "Install Windows Terminal settings"
+        Copy-Item -Path $wintermSrc -Destination $wintermTarget -Force
+    }
+}
+
+function Install-Vimrc() {
+    # Vim profile
+    $vimrc = Join-Path -Path $env:USERPROFILE -ChildPath _vimrc
+    if (!(Test-Path -Path $vimrc)) {
+        Write-Host "Install vimrc"
+        New-Item -Path $vimrc -ItemType File -Force
+        Set-Content -Path $vimrc -Value "source $DotfileDest/conf/vimrc"
+    }
+}
+
+function Install-SSHKeys() {
+    $sshDir = Join-Path -Path $env:USERPROFILE -ChildPath .ssh
+    $sshKeys = 'ed25519', 'rsa'
+    foreach ($key in $sshKeys) {
+        $keyFile = Join-Path -Path $sshDir -ChildPath "id_$key"
+        if (!(Test-Path $keyFile)) {
+            Write-Host "Generating SSH key $key"
+            $comment = "$env:USERNAME@$env:COMPUTERNAME"
+            ssh-keygen -t $key -C "$env:USERNAME@$env:COMPUTERNAME"
+            ssh-add $key
+        }
+    }
 }
 
 #endregion
@@ -143,14 +114,9 @@ function Install-Virtualization() {
 Write-Output "Install dotfiles"
 
 Install-Git
-Install-SSHKeys
 Install-Dotfiles
-Install-Profiles
-
-# Run system configuration
-if (-not $NoSystem) {
-    Install-SSH
-    Install-Virtualization
-}
+Install-Profile
+Install-Vimrc
+Install-SSHKeys
 
 Write-Output "Dotfiles install complete"
