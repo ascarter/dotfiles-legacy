@@ -18,7 +18,7 @@ if ($PSVersionTable.PSEdition -ne "Desktop") {
 }
 
 # Run as administrator
-If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+If (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     $relaunchArgs = "& '" + $MyInvocation.MyCommand.Definition + "'"
     Start-Process powershell -Verb RunAs -ArgumentList $relaunchArgs
     Break
@@ -39,7 +39,7 @@ function Install-SSH() {
     Add-WindowsCapability -Online -Name OpenSSH.Server
 
     # Add firewall rule
-    if (!((Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP").Enabled -eq $true)) {
+    if (-not ((Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP").Enabled -eq $true)) {
         Write-Warning "Missing OpenSSH Server inbound firewall rule"
     }
 

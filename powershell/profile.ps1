@@ -12,25 +12,9 @@ if (!(Get-Module -Name posh-git -ListAvailable)) {
     Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force
 }
 
-# Define top level bin (like /usr/local/bin in Unix)
-$Env:LOCALBIN = Join-Path -Path $Env:SystemDrive -ChildPath bin
-
-# Extend PATH to include LOCALBIN
-$Env:Path = "$Env:LOCALBIN;$Env:Path"
-
-# Add Fork.exe to the path
-if (Test-Path -Path (Join-Path $Env:LOCALAPPDATA "Fork")) {
-    $Env:Path = "$Env:Path;" + (Join-Path $Env:LOCALAPPDATA "Fork")
-}
-
 # Set DOTFILES environment varible if not already set
 if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", "User")) {
     Set-Item -Path Env:DOTFILES -Value (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
-}
-
-# Enable Git to use Windows SSH
-if ($null -eq [System.Environment]::GetEnvironmentVariable("GIT_SSH", "User")) {
-    Set-Item -Path Env:GIT_SSH -Value ((Get-Command ssh).Source)
 }
 
 # Set EDITOR and VISUAL
@@ -122,7 +106,7 @@ function gc_prompt([string]$Key, [string]$Prompt) {
 function Update-GitConfig() {
     # Include defaults and aliases
     gc_update 'include.path' (Join-Path -Path $env:DOTFILES -ChildPath gitconfig)
-    
+
     # No line ending conversion
     gc_set 'core.autocrlf' 'input'
 
