@@ -52,4 +52,4 @@ if ! [ -d ${HOMEDIR}/.ssh ]; then
 	chmod 0700 ${HOMEDIR}/.ssh
 fi
 
-echo "dotfiles installed."
+echo "dotfiles installed"

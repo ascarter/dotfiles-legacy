@@ -3,28 +3,24 @@
 # Uninstall script for dotfiles configuration
 #
 # Usage:
-#	uninstall [target] [homedir]
+#	uninstall [home] [dotfiles]
 #
-# 	target   == destination for enlistment (default ~/.config/dotfiles)
-#	homedir  == home directory (default ${HOME})
+#	home   == home directory (default ${HOME})
+# 	target == destination for enlistment (default ~/.config/dotfiles)
 #
 
 set -ue
 
-DOTFILES="${1:-${HOME}/.config/dotfiles}"
-HOMEDIR="${2:-${HOME}}"
-RC_FILES=""
-
-case "$(uname)" in
-Darwin ) RC_FILES=${RC_FILES}" Brewfile" ;;
-esac
+HOMEDIR="${1:-${HOME}}"
+DOTFILES="${2:-${HOME}/.config/dotfiles}"
 
 # Remove home directory symlinks
-RC_FILES="$(cat ${DOTFILES}/rc.conf) "${RC_FILES}
-for f in ${RC_FILES}; do
+for f in $(ls ${DOTFILES}/conf); do
 	target=${HOMEDIR}/.${f}
 	if [ -e ${target} ]; then
 		echo "Remove ${target}"
 		rm ${target}
 	fi
 done
+
+echo "dotfiles uninstalled"
