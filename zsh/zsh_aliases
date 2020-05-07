@@ -2,7 +2,7 @@
 alias resetcomp='rm -f ${HOME}/.zcompdump && compinit'
 
 # dotfiles home folder
-alias dotf='cd ${DOTFILES}/'
+alias dotfiles='cd ${DOTFILES}/'
 
 # Projects
 alias projects='cd ${HOME}/Projects'
