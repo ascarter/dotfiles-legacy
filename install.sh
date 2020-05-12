@@ -32,7 +32,7 @@ for f in $(ls ${DOTFILES}/conf); do
 done
 
 # Configure zsh if installed
-if command -v zsh &>/dev/null; then
+if [ -x "$(command -v zsh)" ]; then
 	[ ${SHELL} != "/bin/zsh" ] && chsh -s /bin/zsh
 
 	# Set zsh environment

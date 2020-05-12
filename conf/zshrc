@@ -4,7 +4,7 @@ fpath=(${ZDOTDIR:-$DOTFILES/zsh}/completions ${ZDOTDIR:-$DOTFILES/zsh}/functions
 
 # Homebrew
 HOMEBREW_PREFIX=/opt/homebrew
-if type ${HOMEBREW_PREFIX}/bin/brew &>/dev/null; then
+if [ -e ${HOMEBREW_PREFIX}/bin/brew ]; then
 	export HOMEBREW_NO_EMOJI=1
 	export HOMEBREW_NO_ANALYTICS=1
 	eval $(${HOMEBREW_PREFIX}/bin/brew shellenv)
@@ -76,17 +76,12 @@ export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit
 # ========================================
 
 # GitHub
-if type gh &>/dev/null; then
+if [ -x "$(command -v gh)" ]; then
 	eval "$(gh completion -s zsh)"
 fi
 
-# Go
-if type go &>/dev/null; then
-	export PATH=$(go env GOPATH)/bin:${PATH}
-fi
-
 # Ruby
-if type ruby &>/dev/null && type gem &>/dev/null; then
+if [ -x "$(command -v ruby)" ] && [ -x "$(command -v gem)" ]; then
 	export PATH=$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH
 fi
 
@@ -99,12 +94,29 @@ if [[ -d ${HOME}/Library/Python/3.8 ]]; then
 	export LANG=en_US.UTF-8
 	export PATH=${HOME}/Library/Python/3.8/bin:${PATH}
 fi
-if type pip3 &>/dev/null; then
+if [ -x "$(command -v pip3)" ]; then
 	source <(pip3 completion --zsh)
 	compctl -K _pip_completion pip3
 fi
 if [[ -d ${HOME}/Library/Python/2.7 ]]; then
 	export PATH=${HOME}/Library/Python/2.7/bin:${PATH}
+fi
+
+# Go
+if [ -x "$(command -v go)" ]; then
+	export PATH=$(go env GOPATH)/bin:${PATH}
+fi
+
+# .NET Core
+if [[ -d ~/.dotnet ]]; then
+	export PATH=${HOME}/.dotnet:${PATH}
+
+	# zsh parameter completion for the dotnet CLI
+	_dotnet_zsh_complete() {
+		local completions=("$(dotnet complete "$words")")
+		reply=( "${(ps:\n:)completions}" )
+	}
+	compctl -K _dotnet_zsh_complete dotnet
 fi
 
 # Java
@@ -131,12 +143,12 @@ if [[ -d ${HOME}/.cargo ]]; then
 fi
 
 # Kubernetes
-if type kubectl &>/dev/null; then
+if [ -x "$(command -v kubectl)" ]; then
 	source <(kubectl completion zsh)
 fi
 
 # AWS
-if type aws_zsh_completer.sh &>/dev/null; then
+if [ -x "$(command -v aws_zsh_completer.sh)" ]; then
 	source `whence -cp aws_zsh_completer.sh`
 fi
 
@@ -173,7 +185,7 @@ Linux )
 		fi
 	else
 		# Use keychain if installed
-		if type keychain &>/dev/null; then
+		if [ -x "$(command -v keychain)" ]; then
 			eval `keychain --eval --agents ssh id_rsa id_ed25519`
 		fi
 	fi
@@ -183,9 +195,8 @@ esac
 # ========================================
 # Per-machine extras
 # ========================================
-if [[ -e ${HOME}/.zsh_local ]]; then
-	source ${HOME}/.zsh_local
-fi
+[[ -e ${HOME}/.zsh_local ]] && source ${HOME}/.zsh_local
+
 
 # ========================================
 # Banners and messages

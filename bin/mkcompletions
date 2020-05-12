@@ -9,13 +9,13 @@ COMPLETIONS_DIR=${ZDOTDIR:-$DOTFILES/zsh}/completions
 mkdir -p ${COMPLETIONS_DIR}
 
 # Swift
-if type swift &>/dev/null; then
+if [ -x "$(command -v swift)" ]; then
 	echo "Generating swift completions..."
 	swift package completion-tool generate-zsh-script > ${COMPLETIONS_DIR}/_swift
 fi
 
 # Rust
-if type rustup &>/dev/null; then
+if [ -x "$(command -v rustup)" ]; then
 	echo "Generating rustup completions..."
 	rustup completions zsh > ${COMPLETIONS_DIR}/_rustup
 fi
@@ -44,4 +44,3 @@ rm -f ${ZDOTDIR:-$HOME}/.zcompdump
 zsh -ic "compinit"
 
 echo "Reload shell to enable completions"
-

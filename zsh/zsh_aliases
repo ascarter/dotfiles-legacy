@@ -166,7 +166,7 @@ Linux )
 	alias xlock='xscreensaver-command -lock'
 
 	# WSL
-	if type Fork.exe &>/dev/null; then
+	if [ -x "$(command -v Fork.exe)" ]; then
 		alias fork='Fork.exe $(wslpath -w $(git root))'
 	fi
 	;;
