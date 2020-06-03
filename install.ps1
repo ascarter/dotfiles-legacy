@@ -35,7 +35,7 @@ function Install-Git() {
 
     # Set Git SSH client
     if ($null -eq [System.Environment]::GetEnvironmentVariable("GIT_SSH", [System.EnvironmentVariableTarget]::User)) {
-        Write-Host "Set GIT_SSH environment variable"
+        Write-Output "Set GIT_SSH environment variable"
         $sshPath = (Get-Command ssh.exe).Path
         [System.Environment]::SetEnvironmentVariable("GIT_SSH", $sshPath, [System.EnvironmentVariableTarget]::User)
     }
@@ -44,7 +44,7 @@ function Install-Git() {
 function Install-Dotfiles() {
     # Clone dotfiles
     if (-not (Test-Path -Path $DotfileDest)) {
-        Write-Host "Clone dotfiles"
+        Write-Output "Clone dotfiles"
         $dotfileParent = Split-Path -Path $DotfileDest
         if (-not (Test-Path -Path $dotfileParent)) {
             New-Item -Path $dotfileParent -ItemType Directory -Force
@@ -54,7 +54,7 @@ function Install-Dotfiles() {
 
     # Set DOTFILES environment variable
     if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", [System.EnvironmentVariableTarget]::User)) {
-        Write-Host "Set DOTFILES environment variable"
+        Write-Output "Set DOTFILES environment variable"
         [System.Environment]::SetEnvironmentVariable("DOTFILES", $DotfileDest, [System.EnvironmentVariableTarget]::User)
     }
 }
@@ -62,7 +62,7 @@ function Install-Dotfiles() {
 function Install-Profile() {
     # PowerShell profile
     if (-not (Test-Path $PROFILE)) {
-        Write-Host "Install PowerShell profile"
+        Write-Output "Install PowerShell profile"
         New-Item -Path $PROFILE -ItemType File -Force
         Set-Content -Path $PROFILE -Value ". $DotfileDest\powershell\profile.ps1"
     }
@@ -74,7 +74,7 @@ function Install_WindowsTerminalProfile() {
     $wintermID = "Microsoft.WindowsTerminal_8wekyb3d8bbwe"
     $wintermTarget = Join-Path -Path $env:LocalAppData -ChildPath Packages\$wintermID\LocalState\settings.json
     if (-not (Test-Path -Path $wintermTarget)) {
-        Write-Host "Install Windows Terminal settings"
+        Write-Output "Install Windows Terminal settings"
         Copy-Item -Path $wintermSrc -Destination $wintermTarget -Force
     }
 }
@@ -83,7 +83,7 @@ function Install-Vimrc() {
     # Vim profile
     $vimrc = Join-Path -Path $env:USERPROFILE -ChildPath _vimrc
     if (-not (Test-Path -Path $vimrc)) {
-        Write-Host "Install vimrc"
+        Write-Output "Install vimrc"
         New-Item -Path $vimrc -ItemType File -Force
         Set-Content -Path $vimrc -Value "source $DotfileDest/conf/vimrc"
     }
@@ -95,7 +95,7 @@ function Install-SSHKeys() {
     foreach ($key in $sshKeys) {
         $keyFile = Join-Path -Path $sshDir -ChildPath "id_$key"
         if (-not (Test-Path $keyFile)) {
-            Write-Host "Generating SSH key $key"
+            Write-Output "Generating SSH key $key"
             ssh-keygen -t $key -C "$env:USERNAME@$env:COMPUTERNAME"
             ssh-add $key
         }
@@ -112,7 +112,7 @@ function Update-UserPath() {
     $parts = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User) -Split ";"
     foreach ($p in $locations) {
         if ((Test-Path -Path $p) -and ($parts -NotContains $p)) {
-            Write-Host "Add $p to path"
+            Write-Output "Add $p to path"
             $parts += $p
         }
     }
@@ -127,13 +127,11 @@ function Update-EnvPath() {
 #endregion
 
 Write-Output "Install dotfiles"
-
 Install-Git
 Install-Dotfiles
 Install-Profile
 Install-Vimrc
 Install-SSHKeys
 Update-UserPath
-
 Write-Output "dotfiles install complete"
 Write-Output "Reload session to apply configuration"

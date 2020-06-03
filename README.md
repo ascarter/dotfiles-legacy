@@ -75,11 +75,12 @@ Additional requirements:
 * [OpenSSH](https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_overview)
 * [Windows Subsystem for Linux 2](https://docs.microsoft.com/en-us/windows/wsl/wsl2-install)
 * [PowerShell Core](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-7)
+* [Windows Package Manager](https://github.com/microsoft/winget-cli)
 
 To run the provided init script in elevated PowerShell (recommend Windows PowerShell terminal):
 
 ```powershell
-PS[Admin]> Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://raw.githubusercontent.com/ascarter/dotfiles/master/init.ps1 -UseBasicParsing | Invoke-Expression
+Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://raw.githubusercontent.com/ascarter/dotfiles/master/init.ps1 -UseBasicParsing | Invoke-Expression
 ```
 
 ### Install

@@ -31,14 +31,14 @@ If (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 
 function Install-WindowsOptionalFeature([string]$FeatureName) {
     if ((Get-WindowsOptionalFeature -Online -FeatureName $FeatureName).State -eq "Disabled") {
-        Write-Host "Enable $FeatureName"
+        Write-Output "Enable $FeatureName"
         Enable-WindowsOptionalFeature -Online -FeatureName $FeatureName -All
     }
 }
 
 function Install-WindowsCapability([string]$Capability) {
     if ((Get-WindowsCapability -Online -Name "$Capability*").State -eq "NotPresent") {
-        Write-Host "Add Windows Capability $Capability"
+        Write-Output "Add Windows Capability $Capability"
         Add-WindowsCapability -Online -Name $Capability
     }
 }
@@ -82,7 +82,7 @@ function Install-WindowsPackageManager() {
             $uri = 'https://github.com/microsoft/winget-cli/releases/download/v0.1.4331-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
             $bundle = Split-Path $gitURI -Leaf
             $target = Join-Path -Path $env:TEMP -ChildPath $bundle
-            Write-Host "Installing Windows Package Manager $bundle"
+            Write-Output "Installing Windows Package Manager $bundle"
             $wc = New-Object System.Net.WebClient
             $wc.DownloadFile($uri, $target)
             Start-Process -FilePath $target -Wait -NoNewWindow
@@ -108,13 +108,15 @@ function Install-Packages() {
         $app = $($_.key)
         $id = $($_.value)
         if (-not (Get-Command $app -ErrorAction SilentlyContinue)) {
-            Write-Host "Install $id"
+            Write-Output "Install $id"
             winget install --id=$id --exact --interactive
         }
     }
 }
 
+Write-Output "Configure Windows 10"
 Install-SSH
 Install-Virtualization
 Install-WindowsPackageManager
 Install-Packages
+Write-Output "Done."
