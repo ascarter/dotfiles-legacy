@@ -21,9 +21,14 @@ if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", "User")) 
     Set-Item -Path Env:DOTFILES -Value (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
 }
 
-# Set EDITOR and VISUAL
-Set-Item -Path Env:EDITOR -Value ((Get-Command vim).Source)
-Set-Item -Path Env:VISUAL -Value ((Get-Command code).Source)
+# Set editors
+if (Get-Command vim -ErrorAction SilentlyContinue) {
+    Set-Item -Path Env:EDITOR -Value ((Get-Command vim).Source)
+}
+
+if (Get-Command code -ErrorAction SilentlyContinue) {
+    Set-Item -Path Env:VISUAL -Value ((Get-Command code).Source)
+}
 
 #endregion
 

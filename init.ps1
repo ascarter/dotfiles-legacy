@@ -10,7 +10,7 @@ param()
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-# TODO: Check that running in powershell *not* powershell core
+# Check running in Windows PowerShell not Powershell Core
 if ($PSVersionTable.PSEdition -ne "Desktop") {
     $relaunchArgs = "& '" + $MyInvocation.MyCommand.Definition + "'"
     Start-Process powershell -ArgumentList $relaunchArgs -NoNewWindow
@@ -27,89 +27,94 @@ If (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 # Use TLS 1.2
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-# Dotfiles enlistment
-$dotfiles = Join-Path -Path $env:USERPROFILE -ChildPath .config\dotfiles
+#region Helpers
+
+function Install-WindowsOptionalFeature([string]$FeatureName) {
+    if ((Get-WindowsOptionalFeature -Online -FeatureName $FeatureName).State -eq "Disabled") {
+        Write-Host "Enable $FeatureName"
+        Enable-WindowsOptionalFeature -Online -FeatureName $FeatureName -All
+    }
+}
+
+function Install-WindowsCapability([string]$Capability) {
+    if ((Get-WindowsCapability -Online -Name "$Capability*").State -eq "NotPresent") {
+        Write-Host "Add Windows Capability $Capability"
+        Add-WindowsCapability -Online -Name $Capability
+    }
+}
+
+#endregion
 
 #region System Configuration
 
 function Install-SSH() {
     # Install OpenSSH
     # https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse
-    Add-WindowsCapability -Online -Name OpenSSH.Client
-    Add-WindowsCapability -Online -Name OpenSSH.Server
+    Install-WindowsCapability OpenSSH.Client
+    Install-WindowsCapability OpenSSH.Server
 
     # Add firewall rule
     if (-not ((Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP").Enabled -eq $true)) {
         Write-Warning "Missing OpenSSH Server inbound firewall rule"
     }
 
-    # Install OpenSSHUtils
-    Install-Module -Name OpenSSHUtils -Scope AllUsers -Force
-
+    # Configure ssh-agent
     Set-Service -Name ssh-agent -StartupType 'Automatic'
     Start-Service ssh-agent
     Set-Service -Name sshd -StartupType 'Automatic'
     Start-Service sshd
 
     # Configure default shell
-    New-ItemProperty -Path HKLM:\SOFTWARE\OpenSSH -Name DefaultShell -Value $env:ProgramFiles\PowerShell\7\pwsh.exe
+    Set-ItemProperty -Path HKLM:\SOFTWARE\OpenSSH -Name DefaultShell -Value $env:ProgramFiles\PowerShell\7\pwsh.exe
 }
 
 function Install-Virtualization() {
-    Enable-WindowsOptionalFeature -Online -FeatureName Containers-DisposableClientVM -All
-    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
-    Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All
-    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -All
+    Install-WindowsOptionalFeature Containers-DisposableClientVM
+    Install-WindowsOptionalFeature Microsoft-Hyper-V
+    Install-WindowsOptionalFeature VirtualMachinePlatform
+    Install-WindowsOptionalFeature Microsoft-Windows-Subsystem-Linux
+}
+
+function Install-WindowsPackageManager() {
+    if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+        # Download winget package
+        try {
+            $uri = 'https://github.com/microsoft/winget-cli/releases/download/v0.1.4331-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.appxbundle'
+            $bundle = Split-Path $gitURI -Leaf
+            $target = Join-Path -Path $env:TEMP -ChildPath $bundle
+            Write-Host "Installing Windows Package Manager $bundle"
+            $wc = New-Object System.Net.WebClient
+            $wc.DownloadFile($uri, $target)
+            Start-Process -FilePath $target -Wait -NoNewWindow
+        }
+        finally {
+            if (Test-Path $target) { Remove-Item -Path $target }
+        }
+    }
 }
 
 function Install-Packages() {
-    # Read package catalog
-    $activity = "Install packages"
-    $pspackages = Join-Path -Path $dotfiles -ChildPath win10_packages.json
-    Write-Progress -Activity $activity -CurrentOperation "Reading $pspackages" -Id 1
-    $packages = Get-Content -Path $pspackages | ConvertFrom-Json
-    $installed = Get-Package -ProviderName msi, programs
-
-    $idx = 0
-    foreach ($p in $packages) {
-        $idx++
-        $useSudo = if (Get-Member -Name sudo -InputObject $p) { $p.sudo } else { $false }
-        $args = if (Get-Member -Name args -InputObject $p) { $p.args } else { " " }
-        $completed = [math]::Round((($idx - 1) / $packages.Count) * 100)
-
-        if ($installed | Where-Object { $_.CanonicalID -eq $p.id }) {
-            Write-Progress -Activity $activity -CurrentOperation "$($p.id) installed" -Id 1 -Status "$completed% complete" -PercentComplete $completed
-            Write-Host "$($p.id) installed"
-            continue
-        }
-
-        try {
-            # Download file
-            Write-Progress -Activity $activity -CurrentOperation "Downloading $($p.url)" -Id 1 -Status "$($p.id)" -PercentComplete $completed
-            $target = Join-Path -Path $env:TEMP -ChildPath (Split-Path -Path $p.url -Leaf)
-            $wc = New-Object System.Net.WebClient
-            $wc.DownloadFile($p.url, $target)
-
-            # Execute installer
-            Write-Progress -Activity $activity -CurrentOperation "Installing $(Split-Path -Path $target -Leaf)" -Id 1 -Status "$($p.id)" -PercentComplete $completed
-            $verb = if ($useSudo) { 'RunAs' } else { 'Open' }
-            $exe = switch ((Get-Item -Path $target).Extension) {
-                .exe { $target }
-                .msi { $args += ('/I', $target); 'msiexec.exe' }
-                Default { throw "Unknown file type for $target" }
-            }
-            Start-Process -FilePath $exe -ArgumentList $Args -Wait -Verb $verb
-        }
-        catch {
-            Write-Warning "Unable to install $($p.url)"
-            Write-Warning "[$($_.Exception.GetType().FullName)] $($_.Exception.Message)"
-        }
-        finally {
-            if (Test-Path -Path $target) { Remove-Item -Path $target -Force }
+    # Install necessary base packages via Windows Package Manager
+    $packages = @{
+        git       = 'Git.Git'
+        'git-lfs' = 'GitHub.GitLFS'
+        gh        = 'GitHub.cli'
+        pwsh      = 'Microsoft.PowerShell'
+        code      = 'Microsoft.VisualStudioCode'
+        wt        = 'Microsoft.WindowsTerminal'
+        vim       = 'vim.vim'
+    }
+    $packages.GetEnumerator() | ForEach-Object {
+        $app = $($_.key)
+        $id = $($_.value)
+        if (-not (Get-Command $app -ErrorAction SilentlyContinue)) {
+            Write-Host "Install $id"
+            winget install --id=$id --exact --interactive
         }
     }
 }
 
 Install-SSH
 Install-Virtualization
+Install-WindowsPackageManager
 Install-Packages

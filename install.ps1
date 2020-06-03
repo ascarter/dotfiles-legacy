@@ -19,26 +19,18 @@ $ErrorActionPreference = "Stop"
 # Use TLS 1.2
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
+# Check that running PowerShell Core
+if ($PSVersionTable.PSEdition -ne "Core") {
+    throw "Run in PowerShell Core"
+}
+
 #endregion
 
 #region Bootstrap
 
 function Install-Git() {
-    if (-not (Get-Command git.exe -ErrorAction SilentlyContinue)) {
-        try {
-            $gitUri = 'https://github.com/git-for-windows/git/releases/download/v2.26.2.windows.1/Git-2.26.2-64-bit.exe'
-            $gitInstaller = Split-Path $gitURI -Leaf
-            $target = Join-Path -Path $env:TEMP -ChildPath $gitInstaller
-            Write-Host "Installing Git $gitInstaller"
-            $wc = New-Object System.Net.WebClient
-            $wc.DownloadFile($gitUri, $target)
-            Start-Process -FilePath $target -Wait -NoNewWindow
-        }
-        finally {
-            if (Test-Path $target) { Remove-Item -Path $target }
-        }
-
-        Update-EnvPath
+    if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+        throw "Git not installed"
     }
 
     # Set Git SSH client
@@ -114,6 +106,7 @@ function Update-UserPath() {
     # Extend user path for tools
     $locations = @(
         (Join-Path -Path $Env:SystemDrive -ChildPath bin),
+        (Join-Path -Path $Env:ProgramFiles -ChildPath vim\vim82),
         (Join-Path $Env:LOCALAPPDATA "Fork")
     )
     $parts = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User) -Split ";"
