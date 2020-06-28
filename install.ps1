@@ -102,6 +102,15 @@ function Install-SSHKeys() {
     }
 }
 
+# Install-Bin creates a system root bin for adding tools. Similar to /usr/local/bin on Unix
+function Install-Bin() {
+    $userBin = Join-Path -Path $Env:SystemDrive -ChildPath bin
+    if (!(Test-Path -Path $userBin)) {
+        Write-Host "Creating $userBin"
+        New-Item -Path $userBin -ItemType Directory
+    }
+}
+
 function Update-UserPath() {
     # Extend user path for tools
     $locations = @(
@@ -133,6 +142,7 @@ Install-Dotfiles
 Install-Profile
 Install-Vimrc
 Install-SSHKeys
+Install-Bin
 Update-UserPath
 
 Write-Output "dotfiles install complete"
