@@ -37,6 +37,9 @@ Darwin )
 		sudo chown -R ${USER}:admin ${HOMEBREW}
 		curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ${HOMEBREW}
 	fi
+
+	# Add homebrew extras tap
+	${HOMEBREW}/bin/brew tap --full ascarter/extras
 	;;
 Linux )
 	DISTRO_DESCRIPTION=$(lsb_release -d -s)

@@ -103,6 +103,7 @@ function Install-Packages() {
         code      = 'Microsoft.VisualStudioCode'
         wt        = 'Microsoft.WindowsTerminal'
         vim       = 'vim.vim'
+        docker    = 'Docker.DockerDesktop'
     }
     $packages.GetEnumerator() | ForEach-Object {
         $app = $($_.key)
