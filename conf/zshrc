@@ -72,8 +72,11 @@ export PAGER=less
 export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit-at-eof -R"
 
 # ========================================
-# Frameworks/Languages
+# Developer Tools
 # ========================================
+
+# SDK root for custom installs
+export SDK_ROOT=${HOME}/sdk
 
 # GitHub
 if [ -x "$(command -v gh)" ]; then
@@ -103,6 +106,13 @@ if [[ -d ${HOME}/Library/Python/2.7 ]]; then
 fi
 
 # Go
+if [ -d ${SDK_ROOT} ]; then
+	# Check for downloaded go versions and use the latest one
+	export GOROOT=${SDK_ROOT}/$(ls -r ${SDK_ROOT} | grep go1 | head -1)
+	export PATH=${GOROOT}/bin:${PATH}
+fi
+
+# Add GOPATH to installed binaries to path
 if [ -x "$(command -v go)" ]; then
 	export PATH=$(go env GOPATH)/bin:${PATH}
 fi
@@ -202,4 +212,8 @@ esac
 # Banners and messages
 # ========================================
 
-case $(uname) in (Linux) show-motd login; esac
+case $(uname) in
+Linux )
+	show-motd login
+	;;
+esac
