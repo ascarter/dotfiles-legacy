@@ -118,8 +118,9 @@ if [ -x "$(command -v go)" ]; then
 fi
 
 # .NET Core
-if [[ -d ~/.dotnet ]]; then
-	export PATH=${HOME}/.dotnet:${PATH}
+if [-x "$(command -v dotnet)" ]; then
+	# Disable telemtry
+	DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 	# zsh parameter completion for the dotnet CLI
 	_dotnet_zsh_complete() {
