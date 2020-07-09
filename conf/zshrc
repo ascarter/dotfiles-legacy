@@ -118,7 +118,7 @@ if [ -x "$(command -v go)" ]; then
 fi
 
 # .NET Core
-if [-x "$(command -v dotnet)" ]; then
+if [ -x "$(command -v dotnet)" ]; then
 	# Disable telemtry
 	DOTNET_CLI_TELEMETRY_OPTOUT=1
 
