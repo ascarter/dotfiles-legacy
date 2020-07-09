@@ -52,7 +52,7 @@ Linux )
 		sudo apt upgrade -y
 
 		# Install packages
-		sudo apt install build-essential git keychain socat zsh
+		sudo apt install build-essential git keychain socat update-motd zsh
 		;;
 	*)
 		echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"
