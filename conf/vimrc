@@ -38,12 +38,17 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'itchyny/lightline.vim'
 
 " Color schemes
+Plug 'albertorestifo/github.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'arcticicestudio/nord-vim'
+Plug 'cocopon/iceberg.vim'
 Plug 'kjssad/quantum.vim'
 Plug 'nightsense/snow'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'rakr/vim-one'
+Plug 'romainl/Apprentice'
+Plug 'vim-scripts/xoria256.vim'
+
 call plug#end()
 
 " Install any missing plugins
@@ -64,19 +69,9 @@ if has("termguicolors")
 	endif
 endif
 
-" solarized
-"let g:solarized_termcolors=256
-"set background=dark
-"colorscheme solarized
-
-" nord
-"let g:lightline = { 'colorscheme': 'solarized' }
-"colorscheme nord
-"let g:lightline = { 'colorscheme': 'nord' }
-
-" snow
+colorscheme iceberg
+"colorscheme xoria256
 set background=dark
-colorscheme snow
 
 " Flash screen only - no beep
 set visualbell
@@ -234,9 +229,9 @@ if has("gui_running")
 		imap <D-8> <Esc>8gt
 		map  <D-9> 9gt
 		imap <D-9> <Esc>9gt
-	elseif has('gui_gtk2')
+	elseif has('gui_gtk2') || has('gui_gtk3')
 		" Linux
-		set guifont=Source\ Code\ Pro\ Medium\ 12,Monospace\ 12
+		set guifont=Cascadia\ Code\ 10,Source\ Code\ Pro\ Medium\ 12,Monospace\ 12
 	elseif has('gui_win32')
 		" Windows
 		set guifont=Cascadia\ Code:h10,Source\ Code\ Pro:h10,Consolas:h10
@@ -245,5 +240,6 @@ if has("gui_running")
 endif
 
 " Set lightline colors after other colors/background are set
-let g:lightline = { 'colorscheme': ( &background == "light" ? 'snow_light' : 'snow_dark' )}
+" let g:lightline = { 'colorscheme': ( &background == "light" ? 'snow_light' : 'snow_dark' )}
 " let g:lightline = { 'colorscheme': ( &background == "light" ? 'PaperColor' : 'default' ) }
+let g:lightline = { 'colorscheme': 'iceberg' }
