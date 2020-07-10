@@ -30,6 +30,39 @@ if (Get-Command code -ErrorAction SilentlyContinue) {
     Set-Item -Path Env:VISUAL -Value ((Get-Command code).Source)
 }
 
+function Update-UserPath([string[]]$paths) {
+    $parts = $Env:PATH -Split ";"
+    foreach ($p in $paths) {
+        if ((Test-Path -Path $p) -and ($parts -NotContains $p)) {
+            $parts += $p
+        }
+    }
+    $Env:PATH = $parts -Join ";"
+}
+
+# Check for JDK
+if (Test-Path -Path C:\JDK) {
+    # TODO: figure out which JDK to use
+    $jdk_version = '14.0.1'
+    Set-Item -Path Env:JAVA_HOME -Value (Join-Path C:\JDK -ChildPath jdk-$jdk_version)
+    Update-UserPath @(
+        (Join-Path $Env:JAVA_HOME -ChildPath bin)
+    )
+}
+
+# Check for Android SDK
+if (Test-Path -Path $Env:LOCALAPPDATA\Android\SDK) {
+    if ($null -eq [System.Environment]::GetEnvironmentVariable("ANDROID_SDK", "User")) {
+        Set-Item -Path Env:ANDROID_SDK -Value $Env:LOCALAPPDATA\Android\SDK
+    }
+
+    Update-UserPath @(
+        (Join-Path -Path $Env:ANDROID_SDK -ChildPath platform-tools),
+        (Join-Path -Path $Env:ANDROID_SDK -ChildPath emulator),
+        (Join-Path -Path $Env:ANDROID_SDK -ChildPath tools\bin)
+    )
+}
+
 #endregion
 
 #region Alias behavoirs
