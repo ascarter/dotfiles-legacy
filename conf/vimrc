@@ -70,8 +70,8 @@ if has("termguicolors")
 endif
 
 colorscheme iceberg
-"colorscheme xoria256
 set background=dark
+let g:lightline = { 'colorscheme': 'iceberg' }
 
 " Flash screen only - no beep
 set visualbell
@@ -86,11 +86,9 @@ set number
 " 4 -> solid underscore
 " 5 -> blinking vertical bar
 " 6 -> solid vertical bar
-if &term !~ "^win32"
-	let &t_SI = "\e[5 q"  "SI=INSERT mode
-	let &t_SR = "\e[4 q"  "SR=REPLACE mode
-	let &t_EI = "\e[1 q"  "EI=NORMAL mode
-endif
+let &t_SI = "\e[5 q"  "SI=INSERT mode
+let &t_SR = "\e[4 q"  "SR=REPLACE mode
+let &t_EI = "\e[1 q"  "EI=NORMAL mode
 
 " Set fill characters
 set fillchars=vert:\ ,fold:-
@@ -239,7 +237,3 @@ if has("gui_running")
 	endif
 endif
 
-" Set lightline colors after other colors/background are set
-" let g:lightline = { 'colorscheme': ( &background == "light" ? 'snow_light' : 'snow_dark' )}
-" let g:lightline = { 'colorscheme': ( &background == "light" ? 'PaperColor' : 'default' ) }
-let g:lightline = { 'colorscheme': 'iceberg' }
