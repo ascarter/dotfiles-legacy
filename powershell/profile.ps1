@@ -23,11 +23,11 @@ if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", "User")) 
 
 # Set editors
 if (Get-Command vim -ErrorAction SilentlyContinue) {
-    Set-Item -Path Env:EDITOR -Value ((Get-Command vim).Source)
+    Set-Item -Path Env:EDITOR -Value 'vim'
 }
 
 if (Get-Command code -ErrorAction SilentlyContinue) {
-    Set-Item -Path Env:VISUAL -Value ((Get-Command code).Source)
+    Set-Item -Path Env:VISUAL -Value 'code --wait'
 }
 
 function Update-Path([string[]]$paths) {
@@ -165,9 +165,6 @@ function gc_prompt([string]$Key, [string]$Prompt) {
 function Update-GitConfig() {
     # Include defaults and aliases
     gc_update 'include.path' (Join-Path -Path $env:DOTFILES -ChildPath gitconfig)
-
-    # Set editor
-    gc_set 'core.editor' '\"C:\\Users\\acarter\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --wait'
 
     # No line ending conversion
     gc_set 'core.autocrlf' 'input'
