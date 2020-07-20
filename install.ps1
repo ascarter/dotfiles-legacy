@@ -104,10 +104,18 @@ function Install-SSHKeys() {
 
 # Install-Bin creates a system root bin for adding tools. Similar to /usr/local/bin on Unix
 function Install-Bin() {
-    $userBin = Join-Path -Path $Env:SystemDrive -ChildPath bin
-    if (!(Test-Path -Path $userBin)) {
-        Write-Host "Creating $userBin"
-        New-Item -Path $userBin -ItemType Directory
+    $usrbin = Join-Path -Path $Env:SystemDrive -ChildPath bin
+    if (!(Test-Path -Path $usrbin)) {
+        Write-Host "Creating $usrbin"
+        New-Item -Path $usrbin -ItemType Directory
+    }
+
+    # Add to path so WSL can see it
+    $parts = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User) -Split ";"
+    if ($parts -NotContains $usrbin) {
+        Write-Output "Add $usrbin to path"
+        $parts += $usrbin
+        [System.Environment]::SetEnvironmentVariable("PATH", $parts -Join ";", [System.EnvironmentVariableTarget]::User)
     }
 }
 
