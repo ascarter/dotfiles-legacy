@@ -111,28 +111,6 @@ function Install-Bin() {
     }
 }
 
-function Update-UserPath() {
-    # Extend user path for tools
-    $locations = @(
-        (Join-Path -Path $Env:SystemDrive -ChildPath bin),
-        (Join-Path -Path $Env:ProgramFiles -ChildPath vim\vim82),
-        (Join-Path $Env:LOCALAPPDATA "Fork")
-    )
-    $parts = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User) -Split ";"
-    foreach ($p in $locations) {
-        if ((Test-Path -Path $p) -and ($parts -NotContains $p)) {
-            Write-Output "Add $p to path"
-            $parts += $p
-        }
-    }
-    [System.Environment]::SetEnvironmentVariable("PATH", $parts -Join ";", [System.EnvironmentVariableTarget]::User)
-}
-
-function Update-EnvPath() {
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::Machine) + ";" +
-    [System.Environment]::GetEnvironmentVariable("Path", [System.EnvironmentVariableTarget]::User)
-}
-
 #endregion
 
 Write-Output "Install dotfiles"
@@ -142,6 +120,5 @@ Install-Profile
 Install-Vimrc
 Install-SSHKeys
 Install-Bin
-Update-UserPath
 Write-Output "dotfiles install complete"
 Write-Output "Reload session to apply configuration"

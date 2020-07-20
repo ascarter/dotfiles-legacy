@@ -63,6 +63,13 @@ if (Test-Path -Path $Env:LOCALAPPDATA\Android\SDK) {
     )
 }
 
+# Add developer tools to path
+Update-Path @(
+    (Join-Path -Path $Env:SystemDrive -ChildPath bin),
+    (Join-Path -Path $Env:ProgramFiles -ChildPath vim\vim82),
+    (Join-Path -Path $Env:LOCALAPPDATA -ChildPath "Fork")
+)
+
 #endregion
 
 #region Alias behavoirs
