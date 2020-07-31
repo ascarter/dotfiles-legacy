@@ -6,6 +6,8 @@
     excludesFile = ~/.gitignore
 [difftool]
 	prompt = false
+[init]
+    defaultBranch = main
 [instaweb]
 	httpd = webrick
 [difftool "vscode"]
