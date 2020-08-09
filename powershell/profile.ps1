@@ -18,7 +18,7 @@ if (!(Get-Module -Name posh-git -ListAvailable)) {
 
 # Set DOTFILES environment varible if not already set
 if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", "User")) {
-    Set-Item -Path Env:DOTFILES -Value (Join-Path $env:USERPROFILE -ChildPath ".config\dotfiles")
+    Set-Item -Path Env:DOTFILES -Value (Join-Path $Env:USERPROFILE -ChildPath .config\dotfiles)
 }
 
 # Set editors
@@ -28,6 +28,11 @@ if (Get-Command vim -ErrorAction SilentlyContinue) {
 
 if (Get-Command code -ErrorAction SilentlyContinue) {
     Set-Item -Path Env:VISUAL -Value 'code --wait'
+}
+
+# Set SDK environment variable if not set
+if ($null -eq [System.Environment]::GetEnvironmentVariable("SDK_ROOT", "User")) {
+    Set-Item -Path Env:SDK_ROOT -Value (Join-Path $Env:USERPROFILE -ChildPath sdk)
 }
 
 function Update-Path([string[]]$paths) {
@@ -51,15 +56,26 @@ if (Test-Path -Path C:\JDK) {
 }
 
 # Check for Android SDK
-if (Test-Path -Path $Env:LOCALAPPDATA\Android\SDK) {
+if (Test-Path -Path (Join-Path $Env:LOCALAPPDATA -ChildPath Android\SDK)) {
     if ($null -eq [System.Environment]::GetEnvironmentVariable("ANDROID_SDK", "User")) {
-        Set-Item -Path Env:ANDROID_SDK -Value $Env:LOCALAPPDATA\Android\SDK
+        Set-Item -Path Env:ANDROID_SDK -Value (Join-Path $Env:LOCALAPPDATA -ChildPath Android\SDK)
     }
 
     Update-Path @(
         (Join-Path -Path $Env:ANDROID_SDK -ChildPath platform-tools),
         (Join-Path -Path $Env:ANDROID_SDK -ChildPath emulator),
         (Join-Path -Path $Env:ANDROID_SDK -ChildPath tools\bin)
+    )
+}
+
+# Check for Flutter SDK
+if (Test-Path -Path (Join-Path $Env:SDK_ROOT -ChildPath flutter)) {
+    if ($null -eq [System.Environment]::GetEnvironmentVariable("FLUTTER_SDK", "User")) {
+        Set-Item -Path Env:FLUTTER_SDK -Value (Join-Path $Env:SDK_ROOT -ChildPath flutter)
+    }
+
+    Update-Path @(
+        (Join-Path -Path $Env:SDK_ROOT -ChildPath flutter\bin)
     )
 }
 
@@ -102,17 +118,17 @@ function Start-Fork([string]$MyRepo = $PWD) {
 }
 
 function Start-1Password() {
-    if ($null -eq $env:OP_SESSION_carters) {
+    if ($null -eq $Env:OP_SESSION_carters) {
         Invoke-Expression $(op signin carters)
     }
 }
 
 function Set-LocationDotfiles() {
-    Set-Location -Path $env:DOTFILES
+    Set-Location -Path $Env:DOTFILES
 }
 
 # Get-Password retrieves a password for a 1Password password item
-function Get-SSHPassphrase([string]$Key = $env:COMPUTERNAME.ToLower()) {
+function Get-SSHPassphrase([string]$Key = $Env:COMPUTERNAME.ToLower()) {
     $sshKey = 'ssh ' + $Key
     Start-1Password
     op get item $sshKey | jq -r '.details.password' | Set-Clipboard
@@ -125,7 +141,7 @@ function Start-DevEnv() {
 function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
 
 function Update-VSCodeExtensions() {
-    $extensions = Get-Content -Path (Join-Path -Path $env:DOTFILES -ChildPath '.\vscode-extensions.txt')
+    $extensions = Get-Content -Path (Join-Path -Path $Env:DOTFILES -ChildPath '.\vscode-extensions.txt')
     foreach ($extension in $extensions) { code --install-extension $extension }
 }
 
@@ -164,7 +180,7 @@ function gc_prompt([string]$Key, [string]$Prompt) {
 
 function Update-GitConfig() {
     # Include defaults and aliases
-    gc_update 'include.path' (Join-Path -Path $env:DOTFILES -ChildPath gitconfig)
+    gc_update 'include.path' (Join-Path -Path $Env:DOTFILES -ChildPath gitconfig)
 
     # No line ending conversion
     gc_set 'core.autocrlf' 'input'
@@ -193,7 +209,7 @@ if (Get-Module -Name posh-git -ListAvailable) {
         $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
         $principal = [Security.Principal.WindowsPrincipal] $identity
 
-        $GitPromptSettings.DefaultPromptPrefix.Text = "`n[$env:COMPUTERNAME] "
+        $GitPromptSettings.DefaultPromptPrefix.Text = "`n[$Env:COMPUTERNAME] "
         $GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n' + $(
             if (Test-Path variable:/PSDebugContext) { Write-Prompt '[DBG]: ' -ForegroundColor Red }
             elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Write-Prompt '[ADMIN]: ' -ForegroundColor Magenta }
@@ -241,7 +257,7 @@ function Get-InstalledSoftware {
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string]$ComputerName = $env:COMPUTERNAME,
+        [string]$ComputerName = $Env:COMPUTERNAME,
 
         [Parameter()]
         [ValidateNotNullOrEmpty()]
@@ -325,7 +341,7 @@ function Get-InstalledSoftware {
                 }
             }
 
-            if ($ComputerName -eq $env:COMPUTERNAME) {
+            if ($ComputerName -eq $Env:COMPUTERNAME) {
                 $results = Invoke-Command -ScriptBlock $scriptBlock -ArgumentList $PSBoundParameters
             }
             else {

@@ -153,6 +153,12 @@ if [[ -d ${HOME}/Library/Android/sdk ]]; then
 	export PATH=${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${PATH}
 fi
 
+# Flutter
+if [[ -d ${SDK_ROOT}/flutter ]]; then
+	export FLUTTER_ROOT=${SDK_ROOT}/flutter
+	export PATH=${FLUTTER_ROOT}/bin:${PATH}
+fi
+
 # Rust
 if [[ -d ${HOME}/.cargo ]]; then
 	source ${HOME}/.cargo/env
