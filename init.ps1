@@ -53,16 +53,18 @@ function Install-SSH() {
     Install-WindowsCapability OpenSSH.Client
     Install-WindowsCapability OpenSSH.Server
 
-    # Add firewall rule
-    if (-not ((Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP").Enabled -eq $true)) {
-        Write-Warning "Missing OpenSSH Server inbound firewall rule"
-    }
+    # Configure ssh server
+    Set-Service -Name sshd -StartupType 'Automatic'
+    Start-Service sshd
 
     # Configure ssh-agent
     Set-Service -Name ssh-agent -StartupType 'Automatic'
     Start-Service ssh-agent
-    Set-Service -Name sshd -StartupType 'Automatic'
-    Start-Service sshd
+
+    # Add firewall rule
+    if (-not ((Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP").Enabled -eq $true)) {
+        Write-Warning "Missing OpenSSH Server inbound firewall rule"
+    }
 
     # Configure default shell
     Set-ItemProperty -Path HKLM:\SOFTWARE\OpenSSH -Name DefaultShell -Value $env:ProgramFiles\PowerShell\7\pwsh.exe
