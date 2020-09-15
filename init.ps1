@@ -50,8 +50,8 @@ function Install-WindowsCapability([string]$Capability) {
 function Install-SSH() {
     # Install OpenSSH
     # https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse
-    Install-WindowsCapability OpenSSH.Client
-    Install-WindowsCapability OpenSSH.Server
+    Install-WindowsCapability OpenSSH.Client~~~~0.0.1.0
+    Install-WindowsCapability OpenSSH.Server~~~~0.0.1.0
 
     # Configure ssh server
     Set-Service -Name sshd -StartupType 'Automatic'
