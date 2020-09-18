@@ -106,17 +106,50 @@ function Install-SSHKeys() {
 function Install-Bin() {
     $usrbin = Join-Path -Path $Env:SystemDrive -ChildPath bin
     if (!(Test-Path -Path $usrbin)) {
-        Write-Host "Creating $usrbin"
+        Write-Output "Creating $usrbin"
         New-Item -Path $usrbin -ItemType Directory
     }
 
     # Add to path so WSL can see it
-    $parts = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User) -Split ";"
-    if ($parts -NotContains $usrbin) {
-        Write-Output "Add $usrbin to path"
-        $parts += $usrbin
-        [System.Environment]::SetEnvironmentVariable("PATH", $parts -Join ";", [System.EnvironmentVariableTarget]::User)
+    Update-Path @($usrbin)
+}
+
+# Install-Sysinternals adds sysinternals suite and adjusts path
+function Install-Sysinternals() {
+    try {
+        $sysinternals = Join-Path -Path $Env:SystemDrive -ChildPath sysinternals
+        if (!(Test-Path -Path $sysinternals)) {
+            Write-Output "Installing sysinternals"
+            $uri = 'https://download.sysinternals.com/files/SysinternalsSuite.zip'
+            $zipfile = Split-Path $uri -Leaf
+            $target = Join-Path -Path $env:TEMP -ChildPath $zipfile
+            $wc = New-Object System.Net.WebClient
+            $wc.DownloadFile($uri, $target)
+
+            # Unzip
+            Expand-Archive -Path $target -DestinationPath $sysinternals
+        }
+
+        # Add to path
+        Update-Path @($sysinternals)
     }
+    finally {
+        if (Test-Path $target) { Remove-Item -Path $target }
+    }
+}
+
+#endregion
+
+#region Helpers
+
+function Update-Path([string[]]$paths) {
+    $parts = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User) -Split ";"
+    foreach ($p in $paths) {
+        if ((Test-Path -Path $p) -and ($parts -NotContains $p)) {
+            $parts += $p
+        }
+    }
+    [System.Environment]::SetEnvironmentVariable("PATH", $parts -Join ";", [System.EnvironmentVariableTarget]::User)
 }
 
 #endregion
@@ -128,5 +161,6 @@ Install-Profile
 Install-Vimrc
 Install-SSHKeys
 Install-Bin
+Install-Sysinternals
 Write-Output "dotfiles install complete"
 Write-Output "Reload session to apply configuration"
