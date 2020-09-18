@@ -30,7 +30,6 @@ function Install-Apps() {
     Install-PackageList @(
         "7zip.7zip",
         "AgileBits.1Password",
-        "Apple.iTunes",
         "Audacity.Audacity",
         "HexChat.HexChat",
         "Microsoft.Edge",
