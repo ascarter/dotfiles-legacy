@@ -115,7 +115,8 @@ if (Test-Path -Path (Join-Path $Env:SDK_ROOT -ChildPath flutter)) {
 Update-Path @(
     (Join-Path -Path $Env:SystemDrive -ChildPath bin),
     (Join-Path -Path $Env:ProgramFiles -ChildPath vim\vim82),
-    (Join-Path -Path $Env:LOCALAPPDATA -ChildPath "Fork")
+    (Join-Path -Path $Env:LOCALAPPDATA -ChildPath "Fork"),
+    (Join-Path -Path $Env:ProgramFiles -ChildPath "Yubico\YubiKey Manager")
 )
 
 # Enable winget completion

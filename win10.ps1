@@ -21,7 +21,8 @@ function Install-Dev() {
         "Postman.Postman",
         "Python.Python",
         "Rust.rustup",
-        "WiresharkFoundation.Wireshark"
+        "WiresharkFoundation.Wireshark",
+        "Yubico.YubikeyManager"
     )
 }
 
