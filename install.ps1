@@ -114,30 +114,6 @@ function Install-Bin() {
     Update-Path @($usrbin)
 }
 
-# Install-Sysinternals adds sysinternals suite and adjusts path
-function Install-Sysinternals() {
-    try {
-        $sysinternals = Join-Path -Path $Env:SystemDrive -ChildPath sysinternals
-        if (!(Test-Path -Path $sysinternals)) {
-            Write-Output "Installing sysinternals"
-            $uri = 'https://download.sysinternals.com/files/SysinternalsSuite.zip'
-            $zipfile = Split-Path $uri -Leaf
-            $target = Join-Path -Path $env:TEMP -ChildPath $zipfile
-            $wc = New-Object System.Net.WebClient
-            $wc.DownloadFile($uri, $target)
-
-            # Unzip
-            Expand-Archive -Path $target -DestinationPath $sysinternals
-        }
-
-        # Add to path
-        Update-Path @($sysinternals)
-    }
-    finally {
-        if (Test-Path $target) { Remove-Item -Path $target }
-    }
-}
-
 #endregion
 
 #region Helpers
@@ -161,6 +137,5 @@ Install-Profile
 Install-Vimrc
 Install-SSHKeys
 Install-Bin
-Install-Sysinternals
 Write-Output "dotfiles install complete"
 Write-Output "Reload session to apply configuration"

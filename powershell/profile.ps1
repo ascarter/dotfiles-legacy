@@ -35,14 +35,46 @@ if ($null -eq [System.Environment]::GetEnvironmentVariable("SDK_ROOT", "User")) 
     Set-Item -Path Env:SDK_ROOT -Value (Join-Path $Env:USERPROFILE -ChildPath sdk)
 }
 
-function Update-Path([string[]]$paths) {
-    $parts = $Env:PATH -Split ";"
-    foreach ($p in $paths) {
-        if ((Test-Path -Path $p) -and ($parts -NotContains $p)) {
-            $parts += $p
+function Update-Path {
+    <#
+    .SYNOPSIS
+    Add list of paths to current path
+    .EXAMPLE
+    PS> Update-Path @(C:\bin, C:\tools)
+
+    This example adds C:\bin and C:\tools to the current path
+    .PARAMETER Paths
+    List of paths to add
+    .PARAMETER SetEnv
+    Flag to indicate if the list of paths should be saved to the User PATH environment variable
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [string[]]$Paths,
+
+        [Parameter(Mandatory = $false)]
+        [switch]$SetEnv
+    )
+    process {
+        $parts = $Env:PATH -Split ";"
+        if ($SetEnv) { $envparts = [System.Environment]::GetEnvironmentVariable("PATH") -Split ";" }
+
+        foreach ($p in $paths) {
+            if (Test-Path -Path $p) {
+                # Add to current path
+                if ($parts -NotContains $p) { $parts += $p }
+                # Add to environment path if requested
+                if (($SetEnv) -and ($envparts -NotContains $p)) { $envparts += $p }
+            }
         }
+
+        # Set current path
+        $Env:PATH = $parts -Join ";"
+
+        # Save to environment path if requested
+        if ($SetEnv) { [System.Environment]::SetEnvironmentVariable("PATH", $envparts -Join ";", [System.EnvironmentVariableTarget]::User) }
     }
-    $Env:PATH = $parts -Join ";"
 }
 
 # Check for JDK
@@ -209,6 +241,37 @@ function Update-GitConfig() {
 
     # Show full gitconfig
     Write-Output $(git config --global --list)
+}
+
+#endregion
+
+#region Tools
+
+# Install-Sysinternals adds sysinternals suite and adjusts path
+function Update-Sysinternals() {
+    try {
+        $sysinternals = Join-Path -Path $Env:SystemDrive -ChildPath sysinternals
+
+        # Remove old sysinternals
+        if (Test-Path -Path $sysinternals) { Remove-Item -Path $sysinternals }
+
+
+        Write-Output "Updating sysinternals"
+        $uri = 'https://download.sysinternals.com/files/SysinternalsSuite.zip'
+        $zipfile = Split-Path $uri -Leaf
+        $target = Join-Path -Path $env:TEMP -ChildPath $zipfile
+        $wc = New-Object System.Net.WebClient
+        $wc.DownloadFile($uri, $target)
+
+        # Unzip
+        Expand-Archive -Path $target -DestinationPath $sysinternals
+
+        # Add to system path
+        Update-Path @($sysinternals) -SetEnv
+    }
+    finally {
+        if (Test-Path $target) { Remove-Item -Path $target }
+    }
 }
 
 #endregion
