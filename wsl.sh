@@ -23,7 +23,7 @@ sudo apt-get upgrade -y
 sudo apt-get install -y build-essential dotnet-sdk-3.1 golang nodejs openjdk-14-jdk python3 python3-dev python3-pip yarn
 
 # Install latest Go since Ubuntu release is behind and snap not supported
-GO_VERSION=1.14.4
+GO_VERSION=1.15.2
 if ! [ -x "$(command -v go${GO_VERSION})" ]; then
     go get golang.org/dl/go${GO_VERSION}
     go${GO_VERSION} download
