@@ -89,6 +89,12 @@ function Install-Vimrc() {
     }
 }
 
+function Install-SSHConfig() {
+    $source = Join-Path $DotfileDest -ChildPath windows\sshd_config
+    $target = Join-Path $env:ProgramData -ChildPath sshd_config
+    Copy-Item -Path $source -Destination $target -Force
+}
+
 function Install-SSHKeys() {
     $sshDir = Join-Path -Path $env:USERPROFILE -ChildPath .ssh
     $sshKeys = 'ed25519', 'rsa'
@@ -99,6 +105,26 @@ function Install-SSHKeys() {
             ssh-keygen -t $key -C "$env:USERNAME@$env:COMPUTERNAME"
             ssh-add $key
         }
+    }
+
+    # Create authorized_keys
+    $authorizedKeys = Join-Path -Path $sshDir -ChildPath authorized_keys
+    if (-not (Test-Path $authorizedKeys)) {
+        New-Item -Path $authorizedKeys -ItemType File
+    }
+
+    # Disable inheritance and preserve access rules 
+    $acl = Get-Acl -Path $authorizedKeys
+    $acl.SetAccessRuleProtection($true, $true)
+    Set-Acl -Path $authorizedKeys -AclObject $acl
+
+    # Remove administrators rule
+    $identity = New-Object System.Security.Principal.NTAccount('BUILTIN\Administrators')
+    $acl = Get-Acl -Path $authorizedKeys
+    $rule = $acl.Access | Where-Object {$_.IdentityReference.Equals($identity)}
+    if ($rule) {
+        $acl.RemoveAccessRule($rule)
+        Set-Acl -Path $authorizedKeys -AclObject $acl
     }
 }
 
@@ -135,6 +161,7 @@ Install-Git
 Install-Dotfiles
 Install-Profile
 Install-Vimrc
+Install-SSHConfig
 Install-SSHKeys
 Install-Bin
 Write-Output "dotfiles install complete"
