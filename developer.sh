@@ -3,6 +3,9 @@
 case "$(uname)" in
 Darwin )
     echo "Installing macOS developer tools..."
+
+    # Developer tool installs via homebrew
+    brew install muesli/tap/duf
     ;;
 Linux )
     echo "Installing Linux developer tools..."
@@ -31,17 +34,20 @@ Linux )
 
         # Install developer packages
         sudo apt-get install -y build-essential dotnet-sdk-3.1 gh git golang jq nodejs openjdk-14-jdk python3 python3-dev python3-pip
+
+        # Install yarn support
+        sudo npm install -g yarn
+
+        # Install latest Go in ~/sdk/go1.x.y
+        GO_VERSION=1.15.2
+        if ! [ -x "$(command -v go${GO_VERSION})" ]; then
+            go get golang.org/dl/go${GO_VERSION}
+            go${GO_VERSION} download
+        fi
+
+        # Install duf tool
+        go get -u github.com/muesli/duf
         ;;
     esac
-
-    # Install latest Go in ~/sdk/go1.x.y
-    GO_VERSION=1.15.2
-    if ! [ -x "$(command -v go${GO_VERSION})" ]; then
-        go get golang.org/dl/go${GO_VERSION}
-        go${GO_VERSION} download
-    fi
-
-    # Install yarn support
-    sudo npm install -g yarn
     ;;
 esac
