@@ -30,7 +30,7 @@ On macOS, [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) is ex
 For convenience, a full install script can be run using the following command:
 
 ```sh
-curl https://raw.githubusercontent.com/ascarter/dotfiles/master/dotfiles.sh | sh -
+curl https://raw.githubusercontent.com/ascarter/dotfiles/main/dotfiles.sh | sh -
 ```
 
 
@@ -41,19 +41,19 @@ The `init.sh` script prepares the system for running the dotfiles install script
 To run the provided init script:
 
 ```sh
-curl https://raw.githubusercontent.com/ascarter/dotfiles/master/init.sh | sh -
+curl https://raw.githubusercontent.com/ascarter/dotfiles/main/init.sh | sh -
 ```
 
 To install dotfiles, run the following shell script:
 
 ```sh
-curl https://raw.githubusercontent.com/ascarter/dotfiles/master/install.sh | sh -
+curl https://raw.githubusercontent.com/ascarter/dotfiles/main/install.sh | sh -
 ```
 
 To optionally install developer tools, run the following shell script:
 
 ```sh
-curl https://raw.githubusercontent.com/ascarter/dotfiles/master/developer.sh | sh -
+curl https://raw.githubusercontent.com/ascarter/dotfiles/main/developer.sh | sh -
 ```
 
 #### Alternate Install
@@ -98,7 +98,7 @@ Additional requirements:
 To run the provided init script in elevated PowerShell (recommend Windows PowerShell terminal):
 
 ```powershell
-Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://raw.githubusercontent.com/ascarter/dotfiles/master/init.ps1 -UseBasicParsing | Invoke-Expression
+Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://raw.githubusercontent.com/ascarter/dotfiles/main/init.ps1 -UseBasicParsing | Invoke-Expression
 ```
 
 ### Install
@@ -106,7 +106,7 @@ Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://raw.githubu
 Run the following PowerShell script:
 
 ```powershell
-Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://raw.githubusercontent.com/ascarter/dotfiles/master/install.ps1 -UseBasicParsing | Invoke-Expression
+Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://raw.githubusercontent.com/ascarter/dotfiles/main/install.ps1 -UseBasicParsing | Invoke-Expression
 ```
 
 #### Alternate Install
