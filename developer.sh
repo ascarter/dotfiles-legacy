@@ -24,7 +24,7 @@ Linux )
 
         # Add nodesource repository
         # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
-        curl -sL https://deb.nodesource.com/setup_14.x | sudo -E sh -
+        curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 
         # Update repositories and packages
         sudo apt-get update
@@ -42,6 +42,9 @@ Linux )
         GO_VERSION=1.15.2
         if ! [ -x "$(command -v go${GO_VERSION})" ]; then
             go get golang.org/dl/go${GO_VERSION}
+        fi
+
+        if ! [ -x ~/sdk/go${GO_VERSION}/bin/go ]; then
             go${GO_VERSION} download
         fi
 
