@@ -10,11 +10,11 @@ dotfiles for macOS, Linux, and Windows
 * `themes` - various theme files
 * `zsh` - `${ZDOTDIR}` with zsh configuration
 
-An optional init script for each platform is available to install useful packages. Requirements are listed for each platform if the init script is not used.
+An optional init script for each platform is available to install useful packages. Requirements are listed for each platform if the init script is not used. An install script to install development tools is available as well.
 
 ## Unix
 
-The dotfiles configuration works for macOS and Ubuntu Linux including WSL.
+The dotfiles configuration works for macOS and Ubuntu Linux including WSL. It is untested with other Linux distributions but should be adaptable generally.
 
 ### Requirements
 
@@ -25,18 +25,35 @@ The following are the minimum requirements for dotfiles to work:
 
 On macOS, [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) is expected to be installed and configured. Optionally, [homebrew](https://brew.sh) is supported as well.
 
+### Install
+
+For convenience, a full install script can be run using the following command:
+
+```sh
+curl https://raw.githubusercontent.com/ascarter/dotfiles/master/dotfiles.sh | sh -
+```
+
+
+#### Manually Install
+
+The `init.sh` script prepares the system for running the dotfiles install script. This is an optional system level configuration.
+
 To run the provided init script:
 
 ```sh
-sh -c "$(curl https://raw.githubusercontent.com/ascarter/dotfiles/master/init.sh)"
+curl https://raw.githubusercontent.com/ascarter/dotfiles/master/init.sh | sh -
 ```
 
-### Install
-
-Run the following shell script:
+To install dotfiles, run the following shell script:
 
 ```sh
-sh -c "$(curl https://raw.githubusercontent.com/ascarter/dotfiles/master/install.sh)"
+curl https://raw.githubusercontent.com/ascarter/dotfiles/master/install.sh | sh -
+```
+
+To optionally install developer tools, run the following shell script:
+
+```sh
+curl https://raw.githubusercontent.com/ascarter/dotfiles/master/developer.sh | sh -
 ```
 
 #### Alternate Install
@@ -48,6 +65,7 @@ git clone git@github.com:ascarter/dotfiles.git ~/.config/dotfiles
 cd ~/.config/dotfiles
 ./init.sh
 ./install.sh
+./developer.sh
 ```
 
 ### Uninstall
