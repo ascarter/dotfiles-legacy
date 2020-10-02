@@ -40,6 +40,10 @@ Darwin )
 
 	# Add homebrew extras tap
 	${HOMEBREW}/bin/brew tap --full ascarter/extras
+
+	# Enable Git Credential Manager (.NET core)
+	brew tap microsoft/git
+	brew cask install git-credential-manager-core
 	;;
 Linux )
 	DISTRO_DESCRIPTION=$(lsb_release -d -s)
