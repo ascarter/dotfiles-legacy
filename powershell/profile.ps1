@@ -1,15 +1,14 @@
 #region Bootstrap modules
 
-if (!(Get-Module -Name PowerShellGet -ListAvailable)) {
-    Install-Module -Name PowerShellGet -Scope CurrentUser -Force -AllowClobber
-}
-
-if (!(Get-Module -Name Microsoft.PowerShell.GraphicalTools -ListAvailable)) {
-    Install-Module Microsoft.PowerShell.GraphicalTools -Scope CurrentUser -Force -AllowClobber
-}
-
-if (!(Get-Module -Name posh-git -ListAvailable)) {
-    Install-Module -Name posh-git -Scope CurrentUser -AllowPrerelease -Force
+foreach ($m in @(
+        'PowerShellGet',
+        'Microsoft.PowerShell.GraphicalTools',
+        'Microsoft.PowerShell.ConsoleGuiTools',
+        'posh-git'
+    )) {
+    if (!(Get-Module -Name $m -ListAvailable)) {
+        Install-Module $m -Scope CurrentUser -Force -AllowClobber -AllowPrerelease -AcceptLicense
+    }
 }
 
 #endregion
