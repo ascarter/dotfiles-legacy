@@ -314,21 +314,21 @@ else {
 
 function Get-InstalledSoftware {
     <#
-.SYNOPSIS
-  Retrieves a list of all software installed on a Windows computer.
-.EXAMPLE
-  PS> Get-InstalledSoftware
+    .SYNOPSIS
+    Retrieves a list of all software installed on a Windows computer.
+    .EXAMPLE
+    PS> Get-InstalledSoftware
 
-  This example retrieves all software installed on the local computer.
-.PARAMETER ComputerName
-  If querying a remote computer, use the computer name here.
+    This example retrieves all software installed on the local computer.
+    .PARAMETER ComputerName
+    If querying a remote computer, use the computer name here.
 
-.PARAMETER Name
-  The software title you'd like to limit the query to.
+    .PARAMETER Name
+    The software title you'd like to limit the query to.
 
-.PARAMETER Guid
-  The software GUID you'e like to limit the query to
-#>
+    .PARAMETER Guid
+    The software GUID you'e like to limit the query to
+    #>
     [CmdletBinding()]
     param (
 

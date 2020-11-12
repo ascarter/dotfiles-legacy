@@ -26,6 +26,9 @@ Linux )
         # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
         curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 
+        # Enable universe repositories
+        sudo add-apt-repository universe
+
         # Update repositories and packages
         sudo apt-get update
         sudo apt-get install -y apt-transport-https
@@ -33,13 +36,13 @@ Linux )
         sudo apt-get upgrade -y
 
         # Install developer packages
-        sudo apt-get install -y build-essential dotnet-sdk-3.1 gh git golang jq nodejs openjdk-14-jdk python3 python3-dev python3-pip
+        sudo apt-get install -y build-essential dotnet-sdk-3.1 gh git golang jq nodejs openjdk-14-jdk powershell python3 python3-dev python3-pip
 
         # Install yarn support
         sudo npm install -g yarn
 
         # Install latest Go in ~/sdk/go1.x.y
-        GO_VERSION=1.15.2
+        GO_VERSION=1.15.5
         if ! [ -x "$(command -v go${GO_VERSION})" ]; then
             go get golang.org/dl/go${GO_VERSION}
         fi

@@ -141,6 +141,12 @@ if [ -x "$(command -v dotnet)" ]; then
 	compctl -K _dotnet_zsh_complete dotnet
 fi
 
+# PowerShell
+if [ -x "$(command -v pwsh)" ]; then
+	# Disable telemetry
+	POWERSHELL_TELEMETRY_OPTOUT=1
+fi
+
 # Java
 if [[ -e /usr/libexec/java_home ]]; then
 	# Verify that java is installed
