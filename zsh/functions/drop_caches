@@ -1,7 +1,0 @@
-#  -*- mode: unix-shell-script; -*-
-
-# drop_caches clears Linux kernel pagecache
-# Useful particularly with WSL2 + Docker
-
-emulate -L zsh
-sync; echo 1 > sudo tee -a /proc/sys/vm/drop_caches
