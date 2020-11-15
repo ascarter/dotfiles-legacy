@@ -30,7 +30,7 @@ Darwin )
 	fi
 
 	# Install Homebrew
-	HOMEBREW="${1:-/opt/homebrew}"
+	HOMEBREW="${1:-/opt/brew}"
 	if ! [ -e ${HOMEBREW} ]; then
 		echo "Install homebrew to ${HOMEBREW}"
 		sudo mkdir -p ${HOMEBREW}
