@@ -77,13 +77,14 @@ function Update-Path {
 }
 
 # Check for JDK
-if (Test-Path -Path C:\JDK) {
-    # TODO: figure out which JDK to use
-    $jdk_version = '14.0.1'
-    Set-Item -Path Env:JAVA_HOME -Value (Join-Path C:\JDK -ChildPath jdk-$jdk_version)
-    Update-Path @(
-        (Join-Path $Env:JAVA_HOME -ChildPath bin)
-    )
+if (Test-Path -Path (Join-Path $Env:SDK_ROOT -ChildPath jdk)) {
+    # Use latest JDK
+    $jdkSdk = Join-Path $Env:SDK_ROOT -ChildPath jdk
+    $jdk = Get-ChildItem -Path $jdkSdk -Filter jdk-* | Sort-Object -Descending | Select-Object -First 1
+    if ($jdk) {
+        Set-Item -Path Env:JAVA_HOME -Value $jdk
+        Update-Path @((Join-Path $Env:JAVA_HOME -ChildPath bin))    
+    }
 }
 
 # Check for Android SDK
