@@ -89,40 +89,43 @@ fi
 
 # Ruby
 if [ -x "$(command -v ruby)" ] && [ -x "$(command -v gem)" ]; then
-	export PATH=$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH
+	pathadd $(ruby -r rubygems -e 'puts Gem.user_dir')/bin
 fi
 
 # Python
-if [[ -d /Library/Frameworks/Python.framework/Versions/Current ]]; then
-	export PATH=/Library/Frameworks/Python.framework/Versions/Current/bin:${PATH}
-fi
-if [[ -d ${HOME}/Library/Python/3.9 ]]; then
-	export LC_ALL=en_US.UTF-8
-	export LANG=en_US.UTF-8
-	export PATH=${HOME}/Library/Python/3.9/bin:${PATH}
-fi
+case $(uname) in
+Darwin )
+	# Installed Python
+	pathadd /Library/Frameworks/Python.framework/Versions/Current/bin
+	
+	# User pip installed binaries are in ~/Library
+	if [[ -d ${HOME}/Library/Python/3.9 ]]; then
+		export LC_ALL=en_US.UTF-8
+		export LANG=en_US.UTF-8
+		pathadd ${HOME}/Library/Python/3.9/bin
+	fi
+	pathadd ${HOME}/Library/Python/2.7/bin
+esac
+
+pathadd ${HOME}/.local/bin
+
+# Pip 3
 if [ -x "$(command -v pip3)" ]; then
 	source <(pip3 completion --zsh)
 	compctl -K _pip_completion pip3
 fi
-if [[ -d ${HOME}/Library/Python/2.7 ]]; then
-	export PATH=${HOME}/Library/Python/2.7/bin:${PATH}
-fi
-if [[ -d ${HOME}/.local/bin ]]; then
-	export PATH=${HOME}/.local/bin:${PATH}
-fi
+
+# Pip
 if [ -x "$(command -v pipx)" ]; then
 	eval "$(register-python-argcomplete pipx)"
 fi
 
 # Go
-if [ -d /usr/local/go ]; then
-	export PATH=${PATH}:/usr/local/go/bin
-fi
+pathadd /usr/local/go
 
 # Add GOPATH to installed binaries to path
 if [ -x "$(command -v go)" ]; then
-	export PATH=$(go env GOPATH)/bin:${PATH}
+	pathadd $(go env GOPATH)/bin
 fi
 
 # .NET Core
@@ -130,10 +133,8 @@ if [ -x "$(command -v dotnet)" ]; then
 	# Disable telemtry
 	DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-	# Check for dotnet tools
-	if [ -d ${HOME}/.dotnet/tools ]; then
-		export PATH=${HOME}/.dotnet/tools:${PATH}
-	fi
+	# Add dotnet tools
+	pathadd ${HOME}/.dotnet/tools ]
 
 	# zsh parameter completion for the dotnet CLI
 	_dotnet_zsh_complete() {
@@ -164,13 +165,15 @@ fi
 # Android
 if [[ -d ${HOME}/Library/Android/sdk ]]; then
 	export ANDROID_HOME=${HOME}/Library/Android/sdk
-	export PATH=${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${PATH}
+	pathadd ${ANDROID_HOME}/tools
+	pathadd ${ANDROID_HOME}/tools/bin
+	pathadd ${ANDROID_HOME}/platform-tools
 fi
 
 # Flutter
 if [[ -d ${SDK_ROOT}/flutter ]]; then
 	export FLUTTER_ROOT=${SDK_ROOT}/flutter
-	export PATH=${FLUTTER_ROOT}/bin:${PATH}
+	pathadd ${FLUTTER_ROOT}/bin
 fi
 
 # Rust
@@ -201,9 +204,7 @@ fi
 # ========================================
 
 # Add home bin dir if it is there
-if [[ -d ${DOTFILES}/bin ]]; then
-	export PATH=${DOTFILES}/bin:${PATH}
-fi
+pathadd ${DOTFILES}/bin
 
 # ========================================
 # SSH
