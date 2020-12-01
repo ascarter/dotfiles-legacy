@@ -116,10 +116,8 @@ if [ -x "$(command -v pipx)" ]; then
 fi
 
 # Go
-if [ -d ${SDK_ROOT} ]; then
-	# Check for downloaded go versions and use the latest one
-	export GOROOT=${SDK_ROOT}/$(ls -r ${SDK_ROOT} | grep go1 | head -1)
-	export PATH=${GOROOT}/bin:${PATH}
+if [ -d /usr/local/go ]; then
+	export PATH=${PATH}:/usr/local/go/bin
 fi
 
 # Add GOPATH to installed binaries to path

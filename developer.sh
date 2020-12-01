@@ -4,14 +4,16 @@ case "$(uname)" in
 Darwin )
     echo "Installing macOS developer tools..."
 
-    # Developer tool installs via homebrew
-    brew install muesli/tap/duf
+    # Install duf tool
+    go get -u github.com/muesli/duf
     ;;
 Linux )
     echo "Installing Linux developer tools..."
 
     case $(lsb_release -i -s) in
 	Ubuntu )
+        ARCH=$(dpgkg --print-architecture)
+
         # Add GitHub CLI repository
         # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
         sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
@@ -31,28 +33,50 @@ Linux )
 
         # Update repositories and packages
         sudo apt-get update
-        sudo apt-get install -y apt-transport-https
+        sudo apt-get install -y apt-transport-https ca-certificates software-properties-common
         sudo apt-get update
         sudo apt-get upgrade -y
 
         # Install developer packages
-        sudo apt-get install -y build-essential dotnet-sdk-3.1 gh git golang jq nodejs openjdk-14-jdk powershell python3 python3-dev python3-pip
+        sudo apt-get install -y \
+            build-essential \
+            curl \
+            dotnet-sdk-3.1 \
+            gh \
+            git \
+            gnupg-agent \
+            jq \
+            nodejs \
+            openjdk-14-jdk \
+            powershell \
+            python3 \
+            python3-dev \
+            python3-pip
 
         # Install yarn support
         sudo npm install -g yarn
 
-        # Install latest Go in ~/sdk/go1.x.y
+        # Install Go in /usr/local
         GO_VERSION=1.15.5
-        if ! [ -x "$(command -v go${GO_VERSION})" ]; then
-            go get golang.org/dl/go${GO_VERSION}
-        fi
-
-        if ! [ -x ~/sdk/go${GO_VERSION}/bin/go ]; then
-            go${GO_VERSION} download
+        if ! [ -d /usr/local/go ]; then
+            curl -sL https://golang.org/dl/go${GO_VERSION}.linux-${ARCH}.tar.gz | sudo tar -C /usr/local -xz
         fi
 
         # Install duf tool
-        go get -u github.com/muesli/duf
+        /usr/local/go/bin/go get -u github.com/muesli/duf
+
+        # Add Docker (except on WSL)
+        if [ -z "${WSL_DISTRO_NAME}" ]; then
+            # Add Docker repository
+            # https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+            sudo apt-key fingerprint 0EBFCD88
+            sudo add-apt-repository "deb [arch=${ARCH}] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+            # Install Docker
+            sudo apt-get update
+            sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+        fi
         ;;
     esac
     ;;
