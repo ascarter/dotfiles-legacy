@@ -59,11 +59,13 @@ Linux )
         # Install Go in /usr/local
         GO_VERSION=1.15.5
         if ! [ -d /usr/local/go ]; then
+            echo Install Go ${GO_VERSION}...
             curl -sL https://golang.org/dl/go${GO_VERSION}.linux-${ARCH}.tar.gz | sudo tar -C /usr/local -xz
+            /usr/local/go/bin/go version
         fi
 
         # Install duf tool
-        /usr/local/go/bin/go get -u github.com/muesli/duf
+        /usr/local/go/bin/go get -v -u github.com/muesli/duf
 
         # Add Docker (except on WSL)
         if [ -z "${WSL_DISTRO_NAME}" ]; then
