@@ -12,7 +12,7 @@ Linux )
 
     case $(lsb_release -i -s) in
 	Ubuntu )
-        ARCH=$(dpgkg --print-architecture)
+        ARCH=$(dpkg --print-architecture)
 
         # Add GitHub CLI repository
         # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
