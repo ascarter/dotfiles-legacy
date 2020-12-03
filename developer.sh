@@ -78,6 +78,9 @@ Linux )
             # Install Docker
             sudo apt-get update
             sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+            # Add user to docker group
+            sudo usermod -aG docker $USER
         fi
         ;;
     esac
