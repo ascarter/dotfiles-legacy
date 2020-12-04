@@ -97,7 +97,7 @@ case $(uname) in
 Darwin )
 	# Installed Python
 	pathadd /Library/Frameworks/Python.framework/Versions/Current/bin
-	
+
 	# User pip installed binaries are in ~/Library
 	if [[ -d ${HOME}/Library/Python/3.9 ]]; then
 		export LC_ALL=en_US.UTF-8
@@ -121,7 +121,7 @@ if [ -x "$(command -v pipx)" ]; then
 fi
 
 # Go
-pathadd /usr/local/go
+pathadd /usr/local/go/bin
 
 # Add GOPATH to installed binaries to path
 if [ -x "$(command -v go)" ]; then

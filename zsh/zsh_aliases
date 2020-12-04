@@ -1,8 +1,9 @@
 # zsh
 alias resetcomp='rm -f ${HOME}/.zcompdump && compinit'
 
-# dotfiles home folder
+# dotfiles
 alias dotfiles='cd ${DOTFILES}/'
+alias devup=${DOTFILES}/developer.sh
 
 # Projects
 alias projects='cd ${HOME}/Projects'

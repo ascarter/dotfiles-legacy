@@ -8,7 +8,8 @@ Darwin )
     go get -u github.com/muesli/duf
     ;;
 Linux )
-    echo "Installing Linux developer tools..."
+    echo "$(lsb_release -d -s) ($(uname -o) $(uname -r) $(uname -m))"
+    echo "Updating developer tools..."
 
     case $(lsb_release -i -s) in
 	Ubuntu )
@@ -36,6 +37,7 @@ Linux )
         sudo apt-get install -y apt-transport-https ca-certificates software-properties-common
         sudo apt-get update
         sudo apt-get upgrade -y
+        sudo apt-get autoremove -y
 
         # Install developer packages
         sudo apt-get install -y \
@@ -53,11 +55,15 @@ Linux )
             python3-dev \
             python3-pip
 
-        # Install yarn support
-        sudo npm install -g yarn
+        # Update npm and install yarn support
+        sudo npm install -g npm yarn
 
         # Install Go in /usr/local
         GO_VERSION=1.15.5
+        if [ -d /usr/local/go ] && [ "$(/usr/local/go/bin/go version | cut -f3 -d' ')" != "go${GO_VERSION}" ]; then
+            echo Removing $(/usr/local/go/bin/go version) ...
+            sudo rm -Rf /usr/local/go
+        fi
         if ! [ -d /usr/local/go ]; then
             echo Install Go ${GO_VERSION}...
             curl -sL https://golang.org/dl/go${GO_VERSION}.linux-${ARCH}.tar.gz | sudo tar -C /usr/local -xz
@@ -65,7 +71,7 @@ Linux )
         fi
 
         # Install duf tool
-        /usr/local/go/bin/go get -v -u github.com/muesli/duf
+        /usr/local/go/bin/go get -u github.com/muesli/duf
 
         # Add Docker (except on WSL)
         if [ -z "${WSL_DISTRO_NAME}" ]; then
