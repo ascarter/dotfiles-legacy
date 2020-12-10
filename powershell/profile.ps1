@@ -83,7 +83,7 @@ if (Test-Path -Path (Join-Path $Env:SDK_ROOT -ChildPath jdk)) {
     $jdk = Get-ChildItem -Path $jdkSdk -Filter jdk-* | Sort-Object -Descending | Select-Object -First 1
     if ($jdk) {
         Set-Item -Path Env:JAVA_HOME -Value $jdk
-        Update-Path @((Join-Path $Env:JAVA_HOME -ChildPath bin))    
+        Update-Path @((Join-Path $Env:JAVA_HOME -ChildPath bin))
     }
 }
 
@@ -231,6 +231,9 @@ function Update-GitConfig() {
 
     # No line ending conversion
     gc_set 'core.autocrlf' 'input'
+
+    # Enable longpaths
+    gc_set 'core.longpaths' 'true'
 
     # User info
     gc_prompt 'user.name' "User name"
