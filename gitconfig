@@ -1,15 +1,15 @@
 [color]
-	ui = auto
+    ui = auto
 [core]
-	autocrlf = input
-	editor = $EDITOR
+    autocrlf = input
+    editor = $EDITOR
     excludesFile = ~/.gitignore
 [difftool]
-	prompt = false
+    prompt = false
 [init]
     defaultBranch = main
 [instaweb]
-	httpd = webrick
+    httpd = webrick
 [difftool "vscode"]
     cmd = code --wait --new-window --diff $LOCAL $REMOTE
 [mergetool "vscode"]
