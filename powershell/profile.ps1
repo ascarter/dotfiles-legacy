@@ -4,7 +4,8 @@ foreach ($m in @(
         'PowerShellGet',
         'Microsoft.PowerShell.GraphicalTools',
         'Microsoft.PowerShell.ConsoleGuiTools',
-        'posh-git'
+        'posh-git',
+        'WslInterop'
     )) {
     if (!(Get-Module -Name $m -ListAvailable)) {
         Install-Module $m -Scope CurrentUser -Force -AllowClobber -AllowPrerelease -AcceptLicense
