@@ -43,7 +43,7 @@ Linux )
         sudo apt-get install -y \
             build-essential \
             curl \
-            dotnet-sdk-3.1 \
+            dotnet-sdk-5.0 \
             gh \
             git \
             gnupg-agent \
