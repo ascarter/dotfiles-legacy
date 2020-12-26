@@ -15,6 +15,9 @@ Linux )
 	Ubuntu )
         ARCH=$(dpkg --print-architecture)
 
+        # Ensure time is in sync (drift can occur on WSL or VM)
+        sudo hwclock -s
+        
         # Add GitHub CLI repository
         # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
         sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
