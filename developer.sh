@@ -30,7 +30,7 @@ Linux )
 
         # Add nodesource repository
         # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
-        curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+        curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
 
         # Enable universe repositories
         sudo add-apt-repository universe
