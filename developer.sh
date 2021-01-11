@@ -32,6 +32,11 @@ Linux )
         # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
         curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
 
+        # Add speedtest respository
+        # https://www.speedtest.net/apps/cli
+        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61
+        echo "deb https://ookla.bintray.com/debian generic main" | sudo tee /etc/apt/sources.list.d/speedtest.list
+
         # Enable universe repositories
         sudo add-apt-repository universe
 
@@ -56,7 +61,8 @@ Linux )
             powershell \
             python3 \
             python3-dev \
-            python3-pip
+            python3-pip \
+            speedtest
 
         # Update npm and install yarn support
         sudo npm install -g npm yarn
