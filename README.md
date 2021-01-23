@@ -33,7 +33,6 @@ For convenience, a full install script can be run using the following command:
 curl https://raw.githubusercontent.com/ascarter/dotfiles/main/dotfiles.sh | sh -
 ```
 
-
 #### Manually Install
 
 The `init.sh` script prepares the system for running the dotfiles install script. This is an optional system level configuration.
@@ -66,6 +65,14 @@ cd ~/.config/dotfiles
 ./init.sh
 ./install.sh
 ./developer.sh
+```
+
+#### Server/Raspberry Pi Install
+
+An install script for configuring some server packages can be run using the following command:
+
+```sh
+curl https://raw.githubusercontent.com/ascarter/dotfiles/main/server.sh | sh -
 ```
 
 ### Uninstall
