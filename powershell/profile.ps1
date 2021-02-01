@@ -141,7 +141,6 @@ if (Get-Command winget -ErrorAction SilentlyContinue) {
 Set-Alias -Name dev -Value Start-DevEnv
 Set-Alias -Name dotfiles -Value Set-LocationDotfiles
 Set-Alias -Name fork -Value Start-Fork
-Set-Alias -Name opsignin -Value Start-1Password
 Set-Alias -Name opssh -Value Get-SSHPassphrase
 
 # Unix alias helpers
@@ -165,21 +164,8 @@ function Start-Fork([string]$MyRepo = $PWD) {
     & Fork.exe $target
 }
 
-function Start-1Password() {
-    if ($null -eq $Env:OP_SESSION_carters) {
-        Invoke-Expression $(op signin carters)
-    }
-}
-
 function Set-LocationDotfiles() {
     Set-Location -Path $Env:DOTFILES
-}
-
-# Get-Password retrieves a password for a 1Password password item
-function Get-SSHPassphrase([string]$Key = $Env:COMPUTERNAME.ToLower()) {
-    $sshKey = 'ssh ' + $Key
-    Start-1Password
-    op get item $sshKey | jq -r '.details.password' | Set-Clipboard
 }
 
 function Start-DevEnv() {
