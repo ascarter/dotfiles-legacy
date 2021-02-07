@@ -141,7 +141,10 @@ if (Get-Command winget -ErrorAction SilentlyContinue) {
 Set-Alias -Name dev -Value Start-DevEnv
 Set-Alias -Name dotfiles -Value Set-LocationDotfiles
 Set-Alias -Name fork -Value Start-Fork
-Set-Alias -Name opssh -Value Get-SSHPassphrase
+
+# Application aliases
+Set-Alias -Name drawio -Value "C:\Program Files\draw.io\draw.io.exe"
+Set-Alias -Name mc -Value "C:\Program Files (x86)\Midnight Commander\mc.exe"
 
 # Unix alias helpers
 Set-Alias -Name ll -Value Get-ChildItem
