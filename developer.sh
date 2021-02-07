@@ -56,6 +56,7 @@ Linux )
             git \
             gnupg-agent \
             jq \
+            mc \
             nodejs \
             openjdk-14-jdk \
             powershell \
