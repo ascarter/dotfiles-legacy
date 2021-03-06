@@ -17,7 +17,7 @@ Linux )
 
         # Ensure time is in sync (drift can occur on WSL or VM)
         sudo hwclock -s
-        
+
         # Add GitHub CLI repository
         # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
         sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
@@ -69,7 +69,7 @@ Linux )
         sudo npm install -g npm yarn
 
         # Install Go in /usr/local
-        GO_VERSION=1.15.8
+        GO_VERSION=1.16
         if [ -d /usr/local/go ] && [ "$(/usr/local/go/bin/go version | cut -f3 -d' ')" != "go${GO_VERSION}" ]; then
             echo Removing $(/usr/local/go/bin/go version) ...
             sudo rm -Rf /usr/local/go
