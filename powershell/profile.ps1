@@ -117,7 +117,8 @@ Update-Path @(
     (Join-Path -Path $Env:SystemDrive -ChildPath bin),
     (Join-Path -Path $Env:ProgramFiles -ChildPath vim\vim82),
     (Join-Path -Path $Env:LOCALAPPDATA -ChildPath "Fork"),
-    (Join-Path -Path $Env:ProgramFiles -ChildPath "Yubico\YubiKey Manager")
+    (Join-Path -Path $Env:ProgramFiles -ChildPath "Yubico\YubiKey Manager"),
+    (Join-Path -Path $Env:ProgramFiles -ChildPath "7-Zip")
 )
 
 # Enable winget completion
