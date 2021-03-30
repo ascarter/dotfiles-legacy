@@ -5,7 +5,7 @@
 # Usage:
 #	init.sh [homebrew]
 #
-#	homebrew == destination for homebrew enlistment (default /opt/homebrew)
+#	homebrew == destination for homebrew enlistment (default /opt/brew)
 #
 
 set -ue
