@@ -106,7 +106,6 @@ Darwin )
 	fi
 	pathadd ${HOME}/Library/Python/2.7/bin
 esac
-
 pathadd ${HOME}/.local/bin
 
 # Pip 3
@@ -121,7 +120,7 @@ if [ -x "$(command -v pipx)" ]; then
 fi
 
 # Go
-pathadd /usr/local/go/bin
+pathadd /usr/local/go/bin prefix
 
 # Add GOPATH to installed binaries to path
 if [ -x "$(command -v go)" ]; then

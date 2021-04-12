@@ -6,7 +6,7 @@ emulate -L zsh
 
 if [ -d "$1" ] && [[ ! ${PATH} =~ (^|:)$1(:|$) ]]; then
     if [ "$2" = "prefix" ]; then
-        export PATH=$2:${PATH}
+        export PATH=$1:${PATH}
     else
         export PATH=${PATH}:$1
     fi
