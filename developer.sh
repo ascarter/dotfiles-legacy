@@ -18,6 +18,10 @@ Linux )
         # Ensure time is in sync (drift can occur on WSL or VM)
         sudo hwclock -s
 
+        # Setup base packages
+        sudo apt-get update
+        sudo apt-get install -y apt-transport-https ca-certificates dirmngr software-properties-common
+
         # Add GitHub CLI repository
         # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
         sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
@@ -42,8 +46,6 @@ Linux )
 
         # Update repositories and packages
         sudo apt-get update
-        sudo apt-get install -y apt-transport-https ca-certificates software-properties-common
-        sudo apt-get update
         sudo apt-get upgrade -y
         sudo apt-get autoremove -y
 
@@ -54,11 +56,12 @@ Linux )
             dotnet-sdk-5.0 \
             gh \
             git \
+            gnupg \
             gnupg-agent \
             jq \
             mc \
+            msopenjdk-11 \
             nodejs \
-            openjdk-14-jdk \
             powershell \
             python3 \
             python3-dev \
