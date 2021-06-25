@@ -119,6 +119,11 @@ if [ -x "$(command -v pipx)" ]; then
 	eval "$(register-python-argcomplete pipx)"
 fi
 
+# Node.js
+if [ -x "$(command -v npm)" ]; then
+	source <(npm completion)
+fi
+
 # Go
 pathadd /usr/local/go/bin prefix
 
