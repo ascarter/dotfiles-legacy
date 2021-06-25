@@ -34,7 +34,7 @@ Linux )
 
         # Add nodesource repository
         # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
-        curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+        curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 
         # Add speedtest respository
         # https://www.speedtest.net/apps/cli
