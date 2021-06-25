@@ -72,11 +72,12 @@ Linux )
         sudo npm install -g npm yarn
 
         # Install Go in /usr/local
-        GO_VERSION=1.16.3
+        GO_VERSION=1.16.5
         if [ -d /usr/local/go ] && [ "$(/usr/local/go/bin/go version | cut -f3 -d' ')" != "go${GO_VERSION}" ]; then
             echo Removing $(/usr/local/go/bin/go version) ...
             sudo rm -Rf /usr/local/go
         fi
+
         if ! [ -d /usr/local/go ]; then
             echo Install Go ${GO_VERSION}...
             curl -sL https://golang.org/dl/go${GO_VERSION}.linux-${ARCH}.tar.gz | sudo tar -C /usr/local -xz
