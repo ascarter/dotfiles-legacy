@@ -38,8 +38,7 @@ Linux )
 
         # Add speedtest respository
         # https://www.speedtest.net/apps/cli
-        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61
-        echo "deb https://ookla.bintray.com/debian generic main" | sudo tee /etc/apt/sources.list.d/speedtest.list
+		curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo -E bash -
 
         # Enable universe repositories
         sudo add-apt-repository universe
