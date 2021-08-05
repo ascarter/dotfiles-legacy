@@ -1,5 +1,10 @@
 [color]
     ui = auto
+[color "status"]
+    added = green bold
+    changed = red bold
+    untracked = cyan
+    branch = yellow bold
 [core]
     autocrlf = input
     editor = $EDITOR
