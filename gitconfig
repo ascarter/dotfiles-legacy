@@ -5,6 +5,8 @@
     changed = red bold
     untracked = cyan
     branch = yellow bold
+    localBranch = yellow bold
+    remoteBranch = cyan bold
 [core]
     autocrlf = input
     editor = $EDITOR
@@ -66,7 +68,7 @@
     setemail = !git config user.email
     sha = rev-parse --verify HEAD
     ship = merge --no-ff
-    st = status
+    st = status --branch --short
     type = cat-file -t
     unstage = reset HEAD --
     untrack = rm --cache --
