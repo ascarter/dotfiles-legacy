@@ -44,6 +44,8 @@
     cont = !f() { git up; echo "Create new branch ${1}"; git begin ${1} origin/${1}; }; f
     ctags = !${PWD}/.git/hooks/ctags
     datetag = !git tag `date \"+%Y%m%d%H%M\"`
+    dc = diff --cached
+    df = diff
     difflast = diff HEAD^ HEAD
     diffstat = diff --stat -r
     dirty = status --untracked-files=no --porcelain
@@ -53,21 +55,28 @@
     fingerprint = !ssh-keygen -l -E md5 -f id_rsa
     gdiff = difftool --gui --no-prompt
     gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
+    graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
     hist = log --pretty=format:\"%C(yellow)%h %C(green)%ad %C(cyan)%an %Cred%d %Creset%s%d\" --graph --date=local --stat
     hub = !sh -c 'github'
     k = !gitk
     last = log --stat --date=local -1
-    llast = last --patch
+    lc = log ORIG_HEAD.. --stat --no-merges
+    lg = llog --patch
     ll = log --pretty=format:\"%C(yellow)%h %C(green)%ad %C(cyan)%an %Cred%d %Creset%s\" --decorate --date=format-local:\"%b %e %Y %R\" --graph --all
-    logd = log -- .
+    llast = last --patch
+    llog = log --stat --date=local
+    logd = log --date=local -- .
     ls = log --oneline --graph --all
+    new = !sh -c 'git log $1@{1}..$1@{0} "$@"'
     prep = rebase -i @{upstream}
+    prune-all = !git remote | xargs -n 1 git remote prune
     root = rev-parse --show-toplevel
     setemail = !git config user.email
     sha = rev-parse --verify HEAD
     ship = merge --no-ff
     st = status --branch --short
     type = cat-file -t
+    undo = reset --soft HEAD^
     unstage = reset HEAD --
     untrack = rm --cache --
     up = !f() { if [ \"$(git dirty)\" != \"\" ]; then git upd; else git upc; fi; }; f
@@ -77,4 +86,4 @@
     vtag = describe --tags --always --dirty
     whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
     who = shortlog -s --
-    whois = !sh -c 'git log -i -1 --pretty=\"format:%an ae>\n\" --author=\"$1\"' -
+    whois = !sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -
