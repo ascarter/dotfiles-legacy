@@ -56,7 +56,8 @@
     hist = log --pretty=format:\"%C(yellow)%h %C(green)%ad %C(cyan)%an %Cred%d %Creset%s%d\" --graph --date=local --stat
     hub = !sh -c 'github'
     k = !gitk
-    last = log --stat -1
+    last = log --stat --date=local -1
+    llast = last --patch
     ll = log --pretty=format:\"%C(yellow)%h %C(green)%ad %C(cyan)%an %Cred%d %Creset%s\" --decorate --date=format-local:\"%b %e %Y %R\" --graph --all
     logd = log -- .
     ls = log --oneline --graph --all
