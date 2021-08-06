@@ -53,16 +53,13 @@
     fingerprint = !ssh-keygen -l -E md5 -f id_rsa
     gdiff = difftool --gui --no-prompt
     gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
-    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+    hist = log --pretty=format:\"%C(yellow)%h %C(green)%ad %C(cyan)%an %Cred%d %Creset%s%d\" --graph --date=local --stat
     hub = !sh -c 'github'
     k = !gitk
-    last = log -l HEAD -n 1
-    ll = log --pretty=format:\"%C(yellow)%h %C(green)%ad %cn %Cred%d %Creset%s\" --decorate --numstat --date=short
-    llog = log --date=local
-    logb = log master..HEAD --pretty=oneline
+    last = log --stat -1
+    ll = log --pretty=format:\"%C(yellow)%h %C(green)%ad %C(cyan)%an %Cred%d %Creset%s\" --decorate --date=local --graph --all
     logd = log -- .
-    logx = log --graph --decorate --all --oneline
-    ls = log --pretty=format:\"%C(yellow)%h %C(green)%ad%Cred%d %Creset%s\" --decorate --date=relative
+    ls = log --oneline --graph --all
     prep = rebase -i @{upstream}
     root = rev-parse --show-toplevel
     setemail = !git config user.email
