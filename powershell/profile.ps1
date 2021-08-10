@@ -115,10 +115,11 @@ if (Test-Path -Path (Join-Path $Env:SDK_ROOT -ChildPath flutter)) {
 # Add developer tools to path
 Update-Path @(
     (Join-Path -Path $Env:SystemDrive -ChildPath bin),
-    (Join-Path -Path $Env:ProgramFiles -ChildPath vim\vim82),
     (Join-Path -Path $Env:LOCALAPPDATA -ChildPath "Fork"),
+    (Join-Path -Path $Env:ProgramFiles -ChildPath "7-Zip"),
+    (Join-Path -Path $Env:ProgramFiles -ChildPath "Sublime Text"),
     (Join-Path -Path $Env:ProgramFiles -ChildPath "Yubico\YubiKey Manager"),
-    (Join-Path -Path $Env:ProgramFiles -ChildPath "7-Zip")
+    (Join-Path -Path $Env:ProgramFiles -ChildPath vim\vim82)
 )
 
 # Enable winget completion
