@@ -1,3 +1,90 @@
+#region PSReadLine
+
+if ($host.Name -eq 'ConsoleHost') {
+    Import-Module PSReadLine
+    Set-PSReadLineOption -EditMode Emacs
+    Set-PSReadLineOption -HistorySearchCursorMovesToEnd
+    Set-PSReadLineOption -PredictionSource History
+    # Set-PSReadLineOption -PredictionViewStyle ListView
+    Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
+    Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+}
+
+#endregion
+
+#region Helpers
+
+function Install-Zip {
+    <#
+    .SYNOPSIS
+        Download and extract zip archive to target location 
+    .EXAMPLE
+        PS C:\> Install-Zip https://example.com/myapp.zip
+        Downloads myapp.zip from URI and extracts
+    .PARAMETER Uri
+    URI of zip file
+    .PARAMETER Dest
+    Destination path
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [string]$Uri,
+
+        [Parameter()]
+        [string]$Dest
+    )
+    process {
+        try {
+            # Create a random file in temp
+            $zipfile = [System.IO.Path]::GetRandomFileName()
+            $target = Join-Path -Path $env:TEMP -ChildPath $zipfile
+
+            # Download to temp
+            $wc = New-Object System.Net.WebClient
+            $wc.DownloadFile($uri, $target)
+
+            # Unzip
+            Expand-Archive -Path $target -DestinationPath $Dest -Force
+        }
+        finally {
+            if (Test-Path $target) { Remove-Item -Path $target }
+        }
+    }
+}
+
+function Set-LocationDotfiles() { Set-Location -Path $Env:DOTFILES }
+Set-Alias -Name dotfiles -Value Set-LocationDotfiles
+
+function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
+Set-Alias -Name editprofile -Value Start-ProfileEdit
+
+function Test-Adminstrator {
+    ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+function Invoke-Administrator {
+    <#
+    .SYNOPSIS
+    Execute command using elevated privileges (sudo for Windows)
+    .EXAMPLE
+    PS> Invoke-Administrator -Command &{Write-Host "I am admin"}
+
+    This example runs a Write-Host command as Administrator
+    .PARAMETER Command
+    Script block for command to execute as Administrator
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [string]$Command
+    )
+    process {
+        Start-Process powershell -Verb RunAs -ArgumentList @('-Command', $Command) -Wait
+    }
+}
+Set-Alias -Name sudo -Value Invoke-Administrator
+
 function Update-Path {
     <#
     .SYNOPSIS
@@ -40,44 +127,60 @@ function Update-Path {
     }
 }
 
-function Install-Zip {
-    <#
-    .SYNOPSIS
-        Download and extract zip archive to target location 
-    .EXAMPLE
-        PS C:\> Install-Zip https://example.com/myapp.zip
-        Downloads myapp.zip from URI and extracts
-    .PARAMETER Uri
-    URI of zip file
-    .PARAMETER Dest
-    Destination path
-    #>
-    [CmdletBinding()]
-    param (
-        [Parameter()]
-        [string]$Uri,
+#endregion
 
-        [Parameter()]
-        [string]$Dest
-    )
-    process {
-        try {
-            # Create a random file in temp
-            $zipfile = [System.IO.Path]::GetRandomFileName()
-            $target = Join-Path -Path $env:TEMP -ChildPath $zipfile
+#region Developer
 
-            # Download to temp
-            $wc = New-Object System.Net.WebClient
-            $wc.DownloadFile($uri, $target)
+# Set editors
+if (Get-Command vim -ErrorAction SilentlyContinue) {
+    Set-Item -Path Env:EDITOR -Value 'vim'
+}
 
-            # Unzip
-            Expand-Archive -Path $target -DestinationPath $Dest -Force
-        }
-        finally {
-            if (Test-Path $target) { Remove-Item -Path $target }
-        }
+if (Get-Command code -ErrorAction SilentlyContinue) {
+    Set-Item -Path Env:VISUAL -Value 'code --wait'
+}
+
+# Set SDK environment variable if not set
+if ($null -eq [System.Environment]::GetEnvironmentVariable("SDK_ROOT", "User")) {
+    Set-Item -Path Env:SDK_ROOT -Value (Join-Path $Env:USERPROFILE -ChildPath sdk)
+}
+
+# Check for JDK
+if (Test-Path -Path (Join-Path $Env:SDK_ROOT -ChildPath jdk)) {
+    # Use latest JDK
+    $jdkSdk = Join-Path $Env:SDK_ROOT -ChildPath jdk
+    $jdk = Get-ChildItem -Path $jdkSdk -Filter jdk-* | Sort-Object -Descending | Select-Object -First 1
+    if ($jdk) {
+        Set-Item -Path Env:JAVA_HOME -Value $jdk
+        Update-Path @((Join-Path $Env:JAVA_HOME -ChildPath bin))
     }
 }
+
+# Check for Android SDK
+if (Test-Path -Path (Join-Path $Env:LOCALAPPDATA -ChildPath Android\SDK)) {
+    if ($null -eq [System.Environment]::GetEnvironmentVariable("ANDROID_SDK", "User")) {
+        Set-Item -Path Env:ANDROID_SDK -Value (Join-Path $Env:LOCALAPPDATA -ChildPath Android\SDK)
+    }
+
+    Update-Path @(
+        (Join-Path -Path $Env:ANDROID_SDK -ChildPath platform-tools),
+        (Join-Path -Path $Env:ANDROID_SDK -ChildPath emulator),
+        (Join-Path -Path $Env:ANDROID_SDK -ChildPath tools\bin)
+    )
+}
+
+# Check for Flutter SDK
+if (Test-Path -Path (Join-Path $Env:SDK_ROOT -ChildPath flutter)) {
+    if ($null -eq [System.Environment]::GetEnvironmentVariable("FLUTTER_SDK", "User")) {
+        Set-Item -Path Env:FLUTTER_SDK -Value (Join-Path $Env:SDK_ROOT -ChildPath flutter)
+    }
+
+    Update-Path @(
+        (Join-Path -Path $Env:SDK_ROOT -ChildPath flutter\bin)
+    )
+}
+
+#endregion
 
 #region Git
 
@@ -101,6 +204,7 @@ function Read-GitConfig {
     if ($null -eq $value) { $value = $default }
     Set-GitConfig -Key $Key -Value $value
 }
+
 function Remove-GitConfig {
     param (
         [string]$Key
@@ -154,39 +258,72 @@ function Write-GitConfig {
 
 #endregion
 
-#region Helpers
+#region PowerShell
+
+# Enable winget completion
+if (Get-Command winget -ErrorAction SilentlyContinue) {
+    Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
+        param($wordToComplete, $commandAst, $cursorPosition)
+
+        [Console]::InputEncoding = [Console]::OutputEncoding = $OutputEncoding = [System.Text.Utf8Encoding]::new()
+        $Local:word = $wordToComplete.Replace('"', '""')
+        $Local:ast = $commandAst.ToString().Replace('"', '""')
+        winget complete --word="$Local:word" --commandline "$Local:ast" --position $cursorPosition | ForEach-Object {
+            [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+        }
+    }
+}    
 
 function Get-Uname {
-    Get-CimInstance Win32_OperatingSystem | Select-Object 'Caption', 'CSName', 'Version', 'BuildType', 'OSArchitecture' | Format-Table
-}
-
-Set-Alias -Name uname -Value Get-Uname
-
-function Test-Adminstrator {
-    ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-}
-
-function Invoke-Administrator {
     <#
     .SYNOPSIS
-    Execute command using elevated privileges (sudo for Windows)
-    .EXAMPLE
-    PS> Invoke-Administrator -Command &{Write-Host "I am admin"}
-
-    This example runs a Write-Host command as Administrator
-    .PARAMETER Command
-    Script block for command to execute as Administrator
+    Emulate Unix uname
     #>
-    [CmdletBinding()]
-    param (
-        [Parameter()]
-        [string]$Command
-    )
-    process {
-        Start-Process powershell -Verb RunAs -ArgumentList @('-Command', $Command) -Wait
+    Get-CimInstance Win32_OperatingSystem | Select-Object 'Caption', 'CSName', 'Version', 'BuildType', 'OSArchitecture' | Format-Table
+}
+Set-Alias -Name uname -Value Get-Uname
+
+# Unix aliases
+Set-Alias -Name ll -Value Get-ChildItem
+Set-Alias -Name which -Value Get-Command
+
+# macOS aliases
+Set-Alias -Name pbcopy -Value Set-Clipboard
+Set-Alias -Name pbpaste -Value Get-Clipboard
+
+#endregion
+
+#region Prompt
+
+if (Get-Module -Name posh-git -ListAvailable) {
+    Import-Module posh-git
+
+    function prompt {
+        $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+        $principal = [Security.Principal.WindowsPrincipal] $identity
+
+        $GitPromptSettings.DefaultPromptPrefix.Text = "`n[$Env:COMPUTERNAME] "
+        $GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n' + $(
+            if (Test-Path variable:/PSDebugContext) { Write-Prompt '[DBG]: ' -ForegroundColor Red }
+            elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Write-Prompt '[ADMIN]: ' -ForegroundColor Magenta }
+        )
+        $GitPromptSettings.DefaultPromptSuffix.Text = "PS > "
+        $prompt = & $GitPromptScriptBlock
+        if ($prompt) { $prompt } else { ' ' }
     }
 }
+else {
+    # Default prompt with ADMIN and DBG
+    function prompt {
+        $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+        $principal = [Security.Principal.WindowsPrincipal] $identity
 
-Set-Alias -Name sudo -Value Invoke-Administrator
+        $(if (Test-Path variable:/PSDebugContext) { '[DBG]: ' }
+            elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { "[ADMIN]: " }
+            else { '' }
+        ) + 'PS ' + $(Get-Location) +
+        $(if ($NestedPromptLevel -ge 1) { '>>' }) + '> '
+    }
+}    
 
 #endregion
