@@ -269,4 +269,27 @@ function Get-CmdletAlias ($cmdletname) {
     Get-Alias | Where-Object -FilterScript { $_.Definition -like "$cmdletname" } | Format-Table -Property Definition, Name -AutoSize
 }
 
+function Invoke-Administrator {
+    <#
+    .SYNOPSIS
+    Execute command using elevated privileges (sudo for Windows)
+    .EXAMPLE
+    PS> Invoke-Administrator -Command &{Write-Host "I am admin"}
+
+    This example runs a Write-Host command as Administrator
+    .PARAMETER Command
+    Script block for command to execute as Administrator
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [string]$Command
+    )
+    process {
+        Start-Process powershell -Verb RunAs -ArgumentList @('-Command', $Command) -Wait
+    }
+}
+
+Set-Alias -Name sudo -Value Invoke-Administrator
+
 #endregion
