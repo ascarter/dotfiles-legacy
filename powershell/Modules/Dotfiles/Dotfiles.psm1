@@ -88,6 +88,45 @@ function Update-Path {
     }
 }
 
+$OwnerKey = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
+
+function Get-Owner {
+    <#
+    .SYNOPSIS
+        Show register owner and organziation
+    #>
+
+    Get-ItemProperty -Path $OwnerKey | Format-Table RegisteredOwner, RegisteredOrganization
+}
+function Update-Owner {
+    <#
+    .SYNOPSIS
+        Set owner and organization
+    #>
+    [CmdletBinding()]
+    param(
+        [string]$Owner = (Get-ItemProperty -Path $OwnerKey).RegisteredOwner,
+        [string]$Organization = (Get-ItemProperty -Path $OwnerKey).RegisteredOrganization
+    )
+
+    $values = @{
+        RegisteredOwner = $Owner
+        RegisteredOrganization = $Organization
+    }
+
+    $current = Get-ItemProperty -Path $OwnerKey
+    foreach ($prop in $values.Keys) {
+        $value = $values[$prop]
+        if ($value -ne $current.$prop) {
+            Invoke-Administrator "& { Set-ItemProperty -Path '$OwnerKey' -Name '$prop' -Value '$value' }"
+        } else {
+            Write-Output "No change for $prop"
+        }
+    }
+
+    Get-Owner        
+}
+
 #endregion
 
 #region Developer
