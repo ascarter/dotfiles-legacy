@@ -4,54 +4,15 @@ if ($host.Name -eq 'ConsoleHost') {
     Import-Module PSReadLine
     Set-PSReadLineOption -EditMode Emacs
     Set-PSReadLineOption -HistorySearchCursorMovesToEnd
-    Set-PSReadLineOption -PredictionSource History
-    # Set-PSReadLineOption -PredictionViewStyle ListView
     Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
     Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+    Set-PSReadLineOption -PredictionSource History
+    # Set-PSReadLineOption -PredictionViewStyle ListView        
 }
 
 #endregion
 
 #region Helpers
-
-function Install-Zip {
-    <#
-    .SYNOPSIS
-        Download and extract zip archive to target location 
-    .EXAMPLE
-        PS C:\> Install-Zip https://example.com/myapp.zip
-        Downloads myapp.zip from URI and extracts
-    .PARAMETER Uri
-    URI of zip file
-    .PARAMETER Dest
-    Destination path
-    #>
-    [CmdletBinding()]
-    param (
-        [Parameter()]
-        [string]$Uri,
-
-        [Parameter()]
-        [string]$Dest
-    )
-    process {
-        try {
-            # Create a random file in temp
-            $zipfile = [System.IO.Path]::GetRandomFileName()
-            $target = Join-Path -Path $env:TEMP -ChildPath $zipfile
-
-            # Download to temp
-            $wc = New-Object System.Net.WebClient
-            $wc.DownloadFile($uri, $target)
-
-            # Unzip
-            Expand-Archive -Path $target -DestinationPath $Dest -Force
-        }
-        finally {
-            if (Test-Path $target) { Remove-Item -Path $target }
-        }
-    }
-}
 
 function Set-LocationDotfiles() { Set-Location -Path $Env:DOTFILES }
 Set-Alias -Name dotfiles -Value Set-LocationDotfiles
@@ -304,8 +265,12 @@ if (Get-Module -Name posh-git -ListAvailable) {
 
         $GitPromptSettings.DefaultPromptPrefix.Text = "`n[$Env:COMPUTERNAME] "
         $GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n' + $(
-            if (Test-Path variable:/PSDebugContext) { Write-Prompt '[DBG]: ' -ForegroundColor Red }
-            elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Write-Prompt '[ADMIN]: ' -ForegroundColor Magenta }
+            if (Test-Path variable:/PSDebugContext) {
+                Write-Prompt '[DBG]: ' -ForegroundColor Red
+            }
+            elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+                Write-Prompt '[ADMIN]: ' -ForegroundColor Magenta
+            }
         )
         $GitPromptSettings.DefaultPromptSuffix.Text = "PS > "
         $prompt = & $GitPromptScriptBlock
