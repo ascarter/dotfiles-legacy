@@ -5,4 +5,7 @@
     Copyright = '(c) Andrew Carter. All rights reserved.'
     Description = 'Dotfiles tools'
     PowerShellVersion = '7.0'
+    NestedModules = @(
+        'installers.ps1'
+    )
 }
