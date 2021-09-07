@@ -35,7 +35,7 @@ function Install-Winget {
         # Get latest AppInstaller release
         $releasesUri = 'https://api.github.com/repos/microsoft/winget-cli/releases/latest'
         $releases = Invoke-RestMethod -Uri $releasesUri
-        $latestRelease = $releases.assets | Where-Object { $_.browser_download_url.EndsWith('msixbundle') } | Select -First 1
+        $latestRelease = $releases.assets | Where-Object { $_.browser_download_url.EndsWith('msixbundle') } | Select-Object -First 1
         Write-Output "Installing winget $($latestRelease.browser_download_url)"
         Add-AppxPackage -Path $latestRelease.browser_download_url
     } else {
