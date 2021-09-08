@@ -86,7 +86,7 @@ cd ~/.config/dotfiles
 
 ## Windows
 
-A PowerShell install script supports Windows 10.
+A PowerShell install script supports Windows 10 and Windows 11.
 
 ### Pre-requisites
 
@@ -102,15 +102,7 @@ Additional requirements:
 * [PowerShell Core](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-7)
 * [Windows Package Manager](https://github.com/microsoft/winget-cli)
 
-To run the provided init script in elevated PowerShell (recommend Windows PowerShell terminal):
-
-```powershell
-Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://raw.githubusercontent.com/ascarter/dotfiles/main/init.ps1 -UseBasicParsing | Invoke-Expression
-```
-
-### Install
-
-Run the following PowerShell script:
+To run the provided install script:
 
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://raw.githubusercontent.com/ascarter/dotfiles/main/install.ps1 -UseBasicParsing | Invoke-Expression
@@ -118,7 +110,7 @@ Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://raw.githubu
 
 #### Alternate Install
 
-If directly executing powershell script is not desired, clone into a location (recommend `%USERPROFILE%\.config\dotfiles`). Using elevated PowerShell:
+If directly executing powershell script is not desired, clone into a location (recommend `%USERPROFILE%\.config\dotfiles`).
 
 ```powershell
 git clone git@github.com:ascarter/dotfiles.git $env:USERPROFILE\.config\dotfiles
