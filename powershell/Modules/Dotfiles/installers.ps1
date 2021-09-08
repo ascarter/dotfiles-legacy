@@ -130,14 +130,18 @@ function Update-PowerShellModules {
             'posh-git',
             'WslInterop'
         )) {
-        if (!(Get-Module -Name $m -ListAvailable)) {
-            Install-Module -Name $m -Scope CurrentUser -Force -AllowClobber -AllowPrerelease -AcceptLicense
-        } else {
-            Update-Module -Name $m -Force
+        try {
+            if (!(Get-Module -Name $m -ListAvailable)) {
+                Install-Module -Name $m -Scope CurrentUser -Force -AllowClobber -AllowPrerelease -AcceptLicense
+            }
+            else {
+                Update-Module -Name $m -Force
+            }
+        }
+        catch {
+            Write-Warning $_
         }
     }
-
-    Update-Help -UICulture en-US
 }
 
 #endregion
