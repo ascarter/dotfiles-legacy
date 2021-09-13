@@ -68,8 +68,8 @@ function Update-Path {
         [switch]$SetEnv
     )
     process {
-        $parts = $Env:PATH -Split ";"
-        if ($SetEnv) { $envparts = [System.Environment]::GetEnvironmentVariable("PATH") -Split ";" }
+        $parts = ($Env:PATH -Split ";" | Sort-Object | Get-Unique)
+        if ($SetEnv) { $envparts = ([System.Environment]::GetEnvironmentVariable("PATH") -Split ";" | Sort-Object | Get-Unique) }
 
         foreach ($p in $paths) {
             if (Test-Path -Path $p) {
@@ -145,27 +145,21 @@ if ($null -eq [System.Environment]::GetEnvironmentVariable("SDK_ROOT", "User")) 
     Set-Item -Path Env:SDK_ROOT -Value (Join-Path $Env:USERPROFILE -ChildPath sdk)
 }
 
-# Check for JDK
-if (Test-Path -Path (Join-Path $Env:SDK_ROOT -ChildPath jdk)) {
-    # Use latest JDK
-    $jdkSdk = Join-Path $Env:SDK_ROOT -ChildPath jdk
-    $jdk = Get-ChildItem -Path $jdkSdk -Filter jdk-* | Sort-Object -Descending | Select-Object -First 1
-    if ($jdk) {
-        Set-Item -Path Env:JAVA_HOME -Value $jdk
-        Update-Path @((Join-Path $Env:JAVA_HOME -ChildPath bin))
-    }
+# Check for Go
+if (Get-Command go -ErrorAction SilentlyContinue) {
+    Update-Path @(Join-Path -Path (go env GOPATH) -ChildPath bin)
 }
 
 # Check for Android SDK
 if (Test-Path -Path (Join-Path $Env:LOCALAPPDATA -ChildPath Android\SDK)) {
-    if ($null -eq [System.Environment]::GetEnvironmentVariable("ANDROID_SDK", "User")) {
-        Set-Item -Path Env:ANDROID_SDK -Value (Join-Path $Env:LOCALAPPDATA -ChildPath Android\SDK)
+    if ($null -eq [System.Environment]::GetEnvironmentVariable("ANDROID_SDK_ROOT", "User")) {
+        Set-Item -Path Env:ANDROID_SDK_ROOT -Value (Join-Path $Env:LOCALAPPDATA -ChildPath Android\SDK)
     }
 
     Update-Path @(
-        (Join-Path -Path $Env:ANDROID_SDK -ChildPath platform-tools),
-        (Join-Path -Path $Env:ANDROID_SDK -ChildPath emulator),
-        (Join-Path -Path $Env:ANDROID_SDK -ChildPath tools\bin)
+        (Join-Path -Path $Env:ANDROID_SDK_ROOT -ChildPath cmdline-tools\latest\bin),
+        (Join-Path -Path $Env:ANDROID_SDK_ROOT -ChildPath platform-tools),
+        (Join-Path -Path $Env:ANDROID_SDK_ROOT -ChildPath tools\bin)
     )
 }
 
@@ -175,9 +169,7 @@ if (Test-Path -Path (Join-Path $Env:SDK_ROOT -ChildPath flutter)) {
         Set-Item -Path Env:FLUTTER_SDK -Value (Join-Path $Env:SDK_ROOT -ChildPath flutter)
     }
 
-    Update-Path @(
-        (Join-Path -Path $Env:SDK_ROOT -ChildPath flutter\bin)
-    )
+    Update-Path @(Join-Path -Path $Env:SDK_ROOT -ChildPath flutter\bin)
 }
 
 #endregion

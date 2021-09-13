@@ -13,10 +13,11 @@ Import-Module (Join-Path -Path $Env:DOTFILES -ChildPath PowerShell\Modules\Dotfi
 # Add tools to path
 Update-Path @(
     (Join-Path -Path $Env:SystemDrive -ChildPath bin),
-    (Join-Path -Path $Env:LOCALAPPDATA -ChildPath "Fork"),
+    (Join-Path -Path $Env:LOCALAPPDATA -ChildPath Fork),
     (Join-Path -Path $Env:ProgramFiles -ChildPath "7-Zip"),
     (Join-Path -Path $Env:ProgramFiles -ChildPath "Sublime Text"),
     (Join-Path -Path $Env:ProgramFiles -ChildPath "Yubico\YubiKey Manager"),
+    (Join-Path -Path $Env:ProgramFiles -ChildPath qemu),
     (Join-Path -Path $Env:ProgramFiles -ChildPath vim\vim82)
 )
 
