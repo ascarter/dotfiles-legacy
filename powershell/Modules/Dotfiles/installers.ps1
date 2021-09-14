@@ -32,7 +32,7 @@ function Install-Bootstrap {
     Install-Profile -Path $Path -Force:$Force
     
     Write-Verbose "Install vimrc"
-    Install-Vimrc -Force:$Force
+    Install-Vimrc -Path $Path -Force:$Force
     
     Write-Verbose "Install bin"
     Install-Bin

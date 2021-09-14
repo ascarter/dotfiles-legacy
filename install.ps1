@@ -94,8 +94,8 @@ Write-Output "Installing dotfiles"
 Install-Dotfiles -Path $Path
 
 Write-Output "Bootstrap dotfiles"
-$boostrapScript = Join-Path -Path $Path -ChildPath Powershell\bootstrap.ps1
-Start-Process pwsh -ArgumentList "-NoProfile -File $boostrapScript -Path $Path -Verbose" -Wait -NoNewWindow
+$bootstrapScript = Join-Path -Path $Path -ChildPath powershell\bootstrap.ps1
+Start-Process pwsh -ArgumentList "-NoProfile -File $bootstrapScript -Path $Path -Verbose" -Wait -NoNewWindow
 
 Write-Output "dotfiles install complete"
 Write-Output "Reload session to apply configuration"
