@@ -73,7 +73,7 @@ function Install-Dotfiles {
 
     if ($Force -and (Test-Path -Path $Path)) {
         Write-Host "Removing existing dotfiles"
-        Remove-Item -Path $Path -Force
+        Remove-Item -Path $Path -Recurse -Force
     }
 
     # Clone dotfiles

@@ -23,6 +23,6 @@ $gitconfig = Join-Path -Path $env:USERPROFILE -ChildPath .gitconfig
 if (Test-Path -Path $gitconfig) { Remove-Item -Path $gitconfig -Force }
 
 # Remove dotfiles
-if (Test-Path $Env:DOTFILES) { Remove-Item -Path $Env:DOTFILES -Force}
+if (Test-Path $Env:DOTFILES) { Remove-Item -Path $Env:DOTFILES -Recurse -Force}
 
 Write-Output "dotfiles uninstalled"
