@@ -6,9 +6,11 @@
 #>
 [cmdletbinding()]
 param(
-    [Parameter(HelpMessage = "Dotfiles destination")]
-    [string]
-    $Path = (Join-Path -Path $env:USERPROFILE -ChildPath ".config\dotfiles")
+    # Dotfiles destination
+    [string]$Path = (Join-Path -Path $env:USERPROFILE -ChildPath ".config\dotfiles"),
+    
+    # Replace existing dotfiles
+    [switch]$Force = $false
 )
 
 Set-StrictMode -Version Latest
@@ -62,8 +64,17 @@ function Install-Packages {
 
 function Install-Dotfiles {
     param(
-        [string]$Path
+        # Dotfiles path
+        [string]$Path,
+
+        # Replace existing dotfiles
+        [switch]$Force = $false
     )
+
+    if ($Force -and (Test-Path -Path $Path)) {
+        Write-Host "Removing existing dotfiles"
+        Remove-Item -Path $Path -Force
+    }
 
     # Clone dotfiles
     if (-not (Test-Path -Path $Path)) {
@@ -78,7 +89,7 @@ function Install-Dotfiles {
     }
 
     # Set DOTFILES environment variable
-    if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", [System.EnvironmentVariableTarget]::User)) {
+    if ($Force -or ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", [System.EnvironmentVariableTarget]::User))) {
         Write-Output "Set DOTFILES environment variable"
         [System.Environment]::SetEnvironmentVariable("DOTFILES", $Path, [System.EnvironmentVariableTarget]::User)
     } else {
@@ -91,11 +102,11 @@ Install-Winget
 Install-Packages
 
 Write-Output "Installing dotfiles"
-Install-Dotfiles -Path $Path
+Install-Dotfiles -Path $Path -Force $Force
 
 Write-Output "Bootstrap dotfiles"
 $boostrapScript = Join-Path -Path $Path -ChildPath Powershell\bootstrap.ps1
-Start-Process pwsh -ArgumentList "-NoProfile -File $boostrapScript -Path $Path -Verbose" -Wait -NoNewWindow
+Start-Process pwsh -ArgumentList "-NoProfile -File $boostrapScript -Path $Path -Force $Force -Verbose" -Wait -NoNewWindow
 
 Write-Output "dotfiles install complete"
 Write-Output "Reload session to apply configuration"

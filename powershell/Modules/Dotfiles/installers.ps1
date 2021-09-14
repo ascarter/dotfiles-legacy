@@ -21,17 +21,19 @@ function Install-Bootstrap {
     #>
     [CmdletBinding()]
     param (
-        [Parameter(HelpMessage = "Dotfiles path")]
-        [string]
-        $Path = $DefaultDotfilesPath
+        # Dotfiles path
+        [string]$Path = $DefaultDotfilesPath,
+        
+        # Replace existing configuration
+        [switch]$Force = $false
     )
     Write-Output "Bootstrap dotfiles"
     Write-Verbose "Install profile to $Path"
-    Install-Profile -Path $Path
+    Install-Profile -Path $Path -Force $Force
     Write-Verbose "Install vimrc"
-    Install-Vimrc
+    Install-Vimrc -Force $Force
     Write-Verbose "Install bin"
-    Install-Bin
+    Install-Bin -Force $Force
     Write-Output "Boostrap complete"
 }
 
@@ -41,12 +43,24 @@ function Update-DevTools {
         Update/install developer tools
     #>
     [CmdletBinding()]
-    param()
+    param(
+        # Replace existing configuration
+        [switch]$Force = $false
+    )
 
     Write-Host "Updating developer system settings"
 
+    Write-Host "Set PowerShell profile"
+    Install-Profile -Force $force
+
+    Write-Host "Set vimrc"
+    Install-Vimrc -Force $force
+
+    Write-Host "Update git configuration"
+    Write-GitConfig
+
     Write-Host "Update PowerShell modules"
-    Update-PowerShellModules
+    Update-PowerShellModules -Force $Force
 
     Write-Host "Enable Hyper-V"
     Invoke-Administrator -Command { Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All }
@@ -78,10 +92,7 @@ function Install-Zip {
     #>
     [CmdletBinding()]
     param (
-        [Parameter()]
         [string]$Uri,
-
-        [Parameter()]
         [string]$Dest
     )
     process {
@@ -107,14 +118,16 @@ function Install-Zip {
 
 #region Configuration
 
-# TODO: Support -Force
 function Install-Profile {
     [CmdletBinding()]
     param (
         # Path of source profile
-        [Parameter()]
-        [string]$Path = (Join-Path $DefaultDotfilesPath -ChildPath powershell\profile.ps1)
+        [string]$Path = (Join-Path $DefaultDotfilesPath -ChildPath powershell\profile.ps1),
+        
+        # Replace existing profile
+        [switch]$Force = $false
     )
+    if ($Force) { Remove-Item -Path $PROFILE -Force }
     if (-not (Test-Path $PROFILE)) {
         Write-Output "Install PowerShell profile"
         New-Item -Path $PROFILE -ItemType File -Force
@@ -122,16 +135,18 @@ function Install-Profile {
     }
 }
 
-# TODO: Support -Force
 function Install-Vimrc {
     [CmdletBinding()]
     param (
         # Path of source vimrc
-        [Parameter()]
-        [string]$Path = (Join-Path $DefaultDotfilesPath -ChildPath conf\vimrc)
+        [string]$Path = (Join-Path $DefaultDotfilesPath -ChildPath conf\vimrc),
+
+        # Replace existing vimrc
+        [switch]$Force = $false
     )
     # Vim profile
     $vimrc = Join-Path -Path $env:USERPROFILE -ChildPath _vimrc
+    if ($Force) { Remove-Item -Path $vimrc -Force }
     if (-not (Test-Path -Path $vimrc)) {
         Write-Output "Install vimrc"
         New-Item -Path $vimrc -ItemType File -Force
@@ -144,18 +159,23 @@ function Install-Vimrc {
 #region Powershell modules
 
 function Update-PowerShellModules {
+    param(
+        # Replace existing modules
+        [switch]$Force = $false
+    )
     foreach ($m in @(
             'Microsoft.PowerShell.ConsoleGuiTools',
             'posh-git',
             'WslInterop'
         )) {
         try {
-            # Verify module exists
-            if(-not (Get-Module -Name $m -ListAvailable)) {
-                throw "Module $m is not available"
-            }
+            if(-not (Get-Module -Name $m -ListAvailable)) { throw "Module $m is not available" }
 
-            # Install module or update
+            if ($Force -and (Get-Module -Name $m)) { 
+                Write-Host "Removing $m"
+                Uninstall-Module -Name $m -Force
+            }
+            
             if (-not (Get-Module -Name $m)) {
                 Write-Host "Installing $m"
                 Install-Module -Name $m -Scope CurrentUser -Force -AllowClobber -AllowPrerelease -AcceptLicense
@@ -207,7 +227,17 @@ function Install-Bin {
     .SYNOPSIS
     Create system root bin for adding tools (like /usr/local/bin on Unix)
     #>
+    param(
+        # Replace existing bin directory
+        [switch]$Force = $false
+    )
+
     $usrbin = Join-Path -Path $Env:SystemDrive -ChildPath bin
+    if ($Force -and (Test-Path -Path $usrbin)) {
+        Write-Host "Removing $usrbin"
+        Remove-Item -Path $usrbin -Force
+    }
+    
     if (!(Test-Path -Path $usrbin)) {
         Write-Output "Creating $usrbin"
         New-Item -Path $usrbin -ItemType Directory
