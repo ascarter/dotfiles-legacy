@@ -8,8 +8,8 @@ param(
     [string]$Path = (Split-Path (Split-Path $MyInvocation.MyCommand.Path)),
 
     # Replace existing configuration
-    [switch]$Force = $false
+    [switch]$Force
 )
 
 if (-not (Get-Module Dotfiles)) { Import-Module (Join-Path -Path $Path -ChildPath PowerShell\Modules\Dotfiles) }
-Install-Bootstrap -Path $Path -Force $Force -Verbose
+Install-Bootstrap -Path $Path -Force:$Force -Verbose

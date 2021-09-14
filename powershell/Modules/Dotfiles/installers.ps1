@@ -14,24 +14,29 @@ $ErrorActionPreference = "Stop"
 
 function Install-Bootstrap {
     <#
-    .SYNOPSIS
-    Bootstrap dotfiles
+        .SYNOPSIS
+            Bootstrap dotfiles
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # Dotfiles path
         [string]$Path = $Env:DOTFILES,
         
         # Replace existing configuration
-        [switch]$Force = $false
+        [switch]$Force
     )
+
     Write-Output "Bootstrap dotfiles"
+    
     Write-Verbose "Install profile to $Path"
-    Install-Profile -Path $Path -Force $Force
+    Install-Profile -Path $Path -Force:$Force
+    
     Write-Verbose "Install vimrc"
-    Install-Vimrc -Force $Force
+    Install-Vimrc -Force:$Force
+    
     Write-Verbose "Install bin"
-    Install-Bin -Force $Force
+    Install-Bin
+    
     Write-Output "Boostrap complete"
 }
 
@@ -40,25 +45,21 @@ function Update-DevTools {
     .SYNOPSIS
         Update/install developer tools
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # Replace existing configuration
-        [switch]$Force = $false
+        [switch]$Force
     )
 
     Write-Host "Updating developer system settings"
 
-    Write-Host "Set PowerShell profile"
-    Install-Profile -Force $force
-
-    Write-Host "Set vimrc"
-    Install-Vimrc -Force $force
+    Install-Bootstrap -Force:$Force
 
     Write-Host "Update git configuration"
     Write-GitConfig
 
     Write-Host "Update PowerShell modules"
-    Update-PowerShellModules -Force $Force
+    Update-PowerShellModules -Force:$Force
 
     Write-Host "Enable Hyper-V"
     Invoke-Administrator -Command { Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All }
@@ -117,15 +118,16 @@ function Install-Zip {
 #region Configuration
 
 function Install-Profile {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # Path of source profile
         [string]$Path = (Join-Path $Env:DOTFILES -ChildPath powershell\profile.ps1),
         
         # Replace existing profile
-        [switch]$Force = $false
+        [switch]$Force
     )
     if ($Force) { Remove-Item -Path $PROFILE -Force }
+
     if (-not (Test-Path $PROFILE)) {
         Write-Output "Install PowerShell profile"
         New-Item -Path $PROFILE -ItemType File -Force
@@ -134,13 +136,13 @@ function Install-Profile {
 }
 
 function Install-Vimrc {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # Path of source vimrc
         [string]$Path = (Join-Path $Env:DOTFILES -ChildPath conf\vimrc),
 
         # Replace existing vimrc
-        [switch]$Force = $false
+        [switch]$Force
     )
     # Vim profile
     $vimrc = Join-Path -Path $env:USERPROFILE -ChildPath _vimrc
@@ -157,9 +159,10 @@ function Install-Vimrc {
 #region Powershell modules
 
 function Update-PowerShellModules {
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # Replace existing modules
-        [switch]$Force = $false
+        [switch]$Force
     )
     foreach ($m in @(
             'Microsoft.PowerShell.ConsoleGuiTools',
@@ -222,20 +225,12 @@ function Install-SSH() {
 
 function Install-Bin {
     <#
-    .SYNOPSIS
-    Create system root bin for adding tools (like /usr/local/bin on Unix)
+        .SYNOPSIS
+            Create system root bin for adding tools (like /usr/local/bin on Unix)
     #>
-    param(
-        # Replace existing bin directory
-        [switch]$Force = $false
-    )
+    param()
 
     $usrbin = Join-Path -Path $Env:SystemDrive -ChildPath bin
-    if ($Force -and (Test-Path -Path $usrbin)) {
-        Write-Host "Removing $usrbin"
-        Remove-Item -Path $usrbin -Force
-    }
-    
     if (!(Test-Path -Path $usrbin)) {
         Write-Output "Creating $usrbin"
         New-Item -Path $usrbin -ItemType Directory

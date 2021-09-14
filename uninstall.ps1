@@ -4,7 +4,7 @@
 .DESCRIPTION
     Remove dotfiles configuration for current Windows user
 #>
-[cmdletbinding()]
+[CmdletBinding(SupportsShouldProcess)]
 param()
 
 Set-StrictMode -Version Latest
@@ -24,5 +24,8 @@ if (Test-Path -Path $gitconfig) { Remove-Item -Path $gitconfig -Force }
 
 # Remove dotfiles
 if (Test-Path $Env:DOTFILES) { Remove-Item -Path $Env:DOTFILES -Recurse -Force}
+
+# Unset DOTFILES environment variable
+[System.Environment]::SetEnvironmentVariable("DOTFILES", $null, [System.EnvironmentVariableTarget]::User)
 
 Write-Output "dotfiles uninstalled"
