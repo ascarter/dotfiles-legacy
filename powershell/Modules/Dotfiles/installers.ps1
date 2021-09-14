@@ -96,26 +96,31 @@ function Install-WindowsCapability([string]$Capability) {
 function Install-Profile {
     [CmdletBinding()]
     param (
-        [Parameter(HelpMessage = "Dotfiles path")]
-        [string]
-        $Path = $DefaultDotfilesPath
+        # Path of source profile
+        [Parameter()]
+        [string]$Path = (Join-Path $DefaultDotfilesPath -ChildPath powershell\profile.ps1)
     )
     if (-not (Test-Path $PROFILE)) {
         Write-Output "Install PowerShell profile"
         New-Item -Path $PROFILE -ItemType File -Force
-        $dfprofile = Join-Path $Path -ChildPath "PowerShell\profile.ps1"
-        Set-Content -Path $PROFILE -Value ". $dfprofile"
+        Set-Content -Path $PROFILE -Value ". $Path"
     }
 }
 
 # TODO: Support -Force
 function Install-Vimrc {
+    [CmdletBinding()]
+    param (
+        # Path of source vimrc
+        [Parameter()]
+        [string]$Path = (Join-Path $DefaultDotfilesPath -ChildPath conf\vimrc)
+    )
     # Vim profile
     $vimrc = Join-Path -Path $env:USERPROFILE -ChildPath _vimrc
     if (-not (Test-Path -Path $vimrc)) {
         Write-Output "Install vimrc"
         New-Item -Path $vimrc -ItemType File -Force
-        Set-Content -Path $vimrc -Value "source $DotfileDest/conf/vimrc"
+        Set-Content -Path $vimrc -Value "source $Path"
     }
 }
 
