@@ -12,7 +12,7 @@ $ErrorActionPreference = "Stop"
 
 $DefaultDotfilesPath = Join-Path -Path $env:USERPROFILE -ChildPath ".config\dotfiles"
 
-#region Helpers
+#region Tasks
 
 function Install-Bootstrap {
     <#
@@ -34,6 +34,35 @@ function Install-Bootstrap {
     Install-Bin
     Write-Output "Boostrap complete"
 }
+
+function Update-DevTools {
+    <#
+    .SYNOPSIS
+        Update/install developer tools
+    #>
+    [CmdletBinding()]
+    param()
+
+    Write-Host "Updating developer system settings"
+
+    Write-Host "Update PowerShell modules"
+    Update-PowerShellModules
+
+    Write-Host "Enable Hyper-V"
+    Invoke-Administrator -Command { Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All }
+
+    Write-Host "Enable WSL"
+    Invoke-Administrator -Command { wsl --update; wsl --install --distribution Ubuntu }
+
+    Write-Host "Enable hypervisor platform (for Android emulator and QEMU)"
+    Invoke-Administrator -Command { Enable-WindowsOptionalFeature -Online -FeatureName HypervisorPlatform -All }
+
+    Write-Host "Recommend reboot to enable all services"
+}
+
+#endregion
+
+#region Helpers
 
 function Install-Zip {
     <#
@@ -71,20 +100,6 @@ function Install-Zip {
         finally {
             if (Test-Path $target) { Remove-Item -Path $target }
         }
-    }
-}
-
-function Install-WindowsOptionalFeature([string]$FeatureName) {
-    if ((Get-WindowsOptionalFeature -Online -FeatureName $FeatureName).State -eq "Disabled") {
-        Write-Output "Enable $FeatureName"
-        Enable-WindowsOptionalFeature -Online -FeatureName $FeatureName -All
-    }
-}
-
-function Install-WindowsCapability([string]$Capability) {
-    if ((Get-WindowsCapability -Online -Name "$Capability*").State -eq "NotPresent") {
-        Write-Output "Add Windows Capability $Capability"
-        Add-WindowsCapability -Online -Name $Capability
     }
 }
 
@@ -130,17 +145,24 @@ function Install-Vimrc {
 
 function Update-PowerShellModules {
     foreach ($m in @(
-            'Microsoft.PowerShell.GraphicalTools',
             'Microsoft.PowerShell.ConsoleGuiTools',
             'posh-git',
             'WslInterop'
         )) {
         try {
-            if (!(Get-Module -Name $m -ListAvailable)) {
+            # Verify module exists
+            if(-not (Get-Module -Name $m -ListAvailable)) {
+                throw "Module $m is not available"
+            }
+
+            # Install module or update
+            if (-not (Get-Module -Name $m)) {
+                Write-Host "Installing $m"
                 Install-Module -Name $m -Scope CurrentUser -Force -AllowClobber -AllowPrerelease -AcceptLicense
             }
             else {
-                Update-Module -Name $m -Force
+                Write-Host "Updating $m"
+                Update-Module -Name $m -Scope CurrentUser -Force -AllowPrerelease -AcceptLicense
             }
         }
         catch {
@@ -174,18 +196,6 @@ function Install-SSH() {
 
     # Configure default shell
     Set-ItemProperty -Path HKLM:\SOFTWARE\OpenSSH -Name DefaultShell -Value $env:ProgramFiles\PowerShell\7\pwsh.exe
-}
-
-function Install-Virtualization() {
-    # Windows Sandbox
-    Install-WindowsOptionalFeature Containers-DisposableClientVM
-
-    # Hyper-V
-    Install-WindowsOptionalFeature Microsoft-Hyper-V
-    Install-WindowsOptionalFeature VirtualMachinePlatform
-
-    # WSL
-    Install-WindowsOptionalFeature Microsoft-Windows-Subsystem-Linux
 }
 
 #endregion
