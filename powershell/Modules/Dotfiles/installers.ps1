@@ -10,8 +10,6 @@ param()
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$DefaultDotfilesPath = Join-Path -Path $env:USERPROFILE -ChildPath ".config\dotfiles"
-
 #region Tasks
 
 function Install-Bootstrap {
@@ -22,7 +20,7 @@ function Install-Bootstrap {
     [CmdletBinding()]
     param (
         # Dotfiles path
-        [string]$Path = $DefaultDotfilesPath,
+        [string]$Path = $Env:DOTFILES,
         
         # Replace existing configuration
         [switch]$Force = $false
@@ -122,7 +120,7 @@ function Install-Profile {
     [CmdletBinding()]
     param (
         # Path of source profile
-        [string]$Path = (Join-Path $DefaultDotfilesPath -ChildPath powershell\profile.ps1),
+        [string]$Path = (Join-Path $Env:DOTFILES -ChildPath powershell\profile.ps1),
         
         # Replace existing profile
         [switch]$Force = $false
@@ -139,7 +137,7 @@ function Install-Vimrc {
     [CmdletBinding()]
     param (
         # Path of source vimrc
-        [string]$Path = (Join-Path $DefaultDotfilesPath -ChildPath conf\vimrc),
+        [string]$Path = (Join-Path $Env:DOTFILES -ChildPath conf\vimrc),
 
         # Replace existing vimrc
         [switch]$Force = $false
