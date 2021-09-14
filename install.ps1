@@ -23,8 +23,8 @@ switch ($PSVersionTable.PSEdition) {
 
 function Install-Winget {
     <#
-    .SYNOPSIS
-    Install winget package manager
+        .SYNOPSIS
+            Install winget package manager
     #>
     $winget = Get-AppPackage -Name 'Microsoft.DesktopAppInstaller'
     if (-not $winget) {
@@ -44,8 +44,8 @@ function Install-Winget {
 
 function Install-Packages {
     <#
-    .SYNOPSIS
-    Install base packages via Windows Package Manager
+        .SYNOPSIS
+            Install base packages via Windows Package Manager
     #>
     $packages = @('Git.Git', 'Microsoft.PowerShell')
     foreach ($p in $packages) {

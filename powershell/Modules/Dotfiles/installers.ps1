@@ -120,26 +120,28 @@ function Install-Zip {
 function Install-Profile {
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        # Path of source profile
-        [string]$Path = (Join-Path $Env:DOTFILES -ChildPath powershell\profile.ps1),
+        # Path of dotfiles
+        [string]$Path = $Env:DOTFILES,
         
         # Replace existing profile
         [switch]$Force
     )
+
     if ($Force) { Remove-Item -Path $PROFILE -Force }
 
     if (-not (Test-Path $PROFILE)) {
         Write-Output "Install PowerShell profile"
         New-Item -Path $PROFILE -ItemType File -Force
-        Set-Content -Path $PROFILE -Value ". $Path"
+        $dotfilesProfile = (Join-Path $Path -ChildPath powershell\profile.ps1)
+        Set-Content -Path $PROFILE -Value ". $dotfilesProfile"
     }
 }
 
 function Install-Vimrc {
     [CmdletBinding(SupportsShouldProcess)]
     param (
-        # Path of source vimrc
-        [string]$Path = (Join-Path $Env:DOTFILES -ChildPath conf\vimrc),
+        # Path of dotfiles
+        [string]$Path = $Env:DOTFILES,
 
         # Replace existing vimrc
         [switch]$Force
@@ -150,7 +152,8 @@ function Install-Vimrc {
     if (-not (Test-Path -Path $vimrc)) {
         Write-Output "Install vimrc"
         New-Item -Path $vimrc -ItemType File -Force
-        Set-Content -Path $vimrc -Value "source $Path"
+        $dotfilesVimrc = (Join-Path $Path -ChildPath conf\vimrc)
+        Set-Content -Path $vimrc -Value "source $dotfilesVimrc"
     }
 }
 
