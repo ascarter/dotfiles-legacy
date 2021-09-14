@@ -81,6 +81,7 @@ function Install-Dotfiles {
     if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", [System.EnvironmentVariableTarget]::User)) {
         Write-Output "Set DOTFILES environment variable"
         [System.Environment]::SetEnvironmentVariable("DOTFILES", $Path, [System.EnvironmentVariableTarget]::User)
+        Write-Output "DOTFILES=$([System.Environment]::GetEnvironmentVariable("DOTFILES", [System.EnvironmentVariableTarget]::User))"
     } else {
         Write-Verbose "dotfiles env set"
     }
