@@ -5,8 +5,8 @@ if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", "User")) 
     Set-Item -Path Env:DOTFILES -Value (Join-Path $Env:USERPROFILE -ChildPath .config\dotfiles)
 }
 
-# Import Dotfiles module
-Import-Module (Join-Path -Path $Env:DOTFILES -ChildPath PowerShell\Modules\Dotfiles)
+# Add Dotfiles module to path
+$Env:PSModulePath += [System.IO.Path]::PathSeparator + (Join-Path -Path $Env:DOTFILES -ChildPath PowerShell\Modules)
 
 #endregion
 
