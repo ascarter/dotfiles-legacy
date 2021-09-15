@@ -59,7 +59,7 @@ Linux )
             gnupg-agent \
             jq \
             mc \
-            msopenjdk-11 \
+            msopenjdk-16 \
             nodejs \
             powershell \
             python3 \
@@ -71,7 +71,7 @@ Linux )
         sudo npm install -g npm yarn
 
         # Install Go in /usr/local
-        GO_VERSION=1.16.7
+        GO_VERSION=1.17.1
         if [ -d /usr/local/go ] && [ "$(/usr/local/go/bin/go version | cut -f3 -d' ')" != "go${GO_VERSION}" ]; then
             echo Removing $(/usr/local/go/bin/go version) ...
             sudo rm -Rf /usr/local/go
@@ -84,7 +84,7 @@ Linux )
         fi
 
         # Install duf tool
-        /usr/local/go/bin/go get -u github.com/muesli/duf
+        /usr/local/go/bin/go install github.com/muesli/duf@latest
         ;;
     esac
     ;;
