@@ -31,14 +31,6 @@ fi
 # 	_YKMAN_COMPLETE=source /Applications/YubiKey\ Manager.app/Contents/MacOS/ykman > ${COMPLETIONS_DIR}/_ykman
 # fi
 
-# Docker
-if [[ -d /Applications/Docker.app ]]; then
-	for f in docker docker-compose docker-machine; do
-		echo "Generating ${f} completions..."
-		cp /Applications/Docker.app/Contents/Resources/etc/${f}.zsh-completion ${COMPLETIONS_DIR}/_${f}
-	done
-fi
-
 # Clear cached completions
 rm -f ${ZDOTDIR:-$HOME}/.zcompdump
 zsh -ic "compinit"

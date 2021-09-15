@@ -85,22 +85,6 @@ Linux )
 
         # Install duf tool
         /usr/local/go/bin/go get -u github.com/muesli/duf
-
-        # Add Docker (except on WSL)
-        if [ -z "${WSL_DISTRO_NAME}" ]; then
-            # Add Docker repository
-            # https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-            sudo apt-key fingerprint 0EBFCD88
-            sudo add-apt-repository "deb [arch=${ARCH}] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-
-            # Install Docker
-            sudo apt-get update
-            sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
-            # Add user to docker group
-            sudo usermod -aG docker $USER
-        fi
         ;;
     esac
     ;;

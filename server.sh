@@ -23,12 +23,6 @@ Linux )
         sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61
         echo "deb https://ookla.bintray.com/debian generic main" | sudo tee /etc/apt/sources.list.d/speedtest.list
 
-        # Add Docker repository
-        # https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-        sudo apt-key fingerprint 0EBFCD88
-        sudo add-apt-repository "deb [arch=${ARCH}] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-
 		# Update distro
 		sudo apt-get update
 		sudo apt-get upgrade -y
@@ -42,19 +36,8 @@ Linux )
         sudo apt-get install -y \
             curl \
             containerd.io \
-            docker-ce \
-            docker-ce-cli \
             jq \
             speedtest
-
-        # Add user to docker group
-        sudo usermod -aG docker $USER
-
-        # Install docker-compose
-        # sudo curl -L "https://github.com/docker/compose/releases/download/1.28.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        # sudo chmod +x /usr/local/bin/docker-compose
-        # pip3 install docker-compose
-        sudo curl -L https://raw.githubusercontent.com/docker/compose/1.28.0/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
 		;;
 	*)
 		echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"

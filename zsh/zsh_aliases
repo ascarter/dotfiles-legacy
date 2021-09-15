@@ -37,26 +37,6 @@ alias rst='resize -s 0 120'
 # Ski
 alias whistlertom='curl -o ${HOME}/Documents/whistler_tom.pdf -L "http://online.whistlerblackcomb.com/TomPDF/Default.aspx?Season=1&Type=bg" && ql ${HOME}/Documents/whistler_tom.pdf'
 
-# Docker aliases
-alias dcm=docker-compose
-
-# Remove stopped containers
-alias dockerrms='docker rm $(docker ps -a -q)'
-
-# List untagged images
-alias dockeruntagged='docker images --filter "dangling=true"'
-
-# Run docker sandbox
-alias druby="docker_ruby ruby"
-alias dgem="docker_ruby gem"
-alias dbundle="docker_ruby bundle"
-alias dnode="docker_node node"
-alias dnpm="docker_node npm"
-alias dgo="docker_go go"
-alias dgomake="docker_go make"
-alias dpy="docker_python python"
-alias dpip="docker_python pip"
-
 # Ruby
 alias binit="bundle install --path vendor/bundle"
 alias bstubs="bundle install --binstubs"
