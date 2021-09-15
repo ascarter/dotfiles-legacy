@@ -56,7 +56,7 @@ Linux )
 		sudo apt upgrade -y
 
 		# Install packages
-		sudo apt install apt-transport-https build-essential git keychain libnss3-tools socat update-motd zip zsh
+		sudo apt install -y apt-transport-https build-essential git keychain libnss3-tools socat update-motd zip zsh
 		;;
 	*)
 		echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"
