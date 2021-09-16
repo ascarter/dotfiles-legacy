@@ -6,7 +6,7 @@ if ($null -eq [System.Environment]::GetEnvironmentVariable("DOTFILES", "User")) 
 }
 
 # Add Dotfiles module to path
-$Env:PSModulePath += [System.IO.Path]::PathSeparator + (Join-Path -Path $Env:DOTFILES -ChildPath PowerShell\Modules)
+$Env:PSModulePath += [System.IO.Path]::PathSeparator + (Join-Path -Path $Env:DOTFILES -ChildPath powershell\modules)
 
 #endregion
 

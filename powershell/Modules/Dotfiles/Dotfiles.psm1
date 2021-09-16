@@ -283,9 +283,9 @@ function Get-Uname {
     #>
     Get-CimInstance Win32_OperatingSystem | Select-Object 'Caption', 'CSName', 'Version', 'BuildType', 'OSArchitecture' | Format-Table
 }
-Set-Alias -Name uname -Value Get-Uname
 
 # Unix aliases
+Set-Alias -Name uname -Value Get-Uname
 Set-Alias -Name ll -Value Get-ChildItem
 Set-Alias -Name which -Value Get-Command
 
@@ -293,7 +293,8 @@ Set-Alias -Name which -Value Get-Command
 Set-Alias -Name pbcopy -Value Set-Clipboard
 Set-Alias -Name pbpaste -Value Get-Clipboard
 
-Set-Alias -Name findalias -Value Get-CmdletAlias
+Set-Alias -Name fal -Value Get-CmdletAlias
+
 #endregion
 
 #region Prompt
