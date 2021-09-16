@@ -264,7 +264,17 @@ if (Get-Command winget -ErrorAction SilentlyContinue) {
             [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
         }
     }
-}    
+}
+
+function Get-CmdletAlias ($cmdletname) {
+    <#
+        .SYNOPSIS
+            List aliases for any cmdlet
+    #>
+    Get-Alias |
+      Where-Object -FilterScript {$_.Definition -like "$cmdletname"} |
+        Format-Table -Property Definition, Name -AutoSize
+}
 
 function Get-Uname {
     <#
@@ -283,6 +293,7 @@ Set-Alias -Name which -Value Get-Command
 Set-Alias -Name pbcopy -Value Set-Clipboard
 Set-Alias -Name pbpaste -Value Get-Clipboard
 
+Set-Alias -Name findalias -Value Get-CmdletAlias
 #endregion
 
 #region Prompt
