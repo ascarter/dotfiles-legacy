@@ -12,7 +12,9 @@ $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 
 # Remove user profile
-if (Test-Path -Path $PROFILE) { Remove-Item -Path $PROFILE -Force }
+if (Test-Path -Path $PROFILE.CurrentUserAllHosts) {
+    Remove-Item -Path $PROFILE.CurrentUserAllHosts -Force
+}
 
 # Remove vimrc
 $vimrc = Join-Path -Path $env:USERPROFILE -ChildPath _vimrc

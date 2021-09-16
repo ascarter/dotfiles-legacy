@@ -122,18 +122,22 @@ function Install-Profile {
     param (
         # Path of dotfiles
         [string]$Path = $Env:DOTFILES,
+
+        [string]$PSProfile = $PROFILE.CurrentUserAllHosts,
         
         # Replace existing profile
         [switch]$Force
     )
 
-    if ($Force) { Remove-Item -Path $PROFILE -Force }
+    if ($Force -and (Test-Path $PSProfile)) {
+        Remove-Item -Path $PSProfile -Force
+    }
 
-    if (-not (Test-Path $PROFILE)) {
+    if (-not (Test-Path $PSProfile)) {
         Write-Output "Install PowerShell profile"
-        New-Item -Path $PROFILE -ItemType File -Force
+        New-Item -Path $PSProfile -ItemType File -Force
         $dotfilesProfile = (Join-Path $Path -ChildPath powershell\profile.ps1)
-        Set-Content -Path $PROFILE -Value ". $dotfilesProfile"
+        Set-Content -Path $PSProfile -Value ". $dotfilesProfile"
     }
 }
 
