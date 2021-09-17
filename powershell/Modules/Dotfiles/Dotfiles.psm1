@@ -7,17 +7,21 @@ if ($host.Name -eq 'ConsoleHost') {
     Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
     Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
     Set-PSReadLineOption -PredictionSource History
-    # Set-PSReadLineOption -PredictionViewStyle ListView        
+    # Set-PSReadLineOption -PredictionViewStyle ListView
 }
 
 #endregion
 
 #region Helpers
 
-function Set-LocationDotfiles() { Set-Location -Path $Env:DOTFILES }
+function Set-LocationDotfiles {
+    Set-Location -Path $Env:DOTFILES
+}
 Set-Alias -Name dotfiles -Value Set-LocationDotfiles
 
-function Start-ProfileEdit { code -n $PROFILE.CurrentUserAllHosts }
+function Start-ProfileEdit {
+    code -n $PROFILE.CurrentUserAllHosts
+}
 Set-Alias -Name editprofile -Value Start-ProfileEdit
 
 function Test-Adminstrator {
@@ -35,7 +39,7 @@ function Invoke-Administrator {
     .PARAMETER Command
     Script block for command to execute as Administrator
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter()]
         [string]$Command
@@ -68,8 +72,10 @@ function Update-Path {
         [switch]$SetEnv
     )
     process {
-        $parts = ($Env:PATH -Split ";" | Sort-Object | Get-Unique)
-        if ($SetEnv) { $envparts = ([System.Environment]::GetEnvironmentVariable("PATH") -Split ";" | Sort-Object | Get-Unique) }
+        $parts = ($Env:PATH -Split ';' | Sort-Object | Get-Unique)
+        if ($SetEnv) {
+            $envparts = ([System.Environment]::GetEnvironmentVariable('PATH') -Split ';' | Sort-Object | Get-Unique)
+        }
 
         foreach ($p in $paths) {
             if (Test-Path -Path $p) {
@@ -81,10 +87,12 @@ function Update-Path {
         }
 
         # Set current path
-        $Env:PATH = $parts -Join ";"
+        $Env:PATH = $parts -Join ';'
 
         # Save to environment path if requested
-        if ($SetEnv) { [System.Environment]::SetEnvironmentVariable("PATH", $envparts -Join ";", [System.EnvironmentVariableTarget]::User) }
+        if ($SetEnv) {
+            [System.Environment]::SetEnvironmentVariable('PATH', $envparts -Join ';', [System.EnvironmentVariableTarget]::User)
+        }
     }
 }
 
@@ -110,7 +118,7 @@ function Update-Owner {
     )
 
     $values = @{
-        RegisteredOwner = $Owner
+        RegisteredOwner        = $Owner
         RegisteredOrganization = $Organization
     }
 
@@ -119,12 +127,13 @@ function Update-Owner {
         $value = $values[$prop]
         if ($value -ne $current.$prop) {
             Invoke-Administrator "& { Set-ItemProperty -Path '$OwnerKey' -Name '$prop' -Value '$value' }"
-        } else {
+        }
+        else {
             Write-Output "No change for $prop"
         }
     }
 
-    Get-Owner        
+    Get-Owner
 }
 
 #endregion
@@ -141,7 +150,7 @@ if (Get-Command code -ErrorAction SilentlyContinue) {
 }
 
 # Set SDK environment variable if not set
-if ($null -eq [System.Environment]::GetEnvironmentVariable("SDK_ROOT", "User")) {
+if ($null -eq [System.Environment]::GetEnvironmentVariable('SDK_ROOT', 'User')) {
     Set-Item -Path Env:SDK_ROOT -Value (Join-Path $Env:USERPROFILE -ChildPath sdk)
 }
 
@@ -152,7 +161,7 @@ if (Get-Command go -ErrorAction SilentlyContinue) {
 
 # Check for Android SDK
 if (Test-Path -Path (Join-Path $Env:LOCALAPPDATA -ChildPath Android\SDK)) {
-    if ($null -eq [System.Environment]::GetEnvironmentVariable("ANDROID_SDK_ROOT", "User")) {
+    if ($null -eq [System.Environment]::GetEnvironmentVariable('ANDROID_SDK_ROOT', 'User')) {
         Set-Item -Path Env:ANDROID_SDK_ROOT -Value (Join-Path $Env:LOCALAPPDATA -ChildPath Android\SDK)
     }
 
@@ -165,7 +174,7 @@ if (Test-Path -Path (Join-Path $Env:LOCALAPPDATA -ChildPath Android\SDK)) {
 
 # Check for Flutter SDK
 if (Test-Path -Path (Join-Path $Env:SDK_ROOT -ChildPath flutter)) {
-    if ($null -eq [System.Environment]::GetEnvironmentVariable("FLUTTER_SDK", "User")) {
+    if ($null -eq [System.Environment]::GetEnvironmentVariable('FLUTTER_SDK', 'User')) {
         Set-Item -Path Env:FLUTTER_SDK -Value (Join-Path $Env:SDK_ROOT -ChildPath flutter)
     }
 
@@ -237,8 +246,8 @@ function Write-GitConfig {
     Set-GitConfig -Key 'core.longpaths' -Value 'true'
 
     # User info
-    Read-GitConfig -Key 'user.name' -Prompt "User name"
-    Read-GitConfig -Key 'user.email' -Prompt "Email"
+    Read-GitConfig -Key 'user.name' -Prompt 'User name'
+    Read-GitConfig -Key 'user.email' -Prompt 'Email'
 
     # GUI
     Set-GitConfig -Key 'gui.fontui' -Value '-family \"Segoe UI\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0'
@@ -272,8 +281,8 @@ function Get-CmdletAlias ($cmdletname) {
             List aliases for any cmdlet
     #>
     Get-Alias |
-      Where-Object -FilterScript {$_.Definition -like "$cmdletname"} |
-        Format-Table -Property Definition, Name -AutoSize
+    Where-Object -FilterScript { $_.Definition -like "$cmdletname" } |
+    Format-Table -Property Definition, Name -AutoSize
 }
 
 function Get-Uname {
@@ -311,11 +320,11 @@ if (Get-Module -Name posh-git -ListAvailable) {
             if (Test-Path variable:/PSDebugContext) {
                 Write-Prompt '[DBG]: ' -ForegroundColor Red
             }
-            elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+            elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
                 Write-Prompt '[ADMIN]: ' -ForegroundColor Magenta
             }
         )
-        $GitPromptSettings.DefaultPromptSuffix.Text = "PS > "
+        $GitPromptSettings.DefaultPromptSuffix.Text = 'PS > '
         $prompt = & $GitPromptScriptBlock
         if ($prompt) { $prompt } else { ' ' }
     }
@@ -327,11 +336,11 @@ else {
         $principal = [Security.Principal.WindowsPrincipal] $identity
 
         $(if (Test-Path variable:/PSDebugContext) { '[DBG]: ' }
-            elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { "[ADMIN]: " }
+            elseif ($principal.IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) { '[ADMIN]: ' }
             else { '' }
         ) + 'PS ' + $(Get-Location) +
         $(if ($NestedPromptLevel -ge 1) { '>>' }) + '> '
     }
-}    
+}
 
 #endregion

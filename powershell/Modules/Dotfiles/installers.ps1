@@ -8,7 +8,7 @@
 param()
 
 Set-StrictMode -Version Latest
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = 'Stop'
 
 #region Tasks
 
@@ -21,23 +21,23 @@ function Install-Bootstrap {
     param (
         # Dotfiles path
         [string]$Path = $Env:DOTFILES,
-        
+
         # Replace existing configuration
         [switch]$Force
     )
 
-    Write-Output "Bootstrap dotfiles"
-    
+    Write-Output 'Bootstrap dotfiles'
+
     Write-Verbose "Install profile to $Path"
     Install-Profile -Path $Path -Force:$Force
-    
-    Write-Verbose "Install vimrc"
+
+    Write-Verbose 'Install vimrc'
     Install-Vimrc -Path $Path -Force:$Force
-    
-    Write-Verbose "Install bin"
+
+    Write-Verbose 'Install bin'
     Install-Bin
-    
-    Write-Output "Boostrap complete"
+
+    Write-Output 'Boostrap complete'
 }
 
 function Update-DevTools {
@@ -51,26 +51,26 @@ function Update-DevTools {
         [switch]$Force
     )
 
-    Write-Host "Updating developer system settings"
+    Write-Output 'Updating developer system settings'
 
     Install-Bootstrap -Force:$Force
 
-    Write-Host "Update git configuration"
+    Write-Output 'Update git configuration'
     Write-GitConfig
 
-    Write-Host "Update PowerShell modules"
+    Write-Output 'Update PowerShell modules'
     Update-PowerShellModules -Force:$Force
 
-    Write-Host "Enable Hyper-V"
+    Write-Output 'Enable Hyper-V'
     Invoke-Administrator -Command { Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All }
 
-    Write-Host "Enable WSL"
+    Write-Output 'Enable WSL'
     Invoke-Administrator -Command { wsl --update; wsl --install --distribution Ubuntu }
 
-    Write-Host "Enable hypervisor platform (for Android emulator and QEMU)"
+    Write-Output 'Enable hypervisor platform (for Android emulator and QEMU)'
     Invoke-Administrator -Command { Enable-WindowsOptionalFeature -Online -FeatureName HypervisorPlatform -All }
 
-    Write-Host "Recommend reboot to enable all services"
+    Write-Output 'Recommend reboot to enable all services'
 }
 
 #endregion
@@ -80,7 +80,7 @@ function Update-DevTools {
 function Install-Zip {
     <#
     .SYNOPSIS
-        Download and extract zip archive to target location 
+        Download and extract zip archive to target location
     .EXAMPLE
         PS C:\> Install-Zip -Uri https://example.com/myapp.zip -Dest C;\bin
         Downloads myapp.zip from URI and extracts to C:\bin
@@ -124,7 +124,7 @@ function Install-Profile {
         [string]$Path = $Env:DOTFILES,
 
         [string]$PSProfile = $PROFILE.CurrentUserAllHosts,
-        
+
         # Replace existing profile
         [switch]$Force
     )
@@ -134,7 +134,7 @@ function Install-Profile {
     }
 
     if (-not (Test-Path $PSProfile)) {
-        Write-Output "Install PowerShell profile"
+        Write-Output 'Install PowerShell profile'
         New-Item -Path $PSProfile -ItemType File -Force
         $dotfilesProfile = (Join-Path $Path -ChildPath powershell\profile.ps1)
         Set-Content -Path $PSProfile -Value ". $dotfilesProfile"
@@ -154,7 +154,7 @@ function Install-Vimrc {
     $vimrc = Join-Path -Path $env:USERPROFILE -ChildPath _vimrc
     if ($Force) { Remove-Item -Path $vimrc -Force }
     if (-not (Test-Path -Path $vimrc)) {
-        Write-Output "Install vimrc"
+        Write-Output 'Install vimrc'
         New-Item -Path $vimrc -ItemType File -Force
         $dotfilesVimrc = (Join-Path $Path -ChildPath conf\vimrc)
         Set-Content -Path $vimrc -Value "source $dotfilesVimrc"
@@ -174,22 +174,23 @@ function Update-PowerShellModules {
     foreach ($m in @(
             'Microsoft.PowerShell.ConsoleGuiTools',
             'posh-git',
+            'PSScriptAnalyzer',
             'WslInterop'
         )) {
         try {
-            if(-not (Get-Module -Name $m -ListAvailable)) { throw "Module $m is not available" }
+            if (-not (Find-Module -Name $m -ErrorAction SilentlyContinue)) { throw "Module $m is not available" }
 
-            if ($Force -and (Get-Module -Name $m)) { 
-                Write-Host "Removing $m"
+            if ($Force -and (Get-Module -Name $m)) {
+                Write-Output "Removing $m"
                 Uninstall-Module -Name $m -Force
             }
-            
+
             if (-not (Get-Module -Name $m)) {
-                Write-Host "Installing $m"
+                Write-Output "Installing $m"
                 Install-Module -Name $m -Scope CurrentUser -Force -AllowClobber -AllowPrerelease -AcceptLicense
             }
             else {
-                Write-Host "Updating $m"
+                Write-Output "Updating $m"
                 Update-Module -Name $m -Scope CurrentUser -Force -AllowPrerelease -AcceptLicense
             }
         }
@@ -218,8 +219,8 @@ function Install-SSH() {
     Start-Service ssh-agent
 
     # Add firewall rule
-    if (-not ((Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP").Enabled -eq $true)) {
-        Write-Warning "Missing OpenSSH Server inbound firewall rule"
+    if (-not ((Get-NetFirewallRule -Name 'OpenSSH-Server-In-TCP').Enabled -eq $true)) {
+        Write-Warning 'Missing OpenSSH Server inbound firewall rule'
     }
 
     # Configure default shell
@@ -259,7 +260,7 @@ function Install-Sysinternals {
     # Remove old sysinternals
     if (Test-Path -Path $sysinternals) { Remove-Item -Path $sysinternals }
 
-    Write-Output "Updating sysinternals"
+    Write-Output 'Updating sysinternals'
     Install-Zip -Uri $uri -Dest $sysinternals
 
     # Add to system path
@@ -273,7 +274,7 @@ function Install-Speedtest() {
     #>
     $bin = Join-Path -Path $Env:SystemDrive -ChildPath bin
     $uri = 'https://bintray.com/ookla/download/download_file?file_path=ookla-speedtest-1.0.0-win64.zip'
-    Write-Output "Updating speedtest"
+    Write-Output 'Updating speedtest'
     Install-Zip -Uri $uri -Dest $bin
 }
 
