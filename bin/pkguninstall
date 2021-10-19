@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Check if pkg installed
+if ! pkgutil --pkg-info $1; then
+    exit 1
+fi
+
+# for f in $(pkgutil --only-files --files $1); do
+#     echo Deleting $f
+# done
+
+# Remove files
+pkgutil --only-files --files $1 | tr '\n' '\0' | xargs -n 1 -0 sudo rm
+
+# Remove install record
+sudo pkgutil --forget $1
