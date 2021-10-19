@@ -248,25 +248,6 @@ function Install-Bin {
     Update-Path @($usrbin) -SetEnv
 }
 
-function Install-Sysinternals {
-    <#
-    .SYNOPSIS
-    Install sysinternals suite and adjusts path
-    #>
-
-    $sysinternals = Join-Path -Path $Env:SystemDrive -ChildPath sysinternals
-    $uri = 'https://download.sysinternals.com/files/SysinternalsSuite.zip'
-
-    # Remove old sysinternals
-    if (Test-Path -Path $sysinternals) { Remove-Item -Path $sysinternals }
-
-    Write-Output 'Updating sysinternals'
-    Install-Zip -Uri $uri -Dest $sysinternals
-
-    # Add to system path
-    Update-Path @($sysinternals) -SetEnv
-}
-
 function Install-Speedtest() {
     <#
     .SYNOPSIS
