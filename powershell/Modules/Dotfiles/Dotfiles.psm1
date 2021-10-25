@@ -154,6 +154,11 @@ if ($null -eq [System.Environment]::GetEnvironmentVariable('SDK_ROOT', 'User')) 
     Set-Item -Path Env:SDK_ROOT -Value (Join-Path $Env:USERPROFILE -ChildPath sdk)
 }
 
+# Check for Tailscale
+if (Get-Command tailscale -ErrorAction SilentlyContinue) {
+    Update-Path @(Join-Path -Path 'Env:\ProgramFiles(x86)' -ChildPath "Tailscale IPN")
+}
+
 # Check for Go
 if (Get-Command go -ErrorAction SilentlyContinue) {
     Update-Path @(Join-Path -Path (go env GOPATH) -ChildPath bin)
