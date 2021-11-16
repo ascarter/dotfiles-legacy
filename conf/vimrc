@@ -166,6 +166,17 @@ set autoindent
 " Go
 let g:go_fmt_command = "gofmt"
 
+" Test if running in WSL
+function! IsWSL()
+	if has("unix") || has("linux")
+		let lines = readfile("/proc/version")
+		if lines[0] =~ "Microsoft"
+			return 1
+		endif
+	endif
+	return 0
+endfunction
+
 " =====================================
 " GUI settings
 " =====================================
@@ -227,6 +238,9 @@ if has("gui_running")
 		imap <D-8> <Esc>8gt
 		map  <D-9> 9gt
 		imap <D-9> <Esc>9gt
+	elseif IsWSL()
+		" Linux on WSL
+		set guifont=Monospace\ 14
 	elseif has('gui_gtk2') || has('gui_gtk3')
 		" Linux
 		set guifont=Roboto\ Mono\ 12,Cascadia\ Code\ 12,Source\ Code\ Pro\ Medium\ 12,Monospace\ 12
