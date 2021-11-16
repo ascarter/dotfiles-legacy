@@ -67,11 +67,16 @@ Linux )
             python3-pip \
             speedtest
 
+		# Install GUI apps
+		sudo apt-get install -y \
+			nautilus \
+            vim-gtk
+
         # Update npm and install yarn support
         sudo npm install -g npm yarn
 
         # Install Go in /usr/local
-        GO_VERSION=1.17.1
+        GO_VERSION=1.17.3
         if [ -d /usr/local/go ] && [ "$(/usr/local/go/bin/go version | cut -f3 -d' ')" != "go${GO_VERSION}" ]; then
             echo Removing $(/usr/local/go/bin/go version) ...
             sudo rm -Rf /usr/local/go
