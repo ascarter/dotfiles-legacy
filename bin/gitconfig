@@ -67,7 +67,7 @@ Linux )
 	# Check for WSL
 	if [ -n "${WSL_DISTRO_NAME}" ]; then
 		# Use Windows credential manager if running in WSL
-		gc_set credential.helper "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
+		gc_set credential.helper "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager-core.exe"
 
 		# Use Fork for visual
 		gc_set alias.visual '!Fork.exe $(wslpath -w $(git root))'
