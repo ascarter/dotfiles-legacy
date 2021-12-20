@@ -23,27 +23,11 @@ The following are the minimum requirements for dotfiles to work:
 * [git](https://git-scm.com/download/linux)
 * zsh
 
-On macOS, [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) is expected to be installed and configured. Optionally, [homebrew](https://brew.sh) is supported as well.
+On macOS, [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) is expected to be installed and configured.
 
 ### Install
 
 For convenience, a full install script can be run using the following command:
-
-```sh
-curl https://raw.githubusercontent.com/ascarter/dotfiles/main/dotfiles.sh | sh -
-```
-
-#### Manually Install
-
-The `init.sh` script prepares the system for running the dotfiles install script. This is an optional system level configuration.
-
-To run the provided init script:
-
-```sh
-curl https://raw.githubusercontent.com/ascarter/dotfiles/main/init.sh | sh -
-```
-
-To install dotfiles, run the following shell script:
 
 ```sh
 curl https://raw.githubusercontent.com/ascarter/dotfiles/main/install.sh | sh -
@@ -62,7 +46,6 @@ If directly executing script is not desired, clone into a location (recommend `~
 ```sh
 git clone git@github.com:ascarter/dotfiles.git ~/.config/dotfiles
 cd ~/.config/dotfiles
-./init.sh
 ./install.sh
 ./developer.sh
 ```
