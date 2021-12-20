@@ -18,6 +18,13 @@ Linux )
 	Ubuntu )
         ARCH=$(dpkg --print-architecture)
 
+		# Configure hostname
+		local hostname="$(hostname -s)"
+		read -p "hostname (${hostname}): " input
+		sudo hostnamectl set-hostname "${input:-${current}}"
+		sudo hostnamectl set-chassis server
+		sudo hostnamectl set-icon-name ""
+
         # Add speedtest respository
         # https://www.speedtest.net/apps/cli
         sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61
