@@ -58,6 +58,9 @@ An install script for configuring some server packages can be run using the foll
 curl https://raw.githubusercontent.com/ascarter/dotfiles/main/server.sh | sh -
 ```
 
+Dotfiles is not required to run the server install script.
+
+
 ### Uninstall
 
 Run the uninstall script to remove the symlinks:
