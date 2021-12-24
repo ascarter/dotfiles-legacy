@@ -30,7 +30,7 @@ On macOS, [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) is ex
 For convenience, a full install script can be run using the following command:
 
 ```sh
-sh -c "$(curl -sL https://raw.githubusercontent.com/ascarter/dotfiles/main/install.sh)"
+sh -c "$(curl -sSL https://raw.githubusercontent.com/ascarter/dotfiles/main/install.sh)"
 ```
 
 To optionally install developer tools, run the following shell script after installing dotfiles:
@@ -55,7 +55,7 @@ cd ~/.config/dotfiles
 An install script for configuring some server packages can be run using the following command:
 
 ```sh
-sh -c "$(curl -sL https://raw.githubusercontent.com/ascarter/dotfiles/main/server.sh)"
+sh -c "$(curl -sSL https://raw.githubusercontent.com/ascarter/dotfiles/main/server.sh)"
 ```
 
 Dotfiles is not required to run the server install script.

@@ -45,7 +45,7 @@ Linux )
 
         # Add speedtest respository
         # https://www.speedtest.net/apps/cli
-        curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
+        curl -fsSL https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
 
         # Install server packages
         # Install developer packages
@@ -59,7 +59,7 @@ Linux )
             tailscale
 
         # Install docker-compose
-        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo curl -fsSL "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
 
         # Authenticate and connect to Tailscale network
