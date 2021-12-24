@@ -21,7 +21,7 @@ Linux )
 		CODENAME=$(lsb_release -s -c)
 
 		# Configure hostname
-		local hostname="$(hostname -s)"
+		hostname="$(hostname -s)"
 		read -p "hostname (${hostname}): " input
 		sudo hostnamectl set-hostname "${input:-${current}}"
 		sudo hostnamectl set-chassis server
