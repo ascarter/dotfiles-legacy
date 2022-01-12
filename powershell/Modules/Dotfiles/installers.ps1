@@ -207,24 +207,39 @@ function Update-PowerShellModules {
 function Install-SSH() {
     # Install OpenSSH
     # https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse
-    Install-WindowsCapability OpenSSH.Client~~~~0.0.1.0
-    Install-WindowsCapability OpenSSH.Server~~~~0.0.1.0
+    Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+    Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
 
-    # Configure ssh server
-    Set-Service -Name sshd -StartupType 'Automatic'
+    # Start ssh services
     Start-Service sshd
-
-    # Configure ssh-agent
-    Set-Service -Name ssh-agent -StartupType 'Automatic'
     Start-Service ssh-agent
 
-    # Add firewall rule
-    if (-not ((Get-NetFirewallRule -Name 'OpenSSH-Server-In-TCP').Enabled -eq $true)) {
-        Write-Warning 'Missing OpenSSH Server inbound firewall rule'
+    # Configure ssh services to startup automatically
+    Set-Service -Name sshd -StartupType 'Automatic'
+    Set-Service -Name ssh-agent -StartupType 'Automatic'
+
+    # Confirm the Firewall rule is configured. It should be created automatically by setup. Run the following to verify
+    if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyContinue | Select-Object Name, Enabled)) {
+        Write-Output "Firewall Rule 'OpenSSH-Server-In-TCP' does not exist, creating it..."
+        New-NetFirewallRule -Name 'OpenSSH-Server-In-TCP' -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+    } else {
+        Write-Output "Firewall rule 'OpenSSH-Server-In-TCP' has been created and exists."
     }
 
     # Configure default shell
     Set-ItemProperty -Path HKLM:\SOFTWARE\OpenSSH -Name DefaultShell -Value $env:ProgramFiles\PowerShell\7\pwsh.exe
+}
+
+function Install-Remoting() {
+    <#
+    .SYNOPSIS
+        Enable WS-Man remoting
+    #>
+    Write-Output 'Enable PowerShell Remoting'
+    Invoke-Administrator -Core -Command {
+        Install-PowerShellRemoting.ps1
+        Enable-PSRemoting
+    }
 }
 
 #endregion
@@ -233,8 +248,8 @@ function Install-SSH() {
 
 function Install-Bin {
     <#
-        .SYNOPSIS
-            Create system root bin for adding tools (like /usr/local/bin on Unix)
+    .SYNOPSIS
+        Create system root bin for adding tools (like /usr/local/bin on Unix)
     #>
     param()
 
@@ -251,7 +266,7 @@ function Install-Bin {
 function Install-Speedtest() {
     <#
     .SYNOPSIS
-    Install speedtest cli
+        Install speedtest cli
     #>
     $bin = Join-Path -Path $Env:SystemDrive -ChildPath bin
     $uri = 'https://bintray.com/ookla/download/download_file?file_path=ookla-speedtest-1.0.0-win64.zip'
