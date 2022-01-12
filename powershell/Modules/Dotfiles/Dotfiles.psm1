@@ -42,10 +42,16 @@ function Invoke-Administrator {
     [CmdletBinding(SupportsShouldProcess)]
     param (
         [Parameter()]
-        [string]$Command
+        [string]$Command,
+        [switch]$Core
     )
     process {
-        Start-Process powershell -Verb RunAs -ArgumentList @('-Command', $Command) -Wait
+        if ($Core) {
+            $pwsh = 'pwsh'
+        } else {
+            $pwsh = 'powershell'
+        }
+        Start-Process $pwsh -Verb RunAs -ArgumentList @('-Command', $Command) -Wait
     }
 }
 Set-Alias -Name sudo -Value Invoke-Administrator
