@@ -75,6 +75,12 @@ export TEXEDIT='vim +%d %s'
 export PAGER=less
 export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit-at-eof -R"
 
+# 1Password
+if [ -x "$(command -v op)" ]; then
+	eval "$(op completion zsh)"
+	compdef _op op
+fi
+
 # ========================================
 # Developer Tools
 # ========================================
