@@ -101,16 +101,16 @@ fi
 # Python
 case $(uname) in
 Darwin )
-    # Installed Python
-    pathadd /Library/Frameworks/Python.framework/Versions/Current/bin
+	# Installed Python
+	pathadd /Library/Frameworks/Python.framework/Versions/Current/bin
 
-    # User pip installed binaries are in ~/Library
-    if [[ -d ${HOME}/Library/Python/3.9 ]]; then
-        export LC_ALL=en_US.UTF-8
-        export LANG=en_US.UTF-8
-        pathadd ${HOME}/Library/Python/3.9/bin
-    fi
-    pathadd ${HOME}/Library/Python/2.7/bin
+	# User pip installed binaries are in ~/Library
+	local pyver=$(python3 -c "import sys; print ('{}.{}'.format(sys.version_info.major, sys.version_info.minor))")
+	if [[ -d ${HOME}/Library/Python/${pyver} ]]; then
+		export LC_ALL=en_US.UTF-8
+		export LANG=en_US.UTF-8
+		pathadd ${HOME}/Library/Python/${pyver}/bin
+	fi
 esac
 pathadd ${HOME}/.local/bin
 
@@ -120,7 +120,7 @@ if [ -x "$(command -v pip3)" ]; then
     compctl -K _pip_completion pip3
 fi
 
-# Pip
+# Pipx
 if [ -x "$(command -v pipx)" ]; then
     eval "$(register-python-argcomplete pipx)"
 fi
