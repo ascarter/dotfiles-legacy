@@ -7,9 +7,6 @@ check_repo() {
 case "$(uname)" in
 Darwin )
   echo "Installing macOS developer tools..."
-
-  # Install duf tool
-  go get -u github.com/muesli/duf
   ;;
 Linux )
   echo "$(lsb_release -d -s) ($(uname -o) $(uname -r) $(uname -m))"
