@@ -243,7 +243,7 @@ if has("gui_running")
 		set guifont=Monospace\ 14
 	elseif has('gui_gtk2') || has('gui_gtk3')
 		" Linux
-		set guifont=Roboto\ Mono\ 12,Cascadia\ Code\ 12,Source\ Code\ Pro\ Medium\ 12,Monospace\ 12
+		set guifont=Monospace\ 12
 	elseif has('gui_win32')
 		" Windows
 		set guifont=Roboto\ Mono:h12,Cascadia\ Code:h12,Source\ Code\ Pro:h12,Consolas:h12
