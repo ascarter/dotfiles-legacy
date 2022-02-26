@@ -112,6 +112,9 @@ Linux )
 
         # Install duf tool
         /usr/local/go/bin/go install github.com/muesli/duf@latest
+
+		# Install Rust
+		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
         ;;
     esac
     ;;
