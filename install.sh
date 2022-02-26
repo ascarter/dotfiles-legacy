@@ -17,7 +17,7 @@ DOTFILES="${2:-${HOME}/.config/dotfiles}"
 # Configure pre-requisites
 case "$(uname)" in
 Darwin )
-	echo "Installing on $(sw_vers -productName) $(sw_vers -productVersion) ..."
+	echo "Installing on $(sw_vers -productName) $(sw_vers -productVersion)"
 
 	# Verify Xcode installed
 	if ! [ -e /usr/bin/xcode-select ]; then
@@ -52,7 +52,7 @@ Darwin )
 	;;
 Linux )
 	DISTRO_DESCRIPTION=$(lsb_release -d -s)
-	echo "Installing requirements for ${DISTRO_DESCRIPTION}"
+	echo "Installing on ${DISTRO_DESCRIPTION}"
 
 	case $(lsb_release -i -s) in
 	Ubuntu )
@@ -61,7 +61,14 @@ Linux )
 		sudo apt upgrade -y
 
 		# Install packages
-		sudo apt install -y apt-transport-https build-essential git keychain libnss3-tools socat update-motd zip zsh
+		sudo apt install -y apt-transport-https \
+		                    build-essential \
+							curl \
+							git \
+							update-motd \
+							wget \
+							zip \
+							zsh
 		;;
 	*)
 		echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"

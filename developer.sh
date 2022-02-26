@@ -20,7 +20,12 @@ Linux )
 
         # Setup base packages
         sudo apt-get update
-        sudo apt-get install -y apt-transport-https ca-certificates dirmngr software-properties-common
+        sudo apt-get install -y apt-transport-https \
+                                ca-certificates \
+                                build-essential \
+                                curl \
+                                dirmngr \
+                                software-properties-common
 
         # Add GitHub CLI repository
         # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
@@ -36,9 +41,17 @@ Linux )
         # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
         curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 
+        # Add 1Password repository
+        curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
+        echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | sudo tee /etc/apt/sources.list.d/1password.list
+        sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
+        curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
+        sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
+        curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+
         # Add speedtest respository
         # https://www.speedtest.net/apps/cli
-		curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo -E bash -
+        curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
 
         # Enable universe repositories
         sudo add-apt-repository universe
@@ -50,33 +63,31 @@ Linux )
 
         # Install developer packages
         sudo apt-get install -y \
-            build-essential \
-            curl \
-            dotnet-sdk-5.0 \
+            dotnet-sdk-6.0 \
+            exa \
             gh \
             git \
             gnupg \
             gnupg-agent \
             jq \
             mc \
-            msopenjdk-16 \
+            msopenjdk-17 \
             nodejs \
             powershell \
             python3 \
             python3-dev \
             python3-pip \
-            speedtest
+            speedtest \
+            vim-gtk3
 
-		# Install GUI apps
-		sudo apt-get install -y \
-			nautilus \
-            vim-gtk
+        # TODO: Install following on WSL
+        # sudo apt-get install -y keychain libnss3-tools nautilus socat
 
         # Update npm and install yarn support
         sudo npm install -g npm yarn
 
         # Install Go in /usr/local
-        GO_VERSION=1.17.3
+        GO_VERSION=1.17.7
         if [ -d /usr/local/go ] && [ "$(/usr/local/go/bin/go version | cut -f3 -d' ')" != "go${GO_VERSION}" ]; then
             echo Removing $(/usr/local/go/bin/go version) ...
             sudo rm -Rf /usr/local/go
