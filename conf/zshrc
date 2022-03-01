@@ -245,6 +245,6 @@ esac
 
 case $(uname) in
 Linux )
-	show-motd login
+	if [ -x "$(command -v show-motd)" ] && show-motd login
 	;;
 esac
