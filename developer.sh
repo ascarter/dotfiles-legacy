@@ -12,7 +12,7 @@ Linux )
     echo "Updating developer tools..."
 
     case $(lsb_release -i -s) in
-    Ubuntu )
+    Ubuntu | Pop )
         ARCH=$(dpkg --print-architecture)
 
         # Ensure time is in sync (drift can occur on WSL or VM)
@@ -24,52 +24,56 @@ Linux )
         # Setup base packages
         sudo apt-get update
         sudo apt-get upgrade
-          sudo apt-get autoremove -y
+        sudo apt-get autoremove -y
         sudo apt-get install -y apt-transport-https \
                                 ca-certificates \
                                 build-essential \
                                 curl \
                                 dirmngr \
+                                duf \
                                 exa \
+                                ffmpeg \
                                 g++ \
                                 gcc \
                                 git \
+                                gnome-tweak-tool \
                                 gnupg \
                                 gnupg-agent \
+                                gparted \
                                 jq \
                                 make \
                                 mc \
+                                openssh-server \
                                 python3 \
                                 python3-dev \
                                 python3-pip \
                                 software-properties-common \
+                                ubuntu-restricted-extras \
+                                ubuntu-restricted-addons \
                                 vim-gtk3
+
+        # Add Pop packages
+        if [ $(lsb_release -i -s) == "Pop" ]; then
+            sudo apt-get install -y gnome-remote-desktop gnome-user-share
+        fi
 
         # Add GitHub CLI repository
         # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
         sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
         sudo apt-add-repository https://cli.github.com/packages
-        sudo apt-get update
-        sudo apt-get install -y gh
 
         # Add Microsoft repository
         # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software#ubuntu
         curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
         sudo apt-add-repository https://packages.microsoft.com/ubuntu/20.04/prod
-        sudo apt-get update
-        sudo apt-get install -y dotnet-sdk-6.0 msopenjdk-17 powershell
 
         # Add nodesource repository
         # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
         curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
-        sudo apt-get update
-        sudo apt-get install -y nodejs
-        sudo npm install --global typescript
 
+        # Add Yarn
         curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
         echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-        sudo apt-get update && sudo apt-get install yarn
-
 
         # Add 1Password repository
         if ! [ -f /usr/share/keyrings/1password-archive-keyring.gpg ]; then
@@ -84,22 +88,27 @@ Linux )
             sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
             curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
         fi
-        sudo apt-get update
-        sudo apt-get install -y 1password
 
         # Add speedtest respository
         # https://www.speedtest.net/apps/cli
         curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
-        # Install developer packages
+
+        # Install packages
         sudo apt-get update
-        sudo apt-get install -y speedtest
+        sudo apt-get install -y 1password \
+                                dotnet-sdk-6.0 \
+                                gh \
+                                msopenjdk-17 \
+                                nodejs \
+                                powershell \
+                                speedtest \
+                                yarn \
+        sudo npm install --global typescript
 
-        # TODO: Install following on WSL
-        # sudo apt-get install -y keychain libnss3-tools nautilus socat
-
-        # Install Go in /usr/local
-        GO_VERSION=1.17.7
-        if [ -d /usr/local/go ] && [ "$(/usr/local/go/bin/go version | cut -f3 -d' ')" != "go${GO_VERSION}" ]; then
+        # Install latest Go in /usr/local
+        # curl "https://go.dev/dl/?mode=json" | jq --arg filter "go.*.$(uname -s)-$(uname -m)" -r '.[0].files[].filename | select(test($filter; "i"))'
+        GO_VERSION=$(curl -s "https://go.dev/dl/?mode=json" | jq --arg os $(uname -s | tr '[:upper:]' '[:lower:]') --arg arch $(uname -m) -r '[.[0].files[] | select(.os == $os and .arch == $arch)| .version] | unique | .[]')
+        if [ -d /usr/local/go ] && [ "$(/usr/local/go/bin/go version | cut -f3 -d' ')" != "${GO_VERSION}" ]; then
             echo Removing $(/usr/local/go/bin/go version) ...
             sudo rm -Rf /usr/local/go
         fi
@@ -110,11 +119,13 @@ Linux )
             /usr/local/go/bin/go version
         fi
 
-        # Install duf tool
-        /usr/local/go/bin/go install github.com/muesli/duf@latest
-
 		# Install Rust
 		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+        # WSL tools
+        if [[ $(uname -r) == *@(microsoft|wsl)* ]]; then
+            sudo apt-get install -y keychain libnss3-tools nautilus socat update-motd
+        fi
         ;;
     esac
     ;;

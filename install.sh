@@ -55,7 +55,7 @@ Linux )
 	echo "Installing on ${DISTRO_DESCRIPTION}"
 
 	case $(lsb_release -i -s) in
-	Ubuntu )
+	Ubuntu | Pop )
 		# Update distro
 		sudo apt update
 		sudo apt upgrade -y
@@ -65,7 +65,6 @@ Linux )
 		                    build-essential \
 							curl \
 							git \
-							update-motd \
 							wget \
 							zip \
 							zsh
