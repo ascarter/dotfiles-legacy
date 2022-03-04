@@ -104,6 +104,14 @@ cd $env:USERPROFILE\.config\dotfiles
 .\install.ps1
 ```
 
+### Update Developer Tools
+
+`dotfiles` is implemented as a PowerShell module. The module should be configured to be enabled in the user profile. A convenience cmdlet `Update-DevTools` is available to quickly update a useful set of Windows developer tools.
+
+```powershell
+PS> Update-DevTools
+```
+
 ### Uninstall
 
 Run uninstall PowerShell script to remove links:
