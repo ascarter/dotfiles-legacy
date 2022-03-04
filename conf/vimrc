@@ -48,6 +48,7 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'rakr/vim-one'
 Plug 'romainl/Apprentice'
 Plug 'vim-scripts/xoria256.vim'
+Plug 'wojciechkepka/vim-github-dark'
 
 call plug#end()
 
@@ -69,9 +70,10 @@ if has("termguicolors")
 	endif
 endif
 
-colorscheme iceberg
-set background=dark
-let g:lightline = { 'colorscheme': 'iceberg' }
+colorscheme ghdark
+let g:gh_color = "soft"
+" set background=dark
+let g:lightline = { 'colorscheme': 'ghdark' }
 
 " Flash screen only - no beep
 set visualbell
@@ -243,10 +245,10 @@ if has("gui_running")
 		set guifont=Monospace\ 14
 	elseif has('gui_gtk2') || has('gui_gtk3')
 		" Linux
-		set guifont=Monospace\ 12
+		set guifont=Fira\ Code\ 12,Roboto\ Mono\ 12,Source\ Code\ Pro\ Medium\ 12,Monospace\ 12
 	elseif has('gui_win32')
 		" Windows
-		set guifont=Roboto\ Mono:h12,Cascadia\ Code:h12,Source\ Code\ Pro:h12,Consolas:h12
+		set guifont=Fira\ Code:h10,Roboto\ Mono:h12,Cascadia\ Code:h12,Source\ Code\ Pro:h12,Consolas:h12
 		set renderoptions=type:directx
 	endif
 endif
