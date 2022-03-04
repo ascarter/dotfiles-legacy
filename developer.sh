@@ -28,8 +28,6 @@ Linux )
                                 build-essential \
                                 curl \
                                 dirmngr \
-                                duf \
-                                exa \
                                 ffmpeg \
                                 g++ \
                                 gcc \
@@ -37,23 +35,43 @@ Linux )
                                 gnome-tweaks \
                                 gnupg \
                                 gnupg-agent \
-                                gparted \
                                 htop \
                                 jq \
                                 make \
                                 mc \
-                                openssh-server \
                                 python3 \
                                 python3-dev \
                                 python3-pip \
                                 software-properties-common \
-                                ubuntu-restricted-extras \
-                                ubuntu-restricted-addons \
                                 vim-gtk3
 
-        # Add Pop packages
+		if [ -n "${WSL_DISTRO_NAME}" ]; then
+	        # WSL extras
+        	sudo apt-get install -y keychain libnss3-tools nautilus socat update-motd
+		else
+			# Full Ubuntu/Pop install
+			sudo apt-get install -y gparted openssh-server ubuntu-restricted-extras ubuntu-restricted-addons
+
+			# Add 1Password repository
+			if ! [ -f /usr/share/keyrings/1password-archive-keyring.gpg ]; then
+				curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
+			fi
+			echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | sudo tee /etc/apt/sources.list.d/1password.list
+			if ! [ -f /etc/debsig/policies/AC2D62742012EA22/1password.pol ]; then
+				sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
+				curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
+			fi
+			if ! [ -f /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg ]; then
+				sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
+				curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+			fi
+			sudo apt-get update
+			sudo apt-get install -y 1password
+		fi
+
+		# Add Pop packages
         if [ "$(lsb_release -i -s)" = "Pop" ]; then
-            sudo apt-get install -y gnome-remote-desktop gnome-user-share
+            sudo apt-get install -y duf exa gnome-remote-desktop gnome-user-share
         fi
 
         # Add GitHub CLI repository
@@ -66,7 +84,9 @@ Linux )
         # Add Microsoft repository
         # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software#ubuntu
         curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-        sudo apt-add-repository https://packages.microsoft.com/ubuntu/$(lsb_release -r -s)/prod
+        # sudo apt-add-repository https://packages.microsoft.com/ubuntu/$(lsb_release -r -s)/prod
+        # Pin to 20.04 until next LTS
+		sudo apt-add-repository https://packages.microsoft.com/ubuntu/20.04/prod
         sudo apt-get update
         sudo apt-get install -y dotnet-sdk-6.0 msopenjdk-17 powershell
 
@@ -80,22 +100,6 @@ Linux )
         sudo apt-get update
         sudo apt-get install -y nodejs yarn
         sudo npm install --global typescript
-        
-        # Add 1Password repository
-        if ! [ -f /usr/share/keyrings/1password-archive-keyring.gpg ]; then
-            curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
-        fi
-        echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | sudo tee /etc/apt/sources.list.d/1password.list
-        if ! [ -f /etc/debsig/policies/AC2D62742012EA22/1password.pol ]; then
-            sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
-            curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
-        fi
-        if ! [ -f /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg ]; then
-            sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
-            curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
-        fi
-        sudo apt-get update
-        sudo apt-get install -y 1password
 
         # Add speedtest respository
         # https://www.speedtest.net/apps/cli
@@ -123,11 +127,6 @@ Linux )
         else
 		    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
         fi
-
-        # WSL tools
-        # if [[ "$(uname -r)" == *@(microsoft|wsl)* ]]; then
-        #     sudo apt-get install -y keychain libnss3-tools nautilus socat update-motd
-        # fi
         ;;
     esac
     ;;
