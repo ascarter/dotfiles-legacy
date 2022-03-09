@@ -1,20 +1,17 @@
 # Dotfiles configuration
 
-dotfiles for macOS, Linux, and Windows
+dotfiles for POSIX operating systems
+
+The dotfiles configuration works for macOS and Ubuntu/Pop Linux including WSL. It is untested with other Linux distributions but should be adaptable generally.
 
 ## Layout
 
 * `bin` - useful scripts
 * `conf` - configuration scripts symlinked in home directory
-* `powershell` - PowerShell configuration
 * `themes` - various theme files
 * `zsh` - `${ZDOTDIR}` with zsh configuration
 
-An optional init script for each platform is available to install useful packages. Requirements are listed for each platform if the init script is not used. An install script to install development tools is available as well.
-
-## Unix
-
-The dotfiles configuration works for macOS and Ubuntu Linux including WSL. It is untested with other Linux distributions but should be adaptable generally.
+An optional install script is available to provision base packages and bootstrap dotfiles. Other scripts are available for installing packages for development and servers.
 
 ### Requirements
 
@@ -33,13 +30,7 @@ For convenience, a full install script can be run using the following command:
 sh -c "$(curl -sSL https://raw.githubusercontent.com/ascarter/dotfiles/main/install.sh)"
 ```
 
-To optionally install developer tools, run the following shell script after installing dotfiles:
-
-```sh
-${DOTFILES}/developer.sh
-```
-
-#### Alternate Install
+### Alternate Install
 
 If directly executing script is not desired, clone into a location (recommend `~/.config/dotfiles`)
 
@@ -47,10 +38,17 @@ If directly executing script is not desired, clone into a location (recommend `~
 git clone git@github.com:ascarter/dotfiles.git ~/.config/dotfiles
 cd ~/.config/dotfiles
 ./install.sh
-./developer.sh
 ```
 
-#### Server/Raspberry Pi Install
+### Developer Tools
+
+To optionally install developer tools, run the following shell script after installing dotfiles:
+
+```sh
+${DOTFILES}/developer.sh
+```
+
+### Server/Raspberry Pi Install
 
 An install script for configuring some server packages can be run using the following command:
 
@@ -60,7 +58,6 @@ sh -c "$(curl -sSL https://raw.githubusercontent.com/ascarter/dotfiles/main/serv
 
 Dotfiles is not required to run the server install script.
 
-
 ### Uninstall
 
 Run the uninstall script to remove the symlinks:
@@ -68,55 +65,4 @@ Run the uninstall script to remove the symlinks:
 ```sh
 cd ~/.config/dotfiles
 ./uninstall.sh
-```
-
-## Windows
-
-A PowerShell install script supports Windows 10 and Windows 11.
-
-### Pre-requisites
-
-Enable [Developer mode](https://www.hanselman.com/blog/Windows10DeveloperMode.aspx):
-
-*Settings* -> *Update & Security* -> *For Developers*
-
-Additional requirements:
-
-* [git](https://git-scm.com/download/win)
-* [OpenSSH](https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_overview)
-* [Windows Subsystem for Linux 2](https://docs.microsoft.com/en-us/windows/wsl/wsl2-install)
-* [PowerShell Core](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-7)
-* [Windows Package Manager](https://github.com/microsoft/winget-cli)
-
-To run the provided install script:
-
-```powershell
-Set-ExecutionPolicy Bypass -Scope Process; Invoke-WebRequest https://raw.githubusercontent.com/ascarter/dotfiles/main/install.ps1 -UseBasicParsing | Invoke-Expression
-```
-
-#### Alternate Install
-
-If directly executing powershell script is not desired, clone into a location (recommend `%USERPROFILE%\.config\dotfiles`).
-
-```powershell
-git clone git@github.com:ascarter/dotfiles.git $env:USERPROFILE\.config\dotfiles
-cd $env:USERPROFILE\.config\dotfiles
-.\install.ps1
-```
-
-### Update Developer Tools
-
-`dotfiles` is implemented as a PowerShell module. The module should be configured to be enabled in the user profile. A convenience cmdlet `Update-DevTools` is available to quickly update a useful set of Windows developer tools.
-
-```powershell
-PS> Update-DevTools
-```
-
-### Uninstall
-
-Run uninstall PowerShell script to remove links:
-
-```powershell
-cd $env:USERPROFILE\.config\dotfiles
-.\uninstall.ps1
 ```

@@ -37,6 +37,7 @@ Linux )
                                 gnupg-agent \
                                 htop \
                                 jq \
+                                lsb-release \
                                 make \
                                 mc \
                                 python3 \
@@ -52,7 +53,13 @@ Linux )
 			# Full Ubuntu/Pop install
 			sudo apt-get install -y gparted openssh-server ubuntu-restricted-extras ubuntu-restricted-addons
 
-			# Add 1Password repository
+            # Docker
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+            sudo apt-get update
+            sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+			# 1Password
 			if ! [ -f /usr/share/keyrings/1password-archive-keyring.gpg ]; then
 				curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
 			fi
@@ -74,14 +81,14 @@ Linux )
             sudo apt-get install -y duf exa gnome-remote-desktop gnome-user-share
         fi
 
-        # Add GitHub CLI repository
+        # GitHub CLI
         # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
         curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
         sudo apt-get update
         sudo apt-get install -y gh
 
-        # Add Microsoft repository
+        # Microsoft
         # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software#ubuntu
         curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
         # sudo apt-add-repository https://packages.microsoft.com/ubuntu/$(lsb_release -r -s)/prod
@@ -90,24 +97,24 @@ Linux )
         sudo apt-get update
         sudo apt-get install -y dotnet-sdk-6.0 msopenjdk-17 powershell
 
-        # Add nodesource repository
+        # Node.js
         # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
         curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
 
-        # Add Yarn
+        # Yarn
         curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
         echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
         sudo apt-get update
         sudo apt-get install -y nodejs yarn
         sudo npm install --global typescript
 
-        # Add speedtest respository
+        # Speedtest
         # https://www.speedtest.net/apps/cli
         curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
         sudo apt-get update
         sudo apt-get install -y speedtest
 
-        # Install latest Go in /usr/local
+        # Go
         GO_VERSION=$(curl -s "https://go.dev/dl/?mode=json" | jq --arg os $(uname -s | tr '[:upper:]' '[:lower:]') --arg arch $(dpkg --print-architecture) -r '[.[0].files[] | select(.os == $os and .arch == $arch)| .version] | unique | .[]')
         if [ -d /usr/local/go ] && [ "$(/usr/local/go/bin/go version | cut -f3 -d' ')" != "${GO_VERSION}" ]; then
             echo Removing $(/usr/local/go/bin/go version) ...
@@ -120,7 +127,7 @@ Linux )
             /usr/local/go/bin/go version
         fi
 
-		# Install Rust
+		# Rust
         if [ -x "$(command -v rustup)" ]; then
             echo "Updating rust"
             rustup update
