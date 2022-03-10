@@ -44,6 +44,7 @@ Linux )
                                 python3-dev \
                                 python3-pip \
                                 software-properties-common \
+								tmux \
                                 vim-gtk3
 
 		if [ -n "${WSL_DISTRO_NAME}" ]; then
