@@ -62,7 +62,7 @@ Linux )
 
 		# Install packages
 		sudo apt install -y apt-transport-https \
-		                    build-essential \
+							build-essential \
 							curl \
 							git \
 							wget \
