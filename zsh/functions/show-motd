@@ -34,13 +34,13 @@ esac
 
 # Only display this information in interactive shells
 case $- in (*i*)
-	# Also, don't display if .hushlogin exists or MOTD was shown recently
-	if [ ! -e ${hush} ] && [ -z "$MOTD_SHOWN" ] && ! find $stamp -newermt 'today 0:00' 2> /dev/null | grep -q -m 1 '.'; then
-		[ $(id -u) -eq 0 ] || SHOW="--show-only"
-		update-motd ${SHOW}
+    # Also, don't display if .hushlogin exists or MOTD was shown recently
+    if [ ! -e ${hush} ] && [ -z "$MOTD_SHOWN" ] && ! find $stamp -newermt 'today 0:00' 2> /dev/null | grep -q -m 1 '.'; then
+        [ $(id -u) -eq 0 ] || SHOW="--show-only"
+        update-motd ${SHOW}
                 touch $stamp
                 export MOTD_SHOWN=update-motd
-	fi
+    fi
     ;;
 esac
 

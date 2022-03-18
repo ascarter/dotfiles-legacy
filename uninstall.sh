@@ -16,11 +16,11 @@ DOTFILES="${2:-${HOME}/.config/dotfiles}"
 
 # Remove home directory symlinks
 for f in $(ls ${DOTFILES}/conf); do
-	target=${HOMEDIR}/.${f}
-	if [ -e ${target} ]; then
-		echo "Remove ${target}"
-		rm ${target}
-	fi
+  target=${HOMEDIR}/.${f}
+  if [ -e ${target} ]; then
+    echo "Remove ${target}"
+    rm ${target}
+  fi
 done
 
 echo "dotfiles uninstalled"

@@ -12,69 +12,69 @@ set -ue
 
 case "$(uname)" in
 Linux )
-	DISTRO_DESCRIPTION=$(lsb_release -d -s)
-	echo "Installing server packages for ${DISTRO_DESCRIPTION}"
+  DISTRO_DESCRIPTION=$(lsb_release -d -s)
+  echo "Installing server packages for ${DISTRO_DESCRIPTION}"
 
-	case $(lsb_release -i -s) in
-	Ubuntu )
-		ARCH=$(dpkg --print-architecture)
-		CODENAME=$(lsb_release -s -c)
+  case $(lsb_release -i -s) in
+  Ubuntu )
+    ARCH=$(dpkg --print-architecture)
+    CODENAME=$(lsb_release -s -c)
 
-		# Configure hostname
-		hostname="$(hostname -s)"
-		read -p "hostname (${hostname}): " input
-		sudo hostnamectl set-hostname "${input:-${current}}"
-		sudo hostnamectl set-chassis server
-		sudo hostnamectl set-icon-name ""
+    # Configure hostname
+    hostname="$(hostname -s)"
+    read -p "hostname (${hostname}): " input
+    sudo hostnamectl set-hostname "${input:-${current}}"
+    sudo hostnamectl set-chassis server
+    sudo hostnamectl set-icon-name ""
 
-		# Update distro
-		sudo apt-get update
-		sudo apt-get upgrade -y
-		sudo apt-get autoremove -y
+    # Update distro
+    sudo apt-get update
+    sudo apt-get upgrade -y
+    sudo apt-get autoremove -y
 
-		# Install base packages
-		sudo apt-get install -y apt-transport-https ca-certificates software-properties-common
+    # Install base packages
+    sudo apt-get install -y apt-transport-https ca-certificates software-properties-common
 
-		# Add Tailscale repository
-		curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/${CODENAME}.gpg | sudo apt-key add -
-		curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/${CODENAME}.list | sudo tee /etc/apt/sources.list.d/tailscale.list
+    # Add Tailscale repository
+    curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/${CODENAME}.gpg | sudo apt-key add -
+    curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/${CODENAME}.list | sudo tee /etc/apt/sources.list.d/tailscale.list
 
-		# Add Docker repository
-		curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-		echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    # Add Docker repository
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-		# Add speedtest respository
-		# https://www.speedtest.net/apps/cli
-		curl -fsSL https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
+    # Add speedtest respository
+    # https://www.speedtest.net/apps/cli
+    curl -fsSL https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
 
-		# Install server packages
-		# Install developer packages
-		sudo apt-get install -y \
-			curl \
-			containerd.io \
-			docker-ce \
-			docker-ce-cli \
-			jq \
-			speedtest \
-			tailscale
+    # Install server packages
+    # Install developer packages
+    sudo apt-get install -y \
+      curl \
+      containerd.io \
+      docker-ce \
+      docker-ce-cli \
+      jq \
+      speedtest \
+      tailscale
 
-		# Install docker-compose
-		sudo curl -fsSL "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-		sudo chmod +x /usr/local/bin/docker-compose
+    # Install docker-compose
+    sudo curl -fsSL "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
 
-		# Authenticate and connect to Tailscale network
-		sudo tailscale up
-		tailscale ip -4
-		tailscale ip -6
+    # Authenticate and connect to Tailscale network
+    sudo tailscale up
+    tailscale ip -4
+    tailscale ip -6
 
-		;;
-	*)
-		echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"
-		;;
-	esac
-	;;
+    ;;
+  *)
+    echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"
+    ;;
+  esac
+  ;;
 *)
-	echo "Unsupported platform"
-	exit 1
-	;;
+  echo "Unsupported platform"
+  exit 1
+  ;;
 esac

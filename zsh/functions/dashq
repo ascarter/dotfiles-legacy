@@ -5,7 +5,7 @@
 emulate -L zsh
 
 if [ "${2}" ]; then
-	open dash://${1}:${2}
+    open dash://${1}:${2}
 else
-	open dash://${1}
+    open dash://${1}
 fi

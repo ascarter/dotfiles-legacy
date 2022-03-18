@@ -3,17 +3,17 @@
 emulate -L zsh
 
 _resetaudio() {
-	sudo killall coreaudiod
+    sudo killall coreaudiod
 }
 
 _resetvideo() {
-	sudo killall VDCAssistant
-	sudo killall AppleCameraAssistant
+    sudo killall VDCAssistant
+    sudo killall AppleCameraAssistant
 }
 
 _resetav() {
-	_resetaudio
-	_resetvideo
+    _resetaudio
+    _resetvideo
 }
 
 resetav "$@"

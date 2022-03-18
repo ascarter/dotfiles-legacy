@@ -6,7 +6,7 @@
 emulate -L zsh
 
 if [ "${2}" ]; then
-	open x-man-page://${1}/${2}
+    open x-man-page://${1}/${2}
 else
-	open x-man-page://${1}
+    open x-man-page://${1}
 fi

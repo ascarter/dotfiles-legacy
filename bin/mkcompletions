@@ -10,14 +10,14 @@ mkdir -p ${COMPLETIONS_DIR}
 
 # Swift
 if [ -x "$(command -v swift)" ]; then
-	echo "Generating swift completions..."
-	swift package completion-tool generate-zsh-script > ${COMPLETIONS_DIR}/_swift
+    echo "Generating swift completions..."
+    swift package completion-tool generate-zsh-script > ${COMPLETIONS_DIR}/_swift
 fi
 
 # Rust
 if [ -x "$(command -v rustup)" ]; then
-	echo "Generating rustup completions..."
-	rustup completions zsh > ${COMPLETIONS_DIR}/_rustup
+    echo "Generating rustup completions..."
+    rustup completions zsh > ${COMPLETIONS_DIR}/_rustup
 fi
 
 # NPM
