@@ -1,5 +1,9 @@
 #!/bin/sh
 
+check_repo() {
+  apt-cache policy | grep ${1} > /dev/null
+}
+
 case "$(uname)" in
 Darwin )
   echo "Installing macOS developer tools..."
@@ -55,64 +59,84 @@ Linux )
       sudo apt-get install -y fonts-firacode gparted openssh-server ubuntu-restricted-extras ubuntu-restricted-addons
 
       # Docker
-      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      sudo apt-get update
+      if ! check_repo "https://download.docker.com"; then
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+      fi
       sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
       # 1Password
-      if ! [ -f /usr/share/keyrings/1password-archive-keyring.gpg ]; then
-        curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
+      if ! check_repo "https://downloads.1password.com"; then
+        if ! [ -f /usr/share/keyrings/1password-archive-keyring.gpg ]; then
+          curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
+        fi
+        echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | sudo tee /etc/apt/sources.list.d/1password.list
+        if ! [ -f /etc/debsig/policies/AC2D62742012EA22/1password.pol ]; then
+          sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
+          curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
+        fi
+        if ! [ -f /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg ]; then
+          sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
+          curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+        fi
+        sudo apt-get update
       fi
-      echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/amd64 stable main' | sudo tee /etc/apt/sources.list.d/1password.list
-      if ! [ -f /etc/debsig/policies/AC2D62742012EA22/1password.pol ]; then
-        sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
-        curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
-      fi
-      if ! [ -f /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg ]; then
-        sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
-        curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
-      fi
-      sudo apt-get update
       sudo apt-get install -y 1password
     fi
 
     # Add Pop packages
     if [ "$(lsb_release -i -s)" = "Pop" ]; then
       sudo apt-get install -y duf exa gnome-remote-desktop gnome-user-share
+    else
+      # Add Pop repositories
+      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 63C46DF0140D738961429F4E204DD8AEC33A7AFF
+      echo "deb http://apt.pop-os.org/proprietary $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/pop-os-proprietary.list > /dev/null
+      echo "deb http://apt.pop-os.org/release $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/pop-os-release.list > /dev/null
     fi
 
     # GitHub CLI
     # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-    sudo apt-get update
+    if ! check_repo "https://cli.github.com"; then
+      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+      sudo apt-get update
+    fi
     sudo apt-get install -y gh
 
     # Microsoft
     # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software#ubuntu
-    curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-    # sudo apt-add-repository https://packages.microsoft.com/ubuntu/$(lsb_release -r -s)/prod
-    # Pin to 20.04 until next LTS
-    sudo apt-add-repository https://packages.microsoft.com/ubuntu/20.04/prod
-    sudo apt-get update
+    if ! check_repo "https://packages.microsoft.com"; then
+      curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+      # sudo apt-add-repository https://packages.microsoft.com/ubuntu/$(lsb_release -r -s)/prod
+      # Pin to 20.04 until next LTS
+      sudo apt-add-repository https://packages.microsoft.com/ubuntu/20.04/prod
+      sudo apt-get update
+    fi
     sudo apt-get install -y dotnet-sdk-6.0 msopenjdk-17 powershell
 
     # Node.js
     # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
-    curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
+    if ! check_repo "https://deb.nodesource.com"; then
+      curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
+    fi
+    sudo apt-get install -y nodejs
 
     # Yarn
-    curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
-    echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-    sudo apt-get update
-    sudo apt-get install -y nodejs yarn
+    if ! check_repo "https://dl.yarnpkg.com"; then
+      curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
+      echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+      sudo apt-get update
+    fi
+    sudo apt-get install -y yarn
     sudo npm install --global typescript
 
     # Speedtest
     # https://www.speedtest.net/apps/cli
-    curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
-    sudo apt-get update
+    if ! check_repo "https://install.speedtest.net"; then
+      curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
+      sudo apt-get update
+    fi
     sudo apt-get install -y speedtest
 
     # Go
