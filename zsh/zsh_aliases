@@ -34,9 +34,6 @@ command -v hd > /dev/null || alias hd="hexdump -C"
 alias rs='resize -s 40 120'
 alias rst='resize -s 0 120'
 
-# Ski
-alias whistlertom='curl -o ${HOME}/Documents/whistler_tom.pdf -L "http://online.whistlerblackcomb.com/TomPDF/Default.aspx?Season=1&Type=bg" && ql ${HOME}/Documents/whistler_tom.pdf'
-
 # Ruby
 alias binit="bundle install --path vendor/bundle"
 alias bstubs="bundle install --binstubs"
@@ -74,81 +71,81 @@ alias sshagentstart='eval $(ssh-agent -s) && ssh-add -A'
 
 case $(uname) in
 Darwin )
-    # ls
-    alias ls='ls -hFH'
+  # ls
+  alias ls='ls -hFH'
 
-    # macOS appearance
-    alias darkmode='osascript -e "tell application \"System Events\" to tell appearance preferences to set dark mode to true"'
-    alias lightmode='osascript -e "tell application \"System Events\" to tell appearance preferences to set dark mode to false"'
-    alias switchmode='osascript -e "tell application \"System Events\" to tell appearance preferences to set dark mode to not dark mode"'
+  # macOS appearance
+  alias darkmode='osascript -e "tell application \"System Events\" to tell appearance preferences to set dark mode to true"'
+  alias lightmode='osascript -e "tell application \"System Events\" to tell appearance preferences to set dark mode to false"'
+  alias switchmode='osascript -e "tell application \"System Events\" to tell appearance preferences to set dark mode to not dark mode"'
 
-    # System shortcuts
-    alias lockscreen='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
-    alias ejectall='osascript -e "tell application \"Finder\" to eject (every disk whose ejectable is true)"'
+  # System shortcuts
+  alias lockscreen='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
+  alias ejectall='osascript -e "tell application \"Finder\" to eject (every disk whose ejectable is true)"'
 
-    # System information
-    alias about='system_profiler SPHardwareDataType SPSoftwareDataType SPStorageDataType'
+  # System information
+  alias about='system_profiler SPHardwareDataType SPSoftwareDataType SPStorageDataType'
 
-    # Use sw_vers for version
-    alias sysver='sw_vers'
+  # Use sw_vers for version
+  alias sysver='sw_vers'
 
-    # IP addresses
+  # IP addresses
 
-    # ip list
-    alias ip='ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d " " -f2'
+  # ip list
+  alias ip='ifconfig | grep "inet " | grep -v 127.0.0.1 | cut -d " " -f2'
 
-    # verbose ip list
-    alias ipv="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
-    alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+  # verbose ip list
+  alias ipv="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
+  alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 
-    # local ip
-    alias localip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
+  # local ip
+  alias localip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
 
-    # external ip
-    alias wanip="dig +short myip.opendns.com @resolver1.opendns.com"
+  # external ip
+  alias wanip="dig +short myip.opendns.com @resolver1.opendns.com"
 
-    # local ip - expects en0 | en1 | ...
-    # alias localip="ipconfig getifaddr"
+  # local ip - expects en0 | en1 | ...
+  # alias localip="ipconfig getifaddr"
 
-    # Airport utility
-    alias airport=/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport
+  # Airport utility
+  alias airport=/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport
 
-    # Power managment
-    alias keepawake='caffeinate -d -i -s'
-    alias sleepnow='pmset sleepnow'
-    alias batterycapacity='ioreg -w0 -c AppleSmartBattery -b -f | grep -i capacity'
+  # Power managment
+  alias keepawake='caffeinate -d -i -s'
+  alias sleepnow='pmset sleepnow'
+  alias batterycapacity='ioreg -w0 -c AppleSmartBattery -b -f | grep -i capacity'
 
-    # QuickLook
-    alias ql='qlmanage -p "$@" >& /dev/null'
+  # QuickLook
+  alias ql='qlmanage -p "$@" >& /dev/null'
 
-    # YubiKey
-    alias ykman='/Applications/YubiKey\ Manager.app/Contents/MacOS/ykman'
+  # YubiKey
+  alias ykman='/Applications/YubiKey\ Manager.app/Contents/MacOS/ykman'
 
-    # Dev tools
-    alias extags='/opt/homebrew/bin/ctags'
-    alias verifyxcode='spctl --assess --verbose /Applications/Xcode.app'
-    alias sketchtool="$(mdfind kMDItemCFBundleIdentifier = 'com.bohemiancoding.sketch3' | head -n 1)/Contents/Resources/sketchtool/bin/sketchtool"
+  # Dev tools
+  alias extags='/opt/homebrew/bin/ctags'
+  alias verifyxcode='spctl --assess --verbose /Applications/Xcode.app'
+  alias sketchtool="$(mdfind kMDItemCFBundleIdentifier = 'com.bohemiancoding.sketch3' | head -n 1)/Contents/Resources/sketchtool/bin/sketchtool"
 
-    # BBEdit aliases
-    alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
-    alias bbd=bbdiff
-    alias bbmake="bbr make"
-    alias bbnw='bbedit --new-window'
-    alias bbpb='pbpaste | bbedit --clean --view-top'
-    alias bbtags='bbedit --maketags'
+  # BBEdit aliases
+  alias bbctags='/Applications/BBEdit.app/Contents/Helpers/ctags'
+  alias bbd=bbdiff
+  alias bbmake="bbr make"
+  alias bbnw='bbedit --new-window'
+  alias bbpb='pbpaste | bbedit --clean --view-top'
+  alias bbtags='bbedit --maketags'
 
-    # Use MacVim on Mac OS X if installed
-    [[ -e /usr/local/bin/vim ]] && alias vim='/usr/local/bin/vim'
-    ;;
+  # Use MacVim on Mac OS X if installed
+  [[ -e /usr/local/bin/vim ]] && alias vim='/usr/local/bin/vim'
+  ;;
 Linux )
-    alias ls='ls -hFH'
-    alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-    alias glock='gnome-screensaver-command --lock'
-    alias xlock='xscreensaver-command -lock'
+  alias ls='ls -hFH'
+  alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+  alias glock='gnome-screensaver-command --lock'
+  alias xlock='xscreensaver-command -lock'
 
-    # WSL
-    if [ -x "$(command -v Fork.exe)" ]; then
-        alias fork='Fork.exe $(wslpath -w $(git root))'
-    fi
-    ;;
+  # WSL
+  if (( $+commands[Fork.exe] )); then
+      alias fork='Fork.exe $(wslpath -w $(git root))'
+  fi
+  ;;
 esac

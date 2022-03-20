@@ -34,21 +34,25 @@ Darwin )
     sudo xcodebuild -runFirstLaunch
   fi
 
-  # Install Homebrew
-  # HOMEBREW="${1:-/opt/brew}"
-  # if ! [ -e ${HOMEBREW} ]; then
-  #   echo "Install homebrew to ${HOMEBREW}"
-  #   sudo mkdir -p ${HOMEBREW}
-  #   sudo chown -R ${USER}:admin ${HOMEBREW}
-  #   curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ${HOMEBREW}
-  # fi
+  # Install Rosetta 2 on M1
+  if [ 'arm64' == $(uname -m) ]; then
+    softwareupdate --install-rosetta
+  fi
 
-  # # Add homebrew extras tap
-  # ${HOMEBREW}/bin/brew tap --full ascarter/extras
+  # Install Homebrew (/opt/homebrew)
+  if ! [ -e /opt/homebrew ]; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval $(/opt/homebrew/bin/brew shellenv)
+  fi
 
-  # # Enable Git Credential Manager (.NET core)
-  # brew tap microsoft/git
-  # brew cask install git-credential-manager-core
+  if [ -x "$(command -v brew)" ]; then
+    # Add homebrew extras tap
+    brew tap --full ascarter/extras
+
+    # Enable Git Credential Manager (.NET core)
+    # brew tap microsoft/git
+    # brew install --cask git-credential-manager-core
+  fi
   ;;
 Linux )
   DISTRO_DESCRIPTION=$(lsb_release -d -s)
@@ -62,12 +66,12 @@ Linux )
 
     # Install packages
     sudo apt install -y apt-transport-https \
-              build-essential \
-              curl \
-              git \
-              wget \
-              zip \
-              zsh
+                        build-essential \
+                        curl \
+                        git \
+                        wget \
+                        zip \
+                        zsh
     ;;
   *)
     echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"

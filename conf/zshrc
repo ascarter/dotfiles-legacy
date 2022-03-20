@@ -2,18 +2,12 @@
 
 fpath=(${ZDOTDIR:-$DOTFILES/zsh}/completions ${ZDOTDIR:-$DOTFILES/zsh}/functions ${ZDOTDIR:-$DOTFILES/zsh}/prompts $fpath)
 
-# Homebrew
-case "$(uname)" in
-Darwin )
-    HOMEBREW_PREFIX=/opt/brew
-    if [ -e ${HOMEBREW_PREFIX}/bin/brew ]; then
-        export HOMEBREW_NO_EMOJI=1
-        export HOMEBREW_NO_ANALYTICS=1
-        eval $(${HOMEBREW_PREFIX}/bin/brew shellenv)
-        fpath+=($(brew --prefix)/share/zsh/site-functions $(brew --prefix)/share/zsh-completions)
-    fi
-    ;;
-esac
+if (( $+commands[brew] )); then
+  export HOMEBREW_NO_EMOJI=1
+  export HOMEBREW_NO_ANALYTICS=1
+  eval $($(brew --prefix)/bin/brew shellenv)
+  fpath+=($(brew --prefix)/share/zsh/site-functions $(brew --prefix)/share/zsh-completions)
+fi
 
 autoload -Uz compinit
 compinit -u
@@ -76,9 +70,9 @@ export PAGER=less
 export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit-at-eof -R"
 
 # 1Password
-if [ -x "$(command -v op)" ]; then
-	eval "$(op completion zsh)"
-	compdef _op op
+if (( $+commands[op] )); then
+  eval "$(op completion zsh)"
+  compdef _op op
 fi
 
 # ========================================
@@ -89,116 +83,112 @@ fi
 export SDK_ROOT=${HOME}/sdk
 
 # GitHub
-if [ -x "$(command -v gh)" ]; then
-    eval "$(gh completion -s zsh)"
+if (( $+commands[gh] )); then
+  eval "$(gh completion -s zsh)"
 fi
 
 # Ruby
-if [ -x "$(command -v ruby)" ] && [ -x "$(command -v gem)" ]; then
-    pathadd $(ruby -r rubygems -e 'puts Gem.user_dir')/bin
+if (( $+commands[ruby] )) && (( $+commands[gem] )); then
+  pathadd $(ruby -r rubygems -e 'puts Gem.user_dir')/bin
 fi
 
 # Python
 case $(uname) in
 Darwin )
-	# Installed Python
-	pathadd /Library/Frameworks/Python.framework/Versions/Current/bin
+  # Installed Python
+  pathadd /Library/Frameworks/Python.framework/Versions/Current/bin
 
-	# User pip installed binaries are in ~/Library
-	local pyver=$(python3 -c "import sys; print ('{}.{}'.format(sys.version_info.major, sys.version_info.minor))")
-	if [[ -d ${HOME}/Library/Python/${pyver} ]]; then
-		export LC_ALL=en_US.UTF-8
-		export LANG=en_US.UTF-8
-		pathadd ${HOME}/Library/Python/${pyver}/bin
-	fi
+  # User pip installed binaries are in ~/Library
+  local pyver=$(python3 -c "import sys; print ('{}.{}'.format(sys.version_info.major, sys.version_info.minor))")
+  if [[ -d ${HOME}/Library/Python/${pyver} ]]; then
+      export LC_ALL=en_US.UTF-8
+      export LANG=en_US.UTF-8
+      pathadd ${HOME}/Library/Python/${pyver}/bin
+  fi
 esac
 pathadd ${HOME}/.local/bin
 
 # Pip 3
-if [ -x "$(command -v pip3)" ]; then
-    source <(pip3 completion --zsh)
-    compctl -K _pip_completion pip3
+if (( $+commands[pip3] )); then
+  source <(pip3 completion --zsh)
+  compctl -K _pip_completion pip3
 fi
 
 # Pipx
-if [ -x "$(command -v pipx)" ]; then
-    eval "$(register-python-argcomplete pipx)"
+if (( $+commands[pipx] )); then
+  eval "$(register-python-argcomplete pipx)"
 fi
 
+
 # Node.js
-if [ -x "$(command -v npm)" ]; then
-    source <(npm completion)
+if (( $+commands[npm] )); then
+  source <(npm completion)
 fi
 
 # Go
 pathadd /usr/local/go/bin prefix
 
 # Add GOPATH to installed binaries to path
-if [ -x "$(command -v go)" ]; then
-    pathadd $(go env GOPATH)/bin
+if (( $+commands[go] )); then
+  pathadd $(go env GOPATH)/bin
 fi
 
 # .NET Core
-if [ -x "$(command -v dotnet)" ]; then
-    # Disable telemtry
-    DOTNET_CLI_TELEMETRY_OPTOUT=1
+if (( $+commands[dotnet] )); then
+  # Disable telemtry
+  DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-    # Add dotnet tools
-    pathadd ${HOME}/.dotnet/tools ]
+  # Add dotnet tools
+  pathadd ${HOME}/.dotnet/tools ]
 
-    # zsh parameter completion for the dotnet CLI
-    _dotnet_zsh_complete() {
-        local completions=("$(dotnet complete "$words")")
-        reply=( "${(ps:\n:)completions}" )
-    }
-    compctl -K _dotnet_zsh_complete dotnet
+  # zsh parameter completion for the dotnet CLI
+  _dotnet_zsh_complete() {
+      local completions=("$(dotnet complete "$words")")
+      reply=( "${(ps:\n:)completions}" )
+  }
+  compctl -K _dotnet_zsh_complete dotnet
 fi
 
 # PowerShell
-if [ -x "$(command -v pwsh)" ]; then
-    # Disable telemetry
-    POWERSHELL_TELEMETRY_OPTOUT=1
+if (( $+commands[pwsh] )); then
+  # Disable telemetry
+  POWERSHELL_TELEMETRY_OPTOUT=1
 fi
 
 # Java
 if [[ -e /usr/libexec/java_home ]]; then
-    # Verify that java is installed
-    /usr/libexec/java_home > /dev/null 2>&1
-    if [[ $? -eq 0 ]]; then
-        # Java installed - use the default JDK
-        export JAVA_HOME=`/usr/libexec/java_home`
-    fi
+  # Verify that java is installed
+  /usr/libexec/java_home > /dev/null 2>&1
+  if [[ $? -eq 0 ]]; then
+    # Java installed - use the default JDK
+    export JAVA_HOME=`/usr/libexec/java_home`
+  fi
 else
     export JAVA_HOME=$(readlink -f `whence -cp java` | sed "s:bin/java::")
 fi
 
 # Android
 if [[ -d ${HOME}/Library/Android/sdk ]]; then
-    export ANDROID_HOME=${HOME}/Library/Android/sdk
-    pathadd ${ANDROID_HOME}/tools
-    pathadd ${ANDROID_HOME}/tools/bin
-    pathadd ${ANDROID_HOME}/platform-tools
+  export ANDROID_HOME=${HOME}/Library/Android/sdk
+  pathadd ${ANDROID_HOME}/tools
+  pathadd ${ANDROID_HOME}/tools/bin
+  pathadd ${ANDROID_HOME}/platform-tools
 fi
 
 # Flutter
 if [[ -d ${SDK_ROOT}/flutter ]]; then
-    export FLUTTER_ROOT=${SDK_ROOT}/flutter
-    pathadd ${FLUTTER_ROOT}/bin
+  export FLUTTER_ROOT=${SDK_ROOT}/flutter
+  pathadd ${FLUTTER_ROOT}/bin
 fi
 
 # Rust
 if [[ -d ${HOME}/.cargo ]]; then
-    source ${HOME}/.cargo/env
+  source ${HOME}/.cargo/env
 fi
 
 # Kubernetes
-if [ -x "$(command -v kubectl)" ]; then
-    source <(kubectl completion zsh)
-fi
-
-# AWS
-if [ -x "$(command -v aws_zsh_completer.sh)" ]; then
-    source `whence -cp aws_zsh_completer.sh`
+if (( $+commands[kubectl] )); then
+  source <(kubectl completion zsh)
 fi
 
 # ========================================
@@ -206,7 +196,7 @@ fi
 # ========================================
 
 if [ -f ${ZDOTDIR:-$DOTFILES/zsh}/zsh_aliases ]; then
-    source ${ZDOTDIR:-$DOTFILES/zsh}/zsh_aliases
+  source ${ZDOTDIR:-$DOTFILES/zsh}/zsh_aliases
 fi
 
 # ========================================
@@ -222,21 +212,21 @@ pathadd ${DOTFILES}/bin
 
 case $(uname) in
 Linux )
-    if [ -n "${WSL_DISTRO_NAME}" ] && type npiperelay.exe &>/dev/null; then
-        # Used named pipe to Windows host ssh-agent
-        export SSH_AUTH_SOCK=${HOME}/.ssh/agent.sock
-        ss -a | grep -q $SSH_AUTH_SOCK
-        if [ $? -ne 0 ]; then
-            rm -f ${SSH_AUTH_SOCK}
-            ( setsid socat UNIX-LISTEN:${SSH_AUTH_SOCK},fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork & ) >/dev/null 2>&1
-        fi
-    else
-        # Use keychain if installed
-        if [ -x "$(command -v keychain)" ]; then
-            eval `keychain --eval --agents ssh id_rsa id_ed25519`
-        fi
+  if [ -n "${WSL_DISTRO_NAME}" ] && type npiperelay.exe &>/dev/null; then
+    # Used named pipe to Windows host ssh-agent
+    export SSH_AUTH_SOCK=${HOME}/.ssh/agent.sock
+    ss -a | grep -q $SSH_AUTH_SOCK
+    if [ $? -ne 0 ]; then
+      rm -f ${SSH_AUTH_SOCK}
+      ( setsid socat UNIX-LISTEN:${SSH_AUTH_SOCK},fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork & ) >/dev/null 2>&1
     fi
-    ;;
+  else
+    # Use keychain if installed
+    if (( $+commands[keychain] )); then
+      eval `keychain --eval --agents ssh id_rsa id_ed25519`
+    fi
+  fi
+  ;;
 esac
 
 # ========================================
@@ -251,6 +241,6 @@ esac
 
 case $(uname) in
 Linux )
-    if [ -x "$(command -v show-motd)" ] && show-motd login
-    ;;
+  if [ -x "$(command -v show-motd)" ] && show-motd login
+  ;;
 esac
