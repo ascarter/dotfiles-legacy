@@ -41,6 +41,7 @@ Linux )
                 gnupg-agent \
                 htop \
                 jq \
+                libsecret-tools \
                 lsb-release \
                 make \
                 mc \
@@ -158,6 +159,14 @@ Linux )
       rustup update
     else
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
+    fi
+
+    # Install Git Credential Manager for amd64
+    if [ "$(dpkg --print-architecture)" = "amd64" ]; then
+      echo "Installing Git Credential Manager"
+      curl -L -o /tmp/gcmcore-linux_amd64.deb https://github.com/GitCredentialManager/git-credential-manager/releases/download/v2.0.632/gcmcore-linux_amd64.2.0.632.34631.deb
+      sudo dpkg -i /tmp/gcmcore-linux_amd64.deb
+      rm -f /tmp/gcmcore-linux_amd64.deb
     fi
     ;;
   esac

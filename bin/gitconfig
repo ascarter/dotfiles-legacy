@@ -45,12 +45,12 @@ Darwin )
     gc_set credential.helper osxkeychain
 
     # BBEdit diff
-    if command -v bbdiff &>/dev/null; then
+    if [ -x "$(command -v bbdiff)" ]; then
         gc_set difftool."bbdiff".cmd 'bbdiff --wait --resume $LOCAL $REMOTE'
     fi
 
     # Kaleidoscope
-    if command -v ksdiff &>/dev/null; then
+    if [ -x "$(command -v ksdiff)" ]; then
         gc_set difftool."Kaleidoscope".cmd 'ksdiff --partial-changeset --relative-path $MERGED -- $LOCAL $REMOTE'
         gc_set mergetool."Kaleidoscope".cmd 'ksdiff --merge --output $MERGED --base $BASE -- $LOCAL --snapshot $REMOTE --snapshot'
         gc_set mergetool."Kaleidoscope".trustExitCode true
@@ -72,7 +72,13 @@ Linux )
         # Use Fork for visual
         gc_set alias.visual '!Fork.exe $(wslpath -w $(git root))'
     else
-        gc_set credential.helper cache
+        # Use Git Credential Manager if it is installed
+        if [ -x "$(command -v git-credential-manager-core)" ]; then
+            gc_set credential.helper manager-core
+            gc_set credential.credentialStore secretservice
+        else
+            gc_set credential.helper cache
+        fi
     fi
 
     # Use Vim as default diff/merge
