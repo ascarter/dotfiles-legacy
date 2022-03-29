@@ -109,6 +109,15 @@ Linux )
     fi
     sudo apt-get install -y gh
 
+    # GitHub Desktop (Linux fork)
+    # https://github.com/shiftkey/desktop
+    if ! check_repo "https://mirror.mwt.me/ghd/deb/"; then
+      wget -qO - https://mirror.mwt.me/ghd/gpgkey | sudo tee /etc/apt/trusted.gpg.d/shiftkey-desktop.asc > /dev/null
+      sudo sh -c 'echo "deb [arch=amd64] https://mirror.mwt.me/ghd/deb/ any main" > /etc/apt/sources.list.d/packagecloud-shiftkey-desktop.list'
+      sudo apt-get update
+    fi
+    sudo apt-get install -y github-desktop
+
     # Microsoft
     # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software#ubuntu
     if ! check_repo "https://packages.microsoft.com"; then
