@@ -119,12 +119,10 @@ Linux )
     sudo apt-get install -y github-desktop
 
     # Microsoft
-    # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software#ubuntu
-    if ! check_repo "https://packages.microsoft.com"; then
-      curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-      # sudo apt-add-repository https://packages.microsoft.com/ubuntu/$(lsb_release -r -s)/prod
-      # Pin to 20.04 until next LTS
-      sudo apt-add-repository https://packages.microsoft.com/ubuntu/20.04/prod
+    # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software
+    if ! check_repo "https://packages.microsoft.com/ubuntu"; then
+      curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+      curl -sSL https://packages.microsoft.com/config/ubuntu/$(lsb_release -r -s)/prod.list | sudo tee /etc/apt/sources.list.d/microsoft-prod.list
       sudo apt-get update
     fi
     sudo apt-get install -y dotnet-sdk-6.0 msopenjdk-17 powershell
