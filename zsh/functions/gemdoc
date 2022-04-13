@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 # Open gem doc page
 
 emulate -L zsh

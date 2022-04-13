@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 # pathadd appends $1 to PATH variable if not already present
 
 emulate -L zsh

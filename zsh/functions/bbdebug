@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 # Set or turn off bbedit debug expert prefs
 
 emulate -L zsh

@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 # Run command and send results to new BBEdit window
 
 emulate -L zsh

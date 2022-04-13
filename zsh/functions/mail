@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 # Mail file as attachment: <filepath> <subject> <recipient>
 
 emulate -L zsh

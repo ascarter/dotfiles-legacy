@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 # gitfixmain converts git master branch to main branch for upstream main
 
 emulate -L zsh

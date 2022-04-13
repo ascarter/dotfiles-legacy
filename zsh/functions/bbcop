@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 # Run rubocop and send results to bbresults
 
 emulate -L zsh

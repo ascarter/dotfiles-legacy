@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 emulate -L zsh
 
 # Specify terminal themes for directory colors

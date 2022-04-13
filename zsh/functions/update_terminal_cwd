@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 # Identify the directory using a "file:" scheme URL,
 # including the host name to disambiguate local vs.
 # remote connections. Percent-escape spaces.

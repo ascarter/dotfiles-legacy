@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 # Set tab name
 
 emulate -L zsh

@@ -9,3 +9,9 @@ tab_width = 2
 [Makefile]
 indent_style = tab
 tab_width = 8
+
+[{zsh/**/*,conf/{zprofile,zshrc}}]
+mode = unix-shell-script
+
+[/gitconfig]
+mode = ini-file

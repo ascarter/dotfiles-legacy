@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 # Fix open with list in Finder
 
 emulate -L zsh

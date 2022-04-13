@@ -1,5 +1,3 @@
-#  -*- mode: unix-shell-script; -*-
-
 # Open query in dash
 
 emulate -L zsh
