@@ -7,6 +7,14 @@ check_repo() {
 case "$(uname)" in
 Darwin )
   echo "Installing macOS developer tools..."
+
+  # Symlink 1Password agent
+  if [ -S ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ] && ! [ -S ~/.1password/agent.sock ]; then
+    echo "Enabling 1Password SSH Agent..."
+  	mkdir -p ~/.1password
+    ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
+  fi
+
   ;;
 Linux )
   echo "$(lsb_release -d -s) ($(uname -o) $(uname -r) $(uname -m))"
@@ -182,3 +190,10 @@ Linux )
   esac
   ;;
 esac
+
+if [ -S ~/.1password/agent.sock ]; then
+  # TODO: add 1Password SSH Agent to ~/.ssh/config
+  echo "Add following to ~/.ssh/config:"
+  echo "  Host *"
+  echo "      IdentityAgent ~/.1password/agent.sock"
+fi

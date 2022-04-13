@@ -1,5 +1,3 @@
-#  -*- mode: shellscript; -*-
-
 fpath=(${ZDOTDIR:-$DOTFILES/zsh}/completions ${ZDOTDIR:-$DOTFILES/zsh}/functions ${ZDOTDIR:-$DOTFILES/zsh}/prompts $fpath)
 
 if (( $+commands[brew] )); then
@@ -210,24 +208,27 @@ pathadd ${DOTFILES}/bin
 # SSH
 # ========================================
 
-case $(uname) in
-Linux )
-  if [ -n "${WSL_DISTRO_NAME}" ] && type npiperelay.exe &>/dev/null; then
-    # Used named pipe to Windows host ssh-agent
-    export SSH_AUTH_SOCK=${HOME}/.ssh/agent.sock
-    ss -a | grep -q $SSH_AUTH_SOCK
-    if [ $? -ne 0 ]; then
-      rm -f ${SSH_AUTH_SOCK}
-      ( setsid socat UNIX-LISTEN:${SSH_AUTH_SOCK},fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork & ) >/dev/null 2>&1
-    fi
-  else
-    # Use keychain if installed
-    if (( $+commands[keychain] )); then
+# Use 1Password SSH Agent if installed
+if [ -S ~/.1password/agent.sock ]; then
+  export SSH_AUTH_SOCK=~/.1password/agent.sock
+else
+  case $(uname) in
+  Linux )
+    # WSL - use named pipe to Windows host ssh-agent
+    if [ -n "${WSL_DISTRO_NAME}" ] && type npiperelay.exe &>/dev/null; then
+      export SSH_AUTH_SOCK=${HOME}/.ssh/agent.sock
+      ss -a | grep -q $SSH_AUTH_SOCK
+      if [ $? -ne 0 ]; then
+        rm -f ${SSH_AUTH_SOCK}
+        ( setsid socat UNIX-LISTEN:${SSH_AUTH_SOCK},fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork & ) >/dev/null 2>&1
+      fi
+    elif (( $+commands[keychain] )); then
+      # Use keychain if installed
       eval `keychain --eval --agents ssh id_rsa id_ed25519`
     fi
-  fi
-  ;;
-esac
+    ;;
+  esac
+fi
 
 # ========================================
 # Per-machine extras
