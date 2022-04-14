@@ -32,10 +32,15 @@ Linux )
     sudo apt-get update
     sudo apt-get upgrade
     sudo apt-get autoremove -y
-    sudo apt-get install -y apt-transport-https \
+    sudo apt-get install -y \
+                alpine \
+                alpine-doc \
+                alpine-pico \
+                apt-transport-https \
                 ca-certificates \
                 build-essential \
                 curl \
+                default-mta \
                 dirmngr \
                 ffmpeg \
                 g++ \
