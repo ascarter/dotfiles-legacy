@@ -96,12 +96,17 @@ Darwin )
   # Installed Python
   pathadd /Library/Frameworks/Python.framework/Versions/Current/bin
 
-  # User pip installed binaries are in ~/Library
+  # User pip installed binaries are in ~/Library on macOS
   local pyver=$(python3 -c "import sys; print ('{}.{}'.format(sys.version_info.major, sys.version_info.minor))")
   if [[ -d ${HOME}/Library/Python/${pyver} ]]; then
       export LC_ALL=en_US.UTF-8
       export LANG=en_US.UTF-8
       pathadd ${HOME}/Library/Python/${pyver}/bin
+  fi
+
+  # User pip installed binaries are in ~/.local/bin on Linux
+  if [[ -d ${HOME}/.local/bin ]]; then
+    pathadd ${HOME}/.local/bin
   fi
 esac
 pathadd ${HOME}/.local/bin
