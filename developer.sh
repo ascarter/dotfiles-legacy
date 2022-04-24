@@ -66,8 +66,31 @@ Linux )
       # WSL extras
       sudo apt-get install -y keychain libnss3-tools nautilus socat update-motd
     else
-      # Full Ubuntu/Pop install
-      sudo apt-get install -y fonts-firacode gparted openssh-server ubuntu-restricted-extras ubuntu-restricted-addons
+      if ! [ "$(lsb_release -cs)" = "focal" ]; then
+        # More apps and tools for full Ubuntu/Pop desktop install post-focal
+        sudo apt-get install -y \
+                      duf \
+                      exa \
+                      fonts-firacode \
+                      gnome-remote-desktop \
+                      gnome-system-log \
+                      gnome-user-share \
+                      gparted \
+                      openssh-server \
+                      ubuntu-restricted-addons
+                      ubuntu-restricted-extras \
+
+        # Add Pop repositories on Ubuntu
+        if [ "$(lsb_release -i -s)" = "Ubuntu" ]; then
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 63C46DF0140D738961429F4E204DD8AEC33A7AFF
+          if ! check_repo "https://apt.pop-os.org/proprietary"; then
+            echo "deb https://apt.pop-os.org/proprietary $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/pop-os-proprietary.list > /dev/null
+          fi
+          if ! check_repo "https://apt.pop-os.org/release"; then
+            echo "deb https://apt.pop-os.org/release $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/pop-os-release.list > /dev/null
+          fi
+        fi
+      fi
 
       # Docker
       if ! check_repo "https://download.docker.com"; then
@@ -96,20 +119,6 @@ Linux )
         sudo apt-get update
       fi
       sudo apt-get install -y 1password 1password-cli
-    fi
-
-    # Add Pop packages
-    if [ "$(lsb_release -i -s)" = "Pop" ]; then
-      sudo apt-get install -y duf exa gnome-remote-desktop gnome-user-share
-    else
-      # Add Pop repositories
-      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 63C46DF0140D738961429F4E204DD8AEC33A7AFF
-      if ! check_repo "https://apt.pop-os.org/proprietary"; then
-        echo "deb https://apt.pop-os.org/proprietary $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/pop-os-proprietary.list > /dev/null
-      fi
-      if ! [ "$(lsb_release -cs)" = "focal" ] && ! check_repo "https://apt.pop-os.org/release"; then
-        echo "deb https://apt.pop-os.org/release $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/pop-os-release.list > /dev/null
-      fi
     fi
 
     # GitHub CLI
