@@ -146,6 +146,12 @@ Linux )
   alias glock='gnome-screensaver-command --lock'
   alias xlock='xscreensaver-command -lock'
 
+  # Linux version of macOS pbcopy/pbpaste.
+  if (( $+commands[xsel] )); then
+    alias pbcopy='xsel --clipboard --input'
+    alias pbpaste='xsel --clipboard --output'
+  fi
+
   # WSL
   if (( $+commands[Fork.exe] )); then
       alias fork='Fork.exe $(wslpath -w $(git root))'

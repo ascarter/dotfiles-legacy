@@ -60,7 +60,8 @@ Linux )
                 python3-pip \
                 software-properties-common \
                 tmux \
-                vim-gtk3
+                vim-gtk3 \
+                xsel
 
     if [ -n "${WSL_DISTRO_NAME}" ]; then
       # WSL extras
