@@ -4,6 +4,18 @@ check_repo() {
   apt-cache policy | grep ${1} > /dev/null
 }
 
+add_gpg_key() {
+  local keyring=/usr/share/keyrings/${1}-archive-keyring.gpg
+
+  if ! [ -f ${keyring} ]; then
+    local dl_keyring=$(mktemp)
+    gpg --no-default-keyring --keyring ${dl_keyring} --keyserver keyserver.ubuntu.com --recv-keys ${2}
+    sudo mv ${dl_keyring} ${keyring}
+  else
+    echo "Keyring ${keyring} already exists"
+  fi
+}
+
 case "$(uname)" in
 Darwin )
   echo "Installing macOS developer tools..."
@@ -43,18 +55,27 @@ Linux )
                 default-mta \
                 dirmngr \
                 ffmpeg \
+                fonts-firacode \
                 g++ \
                 gcc \
                 git \
+                gnome-remote-desktop \
+                gnome-shell-extensions-gpaste \
+                gnome-system-log \
                 gnome-tweaks \
+                gnome-user-share \
                 gnupg \
                 gnupg-agent \
+                gpaste \
+                gparted \
                 htop \
                 jq \
                 libsecret-tools \
                 lsb-release \
                 make \
                 mc \
+                neofetch \
+                openssh-server \
                 python3 \
                 python3-dev \
                 python3-pip \
@@ -63,40 +84,32 @@ Linux )
                 vim-gtk3 \
                 xsel
 
+    # Newer apps and tools (post-Focal)
+    if ! [ "$(lsb_release -cs)" = "focal" ]; then
+      sudo apt-get install -y
+                    duf \
+                    exa
+    fi
+
     if [ -n "${WSL_DISTRO_NAME}" ]; then
       # WSL extras
-      sudo apt-get install -y keychain libnss3-tools nautilus socat update-motd
+      sudo apt-get install -y libnss3-tools nautilus socat update-motd
     else
-      if ! [ "$(lsb_release -cs)" = "focal" ]; then
-        # More apps and tools for full Ubuntu/Pop desktop install post-focal
-        sudo apt-get install -y \
-                      duf \
-                      exa \
-                      fonts-firacode \
-                      gnome-remote-desktop \
-                      gnome-system-log \
-                      gnome-user-share \
-                      gparted \
-                      openssh-server \
-                      ubuntu-restricted-addons
-                      ubuntu-restricted-extras \
-
-        # Add Pop repositories on Ubuntu
-        if [ "$(lsb_release -i -s)" = "Ubuntu" ]; then
-          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 63C46DF0140D738961429F4E204DD8AEC33A7AFF
-          if ! check_repo "https://apt.pop-os.org/proprietary"; then
-            echo "deb https://apt.pop-os.org/proprietary $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/pop-os-proprietary.list > /dev/null
-          fi
-          if ! check_repo "https://apt.pop-os.org/release"; then
-            echo "deb https://apt.pop-os.org/release $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/pop-os-release.list > /dev/null
-          fi
+      # Add Pop repositories on Ubuntu
+      if [ "$(lsb_release -i -s)" = "Ubuntu" ]; then
+        add_gpg_key pop-os 63C46DF0140D738961429F4E204DD8AEC33A7AFF
+        if ! check_repo "https://apt.pop-os.org/proprietary"; then
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pop-os-archive-keyring.gpg] https://apt.pop-os.org/proprietary $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/pop-os-proprietary.list
+        fi
+        if ! check_repo "https://apt.pop-os.org/release"; then
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pop-os-archive-keyring.gpg] https://apt.pop-os.org/release $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/pop-os-release.list
         fi
       fi
 
       # Docker
       if ! check_repo "https://download.docker.com"; then
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
         sudo apt-get update
       fi
       sudo apt-get install -y docker-ce docker-ce-cli containerd.io
@@ -126,7 +139,7 @@ Linux )
     # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
     if ! check_repo "https://cli.github.com"; then
       curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list
       sudo apt-get update
     fi
     sudo apt-get install -y gh
@@ -135,7 +148,7 @@ Linux )
     # https://github.com/shiftkey/desktop
     if ! check_repo "https://mirror.mwt.me/ghd/deb/"; then
       wget -qO - https://mirror.mwt.me/ghd/gpgkey | sudo tee /etc/apt/trusted.gpg.d/shiftkey-desktop.asc > /dev/null
-      sudo sh -c 'echo "deb [arch=amd64] https://mirror.mwt.me/ghd/deb/ any main" > /etc/apt/sources.list.d/packagecloud-shiftkey-desktop.list'
+      echo "deb [arch=$(dpkg --print-architecture)] https://mirror.mwt.me/ghd/deb/ any main" | sudo tee /etc/apt/sources.list.d/packagecloud-shiftkey-desktop.list
       sudo apt-get update
     fi
     sudo apt-get install -y github-desktop
@@ -145,33 +158,30 @@ Linux )
     if ! check_repo "https://packages.microsoft.com/ubuntu"; then
       curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
       curl -sSL https://packages.microsoft.com/config/ubuntu/$(lsb_release -r -s)/prod.list | sudo tee /etc/apt/sources.list.d/microsoft-prod.list
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] http://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
       sudo apt-get update
     fi
-    sudo apt-get install -y dotnet-sdk-6.0 msopenjdk-17 powershell
-
-    # Node.js
-    # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
-    if ! check_repo "https://deb.nodesource.com"; then
-      curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
-    fi
-    sudo apt-get install -y nodejs
-
-    # Yarn
-    if ! check_repo "https://dl.yarnpkg.com"; then
-      curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
-      echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-      sudo apt-get update
-    fi
-    sudo apt-get install -y yarn
-    sudo npm install --global typescript
+    # sudo apt-get install -y dotnet-sdk-6.0 msopenjdk-17 powershell
+    # sudo apt-get install -y microsoft-edge code
 
     # Speedtest
     # https://www.speedtest.net/apps/cli
     if ! check_repo "https://install.speedtest.net"; then
-      curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
+      curl -fsSL https://packagecloud.io/ookla/speedtest-cli/gpgkey | gpg --dearmor | sudo tee /usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg
+      curl -sSF https://packagecloud.io/install/repositories/ookla/speedtest-cli/config_file.list?os=Ubuntu&dist=$(lsb_release -cs)&source=script | sudo tee /etc/apt/sources.list.d/ookla_speedtest-cli.list
       sudo apt-get update
     fi
     sudo apt-get install -y speedtest
+
+    # Node.js
+    # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
+    if ! check_repo "https://deb.nodesource.com"; then
+      curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee /usr/share/keyrings/nodesource-archive-keyring.gpg
+      echo "deb [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+      echo "deb-src [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+    fi
+    sudo apt-get install -y nodejs
 
     # Go
     GO_VERSION=$(curl -s "https://go.dev/dl/?mode=json" | jq --arg os $(uname -s | tr '[:upper:]' '[:lower:]') --arg arch $(dpkg --print-architecture) -r '[.[0].files[] | select(.os == $os and .arch == $arch)| .version] | unique | .[]')
@@ -212,3 +222,4 @@ if [ -S ~/.1password/agent.sock ]; then
   echo "  Host *"
   echo "      IdentityAgent ~/.1password/agent.sock"
 fi
+
