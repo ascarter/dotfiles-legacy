@@ -91,20 +91,33 @@ Linux )
                     exa
     fi
 
+    # Microsoft
+    # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software
+    if ! check_repo "https://packages.microsoft.com/ubuntu"; then
+      curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc > /dev/null
+      curl -fsSL https://packages.microsoft.com/config/ubuntu/$(lsb_release -r -s)/prod.list | sudo tee /etc/apt/sources.list.d/microsoft-prod.list
+      sudo apt-get update
+    fi
+    # sudo apt-get install -y dotnet-sdk-6.0 powershell
+    # sudo apt-get install -y msopenjdk-17
+
     if [ -n "${WSL_DISTRO_NAME}" ]; then
       # WSL extras
       sudo apt-get install -y libnss3-tools nautilus socat update-motd
     else
-      # Add Pop repositories on Ubuntu
-      if [ "$(lsb_release -i -s)" = "Ubuntu" ]; then
-        add_gpg_key pop-os 63C46DF0140D738961429F4E204DD8AEC33A7AFF
-        if ! check_repo "https://apt.pop-os.org/proprietary"; then
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pop-os-archive-keyring.gpg] https://apt.pop-os.org/proprietary $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/pop-os-proprietary.list
-        fi
-        if ! check_repo "https://apt.pop-os.org/release"; then
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pop-os-archive-keyring.gpg] https://apt.pop-os.org/release $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/pop-os-release.list
-        fi
+      # Microsoft Visual Studio Code
+      if ! check_repo "https://packages.microsoft.com/repos/code"; then
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] http://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+        sudo apt-get update
       fi
+      sudo apt-get install -y code
+      
+      # Microsoft Edge
+      if ! check_repo "https://packages.microsoft.com/repos/edge"; then
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
+        sudo apt-get update
+      fi
+      # sudo apt-get install microsoft-edge
 
       # Docker
       if ! check_repo "https://download.docker.com"; then
@@ -113,7 +126,7 @@ Linux )
         sudo apt-get update
       fi
       sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-      if ! [ groups | grep docker ]; then
+      if ! (groups | grep docker); then
         echo "Add $USER to docker group"
         sudo usermod -aG docker $USER
         newgrp docker
@@ -122,22 +135,31 @@ Linux )
       # 1Password
       if ! check_repo "https://downloads.1password.com"; then
         if ! [ -f /usr/share/keyrings/1password-archive-keyring.gpg ]; then
-          curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
+          curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
         fi
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | sudo tee /etc/apt/sources.list.d/1password.list
 
         if ! [ -f /etc/debsig/policies/AC2D62742012EA22/1password.pol ]; then
           sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
-          curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
+          curl -fsSL https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
         fi
 
         if ! [ -f /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg ]; then
           sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
-          curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+          curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
         fi
         sudo apt-get update
       fi
       sudo apt-get install -y 1password 1password-cli
+
+      # GitHub Desktop (Linux fork)
+      # https://github.com/shiftkey/desktop
+      if ! check_repo "https://mirror.mwt.me/ghd/deb/"; then
+        wget -qO - https://mirror.mwt.me/ghd/gpgkey | sudo tee /etc/apt/trusted.gpg.d/shiftkey-desktop.asc > /dev/null
+        echo "deb [arch=$(dpkg --print-architecture)] https://mirror.mwt.me/ghd/deb/ any main" | sudo tee /etc/apt/sources.list.d/packagecloud-shiftkey-desktop.list
+        sudo apt-get update
+      fi
+      sudo apt-get install -y github-desktop
     fi
 
     # GitHub CLI
@@ -148,33 +170,12 @@ Linux )
       sudo apt-get update
     fi
     sudo apt-get install -y gh
-
-    # GitHub Desktop (Linux fork)
-    # https://github.com/shiftkey/desktop
-    if ! check_repo "https://mirror.mwt.me/ghd/deb/"; then
-      wget -qO - https://mirror.mwt.me/ghd/gpgkey | sudo tee /etc/apt/trusted.gpg.d/shiftkey-desktop.asc > /dev/null
-      echo "deb [arch=$(dpkg --print-architecture)] https://mirror.mwt.me/ghd/deb/ any main" | sudo tee /etc/apt/sources.list.d/packagecloud-shiftkey-desktop.list
-      sudo apt-get update
-    fi
-    sudo apt-get install -y github-desktop
-
-    # Microsoft
-    # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software
-    if ! check_repo "https://packages.microsoft.com/ubuntu"; then
-      curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
-      curl -sSL https://packages.microsoft.com/config/ubuntu/$(lsb_release -r -s)/prod.list | sudo tee /etc/apt/sources.list.d/microsoft-prod.list
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] http://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
-      sudo apt-get update
-    fi
-    # sudo apt-get install -y dotnet-sdk-6.0 msopenjdk-17 powershell
-    # sudo apt-get install -y microsoft-edge code
-
+ 
     # Speedtest
     # https://www.speedtest.net/apps/cli
     if ! check_repo "https://install.speedtest.net"; then
-      curl -fsSL https://packagecloud.io/ookla/speedtest-cli/gpgkey | gpg --dearmor | sudo tee /usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg
-      curl -sSF https://packagecloud.io/install/repositories/ookla/speedtest-cli/config_file.list?os=Ubuntu&dist=$(lsb_release -cs)&source=script | sudo tee /etc/apt/sources.list.d/ookla_speedtest-cli.list
+      curl -fsSL https://packagecloud.io/ookla/speedtest-cli/gpgkey | gpg --dearmor | sudo tee /usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg > /dev/null
+      curl -fsSL "https://packagecloud.io/install/repositories/ookla/speedtest-cli/config_file.list?os=Ubuntu&dist=$(lsb_release -cs)&source=script" | sudo tee /etc/apt/sources.list.d/ookla_speedtest-cli.list
       sudo apt-get update
     fi
     sudo apt-get install -y speedtest
@@ -182,14 +183,14 @@ Linux )
     # Node.js
     # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
     if ! check_repo "https://deb.nodesource.com"; then
-      curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee /usr/share/keyrings/nodesource-archive-keyring.gpg
+      curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee /usr/share/keyrings/nodesource-archive-keyring.gpg > /dev/null
       echo "deb [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/nodesource.list
       echo "deb-src [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
     fi
     sudo apt-get install -y nodejs
 
     # Go
-    GO_VERSION=$(curl -s "https://go.dev/dl/?mode=json" | jq --arg os $(uname -s | tr '[:upper:]' '[:lower:]') --arg arch $(dpkg --print-architecture) -r '[.[0].files[] | select(.os == $os and .arch == $arch)| .version] | unique | .[]')
+    GO_VERSION=$(curl -fsSL "https://go.dev/dl/?mode=json" | jq --arg os $(uname -s | tr '[:upper:]' '[:lower:]') --arg arch $(dpkg --print-architecture) -r '[.[0].files[] | select(.os == $os and .arch == $arch)| .version] | unique | .[]')
     if [ -d /usr/local/go ] && [ "$(/usr/local/go/bin/go version | cut -f3 -d' ')" != "${GO_VERSION}" ]; then
       echo Removing $(/usr/local/go/bin/go version) ...
       sudo rm -Rf /usr/local/go
@@ -197,7 +198,7 @@ Linux )
 
     if ! [ -d /usr/local/go ]; then
       echo Install Go ${GO_VERSION}...
-      curl -sL https://golang.org/dl/${GO_VERSION}.linux-$(dpkg --print-architecture).tar.gz | sudo tar -C /usr/local -xz
+      curl -fsSL https://golang.org/dl/${GO_VERSION}.linux-$(dpkg --print-architecture).tar.gz | sudo tar -C /usr/local -xz
       /usr/local/go/bin/go version
     fi
 
@@ -212,7 +213,7 @@ Linux )
     # Install Git Credential Manager for amd64
     if [ "$(dpkg --print-architecture)" = "amd64" ]; then
       echo "Installing Git Credential Manager"
-      curl -L -o /tmp/gcmcore-linux_amd64.deb https://github.com/GitCredentialManager/git-credential-manager/releases/download/v2.0.632/gcmcore-linux_amd64.2.0.632.34631.deb
+      curl -fsSL -o /tmp/gcmcore-linux_amd64.deb https://github.com/GitCredentialManager/git-credential-manager/releases/download/v2.0.632/gcmcore-linux_amd64.2.0.632.34631.deb
       sudo dpkg -i /tmp/gcmcore-linux_amd64.deb
       rm -f /tmp/gcmcore-linux_amd64.deb
     fi
