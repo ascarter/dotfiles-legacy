@@ -113,6 +113,11 @@ Linux )
         sudo apt-get update
       fi
       sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+      if ! [ groups | grep docker ]; then
+        echo "Add $USER to docker group"
+        sudo usermod -aG docker $USER
+        newgrp docker
+      fi
 
       # 1Password
       if ! check_repo "https://downloads.1password.com"; then
