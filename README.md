@@ -40,12 +40,12 @@ cd ~/.config/dotfiles
 ./install.sh
 ```
 
-### Developer Tools
+### Tools
 
-To optionally install developer tools, run the following shell script after installing dotfiles:
+To optionally install a collection of developer applications and tools, run the following shell script after installing dotfiles:
 
 ```sh
-${DOTFILES}/developer.sh
+${DOTFILES}/tools.sh
 ```
 
 ### Server/Raspberry Pi Install
