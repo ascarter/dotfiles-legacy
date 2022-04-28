@@ -18,7 +18,7 @@ add_gpg_key() {
 
 case "$(uname)" in
 Darwin )
-  echo "Installing macOS developer tools..."
+  echo "Installing macOS tools..."
 
   # Symlink 1Password agent
   if [ -S ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ] && ! [ -S ~/.1password/agent.sock ]; then
@@ -29,8 +29,7 @@ Darwin )
 
   ;;
 Linux )
-  echo "$(lsb_release -d -s) ($(uname -o) $(uname -r) $(uname -m))"
-  echo "Updating developer tools..."
+  echo "Installing $(lsb_release -d -s) ($(uname -o) $(uname -r) $(uname -m)) tools..."
 
   case $(lsb_release -i -s) in
   Ubuntu | Pop )
@@ -111,7 +110,7 @@ Linux )
         sudo apt-get update
       fi
       sudo apt-get install -y code
-      
+
       # Microsoft Edge
       if ! check_repo "https://packages.microsoft.com/repos/edge"; then
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
@@ -152,6 +151,14 @@ Linux )
       fi
       sudo apt-get install -y 1password 1password-cli
 
+      # Signal
+      if ! check_repo "https://updates.signal.org"; then
+        curl -fsSL https://updates.signal.org/desktop/apt/keys.asc | sudo gpg --dearmor --output /usr/share/keyrings/signal-desktop-archive-keyring.gpg
+        echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-archive-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' | sudo tee -a /etc/apt/sources.list.d/signal.list
+        sudo apt-get update
+      fi
+      sudo apt install -y signal-desktop
+
       # GitHub Desktop (Linux fork)
       # https://github.com/shiftkey/desktop
       if ! check_repo "https://mirror.mwt.me/ghd/deb/"; then
@@ -170,7 +177,7 @@ Linux )
       sudo apt-get update
     fi
     sudo apt-get install -y gh
- 
+
     # Speedtest
     # https://www.speedtest.net/apps/cli
     if ! check_repo "https://install.speedtest.net"; then
