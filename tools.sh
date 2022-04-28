@@ -29,7 +29,7 @@ Darwin )
 
   ;;
 Linux )
-  echo "Installing $(lsb_release -d -s) ($(uname -o) $(uname -r) $(uname -m)) tools..."
+  echo "Installing $(lsb_release -d -s) $(uname -m) tools..."
 
   case $(lsb_release -i -s) in
   Ubuntu | Pop )
