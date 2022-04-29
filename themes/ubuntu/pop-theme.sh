@@ -9,8 +9,23 @@ sudo apt-get install -y \
               pop-icon-theme \
               pop-sound-theme
 
-# Checkout and build fonts
-#local fontdir=$(mkdtemp -d)
-#git clone https://github.com/pop-os/fonts.git ${fontdir}/fonts
-#pushd ${fontdir}/fonts
-#make install
+# Create wallpaper
+pop_os_wallpaper=~/Pictures/Wallpapers/pop-os/wallpapers
+if ! [ -d ${pop_os_wallpaper} ]; then
+  mkdir -p $(dirname ${pop_os_wallpaper})
+  git clone https://github.com/pop-os/wallpapers.git ${pop_os_wallpaper}
+fi
+make -C ~/Pictures/Wallpapers/pop-os/wallpapers -j
+sudo make -C ~/Pictures/Wallpapers/pop-os/wallpapers install
+
+# TODO: Set gnome configuration
+echo "Recommendations for Gnome configuration:"
+echo ""
+echo "Icons: Pop Icon Theme"
+echo "Theme: Pop GTK Theme"
+echo ""
+echo "For fonts, use:"
+echo "Window Titles: Fira Sans SemiBold 10"
+echo "Interface:     Fira Sans Book 10"
+echo "Documents:     Roboto Slab Regular 11"
+echo "Monospace:     Fira Mono Regular 11"
