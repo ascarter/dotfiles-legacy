@@ -68,6 +68,7 @@ Linux )
                 gpaste \
                 gparted \
                 htop \
+                imagemagick \
                 jq \
                 libsecret-tools \
                 lsb-release \
