@@ -51,6 +51,7 @@ Linux )
                 ca-certificates \
                 build-essential \
                 curl \
+                dconf-editor \
                 default-mta \
                 dirmngr \
                 ffmpeg \
@@ -67,6 +68,7 @@ Linux )
                 gnupg-agent \
                 gpaste \
                 gparted \
+                groff \
                 htop \
                 imagemagick \
                 jq \
