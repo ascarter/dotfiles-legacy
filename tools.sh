@@ -1,19 +1,9 @@
 #!/bin/sh
 
-check_repo() {
+# Install developer tools
+
+check_apt_repo() {
   apt-cache policy | grep ${1} > /dev/null
-}
-
-add_gpg_key() {
-  local keyring=/usr/share/keyrings/${1}-archive-keyring.gpg
-
-  if ! [ -f ${keyring} ]; then
-    local dl_keyring=$(mktemp)
-    gpg --no-default-keyring --keyring ${dl_keyring} --keyserver keyserver.ubuntu.com --recv-keys ${2}
-    sudo mv ${dl_keyring} ${keyring}
-  else
-    echo "Keyring ${keyring} already exists"
-  fi
 }
 
 case "$(uname)" in
@@ -37,19 +27,22 @@ Linux )
     sudo hwclock -s
 
     # Enable universe repositories
-    sudo add-apt-repository universe
+    # sudo add-apt-repository universe
 
-    # Setup base packages
+    # Update software repositories
     sudo apt-get update
     sudo apt-get upgrade
     sudo apt-get autoremove -y
+
+    # Setup common base packages
     sudo apt-get install -y \
                 alpine \
                 alpine-doc \
                 alpine-pico \
                 apt-transport-https \
-                ca-certificates \
                 build-essential \
+                ca-certificates \
+                cpu-checker \
                 curl \
                 dconf-editor \
                 default-mta \
@@ -59,11 +52,9 @@ Linux )
                 g++ \
                 gcc \
                 git \
-                gnome-remote-desktop \
                 gnome-shell-extensions-gpaste \
                 gnome-system-log \
                 gnome-tweaks \
-                gnome-user-share \
                 gnupg \
                 gnupg-agent \
                 gpaste \
@@ -73,7 +64,6 @@ Linux )
                 imagemagick \
                 jq \
                 libsecret-tools \
-                lsb-release \
                 make \
                 mc \
                 neofetch \
@@ -86,20 +76,20 @@ Linux )
                 vim-gtk3 \
                 xsel
 
-    # Newer apps and tools (post-Focal)
+    # Newer common base packages (post-focal)
     if ! [ "$(lsb_release -cs)" = "focal" ]; then
-      sudo apt-get install -y
-                    duf \
-                    exa
+      sudo apt-get install -y \
+                  duf \
+                  exa
     fi
 
     # Microsoft
     # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software
-    if ! check_repo "https://packages.microsoft.com/ubuntu"; then
-      curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc > /dev/null
-      curl -fsSL https://packages.microsoft.com/config/ubuntu/$(lsb_release -r -s)/prod.list | sudo tee /etc/apt/sources.list.d/microsoft-prod.list
-      sudo apt-get update
-    fi
+    # if ! check_apt_repo "https://packages.microsoft.com/ubuntu"; then
+    #  curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc > /dev/null
+    #  curl -fsSL https://packages.microsoft.com/config/ubuntu/$(lsb_release -r -s)/prod.list | sudo tee /etc/apt/sources.list.d/microsoft-prod.list
+    #  sudo apt-get update
+    # fi
     # sudo apt-get install -y dotnet-sdk-6.0 powershell
     # sudo apt-get install -y msopenjdk-17
 
@@ -108,34 +98,21 @@ Linux )
       sudo apt-get install -y libnss3-tools nautilus socat update-motd
     else
       # Microsoft Visual Studio Code
-      if ! check_repo "https://packages.microsoft.com/repos/code"; then
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] http://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
-        sudo apt-get update
-      fi
-      sudo apt-get install -y code
+      # if ! check_apt_repo "https://packages.microsoft.com/repos/code"; then
+      #  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] http://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+      #  sudo apt-get update
+      # fi
+      # sudo apt-get install -y code
 
       # Microsoft Edge
-      if ! check_repo "https://packages.microsoft.com/repos/edge"; then
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
-        sudo apt-get update
-      fi
+      # if ! check_apt_repo "https://packages.microsoft.com/repos/edge"; then
+      #  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
+      #  sudo apt-get update
+      # fi
       # sudo apt-get install microsoft-edge
 
-      # Docker
-      if ! check_repo "https://download.docker.com"; then
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
-        sudo apt-get update
-      fi
-      sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-      if ! (groups | grep docker); then
-        echo "Add $USER to docker group"
-        sudo usermod -aG docker $USER
-        newgrp docker
-      fi
-
       # 1Password
-      if ! check_repo "https://downloads.1password.com"; then
+      if ! check_apt_repo "https://downloads.1password.com"; then
         if ! [ -f /usr/share/keyrings/1password-archive-keyring.gpg ]; then
           curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
         fi
@@ -155,7 +132,7 @@ Linux )
       sudo apt-get install -y 1password 1password-cli
 
       # Signal
-      if ! check_repo "https://updates.signal.org"; then
+      if ! check_apt_repo "https://updates.signal.org"; then
         curl -fsSL https://updates.signal.org/desktop/apt/keys.asc | sudo gpg --dearmor --output /usr/share/keyrings/signal-desktop-archive-keyring.gpg
         echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-archive-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' | sudo tee -a /etc/apt/sources.list.d/signal.list
         sudo apt-get update
@@ -164,7 +141,7 @@ Linux )
 
       # GitHub Desktop (Linux fork)
       # https://github.com/shiftkey/desktop
-      if ! check_repo "https://mirror.mwt.me/ghd/deb/"; then
+      if ! check_apt_repo "https://mirror.mwt.me/ghd/deb/"; then
         wget -qO - https://mirror.mwt.me/ghd/gpgkey | sudo tee /etc/apt/trusted.gpg.d/shiftkey-desktop.asc > /dev/null
         echo "deb [arch=$(dpkg --print-architecture)] https://mirror.mwt.me/ghd/deb/ any main" | sudo tee /etc/apt/sources.list.d/packagecloud-shiftkey-desktop.list
         sudo apt-get update
@@ -174,28 +151,38 @@ Linux )
 
     # GitHub CLI
     # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
-    if ! check_repo "https://cli.github.com"; then
+    if ! check_apt_repo "https://cli.github.com"; then
       curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list
       sudo apt-get update
     fi
     sudo apt-get install -y gh
 
+    # Install Git Credential Manager for amd64
+    if [ "$(dpkg --print-architecture)" = "amd64" ]; then
+      echo "Installing Git Credential Manager"
+      curl -fsSL -o /tmp/gcmcore-linux_amd64.deb https://github.com/GitCredentialManager/git-credential-manager/releases/download/v2.0.632/gcmcore-linux_amd64.2.0.632.34631.deb
+      sudo dpkg -i /tmp/gcmcore-linux_amd64.deb
+      rm -f /tmp/gcmcore-linux_amd64.deb
+    fi
+
     # Speedtest
     # https://www.speedtest.net/apps/cli
-    if ! check_repo "https://install.speedtest.net"; then
+    # Use groovy as latest
+    if ! check_apt_repo "https://install.speedtest.net"; then
       curl -fsSL https://packagecloud.io/ookla/speedtest-cli/gpgkey | gpg --dearmor | sudo tee /usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg > /dev/null
-      curl -fsSL "https://packagecloud.io/install/repositories/ookla/speedtest-cli/config_file.list?os=Ubuntu&dist=$(lsb_release -cs)&source=script" | sudo tee /etc/apt/sources.list.d/ookla_speedtest-cli.list
+      curl -fsSL "https://packagecloud.io/install/repositories/ookla/speedtest-cli/config_file.list?os=Ubuntu&dist=groovy&source=script" | sudo tee /etc/apt/sources.list.d/ookla_speedtest-cli.list
       sudo apt-get update
     fi
     sudo apt-get install -y speedtest
 
     # Node.js
     # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
-    if ! check_repo "https://deb.nodesource.com"; then
+    # Use impish as latest
+    if ! check_apt_repo "https://deb.nodesource.com"; then
       curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee /usr/share/keyrings/nodesource-archive-keyring.gpg > /dev/null
-      echo "deb [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-      echo "deb-src [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+      echo "deb [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x impish main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+      echo "deb-src [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x impish main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
     fi
     sudo apt-get install -y nodejs
 
@@ -218,14 +205,6 @@ Linux )
       rustup update
     else
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
-    fi
-
-    # Install Git Credential Manager for amd64
-    if [ "$(dpkg --print-architecture)" = "amd64" ]; then
-      echo "Installing Git Credential Manager"
-      curl -fsSL -o /tmp/gcmcore-linux_amd64.deb https://github.com/GitCredentialManager/git-credential-manager/releases/download/v2.0.632/gcmcore-linux_amd64.2.0.632.34631.deb
-      sudo dpkg -i /tmp/gcmcore-linux_amd64.deb
-      rm -f /tmp/gcmcore-linux_amd64.deb
     fi
     ;;
   esac
