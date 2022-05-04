@@ -40,23 +40,18 @@ cd ~/.config/dotfiles
 ./install.sh
 ```
 
-### Tools
+### Install Scripts
 
-To optionally install a collection of developer applications and tools, run the following shell script after installing dotfiles:
+The `scripts` directory contains several additional install scripts. Run based on your usage scenario:
 
-```sh
-${DOTFILES}/tools.sh
-```
+| Script | Description |
+| ------ | ----------- |
+| `scripts/server.sh` | Server tools targetting Ubuntu Server and Raspberry Pi |
+| `scripts/test.sh` | Dotfiles test suite |
+| `scripts/virt.sh` | Enable virtualisation for macOS and Ubuntu (KVM and Docker) |
+| `scripts/workstation.sh` | Workstation applications and tools for macOS and Ubuntu/Pop OS |
+| `scripts/wsl.sh` | WSL software tools on Ubuntu |
 
-### Server/Raspberry Pi Install
-
-An install script for configuring some server packages can be run using the following command:
-
-```sh
-sh -c "$(curl -sSL https://raw.githubusercontent.com/ascarter/dotfiles/main/server.sh)"
-```
-
-Dotfiles is not required to run the server install script.
 
 ### Uninstall
 
