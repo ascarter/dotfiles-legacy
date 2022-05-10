@@ -67,7 +67,6 @@ Linux )
       sudo apt-get update
     fi
     sudo apt-get install -y github-desktop
-  fi
 
     # GitHub CLI
     # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
@@ -86,6 +85,15 @@ Linux )
       rm -f /tmp/gcmcore-linux_amd64.deb
     fi
 
+    # Kubernetes
+    if ! check_apt_repo "https://apt.kubernetes.io"; then
+      sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+      sudo apt-get update
+    fi
+    sudo apt-get install -y kubectl
+
+
     # Node.js
     # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
     # Use impish as latest
@@ -93,6 +101,7 @@ Linux )
       curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee /usr/share/keyrings/nodesource-archive-keyring.gpg > /dev/null
       echo "deb [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x impish main" | sudo tee /etc/apt/sources.list.d/nodesource.list
       echo "deb-src [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x impish main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+      sudo apt-get update
     fi
     sudo apt-get install -y nodejs
 
