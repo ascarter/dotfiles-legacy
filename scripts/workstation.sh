@@ -104,7 +104,15 @@ Linux )
       echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-archive-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' | sudo tee -a /etc/apt/sources.list.d/signal.list
       sudo apt-get update
     fi
-    sudo apt install -y signal-desktop
+    sudo apt-get install -y signal-desktop
+
+    # Onedriver
+    if ! check_apt_repo "https://download.opensuse.org/repositories/home:/jstaf"; then
+      curl -fsSL https://download.opensuse.org/repositories/home:jstaf/xUbuntu_$(lsb_release -rs)/Release.key | sudo gpg --dearmor --output /usr/share/keyrings/jstaf-archive-keyring.gpg
+      echo "deb [signed-by=/usr/share/keyrings/jstaf-archive-keyring.gpg] https://download.opensuse.org/repositories/home:/jstaf/xUbuntu_$(lsb_release -rs)/ /" | sudo tee /etc/apt/sources.list.d/jstaf.list
+      sudo apt update
+    fi
+    sudo apt-get install -y onedriver
 
     # Speedtest
     # https://www.speedtest.net/apps/cli
