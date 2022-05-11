@@ -61,6 +61,8 @@ Linux )
                 openssh-server \
                 software-properties-common \
                 tmux \
+                ubuntu-restricted-extras \
+                ubuntu-restricted-addons \
                 vim-gtk3 \
                 xsel
 
