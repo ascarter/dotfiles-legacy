@@ -42,22 +42,26 @@ Linux )
                 python3-dev \
                 python3-pip
 
-    # Microsoft
+    # Microsoft GPG key
+    if ! [ -f /usr/share/keyrings/microsoft-archive-keyring.gpg ]; then
+      curl https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg
+    fi
+
+    # Microsoft package repo
     # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software
-    # if ! check_apt_repo "https://packages.microsoft.com/ubuntu"; then
-    #  curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc > /dev/null
-    #  curl -fsSL https://packages.microsoft.com/config/ubuntu/$(lsb_release -r -s)/prod.list | sudo tee /etc/apt/sources.list.d/microsoft-prod.list
+    #if ! check_apt_repo "https://packages.microsoft.com/ubuntu"; then
+    #  echo "deb [arch=amd64,armhf,arm64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/ubuntu/20.04/prod focal main" | sudo tee /etc/apt/sources.list.d/microsoft-prod.list
     #  sudo apt-get update
-    # fi
+    #fi
     # sudo apt-get install -y dotnet-sdk-6.0 powershell
     # sudo apt-get install -y msopenjdk-17
 
     # Microsoft Visual Studio Code
-    # if ! check_apt_repo "https://packages.microsoft.com/repos/code"; then
-    #  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] http://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
-    #  sudo apt-get update
-    # fi
-    # sudo apt-get install -y code
+    if ! check_apt_repo "https://packages.microsoft.com/repos/code"; then
+      echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+      sudo apt-get update
+    fi
+    sudo apt-get install -y code
 
     # GitHub Desktop (Linux fork)
     # https://github.com/shiftkey/desktop

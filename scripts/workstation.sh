@@ -73,12 +73,18 @@ Linux )
                   exa
     fi
 
+    # Microsoft GPG key
+    if ! [ -f /usr/share/keyrings/microsoft-archive-keyring.gpg ]; then
+      curl https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg
+    fi
+
     # Microsoft Edge
-    # if ! check_apt_repo "https://packages.microsoft.com/repos/edge"; then
-    #  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
-    #  sudo apt-get update
-    # fi
-    # sudo apt-get install microsoft-edge
+    if ! check_apt_repo "https://packages.microsoft.com/repos/edge"; then
+      curl https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg
+      echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
+      sudo apt-get update
+    fi
+    sudo apt-get install -y microsoft-edge-stable
 
     # 1Password
     if ! check_apt_repo "https://downloads.1password.com"; then
