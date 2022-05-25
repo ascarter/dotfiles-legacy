@@ -1,0 +1,7 @@
+// Settings in here override those in "Default/Preferences.sublime-settings",
+// and are overridden in turn by syntax-specific settings.
+{
+	"highlight_modified_tabs": true,
+	"bold_folder_labels": true,
+	"hardware_acceleration": "opengl"
+}
