@@ -98,6 +98,8 @@ Linux )
     fi
     sudo apt-get install -y kubectl
 
+    # Paw
+    https://cdn-builds.paw.cloud/octopaw/4.2.2/cec3c9ab/linux/deb/x64/paw-client_4.2.2_amd64.deb
 
     # Node.js
     # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
