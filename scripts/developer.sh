@@ -33,6 +33,7 @@ Linux )
                 g++ \
                 gcc \
                 git \
+                gitg \
                 gnupg \
                 gnupg-agent \
                 htop \
