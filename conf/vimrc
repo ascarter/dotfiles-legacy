@@ -165,6 +165,9 @@ filetype indent on
 set nowrap
 set autoindent
 
+" Ensure word wrap does not split words
+set linebreak
+
 " Go
 let g:go_fmt_command = "gofmt"
 
@@ -178,6 +181,75 @@ function! IsWSL()
     endif
     return 0
 endfunction
+
+" =====================================
+" Remap keys
+" =====================================
+
+" Adapted from mswin.vim to make Vim work more like a standard application
+if has("unix") || has("linux")
+	if has("clipboard")
+		" Cut ctrl+x
+		vnoremap <C-X> "+x
+
+		" Copy ctrl+c
+		vnoremap <C-C> "+y
+
+		" Past ctrl+v
+		map  <C-V> "+gP
+		cmap <C-V> <C-R>+
+
+		"vmap <C-c> "+yi
+		"vmap <C-x> "+c
+		"vmap <C-v> "+gP
+		"imap <C-v> <ESC>"+gP
+		"vmap <C-a> ggVg
+	endif
+
+	if has("gui")
+		" Search ctrl+f
+		noremap  <expr> <C-F> has("gui_running") ? ":promptfind\<CR>": "/"
+		inoremap <expr> <C-F> has("gui_running") ? "\<C-\>\<C-O>:promptfind\<CR>": "\<C-\>\<C-O>/"
+		cnoremap <expr> <C-F> has("gui_running") ? "\<C-\>\<C-C>:promptfind\<CR>": "\<C-\>\<C-O>/"
+
+		" Replace dialog ctrl+h
+		nnoremap <expr> <C-H> has("gui_running") ? ":promptrepl\<CR>" : "\<C-H>"
+		inoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-O>:promptrepl\<CR>" : "\<C-H>"
+		cnoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-C>:promptrepl\<CR>" : "\<C-H>"
+	endif
+
+	" Save ctrl+s
+	noremap  <C-S> :update<CR>
+	vnoremap <C-S> <C-C>:update<CR>
+	inoremap <C-S> <ESC>:update<CR>gi
+
+	" For ctrl+v to work, autoselect must be off
+	if !has("unix")
+		set guioptions-=a
+	endif
+
+	"Undo ctrl+z
+	noremap <C-Z>  u
+	inoremap <C-Z> <C-O>u
+
+	" Redo ctrl+y
+	noremap  <C-Y> <C-R>
+	inoremap <C-Y> <C-O><C-R>
+
+	" Select all ctrl+a
+	noremap <C-A> gggH<C-O>G
+	inoremap <C-A> <C-O>gg<C-O>gH<C-O>G
+	cnoremap <C-A> <C-C>gggH<C-O>G
+	onoremap <C-A> <C-C>gggH<C-O>G
+	snoremap <C-A> <C-C>gggH<C-O>G
+	xnoremap <C-A> <C-C>ggVG
+
+	" Next window ctrl+tab
+	noremap  <C-Tab> <C-W>w
+	inoremap <C-Tab> <C-O><C-W>w
+	cnoremap <C-Tab> <C-O><C-W>w
+	onoremap <C-Tab> <C-O><C-W>w
+endif
 
 " =====================================
 " GUI settings
@@ -245,7 +317,8 @@ if has("gui_running")
         set guifont=Monospace\ 14
     elseif has('gui_gtk2') || has('gui_gtk3')
         " Linux
-        set guifont=Fira\ Code\ 12,Roboto\ Mono\ 12,Source\ Code\ Pro\ Medium\ 12,Monospace\ 12
+        set guifont=Monospace\ 11
+
     elseif has('gui_win32')
         " Windows
         set guifont=Fira\ Code:h10,Roboto\ Mono:h12,Cascadia\ Code:h12,Source\ Code\ Pro:h12,Consolas:h12
