@@ -106,6 +106,14 @@ Linux )
     fi
     sudo apt-get install -y 1password 1password-cli
 
+    # Sublime Text
+    if ! check_apt_repo "https://download.sublimetext.com"; then
+      curl -fsSL https://download.sublimetext.com/sublimehq-pub.gpg | sudo gpg --dearmor --output /usr/share/keyrings/sublime-text-archive-keyring.gpg
+      echo "deb [signed-by=/usr/share/keyrings/sublime-text-archive-keyring.gpg] https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+      sudo apt-get update
+    fi
+    sudo apt-get install sublime-text
+
     # Signal
     if ! check_apt_repo "https://updates.signal.org"; then
       curl -fsSL https://updates.signal.org/desktop/apt/keys.asc | sudo gpg --dearmor --output /usr/share/keyrings/signal-desktop-archive-keyring.gpg
