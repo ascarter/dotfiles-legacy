@@ -91,14 +91,22 @@ if ! [ -e ${DOTFILES} ]; then
 fi
 
 # Symlink rc files
+conf_dir=${DOTFILES}/conf
 mkdir -p ${HOMEDIR}
-for f in $(ls ${DOTFILES}/conf); do
-  source=${DOTFILES}/conf/${f}
-  target=${HOMEDIR}/.${f}
-  if ! [ -e ${target} ]; then
-    echo "Symlink ${source} -> ${target}"
-    ln -s ${source} ${target}
-  fi
+for f in $(find ${conf_dir} -type f -print); do
+	t=${HOMEDIR}/.${f#${conf_dir}/}
+	if ! [ -h ${t} ]; then
+		# Check if file is already there and preserve
+		if [ -e ${t} ]; then
+			echo "Backup existing file ${t} -> ${t}.orig"
+			mv ${t} ${t}.orig
+		fi
+
+    # Ensure path is present and create symlink
+		echo "symlink ${f} -> ${t}"
+    mkdir -p $(dirname ${t})
+		ln -s ${f} ${t}
+	fi
 done
 
 # Configure zsh if installed

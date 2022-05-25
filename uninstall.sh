@@ -15,11 +15,19 @@ HOMEDIR="${1:-${HOME}}"
 DOTFILES="${2:-${HOME}/.config/dotfiles}"
 
 # Remove home directory symlinks
-for f in $(ls ${DOTFILES}/conf); do
-  target=${HOMEDIR}/.${f}
-  if [ -e ${target} ]; then
-    echo "Remove ${target}"
-    rm ${target}
+conf_dir=${DOTFILES}/conf
+for f in $(find ${conf_dir} -type f -print); do
+  t=${HOMEDIR}/.${f#${conf_dir}/}
+  if [ -h ${t} ]; then
+    # Remove symlink
+    echo "Remove ${t}"
+    rm ${t}
+
+    # Restore backup if present
+    if [ -e ${t}.orig ]; then
+      echo "Restore ${t}.orig -> ${t}"
+      mv ${t}.orig ${t}
+    fi
   fi
 done
 
