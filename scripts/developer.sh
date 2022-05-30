@@ -85,7 +85,7 @@ Linux )
     # Install Git Credential Manager for amd64
     if [ "$(dpkg --print-architecture)" = "amd64" ]; then
       echo "Installing Git Credential Manager"
-      curl -fsSL -o /tmp/gcmcore-linux_amd64.deb https://github.com/GitCredentialManager/git-credential-manager/releases/download/v2.0.632/gcmcore-linux_amd64.2.0.632.34631.deb
+      curl -fsSL -o /tmp/gcmcore-linux_amd64.deb https://github.com/GitCredentialManager/git-credential-manager/releases/download/v2.0.696/gcmcore-linux_amd64.2.0.696.deb
       sudo dpkg -i /tmp/gcmcore-linux_amd64.deb
       rm -f /tmp/gcmcore-linux_amd64.deb
     fi
