@@ -112,7 +112,7 @@ Linux )
       echo "deb [signed-by=/usr/share/keyrings/sublime-text-archive-keyring.gpg] https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
       sudo apt-get update
     fi
-    sudo apt-get install sublime-text
+    sudo apt-get install sublime-text sublime-merge
 
     # Signal
     if ! check_apt_repo "https://updates.signal.org"; then
