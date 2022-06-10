@@ -47,7 +47,7 @@ Darwin )
 
   if [ -x "$(command -v brew)" ]; then
     # Add homebrew extras tap
-    brew tap --full ascarter/extras
+    brew tap ascarter/extras
 
     # Enable Git Credential Manager (.NET core)
     # brew tap microsoft/git
