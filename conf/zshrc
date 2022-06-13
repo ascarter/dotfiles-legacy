@@ -1,9 +1,10 @@
 fpath=(${ZDOTDIR:-$DOTFILES/zsh}/completions ${ZDOTDIR:-$DOTFILES/zsh}/functions ${ZDOTDIR:-$DOTFILES/zsh}/prompts $fpath)
 
-if (( $+commands[brew] )); then
+# Check for homebrew
+if [ -d /opt/homebrew ]; then
   export HOMEBREW_NO_EMOJI=1
   export HOMEBREW_NO_ANALYTICS=1
-  eval $($(brew --prefix)/bin/brew shellenv)
+  eval $(/opt/homebrew/bin/brew shellenv)
   fpath+=($(brew --prefix)/share/zsh/site-functions $(brew --prefix)/share/zsh-completions)
 fi
 
