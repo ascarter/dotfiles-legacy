@@ -88,29 +88,28 @@ fi
 
 # Ruby
 if (( $+commands[ruby] )) && (( $+commands[gem] )); then
-  pathadd $(ruby -r rubygems -e 'puts Gem.user_dir')/bin
+  path+=$(ruby -r rubygems -e 'puts Gem.user_dir')/bin
 fi
 
 # Python
 case $(uname) in
 Darwin )
   # Installed Python
-  pathadd /Library/Frameworks/Python.framework/Versions/Current/bin
+  path+=/Library/Frameworks/Python.framework/Versions/Current/bin
 
   # User pip installed binaries are in ~/Library on macOS
   local pyver=$(python3 -c "import sys; print ('{}.{}'.format(sys.version_info.major, sys.version_info.minor))")
   if [[ -d ${HOME}/Library/Python/${pyver} ]]; then
       export LC_ALL=en_US.UTF-8
       export LANG=en_US.UTF-8
-      pathadd ${HOME}/Library/Python/${pyver}/bin
-  fi
-
-  # User pip installed binaries are in ~/.local/bin on Linux
-  if [[ -d ${HOME}/.local/bin ]]; then
-    pathadd ${HOME}/.local/bin
+      path+=${HOME}/Library/Python/${pyver}/bin
   fi
 esac
-pathadd ${HOME}/.local/bin
+
+# User pip installed binaries are in ~/.local/bin on Linux
+if [[ -d ${HOME}/.local/bin ]]; then
+    path+=${HOME}/.local/bin
+fi
 
 # Pip 3
 if (( $+commands[pip3] )); then
@@ -130,11 +129,11 @@ if (( $+commands[npm] )); then
 fi
 
 # Go
-pathadd /usr/local/go/bin prefix
+path=(/usr/local/go/bin $path)
 
 # Add GOPATH to installed binaries to path
 if (( $+commands[go] )); then
-  pathadd $(go env GOPATH)/bin
+  path=($(go env GOPATH)/bin $path)
 fi
 
 # .NET Core
@@ -143,7 +142,7 @@ if (( $+commands[dotnet] )); then
   DOTNET_CLI_TELEMETRY_OPTOUT=1
 
   # Add dotnet tools
-  pathadd ${HOME}/.dotnet/tools ]
+  path+=${HOME}/.dotnet/tools
 
   # zsh parameter completion for the dotnet CLI
   _dotnet_zsh_complete() {
@@ -174,15 +173,13 @@ fi
 # Android
 if [[ -d ${HOME}/Library/Android/sdk ]]; then
   export ANDROID_HOME=${HOME}/Library/Android/sdk
-  pathadd ${ANDROID_HOME}/tools
-  pathadd ${ANDROID_HOME}/tools/bin
-  pathadd ${ANDROID_HOME}/platform-tools
+  path+=(${ANDROID_HOME}/tools ${ANDROID_HOME}/tools/bin ${ANDROID_HOME}/platform-tools)
 fi
 
 # Flutter
 if [[ -d ${SDK_ROOT}/flutter ]]; then
   export FLUTTER_ROOT=${SDK_ROOT}/flutter
-  pathadd ${FLUTTER_ROOT}/bin
+  path+=${FLUTTER_ROOT}/bin
 fi
 
 # Rust
@@ -208,7 +205,7 @@ fi
 # ========================================
 
 # Add home bin dir if it is there
-pathadd ${DOTFILES}/bin
+path+=${DOTFILES}/bin
 
 # ========================================
 # SSH
