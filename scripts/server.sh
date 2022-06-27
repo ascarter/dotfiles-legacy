@@ -17,9 +17,6 @@ Linux )
 
   case $(lsb_release -i -s) in
   Ubuntu )
-    ARCH=$(dpkg --print-architecture)
-    CODENAME=$(lsb_release -s -c)
-
     # Configure hostname
     hostname="$(hostname -s)"
     read -p "hostname (${hostname}): " input
@@ -34,10 +31,6 @@ Linux )
 
     # Install base packages
     sudo apt-get install -y apt-transport-https ca-certificates software-properties-common
-
-    # Add Tailscale repository
-    curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/${CODENAME}.gpg | sudo apt-key add -
-    curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/${CODENAME}.list | sudo tee /etc/apt/sources.list.d/tailscale.list
 
     # Add Docker repository
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -55,18 +48,11 @@ Linux )
       docker-ce \
       docker-ce-cli \
       jq \
-      speedtest \
-      tailscale
+      speedtest
 
     # Install docker-compose
     sudo curl -fsSL "https://github.com/docker/compose/releases/download/v2.2.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
-
-    # Authenticate and connect to Tailscale network
-    sudo tailscale up
-    tailscale ip -4
-    tailscale ip -6
-
     ;;
   *)
     echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"
