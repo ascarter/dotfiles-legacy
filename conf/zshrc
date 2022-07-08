@@ -1,4 +1,4 @@
-fpath=(${ZDOTDIR:-$DOTFILES/zsh}/completion ${ZDOTDIR:-$DOTFILES/zsh}/function ${ZDOTDIR:-$DOTFILES/zsh}/prompt $fpath)
+fpath=(${DOTFILES}/zsh/completion ${DOTFILES}/zsh/function ${DOTFILES}/zsh/prompt $fpath)
 
 # Check for homebrew
 if [ -d /opt/homebrew ]; then
@@ -17,7 +17,7 @@ promptinit
 autoload -U colors
 colors
 
-autoload -U ${ZDOTDIR:-$DOTFILES/zsh}/function/[^_]*(:t)
+autoload -U ${DOTFILES}/zsh/function/[^_]*(:t)
 autoload add-zsh-hook
 
 # Support bash completions
@@ -196,8 +196,8 @@ fi
 # Aliases
 # ========================================
 
-if [ -f ${ZDOTDIR:-$DOTFILES/zsh}/zsh_aliases ]; then
-  source ${ZDOTDIR:-$DOTFILES/zsh}/zsh_aliases
+if [ -f ${DOTFILES}/zsh/zsh_aliases ]; then
+  source ${DOTFILES}/zsh/zsh_aliases
 fi
 
 # ========================================

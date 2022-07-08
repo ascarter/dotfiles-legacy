@@ -5,7 +5,7 @@
 
 emulate -L zsh
 
-COMPLETIONS_DIR=${ZDOTDIR:-$DOTFILES/zsh}/completions
+COMPLETIONS_DIR=${DOTFILES}/zsh/completions
 mkdir -p ${COMPLETIONS_DIR}
 
 # Swift
