@@ -136,6 +136,9 @@ Darwin )
   alias bbnw='bbedit --new-window'
   alias bbpb='pbpaste | bbedit --clean --view-top'
   alias bbtags='bbedit --maketags'
+  
+  # Tailscale
+  alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
   # Use MacVim on Mac OS X if installed
   [[ -e /usr/local/bin/vim ]] && alias vim='/usr/local/bin/vim'
