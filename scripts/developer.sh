@@ -12,6 +12,12 @@ Darwin )
 
   # TODO: brewfile for developer tools
 
+  # Enable PostgreSQL CLI
+  if [ -d /Applications/Postgres.app ]; then
+    sudo mkdir -p /etc/paths.d
+    echo /Applications/Postgres.app/Contents/Versions/latest/bin | sudo tee /etc/paths.d/postgresapp
+  fi
+
   ;;
 Linux )
   echo "Installing $(lsb_release -d -s) $(uname -m) tools..."
