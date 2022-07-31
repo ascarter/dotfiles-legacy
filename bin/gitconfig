@@ -8,25 +8,25 @@ GIT_CONFIG_FILE=${2:-${HOME}/.gitconfig}
 GIT_CONFIG_CMD="git config --file ${GIT_CONFIG_FILE}"
 
 gc_set() {
-    ${GIT_CONFIG_CMD} "${1}" "${2}"
+  ${GIT_CONFIG_CMD} "${1}" "${2}"
 }
 
 gc_unset() {
-    ${GIT_CONFIG_CMD} --unset "${1}"
+  ${GIT_CONFIG_CMD} --unset "${1}"
 }
 
 gc_update() {
-    gc_unset "${1}"
-    if [ -n "${2}" ]; then
-        gc_set "${1}" "${2}"
-    fi
+  gc_unset "${1}"
+  if [ -n "${2}" ]; then
+    gc_set "${1}" "${2}"
+  fi
 }
 
 # Prompt for git config key
 gc_prompt() {
-    local current="$(${GIT_CONFIG_CMD} --get ${1})"
-    read -p "${1} (${current}): " input
-    gc_update ${1} "${input:-${current}}"
+  local current="$(${GIT_CONFIG_CMD} --get ${1})"
+  read -p "${1} (${current}): " input
+  gc_update ${1} "${input:-${current}}"
 }
 
 echo "Generating gitconfig..."
@@ -42,47 +42,52 @@ gc_prompt user.email "Email"
 # Set configuration by platform
 case $(uname) in
 Darwin )
+  # Use Git Credential Manager if it is installed
+  if [ -x "$(command -v git-credential-manager-core)" ]; then
+    gc_set credential.helper manager-core
+  else
     gc_set credential.helper osxkeychain
+  fi
 
-    # BBEdit diff
-    if [ -x "$(command -v bbdiff)" ]; then
-        gc_set difftool."bbdiff".cmd 'bbdiff --wait --resume $LOCAL $REMOTE'
-    fi
+  # BBEdit diff
+  if [ -x "$(command -v bbdiff)" ]; then
+    gc_set difftool."bbdiff".cmd 'bbdiff --wait --resume $LOCAL $REMOTE'
+  fi
 
-    # Kaleidoscope
-    if [ -x "$(command -v ksdiff)" ]; then
-        gc_set difftool."Kaleidoscope".cmd 'ksdiff --partial-changeset --relative-path $MERGED -- $LOCAL $REMOTE'
-        gc_set mergetool."Kaleidoscope".cmd 'ksdiff --merge --output $MERGED --base $BASE -- $LOCAL --snapshot $REMOTE --snapshot'
-        gc_set mergetool."Kaleidoscope".trustExitCode true
-    fi
+  # Kaleidoscope
+  if [ -x "$(command -v ksdiff)" ]; then
+    gc_set difftool."Kaleidoscope".cmd 'ksdiff --partial-changeset --relative-path $MERGED -- $LOCAL $REMOTE'
+    gc_set mergetool."Kaleidoscope".cmd 'ksdiff --merge --output $MERGED --base $BASE -- $LOCAL --snapshot $REMOTE --snapshot'
+    gc_set mergetool."Kaleidoscope".trustExitCode true
+  fi
 
-    # Use opendiff as default diff/merge
-    gc_set diff.tool opendiff
-    gc_set merge.tool opendiff
+  # Use opendiff as default diff/merge
+  gc_set diff.tool opendiff
+  gc_set merge.tool opendiff
 
-    # Use fork for visual
-    gc_set alias.visual '!fork $(git root)'
-    ;;
+  # Use fork for visual
+  gc_set alias.visual '!fork $(git root)'
+  ;;
 Linux )
-    # Check for WSL
-    if [ -n "${WSL_DISTRO_NAME}" ]; then
-        # Use Windows credential manager if running in WSL
-        gc_set credential.helper "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager-core.exe"
+  # Check for WSL
+  if [ -n "${WSL_DISTRO_NAME}" ]; then
+    # Use Windows credential manager if running in WSL
+    gc_set credential.helper "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager-core.exe"
 
-        # Use Fork for visual
-        gc_set alias.visual '!Fork.exe $(wslpath -w $(git root))'
+    # Use Fork for visual
+    gc_set alias.visual '!Fork.exe $(wslpath -w $(git root))'
+  else
+    # Use Git Credential Manager if it is installed
+    if [ -x "$(command -v git-credential-manager-core)" ]; then
+      gc_set credential.helper manager-core
+      gc_set credential.credentialStore secretservice
     else
-        # Use Git Credential Manager if it is installed
-        if [ -x "$(command -v git-credential-manager-core)" ]; then
-            gc_set credential.helper manager-core
-            gc_set credential.credentialStore secretservice
-        else
-            gc_set credential.helper cache
-        fi
+      gc_set credential.helper cache
     fi
+  fi
 
-    # Use Vim as default diff/merge
-    gc_set diff.tool vimdiff
-    gc_set merge.tool vimdiff
-    ;;
+  # Use Vim as default diff/merge
+  gc_set diff.tool vimdiff
+  gc_set merge.tool vimdiff
+  ;;
 esac
