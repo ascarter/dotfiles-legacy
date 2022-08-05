@@ -20,7 +20,7 @@
 [difftool "vscode"]
     cmd = code --wait --new-window --diff $LOCAL $REMOTE
 [mergetool "vscode"]
-    cmd = code --wait --new-window $MERGED
+    cmd = code --wait --new-window --merge $REMOTE $LOCAL $BASE $MERGED
 [diff]
     tool = vimdiff
     guitool = vscode
