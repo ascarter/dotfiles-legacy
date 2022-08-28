@@ -94,6 +94,7 @@ Linux )
       curl -fsSL -o /tmp/gcmcore-linux_amd64.deb https://github.com/GitCredentialManager/git-credential-manager/releases/download/v2.0.785/gcm-linux_amd64.2.0.785.deb
       sudo dpkg -i /tmp/gcmcore-linux_amd64.deb
       rm -f /tmp/gcmcore-linux_amd64.deb
+      git-credential-manager-core configure
     fi
 
     # Kubernetes
@@ -103,9 +104,6 @@ Linux )
       sudo apt-get update
     fi
     sudo apt-get install -y kubectl
-
-    # Paw
-    https://cdn-builds.paw.cloud/octopaw/4.2.2/cec3c9ab/linux/deb/x64/paw-client_4.2.2_amd64.deb
 
     # Node.js
     # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
