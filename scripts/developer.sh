@@ -70,6 +70,13 @@ Linux )
     fi
     sudo apt-get install -y code
 
+    # Azure CLI
+    if ! check_apt_repo "https://packages.microsoft.com/repos/azure-cli"; then
+      echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/azure-cli $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+      sudo apt-get update
+    fi
+    sudo apt-get install -y azure-cli
+
     # GitHub Desktop (Linux fork)
     # https://github.com/shiftkey/desktop
     if ! check_apt_repo "https://mirror.mwt.me/ghd/deb/"; then
