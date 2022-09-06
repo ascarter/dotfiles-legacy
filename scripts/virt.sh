@@ -6,24 +6,27 @@
 #    virt.sh [-s]
 #
 #    Options:
+#      -f   Force reinstall of keys and apt sources
 #      -s   Enable server virtualization (default use desktop)
 
+force_reinstall=
 server_flag=
 
-while getopts s flag
+while getopts fs flag
 do
   case $flag in
+  f)  force_reinstall=1;;
   s)  server_flag=1;;
   ?)  printf "Usage: %s: [-s]\n" $0
       exit 2;;
   esac
 done
 
-# Enable virtualisation
-
 check_apt_repo() {
-  apt-cache policy | grep ${1} > /dev/null
+  [ -z "${force_reinstall}" ] && apt-cache policy | grep ${1} > /dev/null
 }
+
+# Enable virtualisation
 
 case "$(uname)" in
 Darwin )

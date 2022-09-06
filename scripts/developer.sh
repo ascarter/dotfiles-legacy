@@ -1,9 +1,26 @@
 #!/bin/sh
 
 # Install developer tools
+#
+# Usage:
+#    developer.sh [-f]
+#
+#    Options:
+#      -f   Force reinstall of keys and apt sources
+
+force_reinstall=
+
+while getopts f flag
+do
+  case $flag in
+  f)  force_reinstall=1;;
+  ?)  printf "Usage: %s: [-f]\n" $0
+      exit 2;;
+  esac
+done
 
 check_apt_repo() {
-  apt-cache policy | grep ${1} > /dev/null
+  [ -z "${force_reinstall}" ] && apt-cache policy | grep ${1} > /dev/null
 }
 
 case "$(uname)" in
