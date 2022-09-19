@@ -5,7 +5,7 @@
 #
 
 prompt_vcs_help () {
-    cat <<'EOH'
+  cat <<'EOH'
 
 Two-line prompt with vcs info
 
@@ -13,62 +13,71 @@ EOH
 }
 
 prompt_vcs_setup () {
-    PROMPT='
+  PROMPT='
 %B%n@%m%b:%3~
 %# '
-    PROMPT4='+%N:%i:%_>'
-    prompt_opts=( cr percent subst )
+  PROMPT4='+%N:%i:%_>'
+  prompt_opts=( cr percent subst )
 
-    if [[ $(whence -w 'vcs_info' | cut -d ':' -f 2 | xargs) == function ]]; then
-        zstyle ':vcs_info:git:*' check-for-changes true
-        zstyle ':vcs_info:git:*' get-revision true
-        zstyle ':vcs_info:*' stagedstr '+'
-        zstyle ':vcs_info:*' unstagedstr '*'
-        zstyle ':vcs_info:*' actionformats ' [%F{2}%0.12i %b%F{3}|%F{1}%a%f %F{5}%m%c%u%f]'
-        zstyle ':vcs_info:*' formats ' [%F{2}%0.12i %b%f %F{5}%m%c%u%f]'
-        zstyle ':vcs_info:*' enable git
+  if [[ $(whence -w 'vcs_info' | cut -d ':' -f 2 | xargs) == function ]]; then
+    zstyle ':vcs_info:git:*' check-for-changes true
+    zstyle ':vcs_info:git:*' get-revision true
+    zstyle ':vcs_info:*' stagedstr '+'
+    zstyle ':vcs_info:*' unstagedstr '*'
+    zstyle ':vcs_info:*' actionformats ' [%F{2}%0.12i %b%F{3}|%F{1}%a%f %F{5}%m%c%u%f]'
+    zstyle ':vcs_info:*' formats ' [%F{2}%0.12i %b%f %F{5}%m%c%u%f]'
+    zstyle ':vcs_info:*' enable git
 
-        # Update git status display
-        # 	Untracked
-        # 	Ahead/behind
-        zstyle ':vcs_info:git*+set-message:*' hooks git-st
-        +vi-git-st() {
-            # Find ahead/behind
-            local count=$(git rev-list --count --left-right @{upstream}...HEAD 2>/dev/null)
-            case "$count" in
-            "")
-                # no upstream
-                hook_com[misc]+="-" ;;
-            "0	0")
-                # equal to upstream
-                hook_com[misc]+="=" ;;
-            "0	"*)
-                # ahead of upstream
-                hook_com[misc]=">" ;;
-            *"	0")
-                # behind upstream
-                hook_com[misc]+="<" ;;
-            *)
-                # diverged from upstream
-                hook_com[misc]+="<>" ;;
-            esac
+    # Update git status display
+    # 	Untracked
+    # 	Ahead/behind
+    zstyle ':vcs_info:git*+set-message:*' hooks git-st
+    +vi-git-st() {
+      # Find ahead/behind
+      local count=$(git rev-list --count --left-right @{upstream}...HEAD 2>/dev/null)
+      case "$count" in
+      "")
+        # no upstream
+        hook_com[misc]+="-" ;;
+      "0	0")
+        # equal to upstream
+        hook_com[misc]+="=" ;;
+      "0	"*)
+        # ahead of upstream
+        hook_com[misc]=">" ;;
+      *"	0")
+        # behind upstream
+        hook_com[misc]+="<" ;;
+      *)
+        # diverged from upstream
+        hook_com[misc]+="<>" ;;
+      esac
 
-            # Flag untracked files
-            if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
-                git status --porcelain | grep '??' &> /dev/null ; then
-                hook_com[unstaged]+='?'
-            fi
-        }
+      # Flag untracked files
+      if git status --porcelain | grep '??' &> /dev/null ; then
+        hook_com[unstaged]+='?'
+      fi
+    }
 
-        precmd() {
-            vcs_info
-            PROMPT='
+    precmd() {
+      case "$(git rev-parse --is-inside-work-tree 2> /dev/null)" in
+      "true")
+        vcs_info
+        PROMPT='
 %B%n@%m%b:%3~% %B${vcs_info_msg_0_}%b
 %# '
-            # print -Pn "\e]0;%n@%m: %~\a"
-            case $(uname) in (Linux) print -Pn "\e]0;%n@%m: %1~\a"; esac
-        }
-    fi
+        ;;
+      "false")
+        PROMPT='
+%B%n@%m%b:%3~% %B [$(git rev-parse --verify HEAD) $(git rev-parse --abbrev-ref HEAD)]%b
+%# '
+        ;;
+      esac
+
+      # print -Pn "\e]0;%n@%m: %~\a"
+      case $(uname) in (Linux) print -Pn "\e]0;%n@%m: %1~\a"; esac
+    }
+  fi
 }
 
 prompt_vcs_setup "$@"
