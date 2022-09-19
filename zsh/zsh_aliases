@@ -142,6 +142,10 @@ Darwin )
 
   # Use MacVim on Mac OS X if installed
   [[ -e /usr/local/bin/vim ]] && alias vim='/usr/local/bin/vim'
+  
+  # Apple Podcasts downloads
+  alias podcastlib="/Users/acarter/Library/Group Containers/243LU875E5.groups.com.apple.podcasts/Library"
+  
   ;;
 Linux )
   alias ls='ls -hFH'
