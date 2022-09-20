@@ -28,6 +28,9 @@ prompt_vcs_setup () {
     zstyle ':vcs_info:*' formats ' [%F{2}%0.12i %b%f %F{5}%m%c%u%f]'
     zstyle ':vcs_info:*' enable git
 
+    # Uncomment to show debug information for vcs_info
+    # zstyle ':vcs_info:*+*:*' debug true
+
     # Update git status display
     # 	Untracked
     # 	Ahead/behind
