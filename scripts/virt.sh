@@ -65,7 +65,7 @@ Linux )
     else
       # Docker Desktop
       echo "Installing Docker Desktop"
-      curl -fsSL -o /tmp/docker-desktop-amd64.deb https://desktop.docker.com/linux/main/amd64/docker-desktop-4.11.0-amd64.deb
+      curl -fsSL -o /tmp/docker-desktop-amd64.deb https://desktop.docker.com/linux/main/amd64/docker-desktop-4.12.0-amd64.deb
       sudo apt-get install -y /tmp/docker-desktop-amd64.deb
       rm -f /tmp/docker-desktop-amd64.deb
     fi
