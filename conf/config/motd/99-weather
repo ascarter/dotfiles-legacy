@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#! /bin/sh
 # If you source this file, it will set WTTR_PARAMS as well as show weather.
 
 unset WTTR_PARAMS
