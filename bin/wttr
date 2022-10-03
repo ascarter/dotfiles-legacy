@@ -1,42 +1,36 @@
 #! /usr/bin/env bash
 # If you source this file, it will set WTTR_PARAMS as well as show weather.
 
-wttr_params=$WTTR_PARAMS
-
 # WTTR_PARAMS is space-separated URL parameters, many of which are single characters that can be
 # lumped together. For example, "F q m" behaves the same as "Fqm".
 if [[ -z "$WTTR_PARAMS" ]]; then
   # Form localized URL parameters for curl
-  if [[ -t 1 ]] && [[ "$(tput cols)" -lt 120 ]]; then
-      wttr_params+='n'
+  if [[ -t 1 ]] && [[ "$(tput cols)" -lt 125 ]]; then
+      WTTR_PARAMS+='n'
   fi 2> /dev/null
   for _token in $( locale LC_MEASUREMENT ); do
     case $_token in
-      1) wttr_params+='m' ;;
-      2) wttr_params+='u' ;;
+      1) WTTR_PARAMS+='m' ;;
+      2) WTTR_PARAMS+='u' ;;
     esac
   done 2> /dev/null
   unset _token
+
   # Set quiet options
-  wttr_params+='F'
-  wttr_params+='q'
-  # Set one day
-  wttr_params+='1'
+  WTTR_PARAMS+='F'
+  WTTR_PARAMS+='q'
+
+  export WTTR_PARAMS
 fi
 
 wttr() {
   local location="${1// /+}"
-  if [ $# -gt 0 ]; then
-    shift
-  fi
+  command shift
   local args=""
-  for p in $wttr_params "$@"; do
+  for p in $WTTR_PARAMS "$@"; do
     args+=" --data-urlencode $p "
   done
-  fmt="%l+%x+%t+%w\n"
-  curl -fGsS -H "Accept-Language: ${LANG%_*}" $args --compressed "wttr.in/${location}?format=${fmt}"
+  curl -fGsS -H "Accept-Language: ${LANG%_*}" $args --compressed "wttr.in/${location}"
 }
 
-echo
 wttr "$@"
-echo

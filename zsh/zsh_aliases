@@ -39,7 +39,7 @@ alias rst='resize -s 0 120'
 
 # Weather
 alias wfc='wttr Snoqualmie'
-alias wnow='wttr Snoqualmie 1'
+alias wnow='wttr Snoqualmie format=3'
 
 # Ruby
 alias binit="bundle install --path vendor/bundle"
