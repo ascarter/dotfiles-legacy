@@ -37,6 +37,10 @@ command -v hd > /dev/null || alias hd="hexdump -C"
 alias rs='resize -s 40 120'
 alias rst='resize -s 0 120'
 
+# Weather
+alias wfc='wttr Snoqualmie'
+alias wnow='wttr Snoqualmie 1'
+
 # Ruby
 alias binit="bundle install --path vendor/bundle"
 alias bstubs="bundle install --binstubs"
@@ -136,16 +140,16 @@ Darwin )
   alias bbnw='bbedit --new-window'
   alias bbpb='pbpaste | bbedit --clean --view-top'
   alias bbtags='bbedit --maketags'
-  
+
   # Tailscale
   alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
   # Use MacVim on Mac OS X if installed
   [[ -e /usr/local/bin/vim ]] && alias vim='/usr/local/bin/vim'
-  
+
   # Apple Podcasts downloads
   alias podcastlib="/Users/acarter/Library/Group Containers/243LU875E5.groups.com.apple.podcasts/Library"
-  
+
   ;;
 Linux )
   alias ls='ls -hFH'
