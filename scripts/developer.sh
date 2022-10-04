@@ -81,28 +81,12 @@ Linux )
     # sudo apt-get install -y dotnet-sdk-6.0 powershell
     # sudo apt-get install -y msopenjdk-17
 
-    # Microsoft Visual Studio Code
-    if ! check_apt_repo "https://packages.microsoft.com/repos/code"; then
-      echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
-      sudo apt-get update
-    fi
-    sudo apt-get install -y code
-
     # Azure CLI
     if ! check_apt_repo "https://packages.microsoft.com/repos/azure-cli"; then
       echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/azure-cli $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
       sudo apt-get update
     fi
     sudo apt-get install -y azure-cli
-
-    # GitHub Desktop (Linux fork)
-    # https://github.com/shiftkey/desktop
-    if ! check_apt_repo "https://mirror.mwt.me/ghd/deb/"; then
-      wget -qO - https://mirror.mwt.me/ghd/gpgkey | sudo tee /etc/apt/trusted.gpg.d/shiftkey-desktop.asc > /dev/null
-      echo "deb [arch=$(dpkg --print-architecture)] https://mirror.mwt.me/ghd/deb/ any main" | sudo tee /etc/apt/sources.list.d/packagecloud-shiftkey-desktop.list
-      sudo apt-get update
-    fi
-    sudo apt-get install -y github-desktop
 
     # GitHub CLI
     # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
@@ -160,6 +144,25 @@ Linux )
       rustup update
     else
       curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
+    fi
+
+    # Check if running under WSL
+    if ! [[ $(grep -i WSL2 /proc/version) ]]; then
+      # Microsoft Visual Studio Code
+      if ! check_apt_repo "https://packages.microsoft.com/repos/code"; then
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+        sudo apt-get update
+      fi
+      sudo apt-get install -y code
+
+      # GitHub Desktop (Linux fork)
+      # https://github.com/shiftkey/desktop
+      if ! check_apt_repo "https://mirror.mwt.me/ghd/deb/"; then
+        wget -qO - https://mirror.mwt.me/ghd/gpgkey | sudo tee /etc/apt/trusted.gpg.d/shiftkey-desktop.asc > /dev/null
+        echo "deb [arch=$(dpkg --print-architecture)] https://mirror.mwt.me/ghd/deb/ any main" | sudo tee /etc/apt/sources.list.d/packagecloud-shiftkey-desktop.list
+        sudo apt-get update
+      fi
+      sudo apt-get install -y github-desktop
     fi
     ;;
   esac
