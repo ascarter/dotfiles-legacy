@@ -147,7 +147,7 @@ Linux )
     fi
 
     # Check if running under WSL
-    if ! [[ $(grep -i WSL2 /proc/version) ]]; then
+    if ! (grep -i WSL2 /proc/version); then
       # Microsoft Visual Studio Code
       if ! check_apt_repo "https://packages.microsoft.com/repos/code"; then
         echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
