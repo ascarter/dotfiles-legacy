@@ -65,7 +65,8 @@ Linux )
                 pass \
                 python3 \
                 python3-dev \
-                python3-pip
+                python3-pip \
+                socat
 
     # Microsoft GPG key
     if ! [ -f /usr/share/keyrings/microsoft-archive-keyring.gpg ]; then
