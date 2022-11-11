@@ -2,7 +2,7 @@ Xft.dpi: 96
 Xft.antialias: true
 
 XTerm.*.faceName: SF Mono
-XTerm.*.faceSize: 12
+XTerm.*.faceSize: 10
 Xterm.*.geometry: 80x24
 
 XClock*foreground:        #FFFFFF
