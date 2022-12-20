@@ -81,6 +81,11 @@ fi
 # SDK root for custom installs
 export SDK_ROOT=${HOME}/sdk
 
+# Azure CLI
+if [ -f $(brew --prefix)/etc/bash_completion.d/az ]; then
+  source $(brew --prefix)/etc/bash_completion.d/az
+fi
+
 # GitHub
 if (( $+commands[gh] )); then
   eval "$(gh completion -s zsh)"
