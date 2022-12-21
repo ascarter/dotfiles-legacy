@@ -1,11 +1,11 @@
 fpath=(${DOTFILES}/zsh/completion ${DOTFILES}/zsh/function ${DOTFILES}/zsh/prompt $fpath)
 
 # Check for homebrew
-if [ -d /opt/homebrew ]; then
+if (( $+commands[brew] )); then
   export HOMEBREW_NO_EMOJI=1
   export HOMEBREW_NO_ANALYTICS=1
-  eval $(/opt/homebrew/bin/brew shellenv)
-  fpath+=($(brew --prefix)/share/zsh/site-functions $(brew --prefix)/share/zsh-completions)
+  eval $(brew shellenv)
+  fpath+=(${HOMEBREW_PREFIX}/share/zsh/site-functions ${HOMEBREW_PREFIX}/share/zsh-completions)
 fi
 
 autoload -Uz compinit
@@ -82,8 +82,8 @@ fi
 export SDK_ROOT=${HOME}/sdk
 
 # Azure CLI
-if [ -f $(brew --prefix)/etc/bash_completion.d/az ]; then
-  source $(brew --prefix)/etc/bash_completion.d/az
+if [ -n ${HOMEBREW_PREFIX} ] && [ -f ${HOMEBREW_PREFIX}/etc/bash_completion.d/az ]; then
+  source ${HOMEBREW_PREFIX}/etc/bash_completion.d/az
 fi
 
 # GitHub
