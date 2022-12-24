@@ -31,26 +31,17 @@ else
     call plug#begin('~/.vim/bundle')
 endif
 
-" EditorConfig
+" Plugins
 Plug 'editorconfig/editorconfig-vim'
-
-" Status line
 Plug 'itchyny/lightline.vim'
-
-" Comments
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'dense-analysis/ale'
+Plug 'fatih/vim-go'
 
 " Color schemes
-Plug 'cocopon/iceberg.vim'
-Plug 'kjssad/quantum.vim'
 Plug 'Lokaltog/vim-monotone'
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'PyGamer0/github-dimmed.vim'
-Plug 'rakr/vim-one'
-Plug 'robertmeta/nofrils'
-Plug 'romainl/Apprentice'
-Plug 'tomasiser/vim-code-dark'
-Plug 'wojciechkepka/vim-github-dark'
 
 call plug#end()
 
@@ -72,11 +63,23 @@ if has("termguicolors")
     endif
 endif
 
-colorscheme ghdark
-let g:gh_color = "soft"
 set background=dark
-let g:lightline = { 'colorscheme': 'ghdark' }
+"let g:lightline = { 'colorscheme': 'PaperColor' }
 colorscheme monotone
+
+" Customize monotone
+if g:colors_name ==# 'monotone'
+	" Font style syntax items
+	hi Function     guifg=NONE     guibg=NONE  gui=bold,italic  ctermfg=NONE  ctermbg=NONE  cterm=bold,italic
+	hi Identifier   guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
+	hi Include      guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
+	hi Keyword      guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+	hi Question     guifg=NONE     guibg=NONE  gui=NONE         ctermfg=NONE  ctermbg=NONE  cterm=NONE
+	hi Statement    guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+	hi Type         guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+	hi Underlined   guifg=NONE     guibg=NONE  gui=underline    ctermfg=NONE  ctermbg=NONE  cterm=underline
+	hi Title        guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+endif
 
 " Flash screen only - no beep
 set visualbell
