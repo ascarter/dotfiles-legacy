@@ -37,16 +37,19 @@ Plug 'editorconfig/editorconfig-vim'
 " Status line
 Plug 'itchyny/lightline.vim'
 
+" Comments
+Plug 'tpope/vim-commentary'
+
 " Color schemes
-Plug 'albertorestifo/github.vim'
-Plug 'altercation/vim-colors-solarized'
-Plug 'arcticicestudio/nord-vim'
 Plug 'cocopon/iceberg.vim'
 Plug 'kjssad/quantum.vim'
+Plug 'Lokaltog/vim-monotone'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'PyGamer0/github-dimmed.vim'
 Plug 'rakr/vim-one'
+Plug 'robertmeta/nofrils'
 Plug 'romainl/Apprentice'
-Plug 'vim-scripts/xoria256.vim'
+Plug 'tomasiser/vim-code-dark'
 Plug 'wojciechkepka/vim-github-dark'
 
 call plug#end()
@@ -71,8 +74,9 @@ endif
 
 colorscheme ghdark
 let g:gh_color = "soft"
-" set background=dark
+set background=dark
 let g:lightline = { 'colorscheme': 'ghdark' }
+colorscheme monotone
 
 " Flash screen only - no beep
 set visualbell
@@ -93,6 +97,12 @@ let &t_EI = "\e[1 q"  "EI=NORMAL mode
 
 " Set fill characters
 set fillchars=vert:\ ,fold:-
+
+" Enable italics in macos terminal
+if has('macunix')
+    let &t_ZH="\e[3m"
+    let &t_ZR="\e[23m"
+endif
 
 " Status line
 if has('statusline')
@@ -144,11 +154,6 @@ imap <Leader>= <ESC> <C-w>=
 
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
-
-" Enable Dash search
-if has('macunix')
-    :nmap <silent> <leader>d <Plug>DashSearch
-endif
 
 " =====================================
 " Syntax and file types
