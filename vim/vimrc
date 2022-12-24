@@ -16,40 +16,25 @@ set backspace=indent,eol,start
 " Enable extend % matching
 runtime macros/matchit.vim
 
-" Install vim plug
-if has("win32")
-    if empty(glob('~\vimfiles\autoload\plug.vim'))
-        silent !curl -fLo \%USERPROFILE\%\\vimfiles\\autoload\\plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-    endif
-    call plug#begin('~/vimfiles/bundle')
-else
-    if empty(glob('~/.vim/autoload/plug.vim'))
-          silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-    endif
-    call plug#begin('~/.vim/bundle')
-endif
-
 " Plugins
-Plug 'editorconfig/editorconfig-vim'
-Plug 'itchyny/lightline.vim'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-fugitive'
-Plug 'dense-analysis/ale'
-Plug 'fatih/vim-go'
+"Plug 'editorconfig/editorconfig-vim'
+"Plug 'itchyny/lightline.vim'
+"Plug 'tpope/vim-commentary'
+"Plug 'tpope/vim-surround'
+"Plug 'tpope/vim-fugitive'
+"Plug 'dense-analysis/ale'
+"Plug 'fatih/vim-go'
 
 " Color schemes
-Plug 'Lokaltog/vim-monotone'
+"Plug 'Lokaltog/vim-monotone'
 
-call plug#end()
+"call plug#end()
 
 " Install any missing plugins
-autocmd VimEnter *
-  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \|   PlugInstall --sync | q
-  \| endif
+"autocmd VimEnter *
+"  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+"  \|   PlugInstall --sync | q
+"  \| endif
 
 " =====================================
 " UI
@@ -65,21 +50,20 @@ endif
 
 set background=dark
 "let g:lightline = { 'colorscheme': 'PaperColor' }
+"let g:monotone_contrast_factor=0.9
 colorscheme monotone
 
 " Customize monotone
-if g:colors_name ==# 'monotone'
-	" Font style syntax items
-	hi Function     guifg=NONE     guibg=NONE  gui=bold,italic  ctermfg=NONE  ctermbg=NONE  cterm=bold,italic
-	hi Identifier   guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
-	hi Include      guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
-	hi Keyword      guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-	hi Question     guifg=NONE     guibg=NONE  gui=NONE         ctermfg=NONE  ctermbg=NONE  cterm=NONE
-	hi Statement    guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-	hi Type         guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-	hi Underlined   guifg=NONE     guibg=NONE  gui=underline    ctermfg=NONE  ctermbg=NONE  cterm=underline
-	hi Title        guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-endif
+hi Normal       guibg=#22272e  ctermbg=None
+hi Function     guifg=NONE     guibg=NONE  gui=bold,italic  ctermfg=NONE  ctermbg=NONE  cterm=bold,italic
+hi Identifier   guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
+hi Include      guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
+hi Keyword      guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+hi Question     guifg=NONE     guibg=NONE  gui=NONE         ctermfg=NONE  ctermbg=NONE  cterm=NONE
+hi Statement    guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+hi Type         guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+hi Underlined   guifg=NONE     guibg=NONE  gui=underline    ctermfg=NONE  ctermbg=NONE  cterm=underline
+hi Title        guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
 
 " Flash screen only - no beep
 set visualbell
@@ -284,7 +268,11 @@ if has("gui_running")
     " set guicursor+=n:blinkon0
 
     if has('gui_macvim')
-        " Mac OS X
+        " macOS
+
+        " Enable smooth scrolling
+        set guioptions+=k
+
         " set macthinstrokes
         set guifont=SF\ Mono\ Regular:h13,Menlo:h13
         let macvim_hig_shift_movement = 1

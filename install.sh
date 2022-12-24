@@ -88,6 +88,10 @@ esac
 if ! [ -e ${DOTFILES} ]; then
   mkdir -p $(dirname ${DOTFILES})
   git clone https://github.com/ascarter/dotfiles ${DOTFILES}
+  git -C ${DOTFILES} submodule init
+else
+  #git -C ${DOTFILES} pull
+  git -C ${DOTFILES} submodule update --remote --merge
 fi
 
 # Symlink rc files
@@ -116,6 +120,10 @@ if [ -x "$(command -v zsh)" ]; then
   # Set zsh environment
   cat <<EOF > ${HOMEDIR}/.zshenv
 DOTFILES=${DOTFILES}
+EOF
+
+  cat <<EOF > ${HOMEDIR}/.zshrc
+source ${DOTFILES}/zsh/zshrc
 EOF
 else
   echo "zsh shell not installed"

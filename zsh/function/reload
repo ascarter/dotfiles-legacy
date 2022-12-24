@@ -1,0 +1,12 @@
+emulate -L zsh
+
+# Reload zsh configuration
+#
+#   reload
+#
+
+
+function reload(){
+  source $HOME/.zshenv
+  source ${ZDOTDIR:-$HOME}/.zshrc
+}
