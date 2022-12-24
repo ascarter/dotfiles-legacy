@@ -34,24 +34,19 @@ Darwin )
     sudo xcodebuild -runFirstLaunch
   fi
 
-  # Install Rosetta 2 on M1
-  if [ 'arm64' == $(uname -m) ]; then
-    softwareupdate --install-rosetta
-  fi
-
   # Install Homebrew (/opt/homebrew)
   if ! [ -e /opt/homebrew ]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval $(/opt/homebrew/bin/brew shellenv)
   fi
 
-  if [ -x "$(command -v brew)" ]; then
+  if [ -d /opt/homebrew ]; then
     # Add homebrew extras tap
     brew tap ascarter/extras
 
     # Enable Git Credential Manager (.NET core)
-    # brew tap microsoft/git
-    # brew install --cask git-credential-manager-core
+    brew tap microsoft/git
+    brew install --cask git-credential-manager-core
   fi
   ;;
 Linux )
@@ -120,10 +115,6 @@ if [ -x "$(command -v zsh)" ]; then
   # Set zsh environment
   cat <<EOF > ${HOMEDIR}/.zshenv
 DOTFILES=${DOTFILES}
-EOF
-
-  cat <<EOF > ${HOMEDIR}/.zshrc
-source ${DOTFILES}/zsh/zshrc
 EOF
 else
   echo "zsh shell not installed"

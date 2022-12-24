@@ -15,6 +15,10 @@ gc_unset() {
   ${GIT_CONFIG_CMD} --unset "${1}"
 }
 
+gc_clear() {
+  ${GIT_CONFIG_CMD} --unset-all "${1}"
+}
+
 gc_update() {
   gc_unset "${1}"
   if [ -n "${2}" ]; then
@@ -39,16 +43,22 @@ gc_set include.path ${DOTFILES}/gitconfig
 gc_prompt user.name "User name"
 gc_prompt user.email "Email"
 
+# Use Git Credential Manager if it is installed
+if [ -x "$(command -v git-credential-manager)" ]; then
+  gc_clear credential.helper
+  git-credential-manager configure
+else
+  gc_clear credential.helper
+  case $(uname) in
+  Darwin ) gc_set credential.helper osxkeychain ;;
+  Linux  ) gc_set credential.helper cache ;;
+  esac
+fi
+
+
 # Set configuration by platform
 case $(uname) in
 Darwin )
-  # Use Git Credential Manager if it is installed
-  if [ -x "$(command -v git-credential-manager-core)" ]; then
-    gc_set credential.helper manager-core
-  else
-    gc_set credential.helper osxkeychain
-  fi
-
   # BBEdit diff
   if [ -x "$(command -v bbdiff)" ]; then
     gc_set difftool."bbdiff".cmd 'bbdiff --wait --resume $LOCAL $REMOTE'
@@ -71,19 +81,8 @@ Darwin )
 Linux )
   # Check for WSL
   if [ -n "${WSL_DISTRO_NAME}" ]; then
-    # Use Windows credential manager if running in WSL
-    gc_set credential.helper "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager-core.exe"
-
     # Use Fork for visual
     gc_set alias.visual '!Fork.exe $(wslpath -w $(git root))'
-  else
-    # Use Git Credential Manager if it is installed
-    if [ -x "$(command -v git-credential-manager-core)" ]; then
-      gc_set credential.helper manager-core
-      gc_set credential.credentialStore secretservice
-    else
-      gc_set credential.helper cache
-    fi
   fi
 
   # Use Vim as default diff/merge
