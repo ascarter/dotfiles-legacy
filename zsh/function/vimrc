@@ -1,0 +1,19 @@
+emulate -L zsh
+
+# Configure vimrc
+#
+#   vimrc
+#
+
+zparseopts -force=force
+
+force=${#force}
+
+if [ "${force}" = "1" ] || ! [ -f ~/.vimrc ]; then
+  # Source dotfiles vimrc
+  cat <<EOF > ~/.vimrc
+set packpath+=${DOTFILES}/vim
+source ${DOTFILES}/vim/vimrc
+EOF
+  echo Generated vimrc
+fi
