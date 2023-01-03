@@ -6,7 +6,5 @@ emulate -L zsh
 #
 
 
-function reload(){
-  source $HOME/.zshenv
-  source ${ZDOTDIR:-$HOME}/.zshrc
-}
+source $HOME/.zshenv
+source ${ZDOTDIR:-$HOME}/.zshrc

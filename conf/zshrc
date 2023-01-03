@@ -75,6 +75,11 @@ fi
 # Developer Tools
 # ========================================
 
+# Vim
+if ! [ -f ~/.vimrc ]; then
+  vimrc
+fi
+
 # SDK root for custom installs
 export SDK_ROOT=${HOME}/sdk
 
@@ -233,6 +238,14 @@ else
     fi
     ;;
   esac
+fi
+
+# ========================================
+# 1Password
+# ========================================
+
+if [ -f ~/.op/plugins.sh ]; then
+  source ~/.config/op/plugins.sh
 fi
 
 # ========================================

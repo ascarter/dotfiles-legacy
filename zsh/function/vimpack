@@ -1,0 +1,72 @@
+emulate -L zsh
+
+usage="$(tput bold)$0$(tput sgr0) -- Manage Vim native packages via git submodules
+
+  $0 [--color] [--plugin] [--opt] add [pack]
+  $0 [--color] [--plugin] [--opt] remove [pack]
+  $0 update
+
+$(tput bold)pack$(tput sgr0) must be short for $(tput bold)https://github.com/<pack>$(tput sgr0) where $(tput bold)pack=<owner>/<repo>$(tput sgr0)
+
+Examples:
+  $0 --color add ascarter/vim-rain
+  $0 --plugin add editorconfig/editorconfig-vim
+  $0 --plugin --opt tpope/vim-commentary
+  $0 --plugin remove fatih/vim-go
+  $0 update
+"
+
+typeset color
+typeset opt
+
+zparseopts -D -E -F -color=color -opt=opt
+color=${#color}
+opt=${#opt}
+
+local cmd=${1}
+
+case ${cmd} in
+update)
+  git -C $DOTFILES submodule update --remote --merge
+  ;;
+*)
+  local pack=${2}
+  if [ -z "$pack" ]; then
+    print "$usage"
+    return 1
+  fi
+
+  local packtype
+  local loadtype
+
+  if [ $color = "1" ]; then
+    packtype=colors
+  else
+    packtype=plugins
+  fi
+
+  if [ $opt = "1" ]; then
+    loadtype=opt
+  else
+    loadtype=start
+  fi
+
+  local dest=vim/pack/${packtype}/${loadtype}/$(basename ${pack})
+
+  case $cmd in
+  add)
+    local repo="https://github.com/${pack}.git"
+    git -C $DOTFILES submodule add $repo $dest
+    git -C $DOTFILES add .gitmodules $dest
+    ;;
+  remove)
+    git -C $DOTFILES submodule deinit $dest
+    git -C $DOTFILES rm $dest
+    rm -Rf $DOTFILES/$dest
+    ;;
+  *)
+    print "$usage"
+    return 1
+  esac
+  ;;
+esac
