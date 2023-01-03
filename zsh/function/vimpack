@@ -4,6 +4,7 @@ usage="$(tput bold)$0$(tput sgr0) -- Manage Vim native packages via git submodul
 
   $0 [--color] [--plugin] [--opt] add [pack]
   $0 [--color] [--plugin] [--opt] remove [pack]
+  $0 list
   $0 update
 
 $(tput bold)pack$(tput sgr0) must be short for $(tput bold)https://github.com/<pack>$(tput sgr0) where $(tput bold)pack=<owner>/<repo>$(tput sgr0)
@@ -26,6 +27,9 @@ opt=${#opt}
 local cmd=${1}
 
 case ${cmd} in
+list|'')
+  git -C $DOTFILES submodule | grep "vim/pack"
+  ;;
 update)
   git -C $DOTFILES submodule update --remote --merge
   ;;
