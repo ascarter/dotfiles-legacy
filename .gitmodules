@@ -22,3 +22,6 @@
 [submodule "/Users/acarter/.config/dotfiles/vim/pack/colors/start/vim-rain"]
 	path = /Users/acarter/.config/dotfiles/vim/pack/colors/start/vim-rain
 	url = https://github.com/ascarter/vim-rain.git
+[submodule "vim/pack/colors/start/vim-rain"]
+	path = vim/pack/colors/start/vim-rain
+	url = https://github.com/ascarter/vim-rain.git
