@@ -17,6 +17,7 @@ A zsh function `vimpack` is autoloaded that allows the following operations:
 ```
 vimpack [--color] [--plugin] [--opt] add [pack]
 vimpack [--color] [--plugin] [--opt] remove [pack]
+vimpack list
 vimpack update
 ```
 
