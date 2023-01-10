@@ -6,6 +6,7 @@ usage="$(tput bold)$0$(tput sgr0) -- Manage Vim native packages via git submodul
   $0 [--color] [--opt] remove [pack]
   $0 list
   $0 update
+  $0 help
 
 $(tput bold)pack$(tput sgr0) must be short for $(tput bold)https://github.com/<pack>$(tput sgr0) where $(tput bold)pack=<owner>/<repo>$(tput sgr0)
 
@@ -14,75 +15,99 @@ Examples:
   $0 add editorconfig/editorconfig-vim
   $0 --opt tpope/vim-commentary
   $0 remove fatih/vim-go
-  $0 update
 "
 
-typeset color
-typeset opt
-
-zparseopts -D -E -F -color=color -opt=opt -force=force -help=help
-color=${#color}
-opt=${#opt}
-force=${#force}
-help=${#help}
-
-local cmd=${1}
-
-# Show help
-if [ ${help} = "1" ] || [ "${cmd}" = "help" ]; then
-  print "$usage"
-  return 1
-fi
-
-case ${cmd} in
-list|'')
-  git -C $DOTFILES submodule | grep "vim/pack"
-  ;;
-update)
-  git -C $DOTFILES submodule update --init --remote --merge
-  ;;
-*)
-  local pack=${2}
-  if [ -z "$pack" ]; then
-    print "$usage"
+_vimpack_is_git_clean() {
+  # Fail if any changes pending since vimpack adds and removes directly from Git
+  if [[ -n $(git -C $DOTFILES status -s -uno) ]]; then
+    print "$DOTFILES has modified files - aborting"
     return 1
   fi
+}
 
-  local packtype
-  local loadtype
+_vimpack_list() {
+  git -C $DOTFILES submodule | grep "vim/pack"
+}
 
-  if [ $color = "1" ]; then
-    packtype=colors
-  else
-    packtype=plugins
-  fi
+_vimpack_update() {
+  git -C $DOTFILES submodule update --init --remote --merge
+  git commit -m "Updated vim packages"
+}
 
-  if [ $opt = "1" ]; then
-    loadtype=opt
-  else
-    loadtype=start
-  fi
+_vimpack_add() {
+  local pack=$1
+  local dest=$2
+  local repo="https://github.com/${pack}.git"
 
-  if [ $force = "1" ]; then
-    opts="--force"
-  fi
+  git -C $DOTFILES submodule add $repo $dest
+  git -C $DOTFILES add .gitmodules $dest
+  git -C $DOTFILES commit -m "Add vim package ${pack}"
+}
 
-  local dest=vim/pack/${packtype}/${loadtype}/$(basename ${pack})
+_vimpack_remove() {
+  local dest=$1
+  git -C $DOTFILES submodule deinit $dest
+  git -C $DOTFILES rm $dest
+  rm -Rf $DOTFILES/$dest
+  git -C $DOTFILES commit -m "Remove vim package $dest"
+}
 
-  case $cmd in
-  add)
-    local repo="https://github.com/${pack}.git"
-    git -C $DOTFILES submodule add $opts $repo $dest
-    git -C $DOTFILES add .gitmodules $dest
-    ;;
-  remove)
-    git -C $DOTFILES submodule deinit $dest
-    git -C $DOTFILES rm $dest
-    rm -Rf $DOTFILES/$dest
+vimpack() {
+  typeset color
+  typeset opt
+
+  zparseopts -D -E -F -color=color -opt=opt -help=help
+  color=${#color}
+  opt=${#opt}
+  help=${#help}
+
+  local cmd=${1}
+
+  # Show help
+  [ ${help} = "1" ] && cmd="help"
+
+  case ${cmd} in
+  list|'')
+    _vimpack_list ;;
+  update)
+    _vimpack_is_git_clean && _vimpack_update ;;
+  add|remove)
+    local pack=${2}
+    if [ -z "$pack" ]; then
+      print "$usage"
+      return 1
+    fi
+
+    local packtype
+    local loadtype
+
+    if [ $color = "1" ]; then
+      packtype=colors
+    else
+      packtype=plugins
+    fi
+
+    if [ $opt = "1" ]; then
+      loadtype=opt
+    else
+      loadtype=start
+    fi
+
+    local dest=vim/pack/${packtype}/${loadtype}/$(basename ${pack})
+
+    case $cmd in
+    add)
+      _vimpack_is_git_clean && _vimpack_add $pack $dest ;;
+    remove)
+      _vimpack_is_git_clean && _vimpack_remove $dest ;;
+    esac
     ;;
   *)
+    ! [ "${cmd}" = "help" ] && print "Invalid command ${cmd}"
     print "$usage"
     return 1
+    ;;
   esac
-  ;;
-esac
+}
+
+vimpack "$@"
