@@ -25,3 +25,24 @@
 [submodule "vim/pack/colors/start/vim-rain"]
 	path = vim/pack/colors/start/vim-rain
 	url = https://github.com/ascarter/vim-rain.git
+[submodule "vim/pack/colors/start/vim-wwdc16-theme"]
+	path = vim/pack/colors/start/vim-wwdc16-theme
+	url = https://github.com/lifepillar/vim-wwdc16-theme.git
+[submodule "vim/pack/colors/start/vim-wwdc17-theme"]
+	path = vim/pack/colors/start/vim-wwdc17-theme
+	url = https://github.com/lifepillar/vim-wwdc17-theme.git
+[submodule "vim/pack/colors/start/vim-solarized8"]
+	path = vim/pack/colors/start/vim-solarized8
+	url = https://github.com/lifepillar/vim-solarized8.git
+[submodule "vim/pack/plugins/start/pgsql.vim"]
+	path = vim/pack/plugins/start/pgsql.vim
+	url = https://github.com/lifepillar/pgsql.vim.git
+[submodule "vim/pack/plugins/start/vim-colortemplate"]
+	path = vim/pack/plugins/start/vim-colortemplate
+	url = https://github.com/lifepillar/vim-colortemplate.git
+[submodule "vim/pack/colors/start/iceberg.vim"]
+	path = vim/pack/colors/start/iceberg.vim
+	url = https://github.com/cocopon/iceberg.vim.git
+[submodule "vim/pack/colors/start/nord-vim"]
+	path = vim/pack/colors/start/nord-vim
+	url = https://github.com/arcticicestudio/nord-vim.git
