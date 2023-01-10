@@ -2,8 +2,8 @@ emulate -L zsh
 
 usage="$(tput bold)$0$(tput sgr0) -- Manage Vim native packages via git submodules
 
-  $0 [--color] [--plugin] [--opt] add [pack]
-  $0 [--color] [--plugin] [--opt] remove [pack]
+  $0 [--color] [--opt] add [pack]
+  $0 [--color] [--opt] remove [pack]
   $0 list
   $0 update
 
@@ -11,27 +11,34 @@ $(tput bold)pack$(tput sgr0) must be short for $(tput bold)https://github.com/<p
 
 Examples:
   $0 --color add ascarter/vim-rain
-  $0 --plugin add editorconfig/editorconfig-vim
-  $0 --plugin --opt tpope/vim-commentary
-  $0 --plugin remove fatih/vim-go
+  $0 add editorconfig/editorconfig-vim
+  $0 --opt tpope/vim-commentary
+  $0 remove fatih/vim-go
   $0 update
 "
 
 typeset color
 typeset opt
 
-zparseopts -D -E -F -color=color -opt=opt
+zparseopts -D -E -F -color=color -opt=opt -help=help
 color=${#color}
 opt=${#opt}
+help=${#help}
 
 local cmd=${1}
+
+# Show help
+if [ ${help} = "1" ] || [ "${cmd}" = "help" ]; then
+  print "$usage"
+  return 1
+fi
 
 case ${cmd} in
 list|'')
   git -C $DOTFILES submodule | grep "vim/pack"
   ;;
 update)
-  git -C $DOTFILES submodule update --remote --merge
+  git -C $DOTFILES submodule update --init --recursive --remote --merge
   ;;
 *)
   local pack=${2}
