@@ -34,3 +34,6 @@
 [submodule "vim/pack/colors/start/nord-vim"]
 	path = vim/pack/colors/start/nord-vim
 	url = https://github.com/arcticicestudio/nord-vim.git
+[submodule "vim/pack/plugins/start/editorconfig-vim"]
+	path = vim/pack/plugins/start/editorconfig-vim
+	url = https://github.com/editorconfig/editorconfig-vim.git
