@@ -20,9 +20,10 @@ Examples:
 typeset color
 typeset opt
 
-zparseopts -D -E -F -color=color -opt=opt -help=help
+zparseopts -D -E -F -color=color -opt=opt -force=force -help=help
 color=${#color}
 opt=${#opt}
+force=${#force}
 help=${#help}
 
 local cmd=${1}
@@ -62,12 +63,16 @@ update)
     loadtype=start
   fi
 
+  if [ $force = "1" ]; then
+    opts="--force"
+  fi
+
   local dest=vim/pack/${packtype}/${loadtype}/$(basename ${pack})
 
   case $cmd in
   add)
     local repo="https://github.com/${pack}.git"
-    git -C $DOTFILES submodule add $repo $dest
+    git -C $DOTFILES submodule add $opts $repo $dest
     git -C $DOTFILES add .gitmodules $dest
     ;;
   remove)
