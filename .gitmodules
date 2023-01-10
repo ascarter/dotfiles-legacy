@@ -1,0 +1,3 @@
+[submodule "vim/pack/colors/start/vim-rain"]
+	path = vim/pack/colors/start/vim-rain
+	url = https://github.com/ascarter/vim-rain.git
