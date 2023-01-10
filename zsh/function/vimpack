@@ -31,7 +31,6 @@ _vimpack_list() {
 
 _vimpack_update() {
   git -C $DOTFILES submodule update --init --remote --merge
-  _vimpack_is_git_clean || return 0
   git -C $DOTFILES commit -m "Updated vim packages"
 }
 
