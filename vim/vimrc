@@ -16,26 +16,6 @@ set backspace=indent,eol,start
 " Enable extend % matching
 runtime macros/matchit.vim
 
-" Plugins
-"Plug 'editorconfig/editorconfig-vim'
-"Plug 'itchyny/lightline.vim'
-"Plug 'tpope/vim-commentary'
-"Plug 'tpope/vim-surround'
-"Plug 'tpope/vim-fugitive'
-"Plug 'dense-analysis/ale'
-"Plug 'fatih/vim-go'
-
-" Color schemes
-"Plug 'Lokaltog/vim-monotone'
-
-"call plug#end()
-
-" Install any missing plugins
-"autocmd VimEnter *
-"  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-"  \|   PlugInstall --sync | q
-"  \| endif
-
 " =====================================
 " UI
 " =====================================
@@ -51,19 +31,31 @@ endif
 set background=dark
 "let g:lightline = { 'colorscheme': 'PaperColor' }
 "let g:monotone_contrast_factor=0.9
-colorscheme monotone
+"colorscheme monotone
+
+
+"colorscheme iceberg
+"let g:lightline = { 'colorscheme': 'iceberg' }
+
+"colorscheme nord
+"let g:nord_bold_vertical_split_line = 1
+"let g:nord_italic = 1
+"let g:nord_italic_comments = 1
+"let g:lightline = { 'colorscheme': 'nord' }
+
+colorscheme rain
 
 " Customize monotone
-hi Normal       guibg=#22272e  ctermbg=None
-hi Function     guifg=NONE     guibg=NONE  gui=bold,italic  ctermfg=NONE  ctermbg=NONE  cterm=bold,italic
-hi Identifier   guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
-hi Include      guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
-hi Keyword      guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-hi Question     guifg=NONE     guibg=NONE  gui=NONE         ctermfg=NONE  ctermbg=NONE  cterm=NONE
-hi Statement    guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-hi Type         guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-hi Underlined   guifg=NONE     guibg=NONE  gui=underline    ctermfg=NONE  ctermbg=NONE  cterm=underline
-hi Title        guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+"hi Normal       guibg=#22272e  ctermbg=None
+"hi Function     guifg=NONE     guibg=NONE  gui=bold,italic  ctermfg=NONE  ctermbg=NONE  cterm=bold,italic
+"hi Identifier   guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
+"hi Include      guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
+"hi Keyword      guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+"hi Question     guifg=NONE     guibg=NONE  gui=NONE         ctermfg=NONE  ctermbg=NONE  cterm=NONE
+"hi Statement    guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+"hi Type         guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+"hi Underlined   guifg=NONE     guibg=NONE  gui=underline    ctermfg=NONE  ctermbg=NONE  cterm=underline
+"hi Title        guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
 
 " Flash screen only - no beep
 set visualbell
@@ -276,6 +268,9 @@ if has("gui_running")
 
         " Enable smooth scrolling
         set guioptions+=k
+
+        " Enable transparency
+        set transparency=2
 
         " set macthinstrokes
         set guifont=SF\ Mono\ Regular:h13,Menlo:h13
