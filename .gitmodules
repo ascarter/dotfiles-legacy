@@ -22,3 +22,6 @@
 [submodule "vim/pack/plugins/start/editorconfig-vim"]
 	path = vim/pack/plugins/start/editorconfig-vim
 	url = https://github.com/editorconfig/editorconfig-vim.git
+[submodule "vim/pack/plugins/start/iceberg.vim"]
+	path = vim/pack/plugins/start/iceberg.vim
+	url = https://github.com/cocopon/iceberg.vim.git
