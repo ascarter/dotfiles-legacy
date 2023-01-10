@@ -39,7 +39,7 @@ list|'')
   git -C $DOTFILES submodule | grep "vim/pack"
   ;;
 update)
-  git -C $DOTFILES submodule update --init --recursive --remote --merge
+  git -C $DOTFILES submodule update --init --remote --merge
   ;;
 *)
   local pack=${2}
