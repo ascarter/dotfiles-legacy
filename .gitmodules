@@ -25,3 +25,6 @@
 [submodule "vim/pack/plugins/start/iceberg.vim"]
 	path = vim/pack/plugins/start/iceberg.vim
 	url = https://github.com/cocopon/iceberg.vim.git
+[submodule "vim/pack/plugins/start/nord-vim"]
+	path = vim/pack/plugins/start/nord-vim
+	url = https://github.com/arcticicestudio/nord-vim.git
