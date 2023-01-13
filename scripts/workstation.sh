@@ -73,8 +73,7 @@ Linux )
       curl -fsSL "https://packagecloud.io/install/repositories/ookla/speedtest-cli/config_file.list?os=Ubuntu&dist=groovy&source=script" | sudo tee /etc/apt/sources.list.d/ookla_speedtest-cli.list
       sudo apt-get update
     fi
-    sudo apt-get install -y speedtest
-    ;;
+    apt sudo-get install -y speedtest
 
     # Desktop Ubuntu (not WSL)
     if ! (grep -iq WSL2 /proc/version); then
@@ -141,6 +140,7 @@ Linux )
       fi
       sudo apt-get install -y onedriver
     fi
+    ;;
   esac
   ;;
 esac
