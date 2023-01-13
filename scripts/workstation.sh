@@ -70,7 +70,7 @@ Linux )
     if ! check_apt_repo "https://packagecloud.io/ookla/speedtest"; then
       curl -fsSL https://packagecloud.io/ookla/speedtest-cli/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg
       echo "deb [signed-by=/usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg] https://packagecloud.io/ookla/speedtest-cli/ubuntu/ jammy main" | sudo tee /etc/apt/sources.list.d/ookla_speedtest-cli.list
-      echo "deb-src [signed-by=/usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg] https://packagecloud.io/ookla/speedtest-cli/ubuntu/ jammy main" | sudo tee -a /etc/apt/sources.list.d/ookla_speedtest-cli.list 
+      echo "deb-src [signed-by=/usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg] https://packagecloud.io/ookla/speedtest-cli/ubuntu/ jammy main" | sudo tee -a /etc/apt/sources.list.d/ookla_speedtest-cli.list
       sudo apt-get update
     fi
     sudo apt-get install -y speedtest
@@ -94,6 +94,13 @@ Linux )
         sudo apt-get update
       fi
       sudo apt-get install -y microsoft-edge-stable
+
+      # Microsoft Teams
+      if ! check_apt_repo "https://packages.microsoft.com/repos/ms-teams"; then
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/ms-teams stable main" | sudo tee /etc/apt/sources.list.d/teams.list
+        sudo apt-get update
+      fi
+      sudo apt-get install -y teams
 
       # 1Password
       if ! check_apt_repo "https://downloads.1password.com"; then
