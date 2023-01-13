@@ -67,13 +67,13 @@ Linux )
 
     # Speedtest
     # https://www.speedtest.net/apps/cli
-    # Use groovy as latest
-    if ! check_apt_repo "https://install.speedtest.net"; then
-      curl -fsSL https://packagecloud.io/ookla/speedtest-cli/gpgkey | gpg --dearmor | sudo tee /usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg > /dev/null
-      curl -fsSL "https://packagecloud.io/install/repositories/ookla/speedtest-cli/config_file.list?os=Ubuntu&dist=groovy&source=script" | sudo tee /etc/apt/sources.list.d/ookla_speedtest-cli.list
+    if ! check_apt_repo "https://packagecloud.io/ookla/speedtest"; then
+      curl -fsSL https://packagecloud.io/ookla/speedtest-cli/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg
+      echo "deb [signed-by=/usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg] https://packagecloud.io/ookla/speedtest-cli/ubuntu/ jammy main" | sudo tee /etc/apt/sources.list.d/ookla_speedtest-cli.list
+      echo "deb-src [signed-by=/usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg] https://packagecloud.io/ookla/speedtest-cli/ubuntu/ jammy main" | sudo tee -a /etc/apt/sources.list.d/ookla_speedtest-cli.list 
       sudo apt-get update
     fi
-    apt sudo-get install -y speedtest
+    sudo apt-get install -y speedtest
 
     # Desktop Ubuntu (not WSL)
     if ! (grep -iq WSL2 /proc/version); then
@@ -90,7 +90,6 @@ Linux )
 
       # Microsoft Edge
       if ! check_apt_repo "https://packages.microsoft.com/repos/edge"; then
-        curl https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg
         echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
         sudo apt-get update
       fi
@@ -101,7 +100,7 @@ Linux )
         if ! [ -f /usr/share/keyrings/1password-archive-keyring.gpg ]; then
           curl -fsSL https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
         fi
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | sudo tee /etc/apt/sources.list.d/1password.list
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | sudo tee /etc/sources/apt.list.d/1password.list
 
         if ! [ -f /etc/debsig/policies/AC2D62742012EA22/1password.pol ]; then
           sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
