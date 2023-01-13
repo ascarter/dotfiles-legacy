@@ -1,0 +1,105 @@
+emulate -L zsh
+
+usage="$(tput bold)$0$(tput sgr0) -- Generate git config
+  $0 [config file path]
+"
+
+_gc_set() {
+  git config --file $1 "${2}" "${3}"
+}
+
+_gc_unset() {
+  git config --file $1 --unset "${2}"
+}
+
+_gc_clear() {
+  git config --file $1 --unset-all "${2}"
+}
+
+_gc_update() {
+  _gc_unset $1 "${2}"
+  if [ -n "${3}" ]; then
+    _gc_set $1 "${2}" "${3}"
+  fi
+}
+
+# Prompt for git config key
+_gc_prompt() {
+  local input="$(git config --file $1 --get "${2}")"
+  vared -p "${2}: " input
+  _gc_update ${1} "${2}" "${input}"
+}
+
+gitconfig() {
+  zparseopts -D -E -F -color=color -opt=opt -help=help
+  help=${#help}
+
+  # Show help
+  if [ ${help} = "1" ]; then
+    print "$usage"
+    return 1
+  fi
+
+  local GIT_CONFIG_FILE=${1:-${HOME}/.gitconfig}
+
+  echo "Generating $GIT_CONFIG_FILE"
+  touch $GIT_CONFIG_FILE
+
+  # Include defaults and aliases
+  _gc_set $GIT_CONFIG_FILE include.path ${DOTFILES}/gitconfig
+
+  # User info
+  _gc_prompt $GIT_CONFIG_FILE user.name "User name"
+  _gc_prompt $GIT_CONFIG_FILE user.email "Email"
+
+  # Use Git Credential Manager if it is installed
+  if [ -x "$(command -v git-credential-manager)" ]; then
+    _gc_clear $GIT_CONFIG_FILE credential.helper
+    git-credential-manager configure
+  else
+    _gc_clear $GIT_CONFIG_FILE credential.helper
+    case $(uname) in
+    Darwin ) gc_set credential.helper osxkeychain ;;
+    Linux  ) gc_set credential.helper cache ;;
+    esac
+  fi
+
+  # Set configuration by platform
+  case $(uname) in
+  Darwin )
+    # BBEdit diff
+    if [ -x "$(command -v bbdiff)" ]; then
+      _gc_set $GIT_CONFIG_FILE difftool."bbdiff".cmd 'bbdiff --wait --resume $LOCAL $REMOTE'
+    fi
+
+    # Kaleidoscope
+    if [ -x "$(command -v ksdiff)" ]; then
+      _gc_set $GIT_CONFIG_FILE difftool."Kaleidoscope".cmd 'ksdiff --partial-changeset --relative-path $MERGED -- $LOCAL $REMOTE'
+      _gc_set $GIT_CONFIG_FILE mergetool."Kaleidoscope".cmd 'ksdiff --merge --output $MERGED --base $BASE -- $LOCAL --snapshot $REMOTE --snapshot'
+      _gc_set $GIT_CONFIG_FILE mergetool."Kaleidoscope".trustExitCode true
+    fi
+
+    # Use opendiff as default diff/merge
+    _gc_set $GIT_CONFIG_FILE diff.tool opendiff
+    _gc_set $GIT_CONFIG_FILE merge.tool opendiff
+
+    # Use fork for visual
+    _gc_set $GIT_CONFIG_FILE alias.visual '!fork $(git root)'
+    ;;
+  Linux )
+    # Check for WSL
+    if [ -n "${WSL_DISTRO_NAME}" ]; then
+      # Use Fork for visual
+      _gc_set $GIT_CONFIG_FILE alias.visual '!Fork.exe $(wslpath -w $(git root))'
+    else
+      _gc_set $GIT_CONFIG_FILE credential.credentialStore "secretservice"
+    fi
+
+    # Use Vim as default diff/merge
+    _gc_set $GIT_CONFIG_FILE diff.tool vimdiff
+    _gc_set $GIT_CONFIG_FILE merge.tool vimdiff
+    ;;
+  esac
+}
+
+gitconfig "$@"

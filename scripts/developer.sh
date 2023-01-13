@@ -161,7 +161,7 @@ Linux )
     fi
 
     # Check if running under WSL
-if (grep -iq WSL2 /proc/version); then
+    if (grep -iq WSL2 /proc/version); then
       # Microsoft Visual Studio Code CLI
       VSCODE_CLI_OS=$(dpkg --print-architecture)
       [ $VSCODE_CLI_OS=amd64 ] && VSCODE_CLI_OS=x64
