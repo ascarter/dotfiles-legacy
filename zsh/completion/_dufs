@@ -1,0 +1,56 @@
+#compdef dufs
+
+autoload -U is-at-least
+
+_dufs() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" \
+'*-b+[Specify bind address or unix socket]:addrs: ' \
+'*--bind=[Specify bind address or unix socket]:addrs: ' \
+'-p+[Specify port to listen on]:port: ' \
+'--port=[Specify port to listen on]:port: ' \
+'--path-prefix=[Specify a path prefix]:path: ' \
+'--hidden=[Hide paths from directory listings, separated by `,`]:value: ' \
+'*-a+[Add auth for path]:rules: ' \
+'*--auth=[Add auth for path]:rules: ' \
+'--auth-method=[Select auth method]:value:(basic digest)' \
+'--assets=[Use custom assets to override builtin assets]:path:_files' \
+'--tls-cert=[Path to an SSL/TLS certificate to serve with HTTPS]:path:_files' \
+'--tls-key=[Path to the SSL/TLS certificate'\''s private key]:path:_files' \
+'--log-format=[Customize http log format]:format: ' \
+'--completions=[Print shell completion script for <shell>]:shell:(bash elvish fish powershell zsh)' \
+'-A[Allow all operations]' \
+'--allow-all[Allow all operations]' \
+'--allow-upload[Allow upload files/folders]' \
+'--allow-delete[Allow delete files/folders]' \
+'--allow-search[Allow search files/folders]' \
+'--allow-symlink[Allow symlink to files/folders outside root directory]' \
+'--enable-cors[Enable CORS, sets `Access-Control-Allow-Origin: *`]' \
+'--render-index[Serve index.html when requesting a directory, returns 404 if not found index.html]' \
+'--render-try-index[Serve index.html when requesting a directory, returns directory listing if not found index.html]' \
+'--render-spa[Serve SPA(Single Page Application)]' \
+'-h[Print help information]' \
+'--help[Print help information]' \
+'-V[Print version information]' \
+'--version[Print version information]' \
+'::root -- Specific path to serve:_files' \
+&& ret=0
+}
+
+(( $+functions[_dufs_commands] )) ||
+_dufs_commands() {
+    local commands; commands=()
+    _describe -t commands 'dufs commands' commands "$@"
+}
+
+_dufs "$@"
