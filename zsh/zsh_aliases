@@ -21,6 +21,7 @@ alias devgrep="grep -n -r --exclude='.svn' --exclude='*.swp' --exclude='.git'"
 
 # SSH
 alias sshpw="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
+alias sshagentstart='eval $(ssh-agent -s) && ssh-add -A'
 
 # Stopwatch
 alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
@@ -66,15 +67,13 @@ alias pipbrew='CFLAGS="-I/opt/homebrew/include -L/opt/homebrew/lib" pip'
 alias pdb='python -m pdb'
 alias pyunittest='python -m unittest discover --buffer'
 
-# GPG/PGP aliases
-alias kpgp='keybase pgp'
-
 # View HTTP traffic
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
-# SSH
-alias sshagentstart='eval $(ssh-agent -s) && ssh-add -A'
+# Networking
+alias tcplisten='lsof -nP -iTCP -sTCP:LISTEN'
+alias udplisten='lsof -nP -iUDP'
 
 case $(uname) in
 Darwin )
