@@ -71,10 +71,13 @@
     prep = rebase -i @{upstream}
     prune-all = !git remote | xargs -n 1 git remote prune
     root = rev-parse --show-toplevel
+    sdiff = '!'"git diff && git submodule foreach 'git diff'"
     setemail = !git config user.email
     sha = rev-parse --verify HEAD
     ship = merge --no-ff
+    spush = 'push --recurse-submodules=on-demand'
     st = status --branch --short
+    supdate = 'submodule update --remote --merge'
     type = cat-file -t
     undo = reset --soft HEAD^
     unstage = reset HEAD --
