@@ -1,3 +1,5 @@
+# gitconfig - generate git config global file
+
 emulate -L zsh
 
 usage="$(tput bold)$0$(tput sgr0) -- Generate git config
@@ -59,8 +61,8 @@ gitconfig() {
   else
     _gc_clear $GIT_CONFIG_FILE credential.helper
     case $(uname) in
-    Darwin ) gc_set credential.helper osxkeychain ;;
-    Linux  ) gc_set credential.helper cache ;;
+    Darwin ) _gc_set credential.helper osxkeychain ;;
+    Linux  ) _gc_set credential.helper cache ;;
     esac
   fi
 
