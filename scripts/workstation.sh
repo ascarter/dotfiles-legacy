@@ -35,13 +35,9 @@ Linux )
 
     # Useful CLI packages
     sudo apt-get install -y \
-                alpine \
-                alpine-doc \
-                alpine-pico \
                 apt-transport-https \
                 ca-certificates \
                 curl \
-                default-mta \
                 dirmngr \
                 duf \
                 exa \
