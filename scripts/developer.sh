@@ -98,14 +98,6 @@ Linux )
     fi
     sudo apt-get install -y gh
 
-    # Kubernetes
-    if ! check_apt_repo "https://apt.kubernetes.io"; then
-      sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-      echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-      sudo apt-get update
-    fi
-    sudo apt-get install -y kubectl
-
     # Node.js
     # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
     # Use impish as latest
@@ -182,6 +174,14 @@ Linux )
         sudo apt-get update
       fi
       sudo apt-get install -y github-desktop
+
+      # Kubernetes
+      # if ! check_apt_repo "https://apt.kubernetes.io"; then
+      #   sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      #   echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+      #   sudo apt-get update
+      # fi
+      # sudo apt-get install -y kubectl
     fi
     ;;
   esac
