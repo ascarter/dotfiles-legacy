@@ -93,6 +93,12 @@ gitconfig() {
     if [ -n "${WSL_DISTRO_NAME}" ]; then
       # Use Fork for visual
       _gc_set $GIT_CONFIG_FILE alias.visual '!Fork.exe $(wslpath -w $(git root))'
+
+      # Share Windows GCM
+      _gc_clear $GIT_CONFIG_FILE credential.helper
+      _gc_set $GIT_CONFIG_FILE credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe"
+      # _gc_set $GIT_CONFIG_FILE credential.credentialStore "cache"
+      _gc_set $GIT_CONFIG_FILE credential.https://dev.azure.com.useHttpPath true
     else
       _gc_set $GIT_CONFIG_FILE credential.credentialStore "secretservice"
     fi

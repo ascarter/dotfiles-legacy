@@ -98,28 +98,6 @@ Linux )
     fi
     sudo apt-get install -y gh
 
-    # Install Git Credential Manager
-    GCM_VERSION=$(curl -s https://api.github.com/repos/GitCredentialManager/git-credential-manager/releases/latest | jq -r '.tag_name' | sed 's/v//')
-    if [ "$(dpkg --print-architecture)" = "amd64" ] ; then
-      # Remove obsolete version
-      if (dpkg-query --show gcmcore); then
-        echo "Remove git-credential-manager-core"
-        git-credential-manager-core unconfigure
-        sudo dpkg -P gcmcore
-      fi
-
-      # Install latest GCM
-      if ! (dpkg-query --show gcm) || [ $(git-credential-manager --version | cut -f1 -d'+') != ${GCM_VERSION} ]; then
-        echo "Installing Git Credential Manager"
-        curl -fsSL -o /tmp/gcm-linux_amd64.deb https://github.com/GitCredentialManager/git-credential-manager/releases/download/v${GCM_VERSION}/gcm-linux_amd64.${GCM_VERSION}.deb
-        sudo dpkg -i /tmp/gcm-linux_amd64.deb
-        rm -f /tmp/gcm-linux_amd64.deb
-        git-credential-manager configure
-      else
-        echo "Git Credential Manager is latest"
-      fi
-    fi
-
     # Kubernetes
     if ! check_apt_repo "https://apt.kubernetes.io"; then
       sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -167,6 +145,28 @@ Linux )
       [ $VSCODE_CLI_OS=amd64 ] && VSCODE_CLI_OS=x64
       curl -fsSL "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-${VSCODE_CLI_OS}" | sudo tar -C /usr/local/bin -xz
     else
+      # Install Git Credential Manager
+      GCM_VERSION=$(curl -s https://api.github.com/repos/GitCredentialManager/git-credential-manager/releases/latest | jq -r '.tag_name' | sed 's/v//')
+      if [ "$(dpkg --print-architecture)" = "amd64" ] ; then
+        # Remove obsolete version
+        if (dpkg-query --show gcmcore); then
+          echo "Remove git-credential-manager-core"
+          git-credential-manager-core unconfigure
+          sudo dpkg -P gcmcore
+        fi
+
+        # Install latest GCM
+        if ! (dpkg-query --show gcm) || [ $(git-credential-manager --version | cut -f1 -d'+') != ${GCM_VERSION} ]; then
+          echo "Installing Git Credential Manager"
+          curl -fsSL -o /tmp/gcm-linux_amd64.deb https://github.com/GitCredentialManager/git-credential-manager/releases/download/v${GCM_VERSION}/gcm-linux_amd64.${GCM_VERSION}.deb
+          sudo dpkg -i /tmp/gcm-linux_amd64.deb
+          rm -f /tmp/gcm-linux_amd64.deb
+          git-credential-manager configure
+        else
+          echo "Git Credential Manager is latest"
+        fi
+      fi
+
       # Microsoft Visual Studio Code
       if ! check_apt_repo "https://packages.microsoft.com/repos/code"; then
         echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
