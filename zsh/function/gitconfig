@@ -2,10 +2,6 @@
 
 emulate -L zsh
 
-usage="$(tput bold)$0$(tput sgr0) -- Generate git config
-  $0 [config file path]
-"
-
 _gc_set() {
   git config --file $1 "${2}" "${3}"
 }
@@ -38,7 +34,7 @@ gitconfig() {
 
   # Show help
   if [ ${help} = "1" ]; then
-    print "$usage"
+    print "$(tput bold)$0$(tput sgr0) -- Generate git config\n  $0 [config file path]\n"
     return 1
   fi
 

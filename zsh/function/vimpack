@@ -1,22 +1,5 @@
 emulate -L zsh
 
-usage="$(tput bold)$0$(tput sgr0) -- Manage Vim native packages via git submodules
-
-  $0 [--color] [--opt] add [pack]
-  $0 [--color] [--opt] remove [pack]
-  $0 list
-  $0 update
-  $0 help
-
-$(tput bold)pack$(tput sgr0) must be short for $(tput bold)https://github.com/<pack>$(tput sgr0) where $(tput bold)pack=<owner>/<repo>$(tput sgr0)
-
-Examples:
-  $0 --color add ascarter/vim-rain
-  $0 add editorconfig/editorconfig-vim
-  $0 --opt tpope/vim-commentary
-  $0 remove fatih/vim-go
-"
-
 _vimpack_is_git_clean() {
   # Fail if any changes pending since vimpack adds and removes directly from Git
   if [[ -n $(git -C $DOTFILES status -s -uno) ]]; then
@@ -55,6 +38,23 @@ _vimpack_remove() {
 vimpack() {
   typeset color
   typeset opt
+
+  local usage="$(tput bold)$0$(tput sgr0) -- Manage Vim native packages via git submodules
+
+  $0 [--color] [--opt] add [pack]
+  $0 [--color] [--opt] remove [pack]
+  $0 list
+  $0 update
+  $0 help
+
+$(tput bold)pack$(tput sgr0) must be short for $(tput bold)https://github.com/<pack>$(tput sgr0) where $(tput bold)pack=<owner>/<repo>$(tput sgr0)
+
+Examples:
+  $0 --color add ascarter/vim-rain
+  $0 add editorconfig/editorconfig-vim
+  $0 --opt tpope/vim-commentary
+  $0 remove fatih/vim-go
+"
 
   zparseopts -D -E -F -color=color -opt=opt -help=help
   color=${#color}
