@@ -99,12 +99,12 @@ Linux )
     sudo apt-get install -y gh
 
     # Node.js
-    # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
-    # Use impish as latest
+    # https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
     if ! check_apt_repo "https://deb.nodesource.com"; then
-      curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee /usr/share/keyrings/nodesource-archive-keyring.gpg > /dev/null
-      echo "deb [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x impish main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-      echo "deb-src [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x impish main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+      NODE_JS_VER=19
+      curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/nodesource-archive-keyring.gpg
+      echo "deb [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_${NODE_JS_VER}.x $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+      echo "deb-src [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_${NODE_JS_VER}.x $(lsb_release -cs) main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
       sudo apt-get update
     fi
     sudo apt-get install -y nodejs
