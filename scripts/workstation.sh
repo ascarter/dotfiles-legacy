@@ -82,7 +82,8 @@ Linux )
                   gnome-tweaks \
                   gpaste \
                   gparted \
-                  openssh-server
+                  openssh-server \
+                  powertop
 
       # Microsoft Edge
       if ! check_apt_repo "https://packages.microsoft.com/repos/edge"; then
