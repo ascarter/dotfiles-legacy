@@ -16,6 +16,48 @@ set backspace=indent,eol,start
 " Enable extend % matching
 runtime macros/matchit.vim
 
+" Install vim plug
+if has("win32")
+    if empty(glob('~\vimfiles\autoload\plug.vim'))
+        silent !curl -fLo \%USERPROFILE\%\\vimfiles\\autoload\\plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
+    call plug#begin('~/vimfiles/bundle')
+else
+    if empty(glob('~/.vim/autoload/plug.vim'))
+          silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
+    call plug#begin('~/.vim/bundle')
+endif
+
+" Plugins
+Plug 'editorconfig/editorconfig-vim'
+Plug 'fatih/vim-go'
+Plug 'itchyny/lightline.vim'
+Plug 'lifepillar/pgsql.vim'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+
+" Disabled plugins
+"Plug 'dense-analysis/ale'
+
+" Color schemes
+Plug 'arcticicestudio/nord-vim'
+Plug 'ascarter/vim-rain'
+Plug 'cocopon/iceberg'
+Plug 'Lokaltog/vim-monotone'
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
+
+call plug#end()
+
+" Install any missing plugins
+autocmd VimEnter *
+  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \|   PlugInstall --sync | q
+  \| endif
+
 " =====================================
 " UI
 " =====================================
@@ -29,6 +71,9 @@ if has("termguicolors")
 endif
 
 set background=dark
+colorscheme onehalfdark
+let g:lightline = { 'colorscheme': 'onehalfdark' }
+
 "let g:lightline = { 'colorscheme': 'PaperColor' }
 "let g:monotone_contrast_factor=0.9
 "colorscheme monotone
@@ -43,7 +88,7 @@ set background=dark
 "let g:nord_italic_comments = 1
 "let g:lightline = { 'colorscheme': 'nord' }
 
-colorscheme rain
+"colorscheme rain
 
 " Customize monotone
 "hi Normal       guibg=#22272e  ctermbg=None
