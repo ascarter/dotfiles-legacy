@@ -16,7 +16,7 @@ set backspace=indent,eol,start
 " Enable extend % matching
 runtime macros/matchit.vim
 
-" Install vim plug
+" Enable vim-plug
 if has("win32")
     if empty(glob('~\vimfiles\autoload\plug.vim'))
         silent !curl -fLo \%USERPROFILE\%\\vimfiles\\autoload\\plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -25,7 +25,7 @@ if has("win32")
     call plug#begin('~/vimfiles/bundle')
 else
     if empty(glob('~/.vim/autoload/plug.vim'))
-          silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
         autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
     endif
     call plug#begin('~/.vim/bundle')
@@ -46,17 +46,14 @@ Plug 'tpope/vim-surround'
 " Color schemes
 Plug 'arcticicestudio/nord-vim'
 Plug 'ascarter/vim-rain'
-Plug 'cocopon/iceberg'
+Plug 'cocopon/iceberg.vim'
 Plug 'Lokaltog/vim-monotone'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
 
 call plug#end()
 
-" Install any missing plugins
-autocmd VimEnter *
-  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \|   PlugInstall --sync | q
-  \| endif
+" Plugin upgrade
+command! PU PlugUpdate | PlugUpgrade
 
 " =====================================
 " UI
@@ -71,8 +68,12 @@ if has("termguicolors")
 endif
 
 set background=dark
-colorscheme onehalfdark
-let g:lightline = { 'colorscheme': 'onehalfdark' }
+try
+    colorscheme onehalfdark
+    let g:lightline = { 'colorscheme': 'onehalfdark' }
+catch
+    colorscheme default
+endtry
 
 "let g:lightline = { 'colorscheme': 'PaperColor' }
 "let g:monotone_contrast_factor=0.9
@@ -220,67 +221,67 @@ endfunction
 
 " Adapted from mswin.vim to make Vim work more like a standard application
 if has("unix") || has("linux")
-	if has("clipboard")
-		" Cut ctrl+x
-		vnoremap <C-X> "+x
+    if has("clipboard")
+        " Cut ctrl+x
+        vnoremap <C-X> "+x
 
-		" Copy ctrl+c
-		vnoremap <C-C> "+y
+        " Copy ctrl+c
+        vnoremap <C-C> "+y
 
-		" Past ctrl+v
-		map  <C-V> "+gP
-		cmap <C-V> <C-R>+
+        " Past ctrl+v
+        map  <C-V> "+gP
+        cmap <C-V> <C-R>+
 
-		"vmap <C-c> "+yi
-		"vmap <C-x> "+c
-		"vmap <C-v> "+gP
-		"imap <C-v> <ESC>"+gP
-		"vmap <C-a> ggVg
-	endif
+        "vmap <C-c> "+yi
+        "vmap <C-x> "+c
+        "vmap <C-v> "+gP
+        "imap <C-v> <ESC>"+gP
+        "vmap <C-a> ggVg
+    endif
 
-	if has("gui")
-		" Search ctrl+f
-		noremap  <expr> <C-F> has("gui_running") ? ":promptfind\<CR>": "/"
-		inoremap <expr> <C-F> has("gui_running") ? "\<C-\>\<C-O>:promptfind\<CR>": "\<C-\>\<C-O>/"
-		cnoremap <expr> <C-F> has("gui_running") ? "\<C-\>\<C-C>:promptfind\<CR>": "\<C-\>\<C-O>/"
+    if has("gui")
+        " Search ctrl+f
+        noremap  <expr> <C-F> has("gui_running") ? ":promptfind\<CR>": "/"
+        inoremap <expr> <C-F> has("gui_running") ? "\<C-\>\<C-O>:promptfind\<CR>": "\<C-\>\<C-O>/"
+        cnoremap <expr> <C-F> has("gui_running") ? "\<C-\>\<C-C>:promptfind\<CR>": "\<C-\>\<C-O>/"
 
-		" Replace dialog ctrl+h
-		nnoremap <expr> <C-H> has("gui_running") ? ":promptrepl\<CR>" : "\<C-H>"
-		inoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-O>:promptrepl\<CR>" : "\<C-H>"
-		cnoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-C>:promptrepl\<CR>" : "\<C-H>"
-	endif
+        " Replace dialog ctrl+h
+        nnoremap <expr> <C-H> has("gui_running") ? ":promptrepl\<CR>" : "\<C-H>"
+        inoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-O>:promptrepl\<CR>" : "\<C-H>"
+        cnoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-C>:promptrepl\<CR>" : "\<C-H>"
+    endif
 
-	" Save ctrl+s
-	noremap  <C-S> :update<CR>
-	vnoremap <C-S> <C-C>:update<CR>
-	inoremap <C-S> <ESC>:update<CR>gi
+    " Save ctrl+s
+    noremap  <C-S> :update<CR>
+    vnoremap <C-S> <C-C>:update<CR>
+    inoremap <C-S> <ESC>:update<CR>gi
 
-	" For ctrl+v to work, autoselect must be off
-	if !has("unix")
-		set guioptions-=a
-	endif
+    " For ctrl+v to work, autoselect must be off
+    if !has("unix")
+        set guioptions-=a
+    endif
 
-	"Undo ctrl+z
-	noremap <C-Z>  u
-	inoremap <C-Z> <C-O>u
+    "Undo ctrl+z
+    noremap <C-Z>  u
+    inoremap <C-Z> <C-O>u
 
-	" Redo ctrl+y
-	noremap  <C-Y> <C-R>
-	inoremap <C-Y> <C-O><C-R>
+    " Redo ctrl+y
+    noremap  <C-Y> <C-R>
+    inoremap <C-Y> <C-O><C-R>
 
-	" Select all ctrl+a
-	noremap <C-A> gggH<C-O>G
-	inoremap <C-A> <C-O>gg<C-O>gH<C-O>G
-	cnoremap <C-A> <C-C>gggH<C-O>G
-	onoremap <C-A> <C-C>gggH<C-O>G
-	snoremap <C-A> <C-C>gggH<C-O>G
-	xnoremap <C-A> <C-C>ggVG
+    " Select all ctrl+a
+    noremap <C-A> gggH<C-O>G
+    inoremap <C-A> <C-O>gg<C-O>gH<C-O>G
+    cnoremap <C-A> <C-C>gggH<C-O>G
+    onoremap <C-A> <C-C>gggH<C-O>G
+    snoremap <C-A> <C-C>gggH<C-O>G
+    xnoremap <C-A> <C-C>ggVG
 
-	" Next window ctrl+tab
-	noremap  <C-Tab> <C-W>w
-	inoremap <C-Tab> <C-O><C-W>w
-	cnoremap <C-Tab> <C-O><C-W>w
-	onoremap <C-Tab> <C-O><C-W>w
+    " Next window ctrl+tab
+    noremap  <C-Tab> <C-W>w
+    inoremap <C-Tab> <C-O><C-W>w
+    cnoremap <C-Tab> <C-O><C-W>w
+    onoremap <C-Tab> <C-O><C-W>w
 endif
 
 " =====================================
@@ -360,7 +361,7 @@ if has("gui_running")
 
     elseif has('gui_win32')
         " Windows
-        set guifont=Fira\ Code:h10,Roboto\ Mono:h12,Cascadia\ Code:h12,Source\ Code\ Pro:h12,Consolas:h12
+        set guifont=Fira\ Code:h10,Roboto\ Mono:h10,Cascadia\ Code:h10,Source\ Code\ Pro:h10,Consolas:h10
         set renderoptions=type:directx
     endif
 endif
