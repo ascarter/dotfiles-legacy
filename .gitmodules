@@ -1,9 +1,6 @@
 [submodule "vim/pack/colors/start/vim-rain"]
 	path = vim/pack/colors/start/vim-rain
 	url = https://github.com/ascarter/vim-rain.git
-[submodule "vim/pack/plugins/start/lightline.vim"]
-	path = vim/pack/plugins/start/lightline.vim
-	url = https://github.com/itchyny/lightline.vim.git
 [submodule "vim/pack/plugins/start/vim-commentary"]
 	path = vim/pack/plugins/start/vim-commentary
 	url = https://github.com/tpope/vim-commentary.git
