@@ -75,6 +75,11 @@ fi
 # Developer Tools
 # ========================================
 
+# Generate user's global gitconfig
+if ! [ -f ${HOME}/.gitconfig ]; then
+  gitconfig ${DOTFILES} ${HOME}/.gitconfig
+fi
+
 # SDK root for custom installs
 export SDK_ROOT=${HOME}/sdk
 
@@ -214,8 +219,8 @@ path+=${DOTFILES}/bin
 # ========================================
 
 # Use 1Password SSH Agent if installed
-if [ -S ~/.1password/agent.sock ]; then
-  export SSH_AUTH_SOCK=~/.1password/agent.sock
+if [ -S ${HOME}/.1password/agent.sock ]; then
+  export SSH_AUTH_SOCK=${HOME}/.1password/agent.sock
 else
   case $(uname) in
   Linux )
@@ -239,8 +244,8 @@ fi
 # 1Password
 # ========================================
 
-if [ -f ~/.op/plugins.sh ]; then
-  source ~/.config/op/plugins.sh
+if [ -f ${HOME}/.op/plugins.sh ]; then
+  source ${HOME}/.config/op/plugins.sh
 fi
 
 # ========================================

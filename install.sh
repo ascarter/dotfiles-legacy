@@ -120,9 +120,6 @@ else
   echo "zsh shell not installed"
 fi
 
-# Generate user's global gitconfig
-${DOTFILES}/bin/gitconfig ${DOTFILES} ${HOMEDIR}/.gitconfig
-
 # Ensure ssh directory exists
 if ! [ -d ${HOMEDIR}/.ssh ]; then
   mkdir -p ${HOMEDIR}/.ssh
