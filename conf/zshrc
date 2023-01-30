@@ -75,11 +75,6 @@ fi
 # Developer Tools
 # ========================================
 
-# Vim
-if ! [ -f ~/.vimrc ]; then
-  vimrc
-fi
-
 # SDK root for custom installs
 export SDK_ROOT=${HOME}/sdk
 
