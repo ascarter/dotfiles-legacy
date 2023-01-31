@@ -48,6 +48,7 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'ascarter/vim-rain'
 Plug 'cocopon/iceberg.vim'
 Plug 'Lokaltog/vim-monotone'
+Plug 'romainl/Apprentice'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
 
 call plug#end()
@@ -69,8 +70,8 @@ endif
 
 set background=dark
 try
-    colorscheme onehalfdark
-    let g:lightline = { 'colorscheme': 'onehalfdark' }
+    colorscheme apprentice
+    let g:lightline = { 'colorscheme': 'PaperColor' }
 catch
     colorscheme default
 endtry
