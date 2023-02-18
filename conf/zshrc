@@ -98,6 +98,10 @@ if (( $+commands[ruby] )) && (( $+commands[gem] )); then
   path+=$(ruby -r rubygems -e 'puts Gem.user_dir')/bin
 fi
 
+if (( $+commands[rbenv] )); then
+  eval "$(rbenv init - zsh)"
+fi
+
 # Python
 case $(uname) in
 Darwin )
