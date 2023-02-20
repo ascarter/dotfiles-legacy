@@ -43,7 +43,7 @@ Linux )
     sudo apt-get install -y \
       containerd.io \
       docker-ce \
-      docker-ce-ci \
+      docker-ce-cli \
       docker-buildx-plugin \
       docker-compose-plugin \
       htop \
