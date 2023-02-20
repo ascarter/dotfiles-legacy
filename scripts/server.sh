@@ -1,11 +1,7 @@
 #!/bin/sh
 
 #
-# Init script for Unix server
-# Tested for Raspberry Pi 3+ on Ubuntu 20.04+
-#
-# Usage:
-#	server.sh
+# Install script for server
 #
 
 set -ue
@@ -30,7 +26,7 @@ Linux )
     sudo apt-get autoremove -y
 
     # Install base packages
-    sudo apt-get install -y apt-transport-https ca-certificates software-properties-common
+    sudo apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release software-properties-common
 
     # Add Docker repository
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -38,21 +34,21 @@ Linux )
 
     # Add speedtest respository
     # https://www.speedtest.net/apps/cli
-    curl -fsSL https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
+    curl -fsSL https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
+
+    # Update repositories
+    sudo apt-get update
 
     # Install server packages
-    # Install developer packages
     sudo apt-get install -y \
-      curl \
       containerd.io \
       docker-ce \
-      docker-ce-cli \
+      docker-ce-ci \
+      docker-buildx-plugin \
+      docker-compose-plugin \
+      htop \
       jq \
       speedtest
-
-    # Install docker-compose
-    sudo curl -fsSL "https://github.com/docker/compose/releases/download/v2.2.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
     ;;
   *)
     echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"
