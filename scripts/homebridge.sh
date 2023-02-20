@@ -34,7 +34,7 @@ EOF
 
 # Bootstrap and start homebridge
 echo "Updating docker images"
-docker compose pull
+docker compose -f ${HOMEBRIDGE_PATH}/docker-compose.yml pull homebridge
 
 echo "Starting Homebridge"
 docker compose -f ${HOMEBRIDGE_PATH}/docker-compose.yml up homebridge -d
