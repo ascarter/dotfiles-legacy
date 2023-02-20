@@ -8,12 +8,6 @@ set -ue
 
 HOMEBRIDGE_PATH="${1:-${HOME}/homebridge}"
 
-# Abort if an existing configuration
-if [ -d ${HOMEBRIDGE_PATH}/config ]; then
-    echo "Homebridge configuration exists"
-    exit 1
-fi
-
 # Create docker-compose.yml
 mkdir -p ${HOMEBRIDGE_PATH}/config
 cat > ${HOMEBRIDGE_PATH}/docker-compose.yml <<EOF
