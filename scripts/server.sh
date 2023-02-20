@@ -16,7 +16,7 @@ Linux )
     # Configure hostname
     hostname="$(hostname -s)"
     read -p "hostname (${hostname}): " input
-    sudo hostnamectl set-hostname "${input:-${current}}"
+    sudo hostnamectl set-hostname "${input:-${hostname}}"
     sudo hostnamectl set-chassis server
     sudo hostnamectl set-icon-name ""
 
