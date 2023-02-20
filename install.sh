@@ -83,10 +83,6 @@ esac
 if ! [ -e ${DOTFILES} ]; then
   mkdir -p $(dirname ${DOTFILES})
   git clone https://github.com/ascarter/dotfiles ${DOTFILES}
-  git -C ${DOTFILES} submodule init
-else
-  #git -C ${DOTFILES} pull
-  git -C ${DOTFILES} submodule update --remote --merge
 fi
 
 # Symlink rc files
