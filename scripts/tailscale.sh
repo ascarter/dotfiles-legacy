@@ -24,6 +24,10 @@ if ! [ -x "$(command -v tailscale)" ]; then
 
             # Authenticate and connect to Tailscale network
             sudo tailscale up
+
+            echo "Tailscale installed"
+            tailscale ip -4
+            tailscale ip -6
             ;;
         esac
     esac
