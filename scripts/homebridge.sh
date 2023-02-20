@@ -34,7 +34,7 @@ EOF
 
 # Bootstrap and start homebridge
 docker compose pull
-docker compose --project-directory ${HOMEBRIDGE_PATH} up homebridge -d
+docker compose -f ${HOMEBRIDGE_PATH}/docker-compose.yml up homebridge -d
 
 echo "Waiting for Homebridge to start..."
 until $(curl --output /dev/null --silent --head --fail http://localhost:8581); do
