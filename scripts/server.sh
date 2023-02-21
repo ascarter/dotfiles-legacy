@@ -49,6 +49,16 @@ Linux )
       htop \
       jq \
       speedtest
+
+    # Validate current $USER is enabled for docker group
+    if ! (groups | grep docker > /dev/null); then
+      echo "Add $USER to docker group by running the following:"
+      echo "----"
+      echo ""
+      echo "sudo usermod -aG docker $USER"
+      echo "newgrp docker"
+    fi
+
     ;;
   *)
     echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"
