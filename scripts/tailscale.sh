@@ -12,6 +12,7 @@ if ! [ -x "$(command -v tailscale)" ]; then
         ;;
         case $(lsb_release -i -s) in
     Linux )
+        case $(lsb_release -i -s) in
         Ubuntu | Pop | Raspbian )
             ID=$(lsb_release -i -s | tr "[:upper:]" "[:lower:]")
             CODENAME=$(lsb_release -s -c)
