@@ -12,7 +12,7 @@ Linux )
   echo "Installing server packages for ${DISTRO_DESCRIPTION}"
 
   case $(lsb_release -i -s) in
-  Ubuntu )
+  Ubuntu | Raspbian )
     # Configure hostname
     hostname="$(hostname -s)"
     read -p "hostname (${hostname}): " input
@@ -28,10 +28,6 @@ Linux )
     # Install base packages
     sudo apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release software-properties-common
 
-    # Add Docker repository
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
     # Add speedtest respository
     # https://www.speedtest.net/apps/cli
     curl -fsSL https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
@@ -40,25 +36,7 @@ Linux )
     sudo apt-get update
 
     # Install server packages
-    sudo apt-get install -y \
-      containerd.io \
-      docker-ce \
-      docker-ce-cli \
-      docker-buildx-plugin \
-      docker-compose-plugin \
-      htop \
-      jq \
-      speedtest
-
-    # Validate current $USER is enabled for docker group
-    if ! (groups | grep docker > /dev/null); then
-      echo "Add $USER to docker group by running the following:"
-      echo "----"
-      echo ""
-      echo "sudo usermod -aG docker $USER"
-      echo "newgrp docker"
-    fi
-
+    sudo apt-get install -y htop jq speedtest
     ;;
   *)
     echo "Unknown Linux distro ${DISTRO_DESCRIPTION}"
