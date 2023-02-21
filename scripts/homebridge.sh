@@ -9,8 +9,8 @@ set -ue
 HOMEBRIDGE_PATH="${1:-${HOME}/homebridge}"
 
 # Create docker-compose.yml
-mkdir -p ${HOMEBRIDGE_PATH}/config
-cat > ${HOMEBRIDGE_PATH}/docker-compose.yml <<EOF
+mkdir -p "${HOMEBRIDGE_PATH}"/config
+cat > "${HOMEBRIDGE_PATH}"/docker-compose.yml <<EOF
 version: '2'
 services:
   homebridge:
@@ -28,10 +28,10 @@ EOF
 
 # Bootstrap and start homebridge
 echo "Updating docker images"
-docker compose -f ${HOMEBRIDGE_PATH}/docker-compose.yml pull homebridge
+docker compose -f "${HOMEBRIDGE_PATH}"/docker-compose.yml pull homebridge
 
 echo "Starting Homebridge"
-docker compose -f ${HOMEBRIDGE_PATH}/docker-compose.yml up homebridge -d
+docker compose -f "${HOMEBRIDGE_PATH}"/docker-compose.yml up homebridge -d
 
 echo "Waiting for Homebridge to start..."
 until $(curl --output /dev/null --silent --head --fail http://localhost:8581); do
@@ -43,7 +43,7 @@ echo "Homebridge install complete"
 echo "Access homebridge UI:"
 IP=$(hostname -I)
 for ip in $IP; do
-    if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    if "$ip" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'; then
         echo "http://$ip:8581"
     else
         echo "http://[$ip]:8581"
