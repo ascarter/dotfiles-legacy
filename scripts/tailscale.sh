@@ -10,7 +10,6 @@ if ! [ -x "$(command -v tailscale)" ]; then
         brew install mas
         mas install 1475387142
         ;;
-        case $(lsb_release -i -s) in
     Linux )
         case $(lsb_release -i -s) in
         Ubuntu | Pop | Raspbian )
