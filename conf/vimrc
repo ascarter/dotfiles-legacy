@@ -49,6 +49,7 @@ Plug 'ascarter/vim-rain'
 Plug 'cocopon/iceberg.vim'
 Plug 'Lokaltog/vim-monotone'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
+Plug 'vim/colorschemes'
 
 call plug#end()
 
