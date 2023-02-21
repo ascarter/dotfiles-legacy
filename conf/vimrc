@@ -48,7 +48,6 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'ascarter/vim-rain'
 Plug 'cocopon/iceberg.vim'
 Plug 'Lokaltog/vim-monotone'
-Plug 'romainl/Apprentice'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
 
 call plug#end()
@@ -70,7 +69,7 @@ endif
 
 set background=dark
 try
-    colorscheme apprentice
+    colorscheme quiet
     let g:lightline = { 'colorscheme': 'PaperColor' }
 catch
     colorscheme default
@@ -362,7 +361,7 @@ if has("gui_running")
 
     elseif has('gui_win32')
         " Windows
-        set guifont=Fira\ Code:h10,Roboto\ Mono:h10,Cascadia\ Code:h10,Source\ Code\ Pro:h10,Consolas:h10
+        set guifont=IBM\ Flex\ Mono:h10,Fira\ Code:h10,Roboto\ Mono:h10,Cascadia\ Code:h10,Source\ Code\ Pro:h10,Consolas:h10
         set renderoptions=type:directx
     endif
 endif
