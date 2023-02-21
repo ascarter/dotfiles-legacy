@@ -47,9 +47,11 @@ Plug 'tpope/vim-surround'
 Plug 'arcticicestudio/nord-vim'
 Plug 'ascarter/vim-rain'
 Plug 'cocopon/iceberg.vim'
+Plug 'dim13/gocode.vim'
 Plug 'Lokaltog/vim-monotone'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
 Plug 'vim/colorschemes'
+Plug '0mp/vim-robpike'
 
 call plug#end()
 
