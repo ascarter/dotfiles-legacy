@@ -118,6 +118,12 @@ alias devgrep="grep -n -r --exclude='.svn' --exclude='*.swp' --exclude='.git'"
 alias sshpw="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
 alias sshagentstart='eval $(ssh-agent -s) && ssh-add -A'
 
+# MicroK8s/Kubernetes
+if ! (( $+commands[kubectl] )) && (( $+commands[microk8s] )); then
+  # Alias microk8s kubectl -> kubectl if only one installed
+  alias kubectl='microk8s kubectl'
+fi
+
 # Stopwatch
 alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
 
