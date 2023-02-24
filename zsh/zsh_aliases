@@ -121,7 +121,7 @@ alias sshagentstart='eval $(ssh-agent -s) && ssh-add -A'
 # MicroK8s/Kubernetes
 if ! (( $+commands[kubectl] )) && (( $+commands[microk8s] )); then
   # Alias microk8s kubectl -> kubectl if only one installed
-  alias kubectl='microk8s kubectl'
+  alias kubectl=microk8s.kubectl
 fi
 
 # Stopwatch
