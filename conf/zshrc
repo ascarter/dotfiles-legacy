@@ -206,6 +206,11 @@ elif (( $+commands[microk8s.kubectl] )); then
   compdef microk8s.kubectl=kubectl
 fi
 
+# MSSQL Server Tools
+if [ -d /opt/mssql-tools/bin/ ]; then
+  path+=/opt/mssql-tools/bin
+fi
+
 # ========================================
 # Aliases
 # ========================================
