@@ -86,6 +86,8 @@ export SDK_ROOT=${HOME}/sdk
 # Azure CLI
 if [ -n ${HOMEBREW_PREFIX} ] && [ -f ${HOMEBREW_PREFIX}/etc/bash_completion.d/az ]; then
   source ${HOMEBREW_PREFIX}/etc/bash_completion.d/az
+elif [ -f /etc/bash_completion.d/azure-cli ]; then
+  source /etc/bash_completion.d/azure-cli
 fi
 
 # GitHub
