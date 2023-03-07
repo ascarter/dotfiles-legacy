@@ -44,14 +44,15 @@ Plug 'tpope/vim-surround'
 "Plug 'dense-analysis/ale'
 
 " Color schemes
-Plug 'arcticicestudio/nord-vim'
+"Plug 'arcticicestudio/nord-vim'
 Plug 'ascarter/vim-rain'
-Plug 'cocopon/iceberg.vim'
-Plug 'dim13/gocode.vim'
+"Plug 'cocopon/iceberg.vim'
+"Plug 'dim13/gocode.vim'
 Plug 'Lokaltog/vim-monotone'
-Plug 'sonph/onehalf', { 'rtp': 'vim' }
+"Plug 'sonph/onehalf', { 'rtp': 'vim' }
 Plug 'vim/colorschemes'
 Plug '0mp/vim-robpike'
+Plug 'romainl/vim-dichromatic'
 
 call plug#end()
 
@@ -72,39 +73,39 @@ endif
 
 set background=dark
 try
-    colorscheme quiet
+    "let g:lightline = { 'colorscheme': 'PaperColor' }
+    "let g:monotone_contrast_factor=0.9
+    "colorscheme monotone
+
+
+    "colorscheme iceberg
+    "let g:lightline = { 'colorscheme': 'iceberg' }
+
+    "colorscheme nord
+    "let g:nord_bold_vertical_split_line = 1
+    "let g:nord_italic = 1
+    "let g:nord_italic_comments = 1
+    "let g:lightline = { 'colorscheme': 'nord' }
+
+    " Customize monotone
+    "hi Normal       guibg=#22272e  ctermbg=None
+    "hi Function     guifg=NONE     guibg=NONE  gui=bold,italic  ctermfg=NONE  ctermbg=NONE  cterm=bold,italic
+    "hi Identifier   guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
+    "hi Include      guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
+    "hi Keyword      guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+    "hi Question     guifg=NONE     guibg=NONE  gui=NONE         ctermfg=NONE  ctermbg=NONE  cterm=NONE
+    "hi Statement    guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+    "hi Type         guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+    "hi Underlined   guifg=NONE     guibg=NONE  gui=underline    ctermfg=NONE  ctermbg=NONE  cterm=underline
+    "hi Title        guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
+
+    "colorscheme quiet
+    "colorscheme dichromatic
+    colorscheme rain
     let g:lightline = { 'colorscheme': 'PaperColor' }
 catch
     colorscheme default
 endtry
-
-"let g:lightline = { 'colorscheme': 'PaperColor' }
-"let g:monotone_contrast_factor=0.9
-"colorscheme monotone
-
-
-"colorscheme iceberg
-"let g:lightline = { 'colorscheme': 'iceberg' }
-
-"colorscheme nord
-"let g:nord_bold_vertical_split_line = 1
-"let g:nord_italic = 1
-"let g:nord_italic_comments = 1
-"let g:lightline = { 'colorscheme': 'nord' }
-
-"colorscheme rain
-
-" Customize monotone
-"hi Normal       guibg=#22272e  ctermbg=None
-"hi Function     guifg=NONE     guibg=NONE  gui=bold,italic  ctermfg=NONE  ctermbg=NONE  cterm=bold,italic
-"hi Identifier   guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
-"hi Include      guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
-"hi Keyword      guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-"hi Question     guifg=NONE     guibg=NONE  gui=NONE         ctermfg=NONE  ctermbg=NONE  cterm=NONE
-"hi Statement    guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-"hi Type         guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-"hi Underlined   guifg=NONE     guibg=NONE  gui=underline    ctermfg=NONE  ctermbg=NONE  cterm=underline
-"hi Title        guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
 
 " Flash screen only - no beep
 set visualbell
