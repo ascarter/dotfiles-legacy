@@ -36,6 +36,7 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'fatih/vim-go'
 Plug 'itchyny/lightline.vim'
 Plug 'lifepillar/pgsql.vim'
+Plug 'lifepillar/vim-colortemplate'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
@@ -44,15 +45,14 @@ Plug 'tpope/vim-surround'
 "Plug 'dense-analysis/ale'
 
 " Color schemes
-"Plug 'arcticicestudio/nord-vim'
+Plug 'arcticicestudio/nord-vim'
 Plug 'ascarter/vim-rain'
-"Plug 'cocopon/iceberg.vim'
-"Plug 'dim13/gocode.vim'
+Plug 'cocopon/iceberg.vim'
 Plug 'Lokaltog/vim-monotone'
-"Plug 'sonph/onehalf', { 'rtp': 'vim' }
+Plug 'romainl/Apprentice'
+Plug 'romainl/vim-dichromatic'
 Plug 'vim/colorschemes'
 Plug '0mp/vim-robpike'
-Plug 'romainl/vim-dichromatic'
 
 call plug#end()
 
