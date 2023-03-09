@@ -23,18 +23,34 @@ check_apt_repo() {
   [ -z "${force_reinstall}" ] && apt-cache policy | grep ${1} > /dev/null
 }
 
+install_rust() {
+  # Rust
+  if [ -x "$(command -v rustup)" ]; then
+    echo "Updating rust"
+    rustup update
+  else
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
+  fi
+}
+
 case "$(uname)" in
 Darwin )
-  echo "Installing macOS tools..."
+  echo "Installing $(sw_vers -productName) $(sw_vers -productVersion) tools"
 
-  # TODO: brewfile for developer tools
+  # Install tools/apps from Homebrew
+  echo "Install Homebrew packages"
+  if ! brew bundle -q --global check; then
+    brew bundle --global install
+  fi
+
+  # Rust
+  install_rust
 
   # Enable PostgreSQL CLI
-  if [ -d /Applications/Postgres.app ]; then
+  if [ -d /Applications/Postgres.app ] && ! [ -f /etc/paths.d/postgresapp ]; then
     sudo mkdir -p /etc/paths.d
     echo /Applications/Postgres.app/Contents/Versions/latest/bin | sudo tee /etc/paths.d/postgresapp
   fi
-
   ;;
 Linux )
   echo "Installing $(lsb_release -d -s) $(uname -m) tools..."
@@ -123,12 +139,7 @@ Linux )
     fi
 
     # Rust
-    if [ -x "$(command -v rustup)" ]; then
-      echo "Updating rust"
-      rustup update
-    else
-      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
-    fi
+    install_rust
 
     # Check if running under WSL
     if (grep -iq WSL2 /proc/version); then
