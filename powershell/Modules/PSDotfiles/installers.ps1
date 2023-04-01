@@ -163,7 +163,7 @@ function Install-Profile {
     if (-not (Test-Path $PSProfile)) {
         Write-Output 'Install PowerShell profile'
         New-Item -Path $PSProfile -ItemType File -Force
-        $dotfilesProfile = (Join-Path $Path -ChildPath profile.ps1)
+        $dotfilesProfile = (Join-Path $Path -ChildPath powershell\profile.ps1)
         Set-Content -Path $PSProfile -Value ". $dotfilesProfile"
     }
 }
