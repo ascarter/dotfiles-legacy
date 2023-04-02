@@ -369,7 +369,7 @@ if has("gui_running")
 
     elseif has('gui_win32')
         " Windows
-        set guifont=IBM\ Flex\ Mono:h10,Fira\ Code:h10,Roboto\ Mono:h10,Cascadia\ Code:h10,Source\ Code\ Pro:h10,Consolas:h10
+        set guifont=Cascadia\ Code:h10,IBM\ Flex\ Mono:h10,Fira\ Code:h10,Roboto\ Mono:h10,Source\ Code\ Pro:h10,Consolas:h10
         set renderoptions=type:directx
     endif
 endif
