@@ -86,6 +86,23 @@ function Enable-WSL {
     wsl --install --distribution Ubuntu
 }
 
+function Install-WSLDotfiles {
+  <#
+      .SYNOPSIS
+          Install dotfiles for WSL
+  #>
+  [CmdletBinding(SupportsShouldProcess)]
+  param()
+
+  if ((Test-Path $Env:DOTFILES)) {
+    throw 'dotfiles not installed'
+  }
+
+  # Share Windows dotfiles with WSL
+  Write-Output 'Sharing dotfiles with WSL'
+  wsl.exe -- `$DOTFILES/install.sh
+}
+
 #endregion
 
 #region Helpers

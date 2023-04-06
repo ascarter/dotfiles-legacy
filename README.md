@@ -4,16 +4,19 @@ dotfiles for POSIX operating systems
 
 The dotfiles configuration works for macOS and Ubuntu/Pop Linux including WSL. It is untested with other Linux distributions but should be adaptable generally.
 
-## Layout
+There is also a [PowerShell module](powershell/README.md) that enables similar command line extensions for PowerShell. It is tested for Windows 10/11 and untested for Linux PowerShell.
+
+# Layout
 
 * `bin` - useful scripts
 * `conf` - configuration scripts symlinked in home directory
+* `powershell` - PowerShell support
 * `themes` - various theme files
 * `zsh` - `${ZDOTDIR}` with zsh configuration
 
 An optional install script is available to provision base packages and bootstrap dotfiles. Other scripts are available for installing packages for development and servers.
 
-### Requirements
+# Requirements
 
 The following are the minimum requirements for dotfiles to work:
 
@@ -22,7 +25,13 @@ The following are the minimum requirements for dotfiles to work:
 
 On macOS, [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) is expected to be installed and configured.
 
-### Install
+On Windows, PowerShell 7.0+ is expected.
+
+# Install
+
+Install scripts are available for Unix and Windows systems.
+
+## Unix
 
 For convenience, a full install script can be run using the following command:
 
@@ -40,7 +49,7 @@ cd ~/.config/dotfiles
 ./install.sh
 ```
 
-### Install Scripts
+### Additional Install Scripts
 
 The `scripts` directory contains several additional install scripts. Run based on your usage scenario:
 
@@ -61,3 +70,7 @@ Run the uninstall script to remove the symlinks:
 cd ~/.config/dotfiles
 ./uninstall.sh
 ```
+
+## Windows
+
+See [README](powershell/README.md) for instructions for installing in Windows PowerShell environment.

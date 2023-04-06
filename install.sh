@@ -12,7 +12,7 @@
 set -ue
 
 HOMEDIR="${1:-${HOME}}"
-DOTFILES="${2:-${HOME}/.config/dotfiles}"
+DOTFILES="${2:-${DOTFILES:-${HOME}/.config/dotfiles}}"
 
 # Configure pre-requisites
 case "$(uname)" in
