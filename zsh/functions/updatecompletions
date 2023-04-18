@@ -1,0 +1,38 @@
+emulate -L zsh
+
+# Update zsh completion files for installed binaries
+#
+
+# 1Password
+if (( $+commands[op] )); then
+  op completion zsh > ${DOTFILES}/zsh/completions/_op
+fi
+
+# GitHub
+if (( $+commands[gh] )); then
+  gh completion -s zsh > ${DOTFILES}/zsh/completions/_gh
+fi
+
+# Pip 3
+if (( $+commands[pip3] )); then
+  pip3 completion --zsh > ${DOTFILES}/zsh/completions/_pip3
+  #compctl -K _pip_completion pip3
+fi
+
+# Node.js
+if (( $+commands[npm] )); then
+  npm completion > ${DOTFILES}/zsh/completions/_npm
+fi
+
+# Cue
+if (( $+commands[cue] )); then
+  cue completion zsh > ${DOTFILES}/zsh/completions/_cue
+fi
+
+# Kubernetes
+if (( $+commands[kubectl] )); then
+  kubectl completion zsh > ${DOTFILES}/zsh/completions/_kubectl
+fi
+
+echo "Updated zsh completions"
+echo "Reload session"

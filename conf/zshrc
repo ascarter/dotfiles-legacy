@@ -1,4 +1,4 @@
-fpath=(${DOTFILES}/zsh/completion ${DOTFILES}/zsh/function ${DOTFILES}/zsh/prompt $fpath)
+fpath=(${DOTFILES}/zsh/completions ${DOTFILES}/zsh/functions ${DOTFILES}/zsh/prompts $fpath)
 
 # Check for homebrew
 if [ -d ${HOMEBREW_PREFIX} ]; then
@@ -14,7 +14,7 @@ promptinit
 autoload -U colors
 colors
 
-autoload -U ${DOTFILES}/zsh/function/[^_]*(:t)
+autoload -U ${DOTFILES}/zsh/functions/[^_]*(:t)
 autoload add-zsh-hook
 
 # Support bash completions
@@ -65,12 +65,6 @@ export TEXEDIT='vim +%d %s'
 export PAGER=less
 export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit-at-eof -R"
 
-# 1Password
-if (( $+commands[op] )); then
-  eval "$(op completion zsh)"
-  compdef _op op
-fi
-
 # ========================================
 # Developer Tools
 # ========================================
@@ -90,10 +84,6 @@ elif [ -f /etc/bash_completion.d/azure-cli ]; then
   source /etc/bash_completion.d/azure-cli
 fi
 
-# GitHub
-if (( $+commands[gh] )); then
-  eval "$(gh completion -s zsh)"
-fi
 
 # Ruby
 if (( $+commands[ruby] )) && (( $+commands[gem] )); then
@@ -124,21 +114,9 @@ if [[ -d ${HOME}/.local/bin ]]; then
     path+=${HOME}/.local/bin
 fi
 
-# Pip 3
-if (( $+commands[pip3] )); then
-  source <(pip3 completion --zsh)
-  compctl -K _pip_completion pip3
-fi
-
 # Pipx
 if (( $+commands[pipx] )); then
   eval "$(register-python-argcomplete pipx)"
-fi
-
-
-# Node.js
-if (( $+commands[npm] )); then
-  source <(npm completion)
 fi
 
 # Go
@@ -200,11 +178,8 @@ if [[ -d ${HOME}/.cargo ]]; then
   source ${HOME}/.cargo/env
 fi
 
-# Kubernetes
-if (( $+commands[kubectl] )); then
-  source <(kubectl completion zsh)
-elif (( $+commands[microk8s.kubectl] )); then
-  source <(microk8s.kubectl completion zsh | sed 's/__start_kubectl kubectl/__start_kubectl microk8s.kubectl/g')
+# Kubernetes (microk8s)
+if (( $+commands[microk8s.kubectl] )); then
   compdef microk8s.kubectl=kubectl
 fi
 
