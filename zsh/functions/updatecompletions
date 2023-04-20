@@ -3,6 +3,8 @@ emulate -L zsh
 # Update zsh completion files for installed binaries
 #
 
+mkdir -p ${DOTFILES}/zsh/completions
+
 # 1Password
 if (( $+commands[op] )); then
   op completion zsh > ${DOTFILES}/zsh/completions/_op

@@ -1,4 +1,4 @@
-fpath=(${DOTFILES}/zsh/completions ${DOTFILES}/zsh/functions ${DOTFILES}/zsh/prompts $fpath)
+fpath=(${DOTFILES}/zsh/functions ${DOTFILES}/zsh/prompts ${DOTFILES}/zsh/completions $fpath)
 
 # Check for homebrew
 if [ -d ${HOMEBREW_PREFIX} ]; then
