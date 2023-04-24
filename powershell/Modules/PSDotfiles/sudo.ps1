@@ -45,7 +45,7 @@ function Invoke-Administrator {
         .EXAMPLE
             sudo Get-Item -Path $PROFILE.CurrentUserAllHosts
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     [Alias("sudo")]
     param (
         [Parameter()]

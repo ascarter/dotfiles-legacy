@@ -4,7 +4,7 @@
 .DESCRIPTION
 	Install user profile and configuration
 #>
-[CmdletBinding(SupportsShouldProcess)]
+[CmdletBinding()]
 param(
     # Dotfiles destination
     [string]$Path = (Join-Path -Path $env:USERPROFILE -ChildPath '.config\dotfiles'),

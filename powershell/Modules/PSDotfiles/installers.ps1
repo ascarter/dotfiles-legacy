@@ -5,7 +5,7 @@ function Install-Bootstrap {
         .SYNOPSIS
             Bootstrap PSDotfiles
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param (
         # dotfiles path
         [string]$Path = $Env:DOTFILES,
@@ -33,7 +33,7 @@ function Update-DevTools {
     .SYNOPSIS
         Update/install developer tools
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param(
         # Replace existing configuration
         [switch]$Force
@@ -91,7 +91,7 @@ function Install-WSLDotfiles {
       .SYNOPSIS
           Install dotfiles for WSL
   #>
-  [CmdletBinding(SupportsShouldProcess)]
+  [CmdletBinding()]
   param()
 
   if ((Test-Path $Env:DOTFILES)) {
@@ -162,7 +162,7 @@ function Get-WinGetLinks {
 #region Configuration
 
 function Install-Profile {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param (
         # Path of dotfiles
         [string]$Path = $Env:DOTFILES,
@@ -186,7 +186,7 @@ function Install-Profile {
 }
 
 function Install-Vimrc {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param (
         # Path of dotfiles
         [string]$Path = $Env:DOTFILES,
@@ -210,7 +210,7 @@ function Install-Vimrc {
 #region Powershell modules
 
 function Update-PowerShellModules {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param(
         # Replace existing modules
         [switch]$Force
@@ -289,7 +289,7 @@ function Install-SSH {
         .PARAMETER EnableAgent
             Enable SSH agent
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param(
         [switch]$EnableAgent
     )
@@ -346,7 +346,7 @@ function Add-SSHAuthorizedKeys {
         .PARAMETER Force
             Replace all existing authorized keys with the input list
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param(
         [string[]]$AuthorizedKeys = @(Get-SSHAgentKeys),
         [switch]$Force
@@ -392,7 +392,7 @@ function Install-Remoting {
         .SYNOPSIS
             Enable WS-Man remoting
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param()
 
     Assert-Administrator
@@ -406,7 +406,7 @@ function Enable-PowerShellSSHRemoting {
         .SYNOPSIS
             Enable SSH PowerShell remoting
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param()
 
     Assert-Administrator
@@ -459,7 +459,7 @@ function Install-Bin {
     .SYNOPSIS
         Create system root bin for adding tools (like /usr/local/bin on Unix)
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param()
 
     $usrbin = Join-Path -Path $Env:SystemDrive -ChildPath bin
@@ -481,7 +481,7 @@ function Install-CLI() {
     .PARAMETER Dest
         Directory to install to in Program Files
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param (
         [Parameter()]
         [string]$Uri,

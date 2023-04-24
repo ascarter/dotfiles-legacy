@@ -80,7 +80,7 @@ function Update-Owner {
     .SYNOPSIS
         Set owner and organization
     #>
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
     param(
         [string]$Owner = (Get-ItemProperty -Path $OwnerKey).RegisteredOwner,
         [string]$Organization = (Get-ItemProperty -Path $OwnerKey).RegisteredOrganization

@@ -4,7 +4,7 @@
 .DESCRIPTION
     Remove dotfiles configuration for current Windows user
 #>
-[CmdletBinding(SupportsShouldProcess)]
+[CmdletBinding()]
 param()
 
 Set-StrictMode -Version Latest
