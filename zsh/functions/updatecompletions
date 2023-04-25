@@ -26,6 +26,11 @@ if (( $+commands[npm] )); then
   npm completion > ${DOTFILES}/zsh/completions/_npm
 fi
 
+# Rustup
+if (( $+commands[rustup] )); then
+  rustup completions zsh > ${DOTFILES}/zsh/completions/_rustup
+fi
+
 # Cue
 if (( $+commands[cue] )); then
   cue completion zsh > ${DOTFILES}/zsh/completions/_cue
