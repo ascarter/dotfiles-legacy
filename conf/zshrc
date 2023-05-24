@@ -62,7 +62,7 @@ export LESSEDIT='vim ?lm+%lm. %f'
 export TEXEDIT='vim +%d %s'
 
 # less
-export PAGER=less
+export PAGER=less -r
 export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit-at-eof -R"
 
 # ========================================
