@@ -94,7 +94,7 @@ function Install-WSLDotfiles {
   [CmdletBinding()]
   param()
 
-  if ((Test-Path $Env:DOTFILES)) {
+  if (-not (Test-Path $Env:DOTFILES)) {
     throw 'dotfiles not installed'
   }
 

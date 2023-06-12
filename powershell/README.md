@@ -55,6 +55,22 @@ cd $env:USERPROFILE\.config\dotfiles
 PS> Update-DevTools
 ```
 
+## Enable WSL dotfiles
+
+The `dotfiles` enlistment can be shared with WSL so that only one copy is needed between Windows and WSL. This is useful for keeping only one Git enlistement in sync.
+
+```powershell
+PS> Install-WSLDotfiles
+```
+
+## Set Microsoft 365 Update Channel
+
+Enable Microsoft 365 Update channel:
+
+```powershell
+Set-M365UpdateChannel [[-Channel] {Current | MonthlyEnterprise | BetaChannel | CurrentPreview}]
+```
+
 ## Uninstall
 
 Run uninstall PowerShell script to remove links:
