@@ -41,5 +41,10 @@ if (( $+commands[kubectl] )); then
   kubectl completion zsh > ${DOTFILES}/zsh/completions/_kubectl
 fi
 
+# Glow
+if (( $+commands[glow] )); then
+  glow completion zsh > ${DOTFILES}/zsh/completions/_glow
+fi
+
 echo "Updated zsh completions"
 echo "Reload session"
