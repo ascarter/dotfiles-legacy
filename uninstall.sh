@@ -6,13 +6,13 @@
 #	uninstall [home] [dotfiles]
 #
 #	home   == home directory (default ${HOME})
-# 	target == destination for enlistment (default ~/.config/dotfiles)
+# target == destination for enlistment (default ~/.config/dotfiles)
 #
 
 set -ue
 
 HOMEDIR="${1:-${HOME}}"
-DOTFILES="${2:-${HOME}/.config/dotfiles}"
+DOTFILES="${2:-${DOTFILES:-${HOMEDIR}/.config/dotfiles}}"
 
 # Remove home directory symlinks
 conf_dir=${DOTFILES}/conf
