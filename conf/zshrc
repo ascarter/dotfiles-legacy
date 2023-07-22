@@ -84,7 +84,6 @@ elif [ -f /etc/bash_completion.d/azure-cli ]; then
   source /etc/bash_completion.d/azure-cli
 fi
 
-
 # Ruby
 if (( $+commands[ruby] )) && (( $+commands[gem] )); then
   path+=$(ruby -r rubygems -e 'puts Gem.user_dir')/bin
@@ -178,9 +177,11 @@ if [[ -d ${HOME}/.cargo ]]; then
   source ${HOME}/.cargo/env
 fi
 
-# Node.js
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# Node.js (Volta)
+export VOLTA_HOME=${HOME}/.volta
+if [[ -d ${VOLTA_HOME} ]]; then
+  path+=${VOLTA_HOME}/bin
+fi
 
 # Kubernetes (microk8s)
 if (( $+commands[microk8s.kubectl] )); then

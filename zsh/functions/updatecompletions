@@ -46,5 +46,10 @@ if (( $+commands[glow] )); then
   glow completion zsh > ${DOTFILES}/zsh/completions/_glow
 fi
 
+# Volta
+if (( $+commands[volta] )); then
+  volta completions -o ${DOTFILES}/zsh/completions/_volta zsh
+fi
+
 echo "Updated zsh completions"
 echo "Reload session"

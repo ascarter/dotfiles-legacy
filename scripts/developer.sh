@@ -114,22 +114,11 @@ Linux )
     fi
     sudo apt-get install -y gh
 
-    # NVM
-    # https://github.com/nvm-sh/nvm
-    if ! [ -d ~/.nvm ]; then
-      PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash'
+    # Volta
+    # https://volta.sh/
+    if ! [ -d ~/.volta ]; then
+      curl https://get.volta.sh | bash -s -- --skip-setup
     fi
-
-    # Node.js
-    # https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
-    # if ! check_apt_repo "https://deb.nodesource.com"; then
-    #   NODE_JS_VER=19
-    #   curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/nodesource-archive-keyring.gpg
-    #   echo "deb [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_${NODE_JS_VER}.x $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-    #   echo "deb-src [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_${NODE_JS_VER}.x $(lsb_release -cs) main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
-    #   sudo apt-get update
-    # fi
-    # sudo apt-get install -y nodejs
 
     # Go
     GO_VERSION=$(curl -fsSL "https://go.dev/dl/?mode=json" | jq --arg os $(uname -s | tr '[:upper:]' '[:lower:]') --arg arch $(dpkg --print-architecture) -r '[.[0].files[] | select(.os == $os and .arch == $arch)| .version] | unique | .[]')
