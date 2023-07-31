@@ -13,9 +13,6 @@ EOH
 }
 
 prompt_vcs_setup () {
-  PROMPT='
-%B%n@%m%b:%3~
-%# '
   PROMPT4='+%N:%i:%_>'
   prompt_opts=( cr percent subst )
 
@@ -73,6 +70,12 @@ prompt_vcs_setup () {
       "false")
         PROMPT='
 %B%n@%m%b:%3~% %B [$(git rev-parse --verify HEAD) $(git rev-parse --abbrev-ref HEAD)]%b
+%# '
+        ;;
+      *)
+        # not a git repo - use default prompt
+        PROMPT='
+%B%n@%m%b:%3~
 %# '
         ;;
       esac
