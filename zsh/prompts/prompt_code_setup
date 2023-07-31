@@ -1,0 +1,65 @@
+# code zsh prompt theme
+# Andrew Carter <ascarter@uw.edu>
+#
+# Coding minimal vcs prompt
+#
+
+prompt_code_help () {
+  cat <<'EOH'
+
+Coding prompt with minimal vcs info
+
+EOH
+}
+
+prompt_code_setup () {
+  # zsh colors %F{<color>} and %f:
+  # 0   Black
+  # 1   Red
+  # 2   Green
+  # 3   Yellow
+  # 4   Blue
+  # 5   Magenta
+  # 6   Cyan
+  # 7   White
+  # 8   Bright Black
+  # 9   Bright Red
+  # 10  Bright Green
+  # 11  Bright Yellow
+  # 12  Bright Blue
+  # 13  Bright Magenta
+  # 14  Bright Cyan
+  # 15  Bright White
+  PROMPT='%F{2}%B%n@%m%b%f ➜ %F{4}%B%~%b%f${vcs_info_msg_0_} %# '
+  PROMPT4='+%N:%i:%_>'
+  prompt_opts=( cr percent subst sp )
+
+  if [[ $(whence -w 'vcs_info' | cut -d ':' -f 2 | xargs) == function ]]; then
+    zstyle ':vcs_info:*' enable git
+    # zstyle ':vcs_info:git:*' check-for-changes true
+    # zstyle ':vcs_info:*' stagedstr ' x'
+    # zstyle ':vcs_info:*' unstagedstr ' x'
+    zstyle ':vcs_info:git*' formats " %F{6}(%f%F{1}%b%f%F{3}%u%c%f%F{6})%f"
+    zstyle ':vcs_info:git*' actionformats " %F{6}(%f%F{1}%b%f%F{3}%u%c%f%F{6} %F{9}%B%a%b%f)%f"
+
+    # Flag untracked files
+    zstyle ':vcs_info:git*+set-message:*' hooks git-st
+    +vi-git-st() {
+      if $(git --no-optional-locks ls-files --error-unmatch -m --directory --no-empty-directory -o --exclude-standard ":/*" > /dev/null 2>&1); then
+        hook_com[unstaged]=' x'
+      fi
+    }
+
+    # Uncomment to show debug information for vcs_info
+    # zstyle ':vcs_info:*+*:*' debug true
+
+    precmd() {
+      vcs_info
+
+      # Update terminal title
+      case $(uname) in (Linux) print -Pn "\e]0;%n@%m: %1~\a"; esac
+    }
+  fi
+}
+
+prompt_code_setup "$@"

@@ -30,7 +30,7 @@ autoload -Uz vcs_info
 
 # Default: PS1="%m%# "
 declare +x PS1
-prompt vcs
+prompt code
 
 # ========================================
 # Shell preferences
