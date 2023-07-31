@@ -36,22 +36,25 @@ prompt_code_setup () {
 
   if [[ $(whence -w 'vcs_info' | cut -d ':' -f 2 | xargs) == function ]]; then
     zstyle ':vcs_info:*' enable git
-    # zstyle ':vcs_info:git:*' check-for-changes true
-    # zstyle ':vcs_info:*' stagedstr ' x'
-    # zstyle ':vcs_info:*' unstagedstr ' x'
-    zstyle ':vcs_info:git*' formats " %F{6}(%f%F{1}%b%f%F{3}%u%c%f%F{6})%f"
-    zstyle ':vcs_info:git*' actionformats " %F{6}(%f%F{1}%b%f%F{3}%u%c%f%F{6} %F{9}%B%a%b%f)%f"
-
-    # Flag untracked files
-    zstyle ':vcs_info:git*+set-message:*' hooks git-st
-    +vi-git-st() {
-      if $(git --no-optional-locks ls-files --error-unmatch -m --directory --no-empty-directory -o --exclude-standard ":/*" > /dev/null 2>&1); then
-        hook_com[unstaged]=' x'
-      fi
-    }
-
+    zstyle ':vcs_info:git:*' check-for-changes true
+    zstyle ':vcs_info:*' stagedstr '+'
+    zstyle ':vcs_info:*' unstagedstr 'x'
+    zstyle ':vcs_info:git*' formats " %F{6}(%f%F{1}%b%f%F{3}%m%c%u%f%F{6})%f"
+    zstyle ':vcs_info:git*' actionformats " %F{6}(%f%F{1}%b%f%F{3}%m%c%u%f%F{6} %F{9}%B%a%b%f)%f"
     # Uncomment to show debug information for vcs_info
     # zstyle ':vcs_info:*+*:*' debug true
+
+    # Check for untracked files.
+    zstyle ':vcs_info:git*+set-message:*' hooks git-st
+    +vi-git-st() {
+      if $(git --no-optional-locks ls-files --error-unmatch --directory --no-empty-directory -o --exclude-standard ":/*" > /dev/null 2>&1); then
+        hook_com[unstaged]+='?'
+      fi
+
+      if [ -n ${hook_com[unstaged]} ] || [ -n ${hook_com[staged]} ]; then
+        hook_com[misc]=' '
+      fi
+    }
 
     precmd() {
       vcs_info
