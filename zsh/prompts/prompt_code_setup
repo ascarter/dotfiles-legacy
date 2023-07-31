@@ -39,8 +39,9 @@ prompt_code_setup () {
     zstyle ':vcs_info:git:*' check-for-changes true
     zstyle ':vcs_info:*' stagedstr '+'
     zstyle ':vcs_info:*' unstagedstr 'x'
+    zstyle ':vcs_info:*' miscstr ''
     zstyle ':vcs_info:git*' formats " %F{6}(%f%F{1}%b%f%F{3}%m%c%u%f%F{6})%f"
-    zstyle ':vcs_info:git*' actionformats " %F{6}(%f%F{1}%b%f%F{3}%m%c%u%f%F{6} %F{9}%B%a%b%f)%f"
+    zstyle ':vcs_info:git*' actionformats " %F{6}(%f%F{1}%b%f%F{3}%m%c%u%f%F{6}|%F{9}%B%a%b%f)%f"
     # Uncomment to show debug information for vcs_info
     # zstyle ':vcs_info:*+*:*' debug true
 
@@ -51,7 +52,9 @@ prompt_code_setup () {
         hook_com[unstaged]+='?'
       fi
 
-      if [ -n ${hook_com[unstaged]} ] || [ -n ${hook_com[staged]} ]; then
+      if [ -z ${hook_com[unstaged]} ] && [ -z ${hook_com[staged]} ]; then
+        hook_com[misc]=''
+      else
         hook_com[misc]=' '
       fi
     }
