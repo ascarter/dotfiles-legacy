@@ -34,6 +34,7 @@ endif
 " Plugins
 Plug 'editorconfig/editorconfig-vim'
 Plug 'fatih/vim-go'
+Plug 'github/copilot.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'lifepillar/pgsql.vim'
 Plug 'lifepillar/vim-colortemplate'
@@ -103,8 +104,8 @@ try
     "hi Underlined   guifg=NONE     guibg=NONE  gui=underline    ctermfg=NONE  ctermbg=NONE  cterm=underline
     "hi Title        guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
 
-    "colorscheme quiet
-    colorscheme dichromatic
+    colorscheme quiet
+    "colorscheme dichromatic
     "colorscheme rain
     let g:lightline = { 'colorscheme': 'PaperColor' }
 catch
