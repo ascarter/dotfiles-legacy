@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Install developer tools
+# Install developer environment
 #
 # Usage:
 #    developer.sh [-f]
@@ -23,16 +23,6 @@ check_apt_repo() {
   [ -z "${force_reinstall}" ] && apt-cache policy | grep ${1} > /dev/null
 }
 
-install_rust() {
-  # Rust
-  if [ -x "$(command -v rustup)" ]; then
-    echo "Updating rust"
-    rustup update
-  else
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
-  fi
-}
-
 case "$(uname)" in
 Darwin )
   echo "Installing $(sw_vers -productName) $(sw_vers -productVersion) tools"
@@ -42,9 +32,6 @@ Darwin )
   if ! brew bundle -q --global check; then
     brew bundle --global install
   fi
-
-  # Rust
-  install_rust
 
   # Enable PostgreSQL CLI
   if [ -d /Applications/Postgres.app ] && ! [ -f /etc/paths.d/postgresapp ]; then
@@ -69,34 +56,28 @@ Linux )
                 ca-certificates \
                 curl \
                 dirmngr \
+                duf \
+                exa \
                 g++ \
                 gcc \
                 git \
                 gitg \
                 gnupg \
                 gnupg-agent \
+                groff \
                 htop \
                 jq \
                 make \
+                mc \
+                neofetch \
                 pass \
-                python3 \
-                python3-dev \
-                python3-pip \
-                socat
+                tmux \
+                vim-gtk3
 
     # Microsoft GPG key
     if ! [ -f /usr/share/keyrings/microsoft-archive-keyring.gpg ]; then
       curl https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg
     fi
-
-    # Microsoft package repo
-    # https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software
-    #if ! check_apt_repo "https://packages.microsoft.com/ubuntu"; then
-    #  echo "deb [arch=amd64,armhf,arm64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/ubuntu/20.04/prod focal main" | sudo tee /etc/apt/sources.list.d/microsoft-prod.list
-    #  sudo apt-get update
-    #fi
-    # sudo apt-get install -y dotnet-sdk-6.0 powershell
-    # sudo apt-get install -y msopenjdk-17
 
     # Azure CLI
     if ! check_apt_repo "https://packages.microsoft.com/repos/azure-cli"; then
@@ -114,34 +95,19 @@ Linux )
     fi
     sudo apt-get install -y gh
 
-    # Volta
-    # https://volta.sh/
-    if ! [ -d ~/.volta ]; then
-      curl https://get.volta.sh | bash -s -- --skip-setup
+    # Speedtest
+    # https://www.speedtest.net/apps/cli
+    if ! check_apt_repo "https://packagecloud.io/ookla/speedtest"; then
+      curl -fsSL https://packagecloud.io/ookla/speedtest-cli/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg
+      echo "deb [signed-by=/usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg] https://packagecloud.io/ookla/speedtest-cli/ubuntu/ jammy main" | sudo tee /etc/apt/sources.list.d/ookla_speedtest-cli.list
+      echo "deb-src [signed-by=/usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg] https://packagecloud.io/ookla/speedtest-cli/ubuntu/ jammy main" | sudo tee -a /etc/apt/sources.list.d/ookla_speedtest-cli.list
+      sudo apt-get update
     fi
-
-    # Go
-    GO_VERSION=$(curl -fsSL "https://go.dev/dl/?mode=json" | jq --arg os $(uname -s | tr '[:upper:]' '[:lower:]') --arg arch $(dpkg --print-architecture) -r '[.[0].files[] | select(.os == $os and .arch == $arch)| .version] | unique | .[]')
-    if [ -d /usr/local/go ] && [ "$(/usr/local/go/bin/go version | cut -f3 -d' ')" != "${GO_VERSION}" ]; then
-      echo Removing $(/usr/local/go/bin/go version) ...
-      sudo rm -Rf /usr/local/go
-    fi
-
-    if ! [ -d /usr/local/go ]; then
-      echo Install Go ${GO_VERSION}...
-      curl -fsSL https://golang.org/dl/${GO_VERSION}.linux-$(dpkg --print-architecture).tar.gz | sudo tar -C /usr/local -xz
-      /usr/local/go/bin/go version
-    fi
-
-    # Rust
-    install_rust
+    sudo apt-get install -y speedtest
 
     # Check if running under WSL
     if (grep -iq WSL2 /proc/version); then
-      # Microsoft Visual Studio Code CLI
-      VSCODE_CLI_OS=$(dpkg --print-architecture)
-      [ $VSCODE_CLI_OS=amd64 ] && VSCODE_CLI_OS=x64
-      curl -fsSL "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-${VSCODE_CLI_OS}" | sudo tar -C /usr/local/bin -xz
+        sudo apt-get install -y socat
     else
       # Install Git Credential Manager
       GCM_VERSION=$(curl -s https://api.github.com/repos/GitCredentialManager/git-credential-manager/releases/latest | jq -r '.tag_name' | sed 's/v//')
@@ -180,14 +146,6 @@ Linux )
         sudo apt-get update
       fi
       sudo apt-get install -y github-desktop
-
-      # Kubernetes
-      # if ! check_apt_repo "https://apt.kubernetes.io"; then
-      #   sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-      #   echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-      #   sudo apt-get update
-      # fi
-      # sudo apt-get install -y kubectl
     fi
     ;;
   esac
