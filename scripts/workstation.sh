@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Install developer tools
+# Install workstation tools
+# Recommend running developer.sh first
 
 check_apt_repo() {
   apt-cache policy | grep ${1} > /dev/null
@@ -41,18 +42,14 @@ Linux )
                 dirmngr \
                 duf \
                 exa \
-                ffmpeg \
                 gnupg \
                 gnupg-agent \
                 groff \
-                imagemagick \
                 libsecret-tools \
                 mc \
                 neofetch \
                 software-properties-common \
                 tmux \
-                ubuntu-restricted-extras \
-                ubuntu-restricted-addons \
                 vim-gtk3 \
                 xsel
 
@@ -60,16 +57,6 @@ Linux )
     if ! [ -f /usr/share/keyrings/microsoft-archive-keyring.gpg ]; then
       curl https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg
     fi
-
-    # Speedtest
-    # https://www.speedtest.net/apps/cli
-    if ! check_apt_repo "https://packagecloud.io/ookla/speedtest"; then
-      curl -fsSL https://packagecloud.io/ookla/speedtest-cli/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg
-      echo "deb [signed-by=/usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg] https://packagecloud.io/ookla/speedtest-cli/ubuntu/ jammy main" | sudo tee /etc/apt/sources.list.d/ookla_speedtest-cli.list
-      echo "deb-src [signed-by=/usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg] https://packagecloud.io/ookla/speedtest-cli/ubuntu/ jammy main" | sudo tee -a /etc/apt/sources.list.d/ookla_speedtest-cli.list
-      sudo apt-get update
-    fi
-    sudo apt-get install -y speedtest
 
     # Desktop Ubuntu (not WSL)
     if ! (grep -iq WSL2 /proc/version); then
@@ -118,14 +105,6 @@ Linux )
         sudo apt-get update
       fi
       sudo apt-get install -y 1password 1password-cli
-
-      # Sublime Text
-      if ! check_apt_repo "https://download.sublimetext.com"; then
-        curl -fsSL https://download.sublimetext.com/sublimehq-pub.gpg | sudo gpg --dearmor --output /usr/share/keyrings/sublime-text-archive-keyring.gpg
-        echo "deb [signed-by=/usr/share/keyrings/sublime-text-archive-keyring.gpg] https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
-        sudo apt-get update
-      fi
-      sudo apt-get install sublime-text sublime-merge
 
       # Signal
       if ! check_apt_repo "https://updates.signal.org"; then
