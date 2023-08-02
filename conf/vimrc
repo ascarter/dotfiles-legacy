@@ -367,10 +367,9 @@ if has("gui_running")
     elseif has('gui_gtk2') || has('gui_gtk3')
         " Linux
         set guifont=Monospace\ 11
-
     elseif has('gui_win32')
         " Windows
-        set guifont=Cascadia\ Code:h10,IBM\ Flex\ Mono:h10,Fira\ Code:h10,Roboto\ Mono:h10,Source\ Code\ Pro:h10,Consolas:h10
+        set guifont=IBM\ Flex\ Mono:h13,Source\ Code\ Pro:h13,Cascadia\ Code:h13,Consolas:h13
         set renderoptions=type:directx
     endif
 endif
