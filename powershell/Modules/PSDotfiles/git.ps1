@@ -15,7 +15,7 @@ function Read-GitConfig {
     $default = Get-GitConfig -Key $Key
     $msg = if ($null -eq $default) { $Prompt } else { "$Prompt (default $default)" }
     $value = Read-Host -Prompt $msg
-    if ($null -eq $value) { $value = $default }
+    if (!$value) { $value = $default }
     Set-GitConfig -Key $Key -Value $value
 }
 
