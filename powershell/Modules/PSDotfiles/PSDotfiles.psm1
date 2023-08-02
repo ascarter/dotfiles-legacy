@@ -25,8 +25,9 @@ if (Get-Module -Name posh-git -ListAvailable) {
         $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
         $principal = [Security.Principal.WindowsPrincipal] $identity
 
-        $GitPromptSettings.DefaultPromptPrefix.Text = "`n[$Env:COMPUTERNAME] "
-        $GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n' + $(
+        $GitPromptSettings.DefaultPromptAbbreviateHomeDirectory = $true
+        $GitPromptSettings.DefaultPromptPrefix.Text = "$Env:COMPUTERNAME ➜ "
+        $GitPromptSettings.DefaultPromptBeforeSuffix.Text = $(
             if (Test-Path variable:/PSDebugContext) {
                 Write-Prompt '[DBG]: ' -ForegroundColor Red
             }
@@ -34,7 +35,9 @@ if (Get-Module -Name posh-git -ListAvailable) {
                 Write-Prompt '[ADMIN]: ' -ForegroundColor Magenta
             }
         )
-        $GitPromptSettings.DefaultPromptSuffix.Text = 'PS > '
+        $GitPromptSettings.BeforeStatus.Text = '('
+        $GitPromptSettings.AfterStatus.Text = ')'
+        $GitPromptSettings.DefaultPromptSuffix.Text = ' > '
         $prompt = & $GitPromptScriptBlock
         if ($prompt) { $prompt } else { ' ' }
     }

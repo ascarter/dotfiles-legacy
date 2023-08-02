@@ -50,8 +50,18 @@ function Update-DevTools {
     Update-PowerShellModules -Force:$Force
 
     # Install developer tools
-    # winget install --id GoLang.Go.1.19 --interactive
-    # go install github.com/jstarks/npiperelay@latest
+    winget install --id AgileBits.1Password.CLI
+    winget install --id Docker.DockerDesktop --interactive
+    winget install --id GitHub.cli
+    winget install --id GitHub.GitHubDesktop --interactive
+    winget install --id jstarks.npiperelay
+    winget install --id Microsoft.PowerToys
+    winget install --id Microsoft.VisualStudioCode --interactive
+    winget install --id Neovim.Neovim --interactive
+    winget install --id Ookla.Speedtest.CLI
+    winget install --id Ookla.Speedtest.DockerDesktop
+    winget install --id Tailscale.Tailscale
+    winget install --id vim.vim --interactive
 
     Write-Output 'Recommend reboot to enable all services'
 }
@@ -84,23 +94,6 @@ function Enable-WSL {
     Write-Output 'Enable WSL'
     wsl --update
     wsl --install --distribution Ubuntu
-}
-
-function Install-WSLDotfiles {
-  <#
-      .SYNOPSIS
-          Install dotfiles for WSL
-  #>
-  [CmdletBinding()]
-  param()
-
-  if (-not (Test-Path $Env:DOTFILES)) {
-    throw 'dotfiles not installed'
-  }
-
-  # Share Windows dotfiles with WSL
-  Write-Output 'Sharing dotfiles with WSL'
-  wsl.exe -- `$DOTFILES/install.sh
 }
 
 #endregion

@@ -35,6 +35,7 @@ function Set-GitConfig {
 
     git config --global $Key $Value | Out-Null
 }
+
 function Update-GitConfig {
     param (
         [string]$Key,
@@ -47,6 +48,7 @@ function Update-GitConfig {
 
 function Write-GitConfig {
     [CmdletBinding()]
+    [Alias("gitconfig")]
     param()
 
     # Include defaults and aliases
