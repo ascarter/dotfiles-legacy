@@ -1,0 +1,46 @@
+#!/bin/sh
+
+OBSIDIAN_ROOT=${OBSIDIAN_ROOT:-${HOME}/Library/Mobile\ Documents/iCloud\~md\~obsidian/Documents}
+
+while getopts "c" flag
+do
+  case $flag in
+  c)
+    use_vscode=1;;
+  ?)
+    printf "Usage: %s: [-c] (vault) (file)\n" $0
+    exit 2;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+VAULT=${1}
+FILE=${2}
+
+if [ -z ${use_vscode} ]; then
+  URI="obsidian://open"
+  if [ -n "${VAULT}" ]; then
+    # Compose URI
+    URI="${URI}?vault=${VAULT}"
+    if [ -n "${FILE}" ]; then
+      URI="${URI}&file=${FILE}"
+    fi
+  fi
+
+  # Open osidian
+  echo ${URI}
+  open "${URI}"
+else
+  # Open Obsidian in VSCode
+  args="--new-window"
+  vault="${OBSIDIAN_ROOT}"
+  if [ -n "${VAULT}" ]; then
+    vault="${vault}/${VAULT}"
+  fi
+  # if [ -n "${FILE}" ]; then
+  #   file="${vault}/${FILE}.md"
+  #   args="${args} --goto ${file}"
+  # fi
+  code ${args} "${vault}"
+fi
