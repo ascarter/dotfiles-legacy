@@ -30,7 +30,11 @@ prompt_code_setup () {
   # 13  Bright Magenta
   # 14  Bright Cyan
   # 15  Bright White
-  PROMPT='%F{2}%B%n@%m%b%f ➜ %F{4}%B%~%b%f${vcs_info_msg_0_} %# '
+  SEPARATOR=" - "
+  if [[ "$TERM" = "xterm-256color" ]]; then
+    SEPARATOR=" ➜ "
+  fi
+  PROMPT='%F{2}%B%n@%m%b%f${SEPARATOR}%F{4}%B%~%b%f${vcs_info_msg_0_} %# '
   PROMPT4='+%N:%i:%_>'
   prompt_opts=( cr percent subst sp )
 

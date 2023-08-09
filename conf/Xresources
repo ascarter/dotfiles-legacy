@@ -1,8 +1,8 @@
-Xft.dpi: 110
+Xft.dpi: 130
 Xft.antialias: true
 
 XTerm.*.faceName: IBM Plex Mono
-XTerm.*.faceSize: 9
+XTerm.*.faceSize: 12
 Xterm.*.geometry: 80x24
 
 XClock*foreground:        #FFFFFF
@@ -16,31 +16,62 @@ XClock.Clock.minuteColor: #999999
 XClock.Clock.secondColor: #FC2125
 !XClock*geometry:          210x210+1020+12
 
-*.foreground:   #EDEDEF
-*.background:   #262626
-*.cursorColor:  #7F7F7F
+! Default colors
+!*.foreground:   #EDEDEF
+!*.background:   #262626
+!*.cursorColor:  #7F7F7F
 
 ! black
-*.color0:       #000000
-*.color8:       #666666
+!*.color0:       #000000
+!*.color8:       #666666
 ! red
-*.color1:       #CC0000
-*.color9:       #FF0000
+!*.color1:       #CC0000
+!*.color9:       #FF0000
 ! green
-*.color2:       #00CC00
-*.color10:      #00FF00
+!*.color2:       #00CC00
+!*.color10:      #00FF00
 ! yellow
-*.color3:       #CCFF66
-*.color11:      #E5E500
+!*.color3:       #CCFF66
+!*.color11:      #E5E500
 ! blue
-*.color4:       #6666FF
-*.color12:      #0000FF
+!*.color4:       #6666FF
+!*.color12:      #0000FF
 ! magenta
-*.color5:       #FF66CC
-*.color13:      #E500E5
+!*.color5:       #FF66CC
+!*.color13:      #E500E5
 ! cyan
-*.color6:       #339999
-*.color14:      #00E5E5
+!*.color6:       #339999
+!*.color14:      #00E5E5
 ! white
-*.color7:       #BFBFBF
-*.color15:      #E5E5E5
+!*.color7:       #BFBFBF
+!*.color15:      #E5E5E5
+
+! Git Hub Dimmed colors
+*.foreground:   #ADBAC7
+*.background:   #22262C
+*.cursorColor:  #FFFFFF
+
+! black
+*.color0:       #22272E
+*.color8:       #2D333B
+! red
+*.color1:       #F47067
+*.color9:       #FF938A
+! green
+*.color2:       #57AB5A
+*.color10:      #6BC46D
+! yellow
+*.color3:       #C69026
+*.color11:      #DAAA3F
+! blue
+*.color4:       #539BF5
+*.color12:      #6CB6FF
+! magenta
+*.color5:       #B083F0
+*.color13:      #DCBDFB
+! cyan
+*.color6:       #76E3EA
+*.color14:      #B3F0FF
+! white
+*.color7:       #909DAB
+*.color15:      #909DAB
