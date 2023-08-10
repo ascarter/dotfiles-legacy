@@ -1,50 +1,54 @@
 # git zsh prompt theme
 # Andrew Carter <ascarter@uw.edu>
 #
-# Two-line git prompt
+# Git prompt
 #
 
 prompt_git_help () {
     cat <<'EOH'
-
-Two-line prompt with git info using __git_ps1
-
+Prompt with git info using __git_ps1
 EOH
 }
 
 prompt_git_setup () {
+    zparseopts -D -E -F -dirty=dirty -stashed=stashed -upstream=upstream -untracked=untracked
+
+    # Clear out any existing git prompt options
+    unset GIT_PS1_SHOWDIRTYSTATE
+    unset GIT_PS1_SHOWSTASHSTATE
+    unset GIT_PS1_SHOWUNTRACKEDFILES
+    unset GIT_PS1_SHOWUPSTREAM
+    unset GIT_PS1_COMPRESSSPARSESTATE
+    unset GIT_PS1_SHOWCONFLICTSTATE
+    unset GIT_PS1_SHOWCOLORHINTS
+
     # Load git prompt
-    case $(uname) in
-    Darwin )
-        if [[ -d /Library/Developer/CommandLineTools ]]; then
-            source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
-        fi
-        ;;
-    esac
+    source ${DOTFILES}/etc/git/git-prompt.sh
 
     # Set Git PS conditions
-    export GIT_PS1_SHOWDIRTYSTATE=1
-    export GIT_PS1_SHOWSTASHSTATE=1
-    export GIT_PS1_SHOWUNTRACKEDFILES=1
-    export GIT_PS1_SHOWUPSTREAM="auto"
+    [[ -n ${dirty} ]] && export GIT_PS1_SHOWDIRTYSTATE="true"
+    [[ -n ${stashed} ]] && export GIT_PS1_SHOWSTASHSTATE="true"
+    [[ -n ${untracked} ]] && export GIT_PS1_SHOWUNTRACKEDFILES="true"
+    [[ -n ${upstream} ]] && export GIT_PS1_SHOWUPSTREAM="auto"
+    export GIT_PS1_COMPRESSSPARSESTATE="true"
+    export GIT_PS1_SHOWCONFLICTSTATE="yes"
     case "${TERM}" in
     xterm-256color|xterm-color|dtterm|linux)
-        export GIT_PS1_SHOWCOLORHINTS=1
+        export GIT_PS1_SHOWCOLORHINTS="true"
         ;;
     esac
+    if [[ "$TERM" = "xterm-256color" ]]; then
+      SEPARATOR=" ➜ "
+    else
+      SEPARATOR=" | "
+    fi
 
-    PROMPT='
-%B%n@%m%b:%3~
-%# '
+    PROMPT="%F{2}%B%n@%m%b%f${SEPARATOR}%F{4}%B%~%b%f %# "
     PROMPT4='+%N:%i:%_>'
-    prompt_opts=( cr percent subst )
+    prompt_opts=( cr percent subst sp )
 
     if [[ $(whence -w '__git_ps1' | cut -d ':' -f 2 | xargs) == function ]]; then
-        precmd() {
-            __git_ps1 "
-%B%n@%m%b:%3~% %B" "%b
-%# " " [%s]"
-        }
+        precmd() { __git_ps1 "%F{2}%B%n@%m%b%f${SEPARATOR}%F{4}%B%~%b%f%F{6}" "%f %# " " (%s)" }
     fi
 }
 
