@@ -2,7 +2,7 @@ Xft.dpi: 130
 Xft.antialias: true
 
 XTerm.*.faceName: IBM Plex Mono
-XTerm.*.faceSize: 12
+XTerm.*.faceSize: 9
 Xterm.*.geometry: 80x24
 
 XClock*foreground:        #FFFFFF
