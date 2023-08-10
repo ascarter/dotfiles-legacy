@@ -25,7 +25,7 @@ The following are the minimum requirements for dotfiles to work:
 
 On macOS, [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) is expected to be installed and configured.
 
-On Windows, PowerShell 7.0+ is expected.
+On Windows, PowerShell 7.0+ is required.
 
 # Install
 
