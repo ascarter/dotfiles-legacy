@@ -80,7 +80,7 @@ prompt_code_setup () {
     }
 
     +vi-dirty() {
-      if [[ -n hook_com[staged] || -n hook_com[unstaged] ]]; then
+      if [[ -n $hook_com[staged] || -n $hook_com[unstaged] ]]; then
         hook_com[staged]=$GIT_DIRTY
         hook_com[unstaged]=""
       fi
