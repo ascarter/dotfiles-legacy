@@ -18,17 +18,17 @@ runtime macros/matchit.vim
 
 " Enable vim-plug
 if has("win32")
-    if empty(glob('~\vimfiles\autoload\plug.vim'))
-        silent !curl -fLo \%USERPROFILE\%\\vimfiles\\autoload\\plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-    endif
-    call plug#begin('~/vimfiles/bundle')
+  if empty(glob('~\vimfiles\autoload\plug.vim'))
+    silent !curl -fLo \%USERPROFILE\%\\vimfiles\\autoload\\plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  endif
+  call plug#begin('~/vimfiles/bundle')
 else
-    if empty(glob('~/.vim/autoload/plug.vim'))
-        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-    endif
-    call plug#begin('~/.vim/bundle')
+  if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  endif
+  call plug#begin('~/.vim/bundle')
 endif
 
 " Plugins
@@ -38,6 +38,7 @@ Plug 'github/copilot.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'lifepillar/pgsql.vim'
 Plug 'lifepillar/vim-colortemplate'
+Plug 'mhinz/vim-signify'
 Plug 'rust-lang/rust.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
@@ -53,6 +54,7 @@ Plug 'ascarter/vim-rain'
 Plug 'cocopon/iceberg.vim'
 Plug 'haishanh/night-owl.vim'
 Plug 'Lokaltog/vim-monotone'
+Plug 'lunacookies/vim-colors-xcode'
 Plug 'macguirerintoul/night_owl_light.vim'
 Plug 'romainl/Apprentice'
 Plug 'romainl/vim-dichromatic'
@@ -70,47 +72,35 @@ command! PU PlugUpdate | PlugUpgrade
 
 " Color scheme
 if has("termguicolors")
-    " Windows 10 terminal
-    if has("vcon")
-        set termguicolors
-    endif
+  " Windows 10 terminal
+  if has("vcon")
+    set termguicolors
+  endif
 endif
 
 set background=dark
 try
-    "let g:lightline = { 'colorscheme': 'PaperColor' }
-    "let g:monotone_contrast_factor=0.9
-    "colorscheme monotone
-
-
-    "colorscheme iceberg
-    "let g:lightline = { 'colorscheme': 'iceberg' }
-
-    "colorscheme nord
-    "let g:nord_bold_vertical_split_line = 1
-    "let g:nord_italic = 1
-    "let g:nord_italic_comments = 1
-    "let g:lightline = { 'colorscheme': 'nord' }
-
-    " Customize monotone
-    "hi Normal       guibg=#22272e  ctermbg=None
-    "hi Function     guifg=NONE     guibg=NONE  gui=bold,italic  ctermfg=NONE  ctermbg=NONE  cterm=bold,italic
-    "hi Identifier   guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
-    "hi Include      guifg=NONE     guibg=NONE  gui=italic       ctermfg=NONE  ctermbg=NONE  cterm=italic
-    "hi Keyword      guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-    "hi Question     guifg=NONE     guibg=NONE  gui=NONE         ctermfg=NONE  ctermbg=NONE  cterm=NONE
-    "hi Statement    guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-    "hi Type         guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-    "hi Underlined   guifg=NONE     guibg=NONE  gui=underline    ctermfg=NONE  ctermbg=NONE  cterm=underline
-    "hi Title        guifg=NONE     guibg=NONE  gui=bold         ctermfg=NONE  ctermbg=NONE  cterm=bold
-
-    colorscheme quiet
-    "colorscheme dichromatic
-    "colorscheme rain
-    let g:lightline = { 'colorscheme': 'PaperColor' }
+  colorscheme xcode
 catch
-    colorscheme default
+  colorscheme default
 endtry
+
+" Signify configuration - similar to Xcode
+let g:signify_sign_add    = '┃'
+let g:signify_sign_change = '┃'
+let g:signify_sign_delete = '•'
+let g:signify_sign_show_count = 0
+set updatetime=100
+
+autocmd User SignifyHunk call s:show_current_hunk()
+
+function! s:show_current_hunk() abort
+  let h = sy#util#get_hunk_stats()
+  if !empty(h)
+    echo printf('[Hunk %d/%d]', h.current_hunk, h.total_hunks)
+  endif
+endfunction
+
 
 " Flash screen only - no beep
 set visualbell
@@ -134,16 +124,29 @@ set fillchars=vert:\ ,fold:-
 
 " Enable italics in macos terminal
 if has('macunix')
-    let &t_ZH="\e[3m"
-    let &t_ZR="\e[23m"
+  let &t_ZH="\e[3m"
+  let &t_ZR="\e[23m"
 endif
 
 " Status line
 if has('statusline')
-    " Mode is shown by lightline
-    set noshowmode
-    set laststatus=2
-    " set statusline=%<%f%{tagbar#currenttag('[%s]\ ','')}\ %w%h%m%r%=%-14.(%l,%c%V%)\ %P
+  " Mode is shown by lightline
+  set noshowmode
+  set laststatus=2
+  " set statusline=%<%f%{tagbar#currenttag('[%s]\ ','')}\ %w%h%m%r%=%-14.(%l,%c%V%)\ %P
+
+  " Lightline
+  let g:lightline = {
+        \ 'active': {
+        \ 'left': [ [ 'mode', 'paste' ],
+        \    [ 'gitbranch', 'readonly', 'filename', 'modified', 'sy' ] ]
+        \ },
+        \ 'component_function': {
+        \   'gitbranch': 'FugitiveHead',
+        \   'sy': 'sy#repo#get_stats_decorated'
+        \ }
+        \ }
+
 endif
 
 set hidden
@@ -215,13 +218,13 @@ let g:go_fmt_command = "gofmt"
 
 " Test if running in WSL
 function! IsWSL()
-    if has("unix") || has("linux")
-        let lines = readfile("/proc/version")
-        if lines[0] =~ "Microsoft"
-            return 1
-        endif
+  if has("unix") || has("linux")
+    let lines = readfile("/proc/version")
+    if lines[0] =~ "Microsoft"
+      return 1
     endif
-    return 0
+  endif
+  return 0
 endfunction
 
 " =====================================
@@ -230,147 +233,152 @@ endfunction
 
 " Adapted from mswin.vim to make Vim work more like a standard application
 if has("unix") || has("linux")
-    if has("clipboard")
-        " Cut ctrl+x
-        vnoremap <C-X> "+x
+  if has("clipboard")
+    " Cut ctrl+x
+    vnoremap <C-X> "+x
 
-        " Copy ctrl+c
-        vnoremap <C-C> "+y
+    " Copy ctrl+c
+    vnoremap <C-C> "+y
 
-        " Past ctrl+v
-        map  <C-V> "+gP
-        cmap <C-V> <C-R>+
+    " Past ctrl+v
+    map  <C-V> "+gP
+    cmap <C-V> <C-R>+
 
-        "vmap <C-c> "+yi
-        "vmap <C-x> "+c
-        "vmap <C-v> "+gP
-        "imap <C-v> <ESC>"+gP
-        "vmap <C-a> ggVg
-    endif
+    "vmap <C-c> "+yi
+    "vmap <C-x> "+c
+    "vmap <C-v> "+gP
+    "imap <C-v> <ESC>"+gP
+    "vmap <C-a> ggVg
+  endif
 
-    if has("gui")
-        " Search ctrl+f
-        noremap  <expr> <C-F> has("gui_running") ? ":promptfind\<CR>": "/"
-        inoremap <expr> <C-F> has("gui_running") ? "\<C-\>\<C-O>:promptfind\<CR>": "\<C-\>\<C-O>/"
-        cnoremap <expr> <C-F> has("gui_running") ? "\<C-\>\<C-C>:promptfind\<CR>": "\<C-\>\<C-O>/"
+  if has("gui")
+    " Search ctrl+f
+    noremap  <expr> <C-F> has("gui_running") ? ":promptfind\<CR>": "/"
+    inoremap <expr> <C-F> has("gui_running") ? "\<C-\>\<C-O>:promptfind\<CR>": "\<C-\>\<C-O>/"
+    cnoremap <expr> <C-F> has("gui_running") ? "\<C-\>\<C-C>:promptfind\<CR>": "\<C-\>\<C-O>/"
 
-        " Replace dialog ctrl+h
-        nnoremap <expr> <C-H> has("gui_running") ? ":promptrepl\<CR>" : "\<C-H>"
-        inoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-O>:promptrepl\<CR>" : "\<C-H>"
-        cnoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-C>:promptrepl\<CR>" : "\<C-H>"
-    endif
+    " Replace dialog ctrl+h
+    nnoremap <expr> <C-H> has("gui_running") ? ":promptrepl\<CR>" : "\<C-H>"
+    inoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-O>:promptrepl\<CR>" : "\<C-H>"
+    cnoremap <expr> <C-H> has("gui_running") ? "\<C-\>\<C-C>:promptrepl\<CR>" : "\<C-H>"
+  endif
 
-    " Save ctrl+s
-    noremap  <C-S> :update<CR>
-    vnoremap <C-S> <C-C>:update<CR>
-    inoremap <C-S> <ESC>:update<CR>gi
+  " Save ctrl+s
+  noremap  <C-S> :update<CR>
+  vnoremap <C-S> <C-C>:update<CR>
+  inoremap <C-S> <ESC>:update<CR>gi
 
-    " For ctrl+v to work, autoselect must be off
-    if !has("unix")
-        set guioptions-=a
-    endif
+  " For ctrl+v to work, autoselect must be off
+  if !has("unix")
+    set guioptions-=a
+  endif
 
-    "Undo ctrl+z
-    noremap <C-Z>  u
-    inoremap <C-Z> <C-O>u
+  "Undo ctrl+z
+  noremap <C-Z>  u
+  inoremap <C-Z> <C-O>u
 
-    " Redo ctrl+y
-    noremap  <C-Y> <C-R>
-    inoremap <C-Y> <C-O><C-R>
+  " Redo ctrl+y
+  noremap  <C-Y> <C-R>
+  inoremap <C-Y> <C-O><C-R>
 
-    " Select all ctrl+a
-    noremap <C-A> gggH<C-O>G
-    inoremap <C-A> <C-O>gg<C-O>gH<C-O>G
-    cnoremap <C-A> <C-C>gggH<C-O>G
-    onoremap <C-A> <C-C>gggH<C-O>G
-    snoremap <C-A> <C-C>gggH<C-O>G
-    xnoremap <C-A> <C-C>ggVG
+  " Select all ctrl+a
+  noremap <C-A> gggH<C-O>G
+  inoremap <C-A> <C-O>gg<C-O>gH<C-O>G
+  cnoremap <C-A> <C-C>gggH<C-O>G
+  onoremap <C-A> <C-C>gggH<C-O>G
+  snoremap <C-A> <C-C>gggH<C-O>G
+  xnoremap <C-A> <C-C>ggVG
 
-    " Next window ctrl+tab
-    noremap  <C-Tab> <C-W>w
-    inoremap <C-Tab> <C-O><C-W>w
-    cnoremap <C-Tab> <C-O><C-W>w
-    onoremap <C-Tab> <C-O><C-W>w
+  " Next window ctrl+tab
+  noremap  <C-Tab> <C-W>w
+  inoremap <C-Tab> <C-O><C-W>w
+  cnoremap <C-Tab> <C-O><C-W>w
+  onoremap <C-Tab> <C-O><C-W>w
 endif
+
+" Function Keys
+" Format file
+map <F7> gg=G<C-o><C-o>
 
 " =====================================
 " GUI settings
 " =====================================
 
 if has("gui_running")
-    if has("termguicolors")
-        set termguicolors
-    endif
+  if has("termguicolors")
+    set termguicolors
+  endif
 
-    " Set standard starting window size
-    if &diff
-        set lines=40 columns=160
-    else
-        set lines=40 columns=100
-    endif
+  " Set standard starting window size
+  if &diff
+    set lines=40 columns=160
+  else
+    set lines=40 columns=100
+  endif
 
-    " Turn off toolbar
-    set guioptions-=T
+  " Turn off toolbar
+  set guioptions-=T
 
-    " Turn on menus
-    set guioptions+=m
+  " Turn on menus
+  set guioptions+=m
 
-    " Turn off blinking cursor
-    " set guicursor+=n:blinkon0
+  " Turn off blinking cursor
+  " set guicursor+=n:blinkon0
 
-    if has('gui_macvim')
-        " macOS
+  if has('gui_macvim')
+    " macOS
 
-        " Enable smooth scrolling
-        set guioptions+=k
+    " Enable smooth scrolling
+    set guioptions+=k
 
-        " Enable transparency
-        set transparency=2
+    " Enable transparency
+    set transparency=2
 
-        " set macthinstrokes
-        set guifont=IBM\ Plex\ Mono:h13,SF\ Mono\ Regular:h13,Menlo:h13
-        let macvim_hig_shift_movement = 1
-        au FocusLost * set transp=5
-        au FocusGained * set transp=0
+    " set macthinstrokes
+    set guifont=SF\ Mono\ Regular:h13,Menlo:h13
+    let macvim_hig_shift_movement = 1
+    au FocusLost * set transp=5
+    au FocusGained * set transp=0
 
-        " Typical Mac OS X keymappings
-        " cmd-[ / cmd-] to increase/decrease indentation
-        vmap <D-]> >gv
-        vmap <D-[> <gv
-        map <D-]> >>
-        map <D-[> <<
+    " Typical Mac OS X keymappings
+    " cmd-[ / cmd-] to increase/decrease indentation
+    vmap <D-]> >gv
+    vmap <D-[> <gv
+    map <D-]> >>
+      map <D-[> <<
 
-        " cmd-<0...9> to switch tabs
-        map  <D-0> 0gt
-        imap <D-0> <Esc>0gt
-        map  <D-1> 1gt
-        imap <D-1> <Esc>1gt
-        map  <D-2> 2gt
-        imap <D-2> <Esc>2gt
-        map  <D-3> 3gt
-        imap <D-3> <Esc>3gt
-        map  <D-4> 4gt
-        imap <D-4> <Esc>4gt
-        map  <D-5> 5gt
-        imap <D-5> <Esc>5gt
-        map  <D-6> 6gt
-        imap <D-6> <Esc>6gt
-        map  <D-7> 7gt
-        imap <D-7> <Esc>7gt
-        map  <D-8> 8gt
-        imap <D-8> <Esc>8gt
-        map  <D-9> 9gt
-        imap <D-9> <Esc>9gt
-    elseif IsWSL()
-        " Linux on WSL
-        set guifont=Monospace\ 14
-    elseif has('gui_gtk2') || has('gui_gtk3')
-        " Linux
-        set guifont=IBM\ Plex\ Mono:h13,Monospace\ 11
-    elseif has('gui_win32')
-        " Windows
-        set guifont=IBM\ Plex\ Mono:h13,Source\ Code\ Pro:h13,Cascadia\ Code:h13,Consolas:h13
-        set renderoptions=type:directx
-    endif
+      " cmd-<0...9> to switch tabs
+      map  <D-0> 0gt
+    imap <D-0> <Esc>0gt
+    map  <D-1> 1gt
+    imap <D-1> <Esc>1gt
+    map  <D-2> 2gt
+    imap <D-2> <Esc>2gt
+    map  <D-3> 3gt
+    imap <D-3> <Esc>3gt
+    map  <D-4> 4gt
+    imap <D-4> <Esc>4gt
+    map  <D-5> 5gt
+    imap <D-5> <Esc>5gt
+    map  <D-6> 6gt
+    imap <D-6> <Esc>6gt
+    map  <D-7> 7gt
+    imap <D-7> <Esc>7gt
+    map  <D-8> 8gt
+    imap <D-8> <Esc>8gt
+    map  <D-9> 9gt
+    imap <D-9> <Esc>9gt
+  elseif IsWSL()
+    " Linux on WSL
+    set guifont=Monospace\ 14
+  elseif has('gui_gtk2') || has('gui_gtk3')
+    " Linux
+    set guifont=IBM\ Plex\ Mono:h13,Monospace\ 11
+  elseif has('gui_win32')
+    " Windows
+    set guifont=IBM\ Plex\ Mono:h13,Source\ Code\ Pro:h13,Cascadia\ Code:h13,Consolas:h13
+    set renderoptions=type:directx
+  endif
 endif
 
+" vim: expandtab:ts=2:sw=2
