@@ -1,3 +1,8 @@
+# zsh interactive shell configuration
+#
+# Config order (system wide then user):
+# zshenv ➜ zprofile ➜ zshrc ➜ zlogin ➜ zlogout
+
 fpath=(${DOTFILES}/zsh/functions ${DOTFILES}/zsh/prompts ${DOTFILES}/zsh/completions $fpath)
 
 # Check for homebrew

@@ -1,3 +1,5 @@
+# zsh login environment configuration
+
 if [ -d /opt/homebrew ]; then
   # Set PATH, MANPATH, etc., for Homebrew
   eval "$(/opt/homebrew/bin/brew shellenv)"
