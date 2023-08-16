@@ -56,12 +56,6 @@ bindkey -e
 bindkey "^[[3~" delete-char
 
 # Editor
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
 export EDITOR="vim"
 export VISUAL="vim -g"
 export LESSEDIT='vim ?lm+%lm. %f'
@@ -80,21 +74,12 @@ if ! [ -f ${HOME}/.gitconfig ]; then
   gitconfig ${DOTFILES} ${HOME}/.gitconfig
 fi
 
-# SDK root for custom installs
-export SDK_ROOT=${HOME}/sdk
-
-# Azure CLI
-if [ -n ${HOMEBREW_PREFIX} ] && [ -f ${HOMEBREW_PREFIX}/etc/bash_completion.d/az ]; then
-  source ${HOMEBREW_PREFIX}/etc/bash_completion.d/az
-elif [ -f /etc/bash_completion.d/azure-cli ]; then
-  source /etc/bash_completion.d/azure-cli
-fi
-
 # Ruby
 if (( $+commands[ruby] )) && (( $+commands[gem] )); then
   path+=$(ruby -r rubygems -e 'puts Gem.user_dir')/bin
 fi
 
+# rbenv
 if (( $+commands[rbenv] )); then
   eval "$(rbenv init - zsh)"
 fi
@@ -124,79 +109,15 @@ if (( $+commands[pipx] )); then
   eval "$(register-python-argcomplete pipx)"
 fi
 
-# Go
-path=(/usr/local/go/bin $path)
-
-# Add GOPATH to installed binaries to path
-if (( $+commands[go] )); then
-  path=($(go env GOPATH)/bin $path)
-fi
-
-# .NET Core
-if (( $+commands[dotnet] )); then
-  # Disable telemtry
-  DOTNET_CLI_TELEMETRY_OPTOUT=1
-
-  # Add dotnet tools
-  path+=${HOME}/.dotnet/tools
-
-  # zsh parameter completion for the dotnet CLI
-  _dotnet_zsh_complete() {
-      local completions=("$(dotnet complete "$words")")
-      reply=( "${(ps:\n:)completions}" )
-  }
-  compctl -K _dotnet_zsh_complete dotnet
-fi
-
-# PowerShell
-if (( $+commands[pwsh] )); then
-  # Disable telemetry
-  POWERSHELL_TELEMETRY_OPTOUT=1
-fi
-
-# Java
-if [[ -e /usr/libexec/java_home ]]; then
-  # Verify that java is installed
-  /usr/libexec/java_home > /dev/null 2>&1
-  if [[ $? -eq 0 ]]; then
-    # Java installed - use the default JDK
-    export JAVA_HOME=`/usr/libexec/java_home`
-  fi
-else
-    export JAVA_HOME=$(readlink -f `whence -cp java` | sed "s:bin/java::")
-fi
-
 # Android
 if [[ -d ${HOME}/Library/Android/sdk ]]; then
   export ANDROID_HOME=${HOME}/Library/Android/sdk
   path+=(${ANDROID_HOME}/tools ${ANDROID_HOME}/tools/bin ${ANDROID_HOME}/platform-tools)
 fi
 
-# Flutter
-if [[ -d ${SDK_ROOT}/flutter ]]; then
-  export FLUTTER_ROOT=${SDK_ROOT}/flutter
-  path+=${FLUTTER_ROOT}/bin
-fi
-
-# Rust
-if [[ -d ${HOME}/.cargo ]]; then
-  source ${HOME}/.cargo/env
-fi
-
-# Node.js (Volta)
-export VOLTA_HOME=${HOME}/.volta
-if [[ -d ${VOLTA_HOME} ]]; then
-  path+=${VOLTA_HOME}/bin
-fi
-
 # Kubernetes (microk8s)
 if (( $+commands[microk8s.kubectl] )); then
   compdef microk8s.kubectl=kubectl
-fi
-
-# MSSQL Server Tools
-if [ -d /opt/mssql-tools/bin/ ]; then
-  path+=/opt/mssql-tools/bin
 fi
 
 # ========================================
