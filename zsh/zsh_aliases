@@ -144,14 +144,16 @@ alias wfc='wttr Snoqualmie'
 alias wnow='wttr Snoqualmie format=3'
 
 # Ruby
-alias binit="bundle install --path vendor/bundle"
-alias bstubs="bundle install --binstubs"
-alias bexec="bundle exec"
-alias bignore="echo \".bundle\nvendor/bundle/ruby\n\" >> .gitignore"
-alias gman="gem man -s"
-alias rails="bin/rails"
-alias gemu="ruby -r rubygems -e 'puts Gem.user_dir'"
-alias gemuinstall="gem install --user-install"
+alias createrbc='docker volume create ruby-bundle-cache'
+alias docked='docker run --rm -it -v ${PWD}:/rails -v ruby-bundle-cache:/bundle -p 3000:3000 ghcr.io/rails/cli'
+# alias binit="bundle install --path vendor/bundle"
+# alias bstubs="bundle install --binstubs"
+# alias bexec="bundle exec"
+# alias bignore="echo \".bundle\nvendor/bundle/ruby\n\" >> .gitignore"
+# alias gman="gem man -s"
+# alias rails="bin/rails"
+# alias gemu="ruby -r rubygems -e 'puts Gem.user_dir'"
+# alias gemuinstall="gem install --user-install"
 
 # Go
 alias gopresent='present -play=true &; open -g http://127.0.0.1:3999; fg'
