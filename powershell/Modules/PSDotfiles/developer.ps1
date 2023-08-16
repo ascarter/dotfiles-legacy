@@ -39,5 +39,5 @@ function Invoke-Codespace {
     [CmdletBinding()]
     [Alias("udc")]
     param()
-    docker run --rm -it -v .:/workspace -w /workspace mcr.microsoft.com/devcontainers/universal:latest
+    docker run --rm -it -v .:/workspace -w /workspace mcr.microsoft.com/devcontainers/universal:latest $args
 }
