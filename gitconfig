@@ -48,7 +48,7 @@
     df = diff
     difflast = diff HEAD^ HEAD
     diffstat = diff --stat -r
-    dirty = status --untracked-files=no --porcelain
+    dirty = status --untracked-files=normal --porcelain
     discard = checkout --
     done = !f() { local branch=${1-$(git blocal)}; git checkout master; git up; git cleanup; git branch -d ${branch}; }; f
     dump = cat-file -p
@@ -90,3 +90,7 @@
     whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
     who = shortlog -s --
     whois = !sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -
+    showdirty = config devcontainers-theme.show-dirty 1
+    hidedirty = config --unset devcontainers-theme.show-dirty
+    showstatus = config --unset devcontainers-theme.hide-status
+    hidestatus = config devcontainers-theme.hide-status 1

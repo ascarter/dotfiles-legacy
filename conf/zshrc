@@ -30,7 +30,7 @@ autoload -Uz vcs_info
 
 # Default: PS1="%m%# "
 declare +x PS1
-prompt code --dirty --upstream
+prompt vscode
 
 # ========================================
 # Shell preferences
@@ -56,6 +56,12 @@ bindkey -e
 bindkey "^[[3~" delete-char
 
 # Editor
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
 export EDITOR="vim"
 export VISUAL="vim -g"
 export LESSEDIT='vim ?lm+%lm. %f'
