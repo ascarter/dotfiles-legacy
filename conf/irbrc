@@ -34,4 +34,10 @@ def vim(*args)
   `vim #{flattened_args}`
   nil
 end
-  
+
+# VS Code helper
+def vscode(*args)
+  flattened_args = args.map { |arg| "\"#{arg.to_s}\""}.join ' '
+  `code --new-window #{flattened_args}`
+  nil
+end
