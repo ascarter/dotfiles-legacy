@@ -143,6 +143,9 @@ alias rst='resize -s 0 120'
 alias wfc='wttr Snoqualmie'
 alias wnow='wttr Snoqualmie format=3'
 
+# Universal Development Container
+alias udc='docker run --rm -it --platform=linux/amd64 -v ${PWD}:/workspace -w /workspace mcr.microsoft.com/devcontainers/universal:latest'
+
 # Ruby
 alias createrbc='docker volume create ruby-bundle-cache'
 alias docked='docker run --rm -it -v ${PWD}:/rails -v ruby-bundle-cache:/bundle -p 3000:3000 ghcr.io/rails/cli'

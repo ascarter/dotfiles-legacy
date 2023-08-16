@@ -30,3 +30,14 @@ if (Test-Path -Path (Join-Path $Env:LOCALAPPDATA -ChildPath Android\SDK)) {
         (Join-Path -Path $Env:ANDROID_SDK_ROOT -ChildPath tools\bin)
     )
 }
+
+function Invoke-Codespace {
+    <#
+        .SYNOPSIS
+            Codespace sandbox
+    #>
+    [CmdletBinding()]
+    [Alias("udc")]
+    param()
+    docker run --rm -it -v .:/workspace -w /workspace mcr.microsoft.com/devcontainers/universal:latest
+}
