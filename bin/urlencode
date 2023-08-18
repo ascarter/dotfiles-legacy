@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+# urlencode - URL-encode strings using system Ruby on macOS
+
+require 'uri'
+
+def main(args)
+  puts URI.encode_www_form_component(args.join(' '))
+end
+
+main(ARGV)

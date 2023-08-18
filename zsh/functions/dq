@@ -1,0 +1,6 @@
+# Open query in dash
+
+emulate -L zsh
+
+query=$(urlencode $@)
+open dash://"${query}"
